@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -23,23 +23,56 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Plus, Edit, Trash2, Eye, EyeOff, Ban, Calendar } from 'lucide-react';
-import { useBlog, BlogPost } from '@/contexts/BlogContext';
+import { Plus, Edit, Trash2, Eye, EyeOff, Ban, Calendar, Upload } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
+
+interface BlogPost {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  content: string;
+  image_url: string | null;
+  published: boolean;
+  blocked: boolean;
+  author: string;
+  publish_date: string;
+}
 
 const AdminBlog = () => {
-  const { posts, updatePost, addPost, deletePost } = useBlog();
-
+  const [posts, setPosts] = useState<BlogPost[]>([]);
   const [editingPost, setEditingPost] = useState<BlogPost | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [formData, setFormData] = useState({
     title: '',
     slug: '',
     excerpt: '',
     content: '',
+    image_url: '',
     published: false,
     author: 'Admin',
-    publishDate: ''
+    publish_date: ''
   });
+
+  useEffect(() => {
+    fetchPosts();
+  }, []);
+
+  const fetchPosts = async () => {
+    const { data, error } = await supabase
+      .from('blog_posts')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      toast.error('Failed to fetch posts');
+      console.error(error);
+    } else {
+      setPosts(data || []);
+    }
+  };
 
   const handleEdit = (post: BlogPost) => {
     setEditingPost(post);
@@ -48,10 +81,12 @@ const AdminBlog = () => {
       slug: post.slug,
       excerpt: post.excerpt,
       content: post.content,
+      image_url: post.image_url || '',
       published: post.published,
       author: post.author,
-      publishDate: post.publishDate
+      publish_date: post.publish_date
     });
+    setImageFile(null);
     setIsDialogOpen(true);
   };
 
@@ -62,40 +97,131 @@ const AdminBlog = () => {
       slug: '',
       excerpt: '',
       content: '',
+      image_url: '',
       published: false,
       author: 'Admin',
-      publishDate: new Date().toISOString().split('T')[0]
+      publish_date: new Date().toISOString().split('T')[0]
     });
+    setImageFile(null);
     setIsDialogOpen(true);
   };
 
-  const handleSubmit = () => {
+  const uploadImage = async (): Promise<string | null> => {
+    if (!imageFile) return formData.image_url || null;
+
+    const fileExt = imageFile.name.split('.').pop();
+    const fileName = `${Math.random()}.${fileExt}`;
+    const filePath = `${fileName}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from('blog-images')
+      .upload(filePath, imageFile);
+
+    if (uploadError) {
+      toast.error('Failed to upload image');
+      console.error(uploadError);
+      return null;
+    }
+
+    const { data } = supabase.storage
+      .from('blog-images')
+      .getPublicUrl(filePath);
+
+    return data.publicUrl;
+  };
+
+  const handleSubmit = async () => {
+    const imageUrl = await uploadImage();
+
+    const postData = {
+      title: formData.title,
+      slug: formData.slug,
+      excerpt: formData.excerpt,
+      content: formData.content,
+      image_url: imageUrl,
+      published: formData.published,
+      author: formData.author,
+      publish_date: formData.publish_date,
+      blocked: editingPost?.blocked || false
+    };
+
     if (editingPost) {
-      updatePost(editingPost.id, formData);
+      const { error } = await supabase
+        .from('blog_posts')
+        .update(postData)
+        .eq('id', editingPost.id);
+
+      if (error) {
+        toast.error('Failed to update post');
+        console.error(error);
+      } else {
+        toast.success('Post updated successfully');
+        fetchPosts();
+      }
     } else {
-      addPost({
-        ...formData,
-        blocked: false
-      });
+      const { error } = await supabase
+        .from('blog_posts')
+        .insert([postData]);
+
+      if (error) {
+        toast.error('Failed to create post');
+        console.error(error);
+      } else {
+        toast.success('Post created successfully');
+        fetchPosts();
+      }
     }
     setIsDialogOpen(false);
   };
 
-  const handleDelete = (id: string) => {
-    deletePost(id);
-  };
+  const handleDelete = async (id: string) => {
+    const { error } = await supabase
+      .from('blog_posts')
+      .delete()
+      .eq('id', id);
 
-  const togglePublished = (id: string) => {
-    const post = posts.find(p => p.id === id);
-    if (post) {
-      updatePost(id, { published: !post.published });
+    if (error) {
+      toast.error('Failed to delete post');
+      console.error(error);
+    } else {
+      toast.success('Post deleted successfully');
+      fetchPosts();
     }
   };
 
-  const toggleBlocked = (id: string) => {
+  const togglePublished = async (id: string) => {
     const post = posts.find(p => p.id === id);
     if (post) {
-      updatePost(id, { blocked: !post.blocked });
+      const { error } = await supabase
+        .from('blog_posts')
+        .update({ published: !post.published })
+        .eq('id', id);
+
+      if (error) {
+        toast.error('Failed to update post');
+        console.error(error);
+      } else {
+        toast.success('Post updated successfully');
+        fetchPosts();
+      }
+    }
+  };
+
+  const toggleBlocked = async (id: string) => {
+    const post = posts.find(p => p.id === id);
+    if (post) {
+      const { error } = await supabase
+        .from('blog_posts')
+        .update({ blocked: !post.blocked })
+        .eq('id', id);
+
+      if (error) {
+        toast.error('Failed to update post');
+        console.error(error);
+      } else {
+        toast.success('Post updated successfully');
+        fetchPosts();
+      }
     }
   };
 
@@ -163,6 +289,20 @@ const AdminBlog = () => {
                   className="min-h-[150px]"
                 />
               </div>
+              <div className="space-y-2">
+                <Label htmlFor="image">Featured Image</Label>
+                <Input
+                  id="image"
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => setImageFile(e.target.files?.[0] || null)}
+                />
+                {formData.image_url && !imageFile && (
+                  <div className="mt-2">
+                    <img src={formData.image_url} alt="Current" className="h-20 w-20 object-cover rounded" />
+                  </div>
+                )}
+              </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="author">Author</Label>
@@ -174,12 +314,12 @@ const AdminBlog = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="publishDate">Publish Date</Label>
+                  <Label htmlFor="publish_date">Publish Date</Label>
                   <Input
-                    id="publishDate"
+                    id="publish_date"
                     type="date"
-                    value={formData.publishDate}
-                    onChange={(e) => setFormData({...formData, publishDate: e.target.value})}
+                    value={formData.publish_date}
+                    onChange={(e) => setFormData({...formData, publish_date: e.target.value})}
                   />
                 </div>
               </div>
@@ -244,7 +384,7 @@ const AdminBlog = () => {
                   <TableCell>
                     <div className="flex items-center gap-1 text-sm text-gray-500">
                       <Calendar className="w-3 h-3" />
-                      {post.publishDate}
+                      {post.publish_date}
                     </div>
                   </TableCell>
                   <TableCell className="text-right">

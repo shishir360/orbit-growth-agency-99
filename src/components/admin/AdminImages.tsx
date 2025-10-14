@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -14,56 +14,38 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Upload, Trash2, Download, Eye, Search } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 
 interface ImageFile {
   id: string;
   name: string;
   url: string;
-  size: string;
+  size: number;
   type: string;
-  uploadedAt: string;
-  usedIn: string[];
+  uploaded_at: string;
 }
 
 const AdminImages = () => {
-  const [images, setImages] = useState<ImageFile[]>([
-    {
-      id: '1',
-      name: 'hero-banner.jpg',
-      url: '/placeholder.svg',
-      size: '2.4 MB',
-      type: 'image/jpeg',
-      uploadedAt: '2024-01-15',
-      usedIn: ['Homepage', 'About Page']
-    },
-    {
-      id: '2',
-      name: 'service-icon-1.png',
-      url: '/placeholder.svg',
-      size: '156 KB',
-      type: 'image/png',
-      uploadedAt: '2024-01-16',
-      usedIn: ['Services Page']
-    },
-    {
-      id: '3',
-      name: 'team-photo.jpg',
-      url: '/placeholder.svg',
-      size: '1.8 MB',
-      type: 'image/jpeg',
-      uploadedAt: '2024-01-17',
-      usedIn: ['About Page']
-    },
-    {
-      id: '4',
-      name: 'blog-thumbnail.jpg',
-      url: '/placeholder.svg',
-      size: '890 KB',
-      type: 'image/jpeg',
-      uploadedAt: '2024-01-18',
-      usedIn: ['Blog Post']
+  const [images, setImages] = useState<ImageFile[]>([]);
+
+  useEffect(() => {
+    fetchImages();
+  }, []);
+
+  const fetchImages = async () => {
+    const { data, error } = await supabase
+      .from('images')
+      .select('*')
+      .order('uploaded_at', { ascending: false });
+
+    if (error) {
+      toast.error('Failed to fetch images');
+      console.error(error);
+    } else {
+      setImages(data || []);
     }
-  ]);
+  };
 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedImage, setSelectedImage] = useState<ImageFile | null>(null);
@@ -74,8 +56,19 @@ const AdminImages = () => {
     image.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleDelete = (id: string) => {
-    setImages(images.filter(image => image.id !== id));
+  const handleDelete = async (id: string) => {
+    const { error } = await supabase
+      .from('images')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      toast.error('Failed to delete image');
+      console.error(error);
+    } else {
+      toast.success('Image deleted successfully');
+      fetchImages();
+    }
   };
 
   const handlePreview = (image: ImageFile) => {
@@ -83,22 +76,47 @@ const AdminImages = () => {
     setIsPreviewDialogOpen(true);
   };
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
-    if (files) {
-      Array.from(files).forEach(file => {
-        const newImage: ImageFile = {
-          id: Date.now().toString() + Math.random(),
+    if (!files) return;
+
+    for (const file of Array.from(files)) {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Math.random()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('blog-images')
+        .upload(filePath, file);
+
+      if (uploadError) {
+        toast.error(`Failed to upload ${file.name}`);
+        console.error(uploadError);
+        continue;
+      }
+
+      const { data } = supabase.storage
+        .from('blog-images')
+        .getPublicUrl(filePath);
+
+      const { error: dbError } = await supabase
+        .from('images')
+        .insert([{
           name: file.name,
-          url: URL.createObjectURL(file),
-          size: `${(file.size / 1024 / 1024).toFixed(2)} MB`,
-          type: file.type,
-          uploadedAt: new Date().toISOString().split('T')[0],
-          usedIn: []
-        };
-        setImages(prev => [...prev, newImage]);
-      });
+          url: data.publicUrl,
+          size: file.size,
+          type: file.type
+        }]);
+
+      if (dbError) {
+        toast.error(`Failed to save ${file.name} to database`);
+        console.error(dbError);
+      } else {
+        toast.success(`${file.name} uploaded successfully`);
+      }
     }
+
+    fetchImages();
     setIsUploadDialogOpen(false);
   };
 
@@ -201,18 +219,9 @@ const AdminImages = () => {
                   {image.name}
                 </h3>
                 <div className="flex justify-between text-xs text-gray-500">
-                  <span>{image.size}</span>
-                  <span>{image.uploadedAt}</span>
+                  <span>{(image.size / 1024 / 1024).toFixed(2)} MB</span>
+                  <span>{new Date(image.uploaded_at).toLocaleDateString()}</span>
                 </div>
-                {image.usedIn.length > 0 && (
-                  <div className="flex flex-wrap gap-1">
-                    {image.usedIn.map((usage, index) => (
-                      <Badge key={index} variant="outline" className="text-xs">
-                        {usage}
-                      </Badge>
-                    ))}
-                  </div>
-                )}
               </div>
             </CardContent>
           </Card>
@@ -239,27 +248,15 @@ const AdminImages = () => {
                   <span className="font-medium">Filename:</span> {selectedImage.name}
                 </div>
                 <div>
-                  <span className="font-medium">Size:</span> {selectedImage.size}
+                  <span className="font-medium">Size:</span> {(selectedImage.size / 1024 / 1024).toFixed(2)} MB
                 </div>
                 <div>
                   <span className="font-medium">Type:</span> {selectedImage.type}
                 </div>
                 <div>
-                  <span className="font-medium">Uploaded:</span> {selectedImage.uploadedAt}
+                  <span className="font-medium">Uploaded:</span> {new Date(selectedImage.uploaded_at).toLocaleDateString()}
                 </div>
               </div>
-              {selectedImage.usedIn.length > 0 && (
-                <div>
-                  <span className="font-medium">Used in:</span>
-                  <div className="flex flex-wrap gap-1 mt-1">
-                    {selectedImage.usedIn.map((usage, index) => (
-                      <Badge key={index} variant="outline">
-                        {usage}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-              )}
             </div>
           )}
           <DialogFooter>
