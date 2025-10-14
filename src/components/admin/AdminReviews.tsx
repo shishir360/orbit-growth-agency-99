@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Star, Trash2, Eye, EyeOff, MessageSquare } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 
 interface Review {
   id: string;
@@ -12,64 +13,66 @@ interface Review {
   email: string;
   rating: number;
   comment: string;
-  date: string;
   visible: boolean;
-  source: 'website' | 'google' | 'facebook';
+  source: string;
+  created_at: string;
+  updated_at: string;
 }
 
 const AdminReviews = () => {
-  const { toast } = useToast();
-  const [reviews, setReviews] = useState<Review[]>([
-    {
-      id: '1',
-      name: 'Sarah Johnson',
-      email: 'sarah@example.com',
-      rating: 5,
-      comment: 'Excellent service! They completely transformed our website and our conversion rate has doubled.',
-      date: '2024-01-20',
-      visible: true,
-      source: 'website'
-    },
-    {
-      id: '2',
-      name: 'Mike Chen',
-      email: 'mike@example.com',
-      rating: 5,
-      comment: 'Professional team with great results. Our Google Ads performance improved significantly.',
-      date: '2024-01-18',
-      visible: true,
-      source: 'google'
-    },
-    {
-      id: '3',
-      name: 'Emily Rodriguez',
-      email: 'emily@example.com',
-      rating: 4,
-      comment: 'Good experience overall. The AI automation saved us a lot of time.',
-      date: '2024-01-15',
-      visible: false,
-      source: 'website'
-    }
-  ]);
+  const [reviews, setReviews] = useState<Review[]>([]);
 
-  const toggleVisibility = (id: string) => {
-    setReviews(reviews.map(review => 
-      review.id === id ? { ...review, visible: !review.visible } : review
-    ));
-    
-    const review = reviews.find(r => r.id === id);
-    toast({
-      title: "Review Updated",
-      description: `Review is now ${review?.visible ? 'hidden' : 'visible'}`,
-    });
+  useEffect(() => {
+    fetchReviews();
+  }, []);
+
+  const fetchReviews = async () => {
+    const { data, error } = await supabase
+      .from('reviews')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Error fetching reviews:', error);
+      toast.error('Failed to load reviews');
+      return;
+    }
+
+    setReviews(data || []);
   };
 
-  const deleteReview = (id: string) => {
-    setReviews(reviews.filter(review => review.id !== id));
-    toast({
-      title: "Review Deleted",
-      description: "The review has been permanently deleted.",
-    });
+  const toggleVisibility = async (review: Review) => {
+    const { error } = await supabase
+      .from('reviews')
+      .update({ visible: !review.visible })
+      .eq('id', review.id);
+
+    if (error) {
+      console.error('Error updating review:', error);
+      toast.error('Failed to update review');
+      return;
+    }
+
+    toast.success(review.visible ? 'Review hidden' : 'Review visible');
+    fetchReviews();
+  };
+
+  const deleteReview = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this review?')) return;
+
+    const { error } = await supabase
+      .from('reviews')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      console.error('Error deleting review:', error);
+      toast.error('Failed to delete review');
+      return;
+    }
+
+    toast.success('Review deleted successfully');
+    fetchReviews();
   };
 
   const renderStars = (rating: number) => {
@@ -91,6 +94,10 @@ const AdminReviews = () => {
     };
     return colors[source as keyof typeof colors] || 'bg-gray-100 text-gray-800';
   };
+
+  const avgRating = reviews.length > 0 
+    ? (reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length).toFixed(1)
+    : '0.0';
 
   return (
     <div className="space-y-6">
@@ -123,9 +130,7 @@ const AdminReviews = () => {
             <div className="flex items-center gap-2">
               <Star className="w-5 h-5 text-yellow-500 fill-current" />
               <div>
-                <p className="text-2xl font-bold">
-                  {(reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length).toFixed(1)}
-                </p>
+                <p className="text-2xl font-bold">{avgRating}</p>
                 <p className="text-sm text-gray-600">Average Rating</p>
               </div>
             </div>
@@ -167,7 +172,9 @@ const AdminReviews = () => {
                       <div className="text-sm text-gray-500">{review.email}</div>
                       <div className="flex items-center gap-1 mt-1">
                         {renderStars(review.rating)}
-                        <span className="text-sm text-gray-500 ml-2">{review.date}</span>
+                        <span className="text-sm text-gray-500 ml-2">
+                          {new Date(review.created_at).toLocaleDateString()}
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -188,7 +195,7 @@ const AdminReviews = () => {
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => toggleVisibility(review.id)}
+                    onClick={() => toggleVisibility(review)}
                   >
                     {review.visible ? (
                       <>
@@ -214,6 +221,11 @@ const AdminReviews = () => {
                 </div>
               </div>
             ))}
+            {reviews.length === 0 && (
+              <div className="text-center py-8 text-gray-500">
+                No reviews yet.
+              </div>
+            )}
           </div>
         </CardContent>
       </Card>

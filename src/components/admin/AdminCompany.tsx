@@ -1,52 +1,136 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { useContent } from '@/contexts/ContentContext';
-import { useToast } from '@/hooks/use-toast';
 import { Building, Mail, Phone, MapPin, Globe, Save } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
+
+interface CompanyInfo {
+  id: string;
+  company_name: string;
+  logo: string;
+  email?: string;
+  phone?: string;
+  address?: string;
+  website?: string;
+  description?: string;
+  tagline?: string;
+  founded_year?: string;
+  team_size?: string;
+  linkedin_url?: string;
+  twitter_url?: string;
+  facebook_url?: string;
+  instagram_url?: string;
+}
 
 const AdminCompany = () => {
-  const { content, updateCompanyInfo } = useContent();
-  const { toast } = useToast();
   const [isEditing, setIsEditing] = useState(false);
+  const [companyInfo, setCompanyInfo] = useState<CompanyInfo | null>(null);
   const [formData, setFormData] = useState({
-    companyName: content.companyName,
-    logo: content.logo,
-    email: 'hello@lunexomedia.com',
-    phone: '+1 (555) 123-4567',
-    address: '123 Business Street, Suite 100, City, State 12345',
-    website: 'https://lunexomedia.com',
-    description: 'We help creators and businesses launch custom membership sites and SaaS MVPs—without the dev headache.',
-    tagline: 'Build Membership Sites and SaaS Products That Scale',
-    foundedYear: '2024',
-    teamSize: '5-10',
-    socialLinks: {
-      linkedin: 'https://linkedin.com/company/lunexomedia',
-      twitter: 'https://twitter.com/lunexomedia',
-      facebook: 'https://facebook.com/lunexomedia',
-      instagram: 'https://instagram.com/lunexomedia'
-    }
+    company_name: '',
+    logo: '',
+    email: '',
+    phone: '',
+    address: '',
+    website: '',
+    description: '',
+    tagline: '',
+    founded_year: '',
+    team_size: '',
+    linkedin_url: '',
+    twitter_url: '',
+    facebook_url: '',
+    instagram_url: ''
   });
 
-  const handleSave = () => {
-    updateCompanyInfo(formData.companyName, formData.logo);
-    // In a real app, you'd save all the other company data too
+  useEffect(() => {
+    fetchCompanyInfo();
+  }, []);
+
+  const fetchCompanyInfo = async () => {
+    const { data, error } = await supabase
+      .from('company_info')
+      .select('*')
+      .limit(1)
+      .maybeSingle();
+
+    if (error) {
+      console.error('Error fetching company info:', error);
+      return;
+    }
+
+    if (data) {
+      setCompanyInfo(data);
+      setFormData({
+        company_name: data.company_name,
+        logo: data.logo,
+        email: data.email || '',
+        phone: data.phone || '',
+        address: data.address || '',
+        website: data.website || '',
+        description: data.description || '',
+        tagline: data.tagline || '',
+        founded_year: data.founded_year || '',
+        team_size: data.team_size || '',
+        linkedin_url: data.linkedin_url || '',
+        twitter_url: data.twitter_url || '',
+        facebook_url: data.facebook_url || '',
+        instagram_url: data.instagram_url || ''
+      });
+    }
+  };
+
+  const handleSave = async () => {
+    if (companyInfo) {
+      const { error } = await supabase
+        .from('company_info')
+        .update(formData)
+        .eq('id', companyInfo.id);
+
+      if (error) {
+        console.error('Error updating company info:', error);
+        toast.error('Failed to update company information');
+        return;
+      }
+    } else {
+      const { error } = await supabase
+        .from('company_info')
+        .insert([formData]);
+
+      if (error) {
+        console.error('Error creating company info:', error);
+        toast.error('Failed to create company information');
+        return;
+      }
+    }
+
+    toast.success('Company information saved successfully');
     setIsEditing(false);
-    toast({
-      title: "Company information updated",
-      description: "Your company information has been saved successfully.",
-    });
+    fetchCompanyInfo();
   };
 
   const handleCancel = () => {
-    setFormData({
-      ...formData,
-      companyName: content.companyName,
-      logo: content.logo
-    });
+    if (companyInfo) {
+      setFormData({
+        company_name: companyInfo.company_name,
+        logo: companyInfo.logo,
+        email: companyInfo.email || '',
+        phone: companyInfo.phone || '',
+        address: companyInfo.address || '',
+        website: companyInfo.website || '',
+        description: companyInfo.description || '',
+        tagline: companyInfo.tagline || '',
+        founded_year: companyInfo.founded_year || '',
+        team_size: companyInfo.team_size || '',
+        linkedin_url: companyInfo.linkedin_url || '',
+        twitter_url: companyInfo.twitter_url || '',
+        facebook_url: companyInfo.facebook_url || '',
+        instagram_url: companyInfo.instagram_url || ''
+      });
+    }
     setIsEditing(false);
   };
 
@@ -64,7 +148,6 @@ const AdminCompany = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Basic Info */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -75,36 +158,35 @@ const AdminCompany = () => {
             <CardContent className="space-y-4">
               <div>
                 <Label className="text-sm font-medium text-gray-500">Company Name</Label>
-                <p className="text-lg font-semibold">{content.companyName}</p>
+                <p className="text-lg font-semibold">{formData.company_name || 'Not set'}</p>
               </div>
               <div>
                 <Label className="text-sm font-medium text-gray-500">Logo</Label>
                 <p className="text-sm bg-primary/10 text-primary px-3 py-1 rounded inline-block">
-                  {content.logo}
+                  {formData.logo || 'Not set'}
                 </p>
               </div>
               <div>
                 <Label className="text-sm font-medium text-gray-500">Tagline</Label>
-                <p className="text-gray-600">{formData.tagline}</p>
+                <p className="text-gray-600">{formData.tagline || 'Not set'}</p>
               </div>
               <div>
                 <Label className="text-sm font-medium text-gray-500">Description</Label>
-                <p className="text-gray-600">{formData.description}</p>
+                <p className="text-gray-600">{formData.description || 'Not set'}</p>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label className="text-sm font-medium text-gray-500">Founded</Label>
-                  <p className="text-gray-600">{formData.foundedYear}</p>
+                  <p className="text-gray-600">{formData.founded_year || 'Not set'}</p>
                 </div>
                 <div>
                   <Label className="text-sm font-medium text-gray-500">Team Size</Label>
-                  <p className="text-gray-600">{formData.teamSize}</p>
+                  <p className="text-gray-600">{formData.team_size || 'Not set'}</p>
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          {/* Contact Info */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -117,35 +199,34 @@ const AdminCompany = () => {
                 <Mail className="w-4 h-4 text-gray-400" />
                 <div>
                   <Label className="text-sm font-medium text-gray-500">Email</Label>
-                  <p className="text-gray-600">{formData.email}</p>
+                  <p className="text-gray-600">{formData.email || 'Not set'}</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
                 <Phone className="w-4 h-4 text-gray-400" />
                 <div>
                   <Label className="text-sm font-medium text-gray-500">Phone</Label>
-                  <p className="text-gray-600">{formData.phone}</p>
+                  <p className="text-gray-600">{formData.phone || 'Not set'}</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
                 <MapPin className="w-4 h-4 text-gray-400" />
                 <div>
                   <Label className="text-sm font-medium text-gray-500">Address</Label>
-                  <p className="text-gray-600">{formData.address}</p>
+                  <p className="text-gray-600">{formData.address || 'Not set'}</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
                 <Globe className="w-4 h-4 text-gray-400" />
                 <div>
                   <Label className="text-sm font-medium text-gray-500">Website</Label>
-                  <p className="text-gray-600">{formData.website}</p>
+                  <p className="text-gray-600">{formData.website || 'Not set'}</p>
                 </div>
               </div>
             </CardContent>
           </Card>
         </div>
 
-        {/* Social Media */}
         <Card>
           <CardHeader>
             <CardTitle>Social Media Links</CardTitle>
@@ -159,7 +240,7 @@ const AdminCompany = () => {
                 </div>
                 <div>
                   <p className="text-sm font-medium">LinkedIn</p>
-                  <p className="text-xs text-gray-500">@lunexomedia</p>
+                  <p className="text-xs text-gray-500">{formData.linkedin_url || 'Not set'}</p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
@@ -168,7 +249,7 @@ const AdminCompany = () => {
                 </div>
                 <div>
                   <p className="text-sm font-medium">Twitter</p>
-                  <p className="text-xs text-gray-500">@lunexomedia</p>
+                  <p className="text-xs text-gray-500">{formData.twitter_url || 'Not set'}</p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
@@ -177,7 +258,7 @@ const AdminCompany = () => {
                 </div>
                 <div>
                   <p className="text-sm font-medium">Facebook</p>
-                  <p className="text-xs text-gray-500">@lunexomedia</p>
+                  <p className="text-xs text-gray-500">{formData.facebook_url || 'Not set'}</p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
@@ -186,7 +267,7 @@ const AdminCompany = () => {
                 </div>
                 <div>
                   <p className="text-sm font-medium">Instagram</p>
-                  <p className="text-xs text-gray-500">@lunexomedia</p>
+                  <p className="text-xs text-gray-500">{formData.instagram_url || 'Not set'}</p>
                 </div>
               </div>
             </div>
@@ -215,18 +296,17 @@ const AdminCompany = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Basic Info */}
         <Card>
           <CardHeader>
             <CardTitle>Basic Information</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="companyName">Company Name</Label>
+              <Label htmlFor="company_name">Company Name</Label>
               <Input
-                id="companyName"
-                value={formData.companyName}
-                onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
+                id="company_name"
+                value={formData.company_name}
+                onChange={(e) => setFormData({ ...formData, company_name: e.target.value })}
                 placeholder="Your company name"
               />
             </div>
@@ -260,20 +340,20 @@ const AdminCompany = () => {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="foundedYear">Founded Year</Label>
+                <Label htmlFor="founded_year">Founded Year</Label>
                 <Input
-                  id="foundedYear"
-                  value={formData.foundedYear}
-                  onChange={(e) => setFormData({ ...formData, foundedYear: e.target.value })}
+                  id="founded_year"
+                  value={formData.founded_year}
+                  onChange={(e) => setFormData({ ...formData, founded_year: e.target.value })}
                   placeholder="2024"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="teamSize">Team Size</Label>
+                <Label htmlFor="team_size">Team Size</Label>
                 <Input
-                  id="teamSize"
-                  value={formData.teamSize}
-                  onChange={(e) => setFormData({ ...formData, teamSize: e.target.value })}
+                  id="team_size"
+                  value={formData.team_size}
+                  onChange={(e) => setFormData({ ...formData, team_size: e.target.value })}
                   placeholder="5-10"
                 />
               </div>
@@ -281,7 +361,6 @@ const AdminCompany = () => {
           </CardContent>
         </Card>
 
-        {/* Contact Info */}
         <Card>
           <CardHeader>
             <CardTitle>Contact Information</CardTitle>
@@ -328,7 +407,6 @@ const AdminCompany = () => {
         </Card>
       </div>
 
-      {/* Social Media */}
       <Card>
         <CardHeader>
           <CardTitle>Social Media Links</CardTitle>
@@ -337,50 +415,38 @@ const AdminCompany = () => {
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="linkedin">LinkedIn URL</Label>
+              <Label htmlFor="linkedin_url">LinkedIn URL</Label>
               <Input
-                id="linkedin"
-                value={formData.socialLinks.linkedin}
-                onChange={(e) => setFormData({ 
-                  ...formData, 
-                  socialLinks: { ...formData.socialLinks, linkedin: e.target.value }
-                })}
+                id="linkedin_url"
+                value={formData.linkedin_url}
+                onChange={(e) => setFormData({ ...formData, linkedin_url: e.target.value })}
                 placeholder="https://linkedin.com/company/yourcompany"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="twitter">Twitter URL</Label>
+              <Label htmlFor="twitter_url">Twitter URL</Label>
               <Input
-                id="twitter"
-                value={formData.socialLinks.twitter}
-                onChange={(e) => setFormData({ 
-                  ...formData, 
-                  socialLinks: { ...formData.socialLinks, twitter: e.target.value }
-                })}
+                id="twitter_url"
+                value={formData.twitter_url}
+                onChange={(e) => setFormData({ ...formData, twitter_url: e.target.value })}
                 placeholder="https://twitter.com/yourcompany"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="facebook">Facebook URL</Label>
+              <Label htmlFor="facebook_url">Facebook URL</Label>
               <Input
-                id="facebook"
-                value={formData.socialLinks.facebook}
-                onChange={(e) => setFormData({ 
-                  ...formData, 
-                  socialLinks: { ...formData.socialLinks, facebook: e.target.value }
-                })}
+                id="facebook_url"
+                value={formData.facebook_url}
+                onChange={(e) => setFormData({ ...formData, facebook_url: e.target.value })}
                 placeholder="https://facebook.com/yourcompany"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="instagram">Instagram URL</Label>
+              <Label htmlFor="instagram_url">Instagram URL</Label>
               <Input
-                id="instagram"
-                value={formData.socialLinks.instagram}
-                onChange={(e) => setFormData({ 
-                  ...formData, 
-                  socialLinks: { ...formData.socialLinks, instagram: e.target.value }
-                })}
+                id="instagram_url"
+                value={formData.instagram_url}
+                onChange={(e) => setFormData({ ...formData, instagram_url: e.target.value })}
                 placeholder="https://instagram.com/yourcompany"
               />
             </div>

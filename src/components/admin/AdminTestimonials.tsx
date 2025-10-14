@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -23,24 +23,56 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Plus, Edit, Trash2, Eye, EyeOff, Star } from 'lucide-react';
-import { useContent, Testimonial } from '@/contexts/ContentContext';
-import { useToast } from '@/hooks/use-toast';
+import { Plus, Edit, Trash2, Eye, EyeOff, Upload } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
+
+interface Testimonial {
+  id: string;
+  quote: string;
+  author: string;
+  role: string;
+  company: string;
+  image_url?: string;
+  visible: boolean;
+  display_order: number;
+  created_at: string;
+  updated_at: string;
+}
 
 const AdminTestimonials = () => {
-  const { content, updateTestimonials } = useContent();
-  const { toast } = useToast();
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [editingTestimonial, setEditingTestimonial] = useState<Testimonial | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [formData, setFormData] = useState({
     quote: '',
     author: '',
     role: '',
     company: '',
-    image: '',
+    image_url: '',
     visible: true,
-    order: 1
+    display_order: 1
   });
+
+  useEffect(() => {
+    fetchTestimonials();
+  }, []);
+
+  const fetchTestimonials = async () => {
+    const { data, error } = await supabase
+      .from('testimonials')
+      .select('*')
+      .order('display_order', { ascending: true });
+
+    if (error) {
+      console.error('Error fetching testimonials:', error);
+      toast.error('Failed to load testimonials');
+      return;
+    }
+
+    setTestimonials(data || []);
+  };
 
   const handleEdit = (testimonial: Testimonial) => {
     setEditingTestimonial(testimonial);
@@ -49,78 +81,131 @@ const AdminTestimonials = () => {
       author: testimonial.author,
       role: testimonial.role,
       company: testimonial.company,
-      image: testimonial.image,
+      image_url: testimonial.image_url || '',
       visible: testimonial.visible,
-      order: testimonial.order
+      display_order: testimonial.display_order
     });
     setIsDialogOpen(true);
   };
 
   const handleAdd = () => {
     setEditingTestimonial(null);
-    const maxOrder = Math.max(...content.testimonials.map(t => t.order), 0);
+    const maxOrder = Math.max(...testimonials.map(t => t.display_order), 0);
     setFormData({
       quote: '',
       author: '',
       role: '',
       company: '',
-      image: '',
+      image_url: '',
       visible: true,
-      order: maxOrder + 1
+      display_order: maxOrder + 1
     });
     setIsDialogOpen(true);
   };
 
-  const handleSubmit = () => {
-    let updatedTestimonials = [...content.testimonials];
+  const uploadImage = async (file: File): Promise<string | null> => {
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Math.random()}.${fileExt}`;
     
-    if (editingTestimonial) {
-      updatedTestimonials = updatedTestimonials.map(testimonial => 
-        testimonial.id === editingTestimonial.id 
-          ? { ...testimonial, ...formData }
-          : testimonial
-      );
-      toast({
-        title: "Testimonial updated",
-        description: "Testimonial has been updated successfully.",
-      });
-    } else {
-      const newTestimonial: Testimonial = {
-        id: Date.now().toString(),
-        ...formData,
-      };
-      updatedTestimonials.push(newTestimonial);
-      toast({
-        title: "Testimonial created",
-        description: "New testimonial has been created successfully.",
-      });
+    const { error: uploadError } = await supabase.storage
+      .from('blog-images')
+      .upload(fileName, file);
+
+    if (uploadError) {
+      console.error('Error uploading image:', uploadError);
+      return null;
     }
-    updateTestimonials(updatedTestimonials);
+
+    const { data } = supabase.storage
+      .from('blog-images')
+      .getPublicUrl(fileName);
+
+    return data.publicUrl;
+  };
+
+  const handleSubmit = async () => {
+    let imageUrl = formData.image_url;
+    if (imageFile) {
+      const uploadedUrl = await uploadImage(imageFile);
+      if (uploadedUrl) {
+        imageUrl = uploadedUrl;
+      }
+    }
+
+    const testimonialData = {
+      quote: formData.quote,
+      author: formData.author,
+      role: formData.role,
+      company: formData.company,
+      image_url: imageUrl,
+      visible: formData.visible,
+      display_order: formData.display_order,
+    };
+
+    if (editingTestimonial) {
+      const { error } = await supabase
+        .from('testimonials')
+        .update(testimonialData)
+        .eq('id', editingTestimonial.id);
+
+      if (error) {
+        console.error('Error updating testimonial:', error);
+        toast.error('Failed to update testimonial');
+        return;
+      }
+
+      toast.success('Testimonial updated successfully');
+    } else {
+      const { error } = await supabase
+        .from('testimonials')
+        .insert([testimonialData]);
+
+      if (error) {
+        console.error('Error creating testimonial:', error);
+        toast.error('Failed to create testimonial');
+        return;
+      }
+
+      toast.success('Testimonial created successfully');
+    }
+
     setIsDialogOpen(false);
+    setImageFile(null);
+    fetchTestimonials();
   };
 
-  const handleDelete = (id: string) => {
-    const updatedTestimonials = content.testimonials.filter(testimonial => testimonial.id !== id);
-    updateTestimonials(updatedTestimonials);
-    toast({
-      title: "Testimonial deleted",
-      description: "Testimonial has been deleted successfully.",
-    });
+  const handleDelete = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this testimonial?')) return;
+
+    const { error } = await supabase
+      .from('testimonials')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      console.error('Error deleting testimonial:', error);
+      toast.error('Failed to delete testimonial');
+      return;
+    }
+
+    toast.success('Testimonial deleted successfully');
+    fetchTestimonials();
   };
 
-  const toggleVisibility = (id: string) => {
-    const updatedTestimonials = content.testimonials.map(testimonial => 
-      testimonial.id === id 
-        ? { ...testimonial, visible: !testimonial.visible }
-        : testimonial
-    );
-    updateTestimonials(updatedTestimonials);
-    
-    const testimonial = content.testimonials.find(t => t.id === id);
-    toast({
-      title: "Testimonial visibility updated",
-      description: `Testimonial by ${testimonial?.author} is now ${testimonial?.visible ? 'hidden' : 'visible'}`,
-    });
+  const toggleVisibility = async (testimonial: Testimonial) => {
+    const { error } = await supabase
+      .from('testimonials')
+      .update({ visible: !testimonial.visible })
+      .eq('id', testimonial.id);
+
+    if (error) {
+      console.error('Error updating testimonial:', error);
+      toast.error('Failed to update testimonial');
+      return;
+    }
+
+    toast.success(testimonial.visible ? 'Testimonial hidden' : 'Testimonial visible');
+    fetchTestimonials();
   };
 
   return (
@@ -155,6 +240,7 @@ const AdminTestimonials = () => {
                   onChange={(e) => setFormData({...formData, quote: e.target.value})}
                   placeholder="Enter the customer's testimonial..."
                   className="min-h-[100px]"
+                  required
                 />
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -165,6 +251,7 @@ const AdminTestimonials = () => {
                     value={formData.author}
                     onChange={(e) => setFormData({...formData, author: e.target.value})}
                     placeholder="e.g., Sarah Johnson"
+                    required
                   />
                 </div>
                 <div className="space-y-2">
@@ -174,6 +261,7 @@ const AdminTestimonials = () => {
                     value={formData.role}
                     onChange={(e) => setFormData({...formData, role: e.target.value})}
                     placeholder="e.g., CEO"
+                    required
                   />
                 </div>
               </div>
@@ -184,16 +272,20 @@ const AdminTestimonials = () => {
                   value={formData.company}
                   onChange={(e) => setFormData({...formData, company: e.target.value})}
                   placeholder="e.g., TechStartup Inc"
+                  required
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="image">Profile Image URL</Label>
+                <Label htmlFor="image">Profile Image</Label>
                 <Input
                   id="image"
-                  value={formData.image}
-                  onChange={(e) => setFormData({...formData, image: e.target.value})}
-                  placeholder="https://images.unsplash.com/photo-..."
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => setImageFile(e.target.files?.[0] || null)}
                 />
+                {editingTestimonial?.image_url && !imageFile && (
+                  <p className="text-sm text-gray-500 mt-1">Current image will be kept</p>
+                )}
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
@@ -201,8 +293,8 @@ const AdminTestimonials = () => {
                   <Input
                     id="order"
                     type="number"
-                    value={formData.order}
-                    onChange={(e) => setFormData({...formData, order: parseInt(e.target.value) || 1})}
+                    value={formData.display_order}
+                    onChange={(e) => setFormData({...formData, display_order: parseInt(e.target.value) || 1})}
                     placeholder="1"
                   />
                 </div>
@@ -229,7 +321,7 @@ const AdminTestimonials = () => {
         <CardHeader>
           <CardTitle>All Testimonials</CardTitle>
           <CardDescription>
-            {content.testimonials.length} testimonials total • {content.testimonials.filter(t => t.visible).length} visible
+            {testimonials.length} testimonials total • {testimonials.filter(t => t.visible).length} visible
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -244,18 +336,17 @@ const AdminTestimonials = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {content.testimonials.map((testimonial) => (
+              {testimonials.map((testimonial) => (
                 <TableRow key={testimonial.id}>
                   <TableCell>
                     <div className="flex items-center space-x-3">
-                      <img 
-                        src={testimonial.image} 
-                        alt={testimonial.author}
-                        className="w-8 h-8 rounded-full object-cover"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop&crop=face';
-                        }}
-                      />
+                      {testimonial.image_url && (
+                        <img 
+                          src={testimonial.image_url} 
+                          alt={testimonial.author}
+                          className="w-8 h-8 rounded-full object-cover"
+                        />
+                      )}
                       <div>
                         <div className="font-medium">{testimonial.author}</div>
                         <div className="text-sm text-gray-500">
@@ -275,14 +366,14 @@ const AdminTestimonials = () => {
                     </Badge>
                   </TableCell>
                   <TableCell className="text-sm text-gray-500">
-                    {testimonial.order}
+                    {testimonial.display_order}
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex items-center justify-end gap-2">
                       <Button
                         variant="ghost"
                         size="icon"
-                        onClick={() => toggleVisibility(testimonial.id)}
+                        onClick={() => toggleVisibility(testimonial)}
                       >
                         {testimonial.visible ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
                       </Button>
@@ -306,6 +397,11 @@ const AdminTestimonials = () => {
               ))}
             </TableBody>
           </Table>
+          {testimonials.length === 0 && (
+            <div className="text-center py-8 text-gray-500">
+              No testimonials yet. Click "Add Testimonial" to create one.
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>

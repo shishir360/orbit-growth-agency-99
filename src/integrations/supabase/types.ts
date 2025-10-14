@@ -59,6 +59,66 @@ export type Database = {
         }
         Relationships: []
       }
+      company_info: {
+        Row: {
+          address: string | null
+          company_name: string
+          created_at: string
+          description: string | null
+          email: string | null
+          facebook_url: string | null
+          founded_year: string | null
+          id: string
+          instagram_url: string | null
+          linkedin_url: string | null
+          logo: string
+          phone: string | null
+          tagline: string | null
+          team_size: string | null
+          twitter_url: string | null
+          updated_at: string
+          website: string | null
+        }
+        Insert: {
+          address?: string | null
+          company_name: string
+          created_at?: string
+          description?: string | null
+          email?: string | null
+          facebook_url?: string | null
+          founded_year?: string | null
+          id?: string
+          instagram_url?: string | null
+          linkedin_url?: string | null
+          logo: string
+          phone?: string | null
+          tagline?: string | null
+          team_size?: string | null
+          twitter_url?: string | null
+          updated_at?: string
+          website?: string | null
+        }
+        Update: {
+          address?: string | null
+          company_name?: string
+          created_at?: string
+          description?: string | null
+          email?: string | null
+          facebook_url?: string | null
+          founded_year?: string | null
+          id?: string
+          instagram_url?: string | null
+          linkedin_url?: string | null
+          logo?: string
+          phone?: string | null
+          tagline?: string | null
+          team_size?: string | null
+          twitter_url?: string | null
+          updated_at?: string
+          website?: string | null
+        }
+        Relationships: []
+      }
       images: {
         Row: {
           id: string
@@ -134,6 +194,120 @@ export type Database = {
           technologies?: string[] | null
           title?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      reviews: {
+        Row: {
+          comment: string
+          created_at: string
+          email: string
+          id: string
+          name: string
+          rating: number
+          source: string
+          updated_at: string
+          visible: boolean
+        }
+        Insert: {
+          comment: string
+          created_at?: string
+          email: string
+          id?: string
+          name: string
+          rating: number
+          source?: string
+          updated_at?: string
+          visible?: boolean
+        }
+        Update: {
+          comment?: string
+          created_at?: string
+          email?: string
+          id?: string
+          name?: string
+          rating?: number
+          source?: string
+          updated_at?: string
+          visible?: boolean
+        }
+        Relationships: []
+      }
+      services: {
+        Row: {
+          created_at: string
+          description: string
+          display_order: number
+          icon: string
+          id: string
+          image_path: string | null
+          page_url: string
+          title: string
+          updated_at: string
+          visible: boolean
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          display_order?: number
+          icon: string
+          id?: string
+          image_path?: string | null
+          page_url: string
+          title: string
+          updated_at?: string
+          visible?: boolean
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          display_order?: number
+          icon?: string
+          id?: string
+          image_path?: string | null
+          page_url?: string
+          title?: string
+          updated_at?: string
+          visible?: boolean
+        }
+        Relationships: []
+      }
+      testimonials: {
+        Row: {
+          author: string
+          company: string
+          created_at: string
+          display_order: number
+          id: string
+          image_url: string | null
+          quote: string
+          role: string
+          updated_at: string
+          visible: boolean
+        }
+        Insert: {
+          author: string
+          company: string
+          created_at?: string
+          display_order?: number
+          id?: string
+          image_url?: string | null
+          quote: string
+          role: string
+          updated_at?: string
+          visible?: boolean
+        }
+        Update: {
+          author?: string
+          company?: string
+          created_at?: string
+          display_order?: number
+          id?: string
+          image_url?: string | null
+          quote?: string
+          role?: string
+          updated_at?: string
+          visible?: boolean
         }
         Relationships: []
       }

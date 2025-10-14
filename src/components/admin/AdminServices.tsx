@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -31,23 +31,54 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Plus, Edit, Trash2, Eye, EyeOff, Globe } from 'lucide-react';
-import { useContent, Service } from '@/contexts/ContentContext';
-import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
+
+interface Service {
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
+  page_url: string;
+  image_path?: string;
+  visible: boolean;
+  display_order: number;
+  created_at: string;
+  updated_at: string;
+}
 
 const AdminServices = () => {
-  const { content, updateServices } = useContent();
-  const { toast } = useToast();
+  const [services, setServices] = useState<Service[]>([]);
   const [editingService, setEditingService] = useState<Service | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
     description: '',
     icon: 'Globe',
-    href: '',
-    image: '',
+    page_url: '',
+    image_path: '',
     visible: true,
-    order: 1
+    display_order: 1
   });
+
+  useEffect(() => {
+    fetchServices();
+  }, []);
+
+  const fetchServices = async () => {
+    const { data, error } = await supabase
+      .from('services')
+      .select('*')
+      .order('display_order', { ascending: true });
+
+    if (error) {
+      console.error('Error fetching services:', error);
+      toast.error('Failed to load services');
+      return;
+    }
+
+    setServices(data || []);
+  };
 
   const handleEdit = (service: Service) => {
     setEditingService(service);
@@ -55,79 +86,103 @@ const AdminServices = () => {
       title: service.title,
       description: service.description,
       icon: service.icon,
-      href: service.href,
-      image: service.image,
+      page_url: service.page_url,
+      image_path: service.image_path || '',
       visible: service.visible,
-      order: service.order
+      display_order: service.display_order
     });
     setIsDialogOpen(true);
   };
 
   const handleAdd = () => {
     setEditingService(null);
-    const maxOrder = Math.max(...content.services.map(s => s.order), 0);
+    const maxOrder = Math.max(...services.map(s => s.display_order), 0);
     setFormData({
       title: '',
       description: '',
       icon: 'Globe',
-      href: '',
-      image: '',
+      page_url: '',
+      image_path: '',
       visible: true,
-      order: maxOrder + 1
+      display_order: maxOrder + 1
     });
     setIsDialogOpen(true);
   };
 
-  const handleSubmit = () => {
-    let updatedServices = [...content.services];
-    
+  const handleSubmit = async () => {
+    const serviceData = {
+      title: formData.title,
+      description: formData.description,
+      icon: formData.icon,
+      page_url: formData.page_url,
+      image_path: formData.image_path,
+      visible: formData.visible,
+      display_order: formData.display_order,
+    };
+
     if (editingService) {
-      updatedServices = updatedServices.map(service => 
-        service.id === editingService.id 
-          ? { ...service, ...formData }
-          : service
-      );
-      toast({
-        title: "Service updated",
-        description: "Service has been updated successfully.",
-      });
+      const { error } = await supabase
+        .from('services')
+        .update(serviceData)
+        .eq('id', editingService.id);
+
+      if (error) {
+        console.error('Error updating service:', error);
+        toast.error('Failed to update service');
+        return;
+      }
+
+      toast.success('Service updated successfully');
     } else {
-      const newService: Service = {
-        id: Date.now().toString(),
-        ...formData,
-      };
-      updatedServices.push(newService);
-      toast({
-        title: "Service created",
-        description: "New service has been created successfully.",
-      });
+      const { error } = await supabase
+        .from('services')
+        .insert([serviceData]);
+
+      if (error) {
+        console.error('Error creating service:', error);
+        toast.error('Failed to create service');
+        return;
+      }
+
+      toast.success('Service created successfully');
     }
-    updateServices(updatedServices);
+
     setIsDialogOpen(false);
+    fetchServices();
   };
 
-  const handleDelete = (id: string) => {
-    const updatedServices = content.services.filter(service => service.id !== id);
-    updateServices(updatedServices);
-    toast({
-      title: "Service deleted",
-      description: "Service has been deleted successfully.",
-    });
+  const handleDelete = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this service?')) return;
+
+    const { error } = await supabase
+      .from('services')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      console.error('Error deleting service:', error);
+      toast.error('Failed to delete service');
+      return;
+    }
+
+    toast.success('Service deleted successfully');
+    fetchServices();
   };
 
-  const toggleVisibility = (id: string) => {
-    const updatedServices = content.services.map(service => 
-      service.id === id 
-        ? { ...service, visible: !service.visible }
-        : service
-    );
-    updateServices(updatedServices);
-    
-    const service = content.services.find(s => s.id === id);
-    toast({
-      title: "Service visibility updated",
-      description: `${service?.title} is now ${service?.visible ? 'hidden' : 'visible'}`,
-    });
+  const toggleVisibility = async (service: Service) => {
+    const { error } = await supabase
+      .from('services')
+      .update({ visible: !service.visible })
+      .eq('id', service.id);
+
+    if (error) {
+      console.error('Error updating service:', error);
+      toast.error('Failed to update service');
+      return;
+    }
+
+    toast.success(service.visible ? 'Service hidden' : 'Service visible');
+    fetchServices();
   };
 
   return (
@@ -161,6 +216,7 @@ const AdminServices = () => {
                   value={formData.title}
                   onChange={(e) => setFormData({...formData, title: e.target.value})}
                   placeholder="Enter service title"
+                  required
                 />
               </div>
               <div className="space-y-2">
@@ -171,6 +227,7 @@ const AdminServices = () => {
                   onChange={(e) => setFormData({...formData, description: e.target.value})}
                   placeholder="Enter service description"
                   className="min-h-[100px]"
+                  required
                 />
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -188,21 +245,22 @@ const AdminServices = () => {
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="href">Service URL</Label>
+                  <Label htmlFor="page_url">Service URL</Label>
                   <Input
-                    id="href"
-                    value={formData.href}
-                    onChange={(e) => setFormData({...formData, href: e.target.value})}
+                    id="page_url"
+                    value={formData.page_url}
+                    onChange={(e) => setFormData({...formData, page_url: e.target.value})}
                     placeholder="e.g., /website-design"
+                    required
                   />
                 </div>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="image">Service Image Path</Label>
+                <Label htmlFor="image_path">Service Image Path</Label>
                 <Input
-                  id="image"
-                  value={formData.image}
-                  onChange={(e) => setFormData({...formData, image: e.target.value})}
+                  id="image_path"
+                  value={formData.image_path}
+                  onChange={(e) => setFormData({...formData, image_path: e.target.value})}
                   placeholder="e.g., /src/assets/website-design-hero.jpg"
                 />
               </div>
@@ -212,8 +270,8 @@ const AdminServices = () => {
                   <Input
                     id="order"
                     type="number"
-                    value={formData.order}
-                    onChange={(e) => setFormData({...formData, order: parseInt(e.target.value) || 1})}
+                    value={formData.display_order}
+                    onChange={(e) => setFormData({...formData, display_order: parseInt(e.target.value) || 1})}
                     placeholder="1"
                   />
                 </div>
@@ -240,7 +298,7 @@ const AdminServices = () => {
         <CardHeader>
           <CardTitle>All Services</CardTitle>
           <CardDescription>
-            {content.services.length} services total • {content.services.filter(s => s.visible).length} visible
+            {services.length} services total • {services.filter(s => s.visible).length} visible
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -255,7 +313,7 @@ const AdminServices = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {content.services.map((service) => (
+              {services.map((service) => (
                 <TableRow key={service.id}>
                   <TableCell>
                     <div>
@@ -269,7 +327,7 @@ const AdminServices = () => {
                     <div className="flex items-center gap-1">
                       <span className="text-sm">{service.icon}</span>
                       <Globe className="w-3 h-3 text-gray-400" />
-                      <span className="text-sm font-mono">{service.href}</span>
+                      <span className="text-sm font-mono">{service.page_url}</span>
                     </div>
                   </TableCell>
                   <TableCell>
@@ -278,14 +336,14 @@ const AdminServices = () => {
                     </Badge>
                   </TableCell>
                   <TableCell className="text-sm text-gray-500">
-                    {service.order}
+                    {service.display_order}
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex items-center justify-end gap-2">
                       <Button
                         variant="ghost"
                         size="icon"
-                        onClick={() => toggleVisibility(service.id)}
+                        onClick={() => toggleVisibility(service)}
                       >
                         {service.visible ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
                       </Button>
@@ -309,6 +367,11 @@ const AdminServices = () => {
               ))}
             </TableBody>
           </Table>
+          {services.length === 0 && (
+            <div className="text-center py-8 text-gray-500">
+              No services yet. Click "Add Service" to create one.
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
