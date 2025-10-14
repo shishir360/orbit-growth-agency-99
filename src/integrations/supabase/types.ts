@@ -86,6 +86,57 @@ export type Database = {
         }
         Relationships: []
       }
+      portfolio: {
+        Row: {
+          blocked: boolean
+          category: string
+          content: string | null
+          created_at: string
+          description: string
+          featured: boolean
+          id: string
+          image_url: string | null
+          project_url: string | null
+          published: boolean
+          slug: string
+          technologies: string[] | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          blocked?: boolean
+          category: string
+          content?: string | null
+          created_at?: string
+          description: string
+          featured?: boolean
+          id?: string
+          image_url?: string | null
+          project_url?: string | null
+          published?: boolean
+          slug: string
+          technologies?: string[] | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          blocked?: boolean
+          category?: string
+          content?: string | null
+          created_at?: string
+          description?: string
+          featured?: boolean
+          id?: string
+          image_url?: string | null
+          project_url?: string | null
+          published?: boolean
+          slug?: string
+          technologies?: string[] | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
