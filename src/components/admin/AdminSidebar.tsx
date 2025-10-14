@@ -34,7 +34,8 @@ import {
   Activity,
   Search,
   Folder,
-  HelpCircle
+  HelpCircle,
+  DollarSign
 } from 'lucide-react';
 
 interface AdminSidebarProps {
@@ -64,6 +65,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ collapsed, onToggle, mobile
     
     // Services
     { to: '/admin-dashboard/services', icon: Settings, label: 'All Services', section: 'services' },
+    { to: '/admin-dashboard/pricing', icon: DollarSign, label: 'Pricing Plans', section: 'services' },
     { to: '/admin-dashboard/website-design', icon: Globe, label: 'Website Design', section: 'services' },
     { to: '/admin-dashboard/ads-management', icon: Target, label: 'Ads Management', section: 'services' },
     { to: '/admin-dashboard/ai-automation', icon: Bot, label: 'AI Automation', section: 'services' },

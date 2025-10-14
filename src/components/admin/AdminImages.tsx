@@ -14,8 +14,8 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Upload, Trash2, Download, Eye, Search } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
 
 interface ImageFile {
   id: string;

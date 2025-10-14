@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -31,49 +33,41 @@ interface Page {
   slug: string;
   content: string;
   visible: boolean;
-  createdAt: string;
-  updatedAt: string;
+  created_at: string;
+  updated_at: string;
 }
 
 const AdminPages = () => {
-  const [pages, setPages] = useState<Page[]>([
-    {
-      id: '1',
-      title: 'About Us',
-      slug: '/about',
-      content: 'Learn more about our company and mission...',
-      visible: true,
-      createdAt: '2024-01-15',
-      updatedAt: '2024-01-20'
-    },
-    {
-      id: '2',
-      title: 'Contact',
-      slug: '/contact',
-      content: 'Get in touch with our team...',
-      visible: true,
-      createdAt: '2024-01-16',
-      updatedAt: '2024-01-18'
-    },
-    {
-      id: '3',
-      title: 'Privacy Policy',
-      slug: '/privacy',
-      content: 'Our privacy policy and data handling...',
-      visible: true,
-      createdAt: '2024-01-17',
-      updatedAt: '2024-01-17'
-    }
-  ]);
-
+  const [pages, setPages] = useState<Page[]>([]);
   const [editingPage, setEditingPage] = useState<Page | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
     title: '',
     slug: '',
     content: '',
     visible: true
   });
+
+  useEffect(() => {
+    fetchPages();
+  }, []);
+
+  const fetchPages = async () => {
+    setLoading(true);
+    const { data, error } = await supabase
+      .from('pages')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      toast.error('Failed to load pages');
+      console.error(error);
+    } else {
+      setPages(data || []);
+    }
+    setLoading(false);
+  };
 
   const handleEdit = (page: Page) => {
     setEditingPage(page);
@@ -97,37 +91,71 @@ const AdminPages = () => {
     setIsDialogOpen(true);
   };
 
-  const handleSubmit = () => {
-    const now = new Date().toISOString().split('T')[0];
-    
+  const handleSubmit = async () => {
     if (editingPage) {
-      setPages(pages.map(page => 
-        page.id === editingPage.id 
-          ? { ...page, ...formData, updatedAt: now }
-          : page
-      ));
+      const { error } = await supabase
+        .from('pages')
+        .update(formData)
+        .eq('id', editingPage.id);
+
+      if (error) {
+        toast.error('Failed to update page');
+        console.error(error);
+        return;
+      }
+      toast.success('Page updated successfully');
     } else {
-      const newPage: Page = {
-        id: Date.now().toString(),
-        ...formData,
-        createdAt: now,
-        updatedAt: now
-      };
-      setPages([...pages, newPage]);
+      const { error } = await supabase
+        .from('pages')
+        .insert([formData]);
+
+      if (error) {
+        toast.error('Failed to create page');
+        console.error(error);
+        return;
+      }
+      toast.success('Page created successfully');
     }
+    
+    fetchPages();
     setIsDialogOpen(false);
   };
 
-  const handleDelete = (id: string) => {
-    setPages(pages.filter(page => page.id !== id));
+  const handleDelete = async (id: string) => {
+    if (confirm('Are you sure you want to delete this page?')) {
+      const { error } = await supabase
+        .from('pages')
+        .delete()
+        .eq('id', id);
+
+      if (error) {
+        toast.error('Failed to delete page');
+        console.error(error);
+        return;
+      }
+      
+      toast.success('Page deleted successfully');
+      fetchPages();
+    }
   };
 
-  const toggleVisibility = (id: string) => {
-    setPages(pages.map(page => 
-      page.id === id 
-        ? { ...page, visible: !page.visible }
-        : page
-    ));
+  const toggleVisibility = async (id: string) => {
+    const page = pages.find(p => p.id === id);
+    if (!page) return;
+
+    const { error } = await supabase
+      .from('pages')
+      .update({ visible: !page.visible })
+      .eq('id', id);
+
+    if (error) {
+      toast.error('Failed to update visibility');
+      console.error(error);
+      return;
+    }
+
+    toast.success('Page visibility updated');
+    fetchPages();
   };
 
   return (
@@ -241,7 +269,7 @@ const AdminPages = () => {
                     </Badge>
                   </TableCell>
                   <TableCell className="text-sm text-gray-500">
-                    {page.updatedAt}
+                    {new Date(page.updated_at).toLocaleDateString()}
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex items-center justify-end gap-2">

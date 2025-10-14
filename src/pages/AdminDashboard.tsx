@@ -26,6 +26,7 @@ import AdminAdsManagement from '@/components/admin/AdminAdsManagement';
 import AdminAIAutomation from '@/components/admin/AdminAIAutomation';
 import AdminQuestions from '@/components/admin/AdminQuestions';
 import AdminCategories from '@/components/admin/AdminCategories';
+import AdminPricing from '@/components/admin/AdminPricing';
 
 const AdminDashboard = () => {
   const { isAuthenticated } = useAdminAuth();
@@ -82,6 +83,7 @@ const AdminDashboard = () => {
             <Route path="tracking" element={<AdminTracking />} />
             <Route path="analytics" element={<AdminAnalytics />} />
             <Route path="users" element={<AdminUsers />} />
+            <Route path="pricing" element={<AdminPricing />} />
           </Routes>
         </div>
       </main>

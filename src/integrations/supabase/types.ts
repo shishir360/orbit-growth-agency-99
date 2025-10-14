@@ -146,6 +146,36 @@ export type Database = {
         }
         Relationships: []
       }
+      pages: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          slug: string
+          title: string
+          updated_at: string
+          visible: boolean
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          slug: string
+          title: string
+          updated_at?: string
+          visible?: boolean
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          slug?: string
+          title?: string
+          updated_at?: string
+          visible?: boolean
+        }
+        Relationships: []
+      }
       portfolio: {
         Row: {
           blocked: boolean
@@ -194,6 +224,48 @@ export type Database = {
           technologies?: string[] | null
           title?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      pricing: {
+        Row: {
+          billing_period: string | null
+          created_at: string
+          currency: string
+          display_order: number
+          features: string[] | null
+          id: string
+          popular: boolean
+          price: number
+          service_name: string
+          updated_at: string
+          visible: boolean
+        }
+        Insert: {
+          billing_period?: string | null
+          created_at?: string
+          currency?: string
+          display_order?: number
+          features?: string[] | null
+          id?: string
+          popular?: boolean
+          price: number
+          service_name: string
+          updated_at?: string
+          visible?: boolean
+        }
+        Update: {
+          billing_period?: string | null
+          created_at?: string
+          currency?: string
+          display_order?: number
+          features?: string[] | null
+          id?: string
+          popular?: boolean
+          price?: number
+          service_name?: string
+          updated_at?: string
+          visible?: boolean
         }
         Relationships: []
       }
