@@ -16,10 +16,22 @@ const BlogPost = () => {
   const { slug } = useParams();
   const { toast } = useToast();
   const [copied, setCopied] = useState(false);
-  const { getPostBySlug, getPublishedPosts } = useBlog();
+  const { getPostBySlug, getPublishedPosts, loading } = useBlog();
 
   // Get the blog post from context
   const blogPost = getPostBySlug(slug || '');
+
+  // Show loading state while posts are being fetched
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading post...</p>
+        </div>
+      </div>
+    );
+  }
 
   // If post doesn't exist, is not published, or is blocked, redirect to blog page
   if (!blogPost || !blogPost.published || blogPost.blocked) {

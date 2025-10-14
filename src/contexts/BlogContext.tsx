@@ -19,6 +19,7 @@ export interface BlogPost {
 
 interface BlogContextType {
   posts: BlogPost[];
+  loading: boolean;
   getPostBySlug: (slug: string) => BlogPost | undefined;
   updatePost: (id: string, updates: Partial<BlogPost>) => void;
   addPost: (post: Omit<BlogPost, 'id' | 'updatedAt'>) => void;
@@ -38,10 +39,12 @@ export const useBlog = () => {
 
 export const BlogProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 const [posts, setPosts] = useState<BlogPost[]>([]);
+const [loading, setLoading] = useState(true);
 
 // Load published posts from backend on mount
 useEffect(() => {
   const fetchPublished = async () => {
+    setLoading(true);
     const { data, error } = await supabase
       .from('blog_posts')
       .select('*')
@@ -51,6 +54,7 @@ useEffect(() => {
 
     if (error) {
       console.error('Failed to load blog posts:', error);
+      setLoading(false);
       return;
     }
 
@@ -72,6 +76,7 @@ useEffect(() => {
     }));
 
     setPosts(mapped);
+    setLoading(false);
     console.log('Loaded posts from backend:', mapped.length);
   };
 
@@ -110,6 +115,7 @@ useEffect(() => {
   return (
     <BlogContext.Provider value={{
       posts,
+      loading,
       getPostBySlug,
       updatePost,
       addPost,
