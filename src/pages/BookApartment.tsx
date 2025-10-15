@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Navigation from '@/components/ui/navigation';
 import Footer from '@/components/ui/footer';
 import SEO from '@/components/ui/seo';
@@ -16,7 +15,6 @@ import { cn } from '@/lib/utils';
 import { toast } from '@/hooks/use-toast';
 
 const BookApartment = () => {
-  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [date, setDate] = useState<Date>();
   const [formData, setFormData] = useState({
