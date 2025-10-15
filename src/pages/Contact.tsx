@@ -14,7 +14,7 @@ import SEO from "@/components/ui/seo";
 const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
-  const webhookUrl = "https://hook.eu2.make.com/wvpplt3xrjgpmpfhneucen1ywgladsfo";
+  const webhookUrl = "https://iamfts0bbb.app.n8n.cloud/webhook-test/contacus";
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

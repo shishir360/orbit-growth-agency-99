@@ -446,7 +446,7 @@ const Tutorials = () => {
                   <h3 className="font-bold mb-2">Free Consultation</h3>
                   <p className="text-muted-foreground text-sm mb-4">Get personalized advice for your project</p>
                   <Button variant="outline" size="sm" asChild>
-                    <a href="/contact">Book Call</a>
+                    <a href="/book-apartment">Book Call</a>
                   </Button>
                 </div>
 

@@ -356,7 +356,7 @@ const About = () => {
             Need help deciding between a website or an AI automation? Book a free discovery call—we'll walk you through both options and help map out a plan.
           </p>
           <Button asChild size="lg" className="group bg-white text-gray-900 hover:bg-gray-100 text-xl px-10 py-6 shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-105">
-            <a href="/contact">
+            <a href="/book-apartment">
               Book a Discovery Call 
               <ArrowRight className="ml-3 w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </a>
