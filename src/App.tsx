@@ -46,6 +46,7 @@ import Sitemap from "./pages/Sitemap";
 import PortfolioWebsiteDesign from "./pages/PortfolioWebsiteDesign";
 import PortfolioAIAutomation from "./pages/PortfolioAIAutomation";
 import PortfolioAdsManagement from "./pages/PortfolioAdsManagement";
+import BookApartment from "./pages/BookApartment";
 
 const queryClient = new QueryClient();
 
@@ -80,6 +81,7 @@ const App = () => (
                   <Route path="/about" element={<About />} />
                   <Route path="/pricing" element={<Pricing />} />
                   <Route path="/contact" element={<Contact />} />
+                  <Route path="/book-apartment" element={<BookApartment />} />
                   <Route path="/blog" element={<Blog />} />
                   <Route path="/blog/categories" element={<BlogCategories />} />
                   <Route path="/blog/:slug" element={<BlogPost />} />
