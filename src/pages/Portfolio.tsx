@@ -196,9 +196,25 @@ const Portfolio = () => {
 
   const categories = ["All", "Website Design", "Ads Management", "AI Automation"];
   
+  // Combine database projects with hardcoded projects
+  const allProjects = [...dbProjects.map(p => ({
+    id: p.slug,
+    title: p.title,
+    description: p.description,
+    image: p.image_url || "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80",
+    category: p.category,
+    technologies: p.technologies || [],
+    timeline: "Custom",
+    users: "N/A",
+    results: "View project",
+    featured: p.featured,
+    liveUrl: p.project_url,
+    isFromDb: true
+  })), ...projects];
+  
   const filteredProjects = activeCategory === "All" 
-    ? projects 
-    : projects.filter(project => project.category === activeCategory);
+    ? allProjects 
+    : allProjects.filter(project => project.category === activeCategory);
     
   const featuredProjects = filteredProjects.filter(project => project.featured);
   const regularProjects = filteredProjects.filter(project => !project.featured);
@@ -332,7 +348,12 @@ const Portfolio = () => {
           </div>
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-            {featuredProjects.map((project, index) => (
+            {loadingDb ? (
+              <>
+                <Skeleton className="h-[600px] rounded-3xl" />
+                <Skeleton className="h-[600px] rounded-3xl" />
+              </>
+            ) : featuredProjects.map((project, index) => (
               <Card key={index} className="luxury-card overflow-hidden group hover:scale-[1.02] transition-all duration-700">
                 <div className="relative">
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent z-10"></div>
@@ -434,7 +455,13 @@ const Portfolio = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-            {regularProjects.map((project, index) => (
+            {loadingDb ? (
+              <>
+                <Skeleton className="h-[450px] rounded-3xl" />
+                <Skeleton className="h-[450px] rounded-3xl" />
+                <Skeleton className="h-[450px] rounded-3xl" />
+              </>
+            ) : regularProjects.map((project, index) => (
               <Card key={index} className="luxury-card overflow-hidden group hover:scale-105 transition-all duration-500">
                 <div className="relative">
                   <img 
