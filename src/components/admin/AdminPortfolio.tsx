@@ -180,7 +180,7 @@ const AdminPortfolio = () => {
       } else {
         const { error } = await supabase
           .from('portfolio')
-          .insert([validData]);
+          .insert([validData as any]);
 
         if (error) throw error;
         toast.success('Project created successfully');
