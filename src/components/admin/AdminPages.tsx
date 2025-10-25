@@ -25,7 +25,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Plus, Edit, Trash2, Eye, EyeOff, Globe } from 'lucide-react';
+import { Plus, Edit, Trash2, Eye, EyeOff, Globe, ExternalLink } from 'lucide-react';
 
 interface Page {
   id: string;
@@ -96,10 +96,22 @@ const AdminPages = () => {
   };
 
   const handleSubmit = async () => {
+    // Normalize slug to always start with "/"
+    const normalizedSlug = formData.slug.startsWith('/') ? formData.slug : `/${formData.slug}`;
+    // Basic validation for iframe URL
+    const iframeUrl = formData.iframe_url?.trim();
+    const cleanedIframeUrl = iframeUrl && /^(https?:)\/\//i.test(iframeUrl) ? iframeUrl : '';
+
+    const payload = {
+      ...formData,
+      slug: normalizedSlug,
+      iframe_url: cleanedIframeUrl,
+    };
+
     if (editingPage) {
       const { error } = await supabase
         .from('pages')
-        .update(formData)
+        .update(payload)
         .eq('id', editingPage.id);
 
       if (error) {
@@ -111,7 +123,7 @@ const AdminPages = () => {
     } else {
       const { error } = await supabase
         .from('pages')
-        .insert([formData]);
+        .insert([payload]);
 
       if (error) {
         toast.error('Failed to create page');
@@ -276,7 +288,9 @@ const AdminPages = () => {
                   <TableCell>
                     <div className="flex items-center gap-1">
                       <Globe className="w-3 h-3 text-gray-400" />
-                      <span className="text-sm font-mono">{page.slug}</span>
+                      <a href={page.slug} target="_blank" rel="noopener noreferrer" className="text-sm font-mono underline">
+                        {page.slug}
+                      </a>
                     </div>
                   </TableCell>
                   <TableCell>
@@ -289,6 +303,11 @@ const AdminPages = () => {
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex items-center justify-end gap-2">
+                      <a href={page.slug} target="_blank" rel="noopener noreferrer">
+                        <Button variant="ghost" size="icon" aria-label="View page">
+                          <ExternalLink className="w-4 h-4" />
+                        </Button>
+                      </a>
                       <Button
                         variant="ghost"
                         size="icon"

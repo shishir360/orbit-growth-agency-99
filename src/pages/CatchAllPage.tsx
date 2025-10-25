@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import Navigation from '@/components/ui/navigation';
 import Footer from '@/components/ui/footer';
 import SEO from '@/components/ui/seo';
 import { Skeleton } from '@/components/ui/skeleton';
+import NotFound from './NotFound';
 
 interface Page {
   id: string;
@@ -15,37 +16,28 @@ interface Page {
   visible: boolean;
 }
 
-const DynamicPage = () => {
-  const { slug } = useParams();
+const CatchAllPage = () => {
+  const location = useLocation();
   const [page, setPage] = useState<Page | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
 
   useEffect(() => {
     const fetchPage = async () => {
-      if (!slug) return;
-      
       setLoading(true);
-      setError(false);
+      const path = location.pathname; // e.g. "/shishir"
 
-      const { data, error: fetchError } = await supabase
+      const { data } = await supabase
         .from('pages')
         .select('*')
-        .eq('slug', `/${slug}`)
+        .eq('slug', path)
         .eq('visible', true)
         .maybeSingle();
 
-      if (fetchError || !data) {
-        setError(true);
-      } else {
-        setPage(data);
-      }
-      
+      setPage(data ?? null);
       setLoading(false);
     };
-
     fetchPage();
-  }, [slug]);
+  }, [location.pathname]);
 
   if (loading) {
     return (
@@ -64,23 +56,8 @@ const DynamicPage = () => {
     );
   }
 
-  if (error || !page) {
-    return (
-      <>
-        <SEO 
-          title="Page Not Found"
-          description="The requested page could not be found"
-        />
-        <Navigation />
-        <main className="min-h-screen pt-20 px-4">
-          <div className="max-w-7xl mx-auto py-12 text-center">
-            <h1 className="text-4xl font-bold mb-4">Page Not Found</h1>
-            <p className="text-muted-foreground">The page you are looking for does not exist.</p>
-          </div>
-        </main>
-        <Footer />
-      </>
-    );
+  if (!page) {
+    return <NotFound />;
   }
 
   return (
@@ -90,10 +67,8 @@ const DynamicPage = () => {
         description={page.content.substring(0, 160)}
       />
       <Navigation />
-      
       <main className="min-h-screen pt-20">
         {page.iframe_url ? (
-          // Iframe mode - embed external website
           <div className="w-full">
             <iframe
               src={page.iframe_url}
@@ -105,7 +80,6 @@ const DynamicPage = () => {
             />
           </div>
         ) : (
-          // Regular content mode
           <div className="max-w-7xl mx-auto px-4 py-12">
             <h1 className="text-4xl font-bold mb-6">{page.title}</h1>
             <div className="prose prose-lg max-w-none">
@@ -114,10 +88,9 @@ const DynamicPage = () => {
           </div>
         )}
       </main>
-      
       <Footer />
     </>
   );
 };
 
-export default DynamicPage;
+export default CatchAllPage;
