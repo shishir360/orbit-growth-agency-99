@@ -96,16 +96,33 @@ const AdminPages = () => {
   };
 
   const handleSubmit = async () => {
+    // Validation
+    if (!formData.title.trim()) {
+      toast.error('Page title is required');
+      return;
+    }
+    if (!formData.slug.trim()) {
+      toast.error('URL slug is required');
+      return;
+    }
+
     // Normalize slug to always start with "/"
-    const normalizedSlug = formData.slug.startsWith('/') ? formData.slug : `/${formData.slug}`;
+    const normalizedSlug = formData.slug.trim().startsWith('/') ? formData.slug.trim() : `/${formData.slug.trim()}`;
+    
     // Basic validation for iframe URL
     const iframeUrl = formData.iframe_url?.trim();
     const cleanedIframeUrl = iframeUrl && /^(https?:)\/\//i.test(iframeUrl) ? iframeUrl : '';
 
+    // If iframe URL is provided, content is optional
+    if (!cleanedIframeUrl && !formData.content.trim()) {
+      toast.error('Either content or iframe URL must be provided');
+      return;
+    }
+
     const payload = {
       ...formData,
       slug: normalizedSlug,
-      iframe_url: cleanedIframeUrl,
+      iframe_url: cleanedIframeUrl || null,
     };
 
     if (editingPage) {
@@ -280,9 +297,15 @@ const AdminPages = () => {
                   <TableCell>
                     <div>
                       <div className="font-medium">{page.title}</div>
-                      <div className="text-sm text-gray-500 truncate max-w-[200px]">
-                        {page.content}
-                      </div>
+                      {page.iframe_url ? (
+                        <div className="text-xs text-blue-600 truncate max-w-[200px]">
+                          🔗 {page.iframe_url}
+                        </div>
+                      ) : (
+                        <div className="text-sm text-gray-500 truncate max-w-[200px]">
+                          {page.content}
+                        </div>
+                      )}
                     </div>
                   </TableCell>
                   <TableCell>

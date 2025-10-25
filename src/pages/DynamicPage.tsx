@@ -87,25 +87,30 @@ const DynamicPage = () => {
     <>
       <SEO 
         title={page.title}
-        description={page.content.substring(0, 160)}
+        description={page.iframe_url ? `Visit ${page.title}` : page.content.substring(0, 160)}
+        keywords={page.title}
       />
       <Navigation />
       
-      <main className="min-h-screen pt-20">
+      <main className="pt-20">
         {page.iframe_url ? (
-          // Iframe mode - embed external website
-          <div className="w-full">
+          <div className="w-full h-full">
             <iframe
               src={page.iframe_url}
-              className="w-full border-0"
-              style={{ minHeight: 'calc(100vh - 80px)' }}
+              className="w-full border-0 block"
+              style={{ 
+                minHeight: 'calc(100vh - 80px - 320px)',
+                height: 'calc(100vh - 80px - 320px)',
+                display: 'block',
+                margin: 0,
+                padding: 0
+              }}
               title={page.title}
-              sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox"
+              sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox allow-top-navigation"
               loading="lazy"
             />
           </div>
         ) : (
-          // Regular content mode
           <div className="max-w-7xl mx-auto px-4 py-12">
             <h1 className="text-4xl font-bold mb-6">{page.title}</h1>
             <div className="prose prose-lg max-w-none">
