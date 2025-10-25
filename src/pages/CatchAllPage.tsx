@@ -68,15 +68,15 @@ const CatchAllPage = () => {
         keywords={page.title}
       />
       <Navigation />
-      <main className="pt-20">
+      <main className={page.iframe_url ? "pt-20" : "pt-20"}>
         {page.iframe_url ? (
-          <div className="w-full h-full">
+          <div className="w-full">
             <iframe
               src={page.iframe_url}
               className="w-full border-0 block"
               style={{ 
-                minHeight: 'calc(100vh - 80px - 320px)',
-                height: 'calc(100vh - 80px - 320px)',
+                minHeight: '100vh',
+                height: '200vh',
                 display: 'block',
                 margin: 0,
                 padding: 0
