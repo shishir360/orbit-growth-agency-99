@@ -45,7 +45,7 @@ const AdminPortfolio = () => {
     category: '',
     project_url: '',
     technologies: '',
-    published: false,
+    published: true,
     featured: false,
   });
 
@@ -94,7 +94,7 @@ const AdminPortfolio = () => {
       category: '',
       project_url: '',
       technologies: '',
-      published: false,
+      published: true,
       featured: false,
     });
     setIsDialogOpen(true);

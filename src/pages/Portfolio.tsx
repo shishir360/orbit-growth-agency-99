@@ -301,10 +301,11 @@ const Portfolio = () => {
               <Sparkles className="w-6 h-6 mr-3" />
               Premium Categories
             </Badge>
-            <h2 className="text-3xl lg:text-5xl font-black mb-6 leading-tight">
+            <h2 className="text-3xl lg:text-5xl font-black mb-3 leading-tight">
               <span className="text-foreground">Explore by</span>{" "}
               <span className="premium-gradient-text">Service Type</span>
             </h2>
+            <p className="text-sm text-muted-foreground">Published projects: {dbProjects.length}</p>
           </div>
           
           <div className="flex flex-wrap gap-4 justify-center mb-16">
