@@ -7,7 +7,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Briefcase, Plus, Edit, Trash2, Eye, Upload } from 'lucide-react';
+import { Briefcase, Plus, Edit, Trash2, Eye, Upload, ExternalLink } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -435,6 +436,12 @@ const AdminPortfolio = () => {
                     {project.published ? 'Published' : 'Draft'}
                   </Badge>
                   {project.featured && <Badge variant="outline">Featured</Badge>}
+                  <Link to={`/portfolio/${project.slug}`} target="_blank">
+                    <Button variant="outline" size="sm">
+                      <ExternalLink className="w-4 h-4 mr-1" />
+                      View Now
+                    </Button>
+                  </Link>
                   <Button 
                     variant="ghost" 
                     size="sm"
