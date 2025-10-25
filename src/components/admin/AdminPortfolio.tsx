@@ -119,11 +119,20 @@ const AdminPortfolio = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Validate required fields
+    if (!formData.title || !formData.slug || !formData.description || !formData.category) {
+      toast.error('Please fill in all required fields');
+      return;
+    }
+
     let imageUrl = editingProject?.image_url;
     if (imageFile) {
       const uploadedUrl = await uploadImage(imageFile);
       if (uploadedUrl) {
         imageUrl = uploadedUrl;
+      } else {
+        toast.error('Failed to upload image');
+        return;
       }
     }
 
@@ -399,7 +408,16 @@ const AdminPortfolio = () => {
             {projects.map((project) => (
               <div key={project.id} className="flex items-center justify-between p-4 border rounded-lg">
                 <div className="flex-1">
-                  <h3 className="font-medium">{project.title}</h3>
+                  <h3 className="font-medium">
+                    <a 
+                      href={`/portfolio/${project.slug}`} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="hover:text-primary hover:underline"
+                    >
+                      {project.title}
+                    </a>
+                  </h3>
                   <p className="text-sm text-gray-500">{project.category}</p>
                   <p className="text-xs text-gray-400 mt-1">{project.description.substring(0, 80)}...</p>
                 </div>
