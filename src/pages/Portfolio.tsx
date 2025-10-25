@@ -20,12 +20,36 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Portfolio = () => {
   const [activeCategory, setActiveCategory] = useState("All");
+  const [dbProjects, setDbProjects] = useState<any[]>([]);
+  const [loadingDb, setLoadingDb] = useState(true);
 
   useEffect(() => {
     document.title = "Our Work & Case Studies | Lunexo Media";
+  }, []);
+
+  useEffect(() => {
+    const load = async () => {
+      setLoadingDb(true);
+      const { data, error } = await supabase
+        .from('portfolio')
+        .select('*')
+        .eq('published', true)
+        .eq('blocked', false)
+        .order('created_at', { ascending: false })
+        .limit(12);
+      if (error) {
+        console.error('Error loading portfolio:', error);
+      } else {
+        setDbProjects(data || []);
+      }
+      setLoadingDb(false);
+    };
+    load();
   }, []);
 
   const projects = [

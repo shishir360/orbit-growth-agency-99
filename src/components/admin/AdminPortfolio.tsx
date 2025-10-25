@@ -10,6 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Briefcase, Plus, Edit, Trash2, Eye, Upload } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { z } from 'zod';
 
 interface PortfolioItem {
   id: string;
@@ -27,6 +28,8 @@ interface PortfolioItem {
   created_at: string;
   updated_at: string;
 }
+
+const slugify = (v: string) => v.toLowerCase().trim().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-');
 
 const AdminPortfolio = () => {
   const [projects, setProjects] = useState<PortfolioItem[]>([]);
@@ -119,71 +122,77 @@ const AdminPortfolio = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validate required fields
-    if (!formData.title || !formData.slug || !formData.description || !formData.category) {
-      toast.error('Please fill in all required fields');
-      return;
-    }
+    try {
+      const normalizedSlug = slugify(formData.slug || formData.title);
 
-    let imageUrl = editingProject?.image_url;
-    if (imageFile) {
-      const uploadedUrl = await uploadImage(imageFile);
-      if (uploadedUrl) {
+      let imageUrl = editingProject?.image_url || undefined;
+      if (imageFile) {
+        const uploadedUrl = await uploadImage(imageFile);
+        if (!uploadedUrl) {
+          toast.error('Failed to upload image');
+          return;
+        }
         imageUrl = uploadedUrl;
-      } else {
-        toast.error('Failed to upload image');
-        return;
       }
-    }
 
-    const techArray = formData.technologies
-      ? formData.technologies.split(',').map(t => t.trim())
-      : [];
+      const techArray = formData.technologies
+        ? formData.technologies.split(',').map(t => t.trim()).filter(Boolean)
+        : [];
 
-    const projectData = {
-      title: formData.title,
-      slug: formData.slug,
-      description: formData.description,
-      content: formData.content,
-      category: formData.category,
-      image_url: imageUrl,
-      project_url: formData.project_url,
-      technologies: techArray,
-      published: formData.published,
-      blocked: false,
-      featured: formData.featured,
-    };
+      const projectData = {
+        title: formData.title.trim(),
+        slug: normalizedSlug,
+        description: formData.description.trim(),
+        content: formData.content?.trim() || null,
+        category: formData.category.trim(),
+        image_url: imageUrl || null,
+        project_url: formData.project_url?.trim() || null,
+        technologies: techArray,
+        published: formData.published,
+        blocked: false,
+        featured: formData.featured,
+      };
 
-    if (editingProject) {
+      const schema = z.object({
+        title: z.string().trim().min(2).max(150),
+        slug: z.string().trim().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
+        description: z.string().trim().min(10).max(500),
+        content: z.string().nullable().optional(),
+        category: z.string().trim().min(2).max(100),
+        image_url: z.string().url().nullable().optional(),
+        project_url: z.string().url().nullable().optional(),
+        technologies: z.array(z.string()).optional(),
+        published: z.boolean(),
+        blocked: z.boolean(),
+        featured: z.boolean(),
+      });
+
+      const validData = schema.parse(projectData);
+
+      if (editingProject) {
       const { error } = await supabase
         .from('portfolio')
-        .update(projectData)
+        .update(validData as any)
         .eq('id', editingProject.id);
 
-      if (error) {
-        console.error('Error updating project:', error);
-        toast.error('Failed to update project');
-        return;
+        if (error) throw error;
+        toast.success('Project updated successfully');
+      } else {
+        const { error } = await supabase
+          .from('portfolio')
+          .insert([validData]);
+
+        if (error) throw error;
+        toast.success('Project created successfully');
       }
 
-      toast.success('Project updated successfully');
-    } else {
-      const { error } = await supabase
-        .from('portfolio')
-        .insert([projectData]);
-
-      if (error) {
-        console.error('Error creating project:', error);
-        toast.error('Failed to create project');
-        return;
-      }
-
-      toast.success('Project created successfully');
+      setIsDialogOpen(false);
+      setImageFile(null);
+      fetchProjects();
+    } catch (err: any) {
+      console.error('Save failed:', err);
+      toast.error(err?.message || 'Failed to save project');
     }
-
-    setIsDialogOpen(false);
-    setImageFile(null);
-    fetchProjects();
   };
 
   const handleDelete = async (id: string) => {
