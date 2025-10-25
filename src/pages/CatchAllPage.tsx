@@ -68,7 +68,7 @@ const CatchAllPage = () => {
         keywords={page.title}
       />
       <Navigation />
-      <main className={page.iframe_url ? "pt-20" : "pt-20"}>
+      <main className={page.iframe_url ? "" : "pt-20"}>
         {page.iframe_url ? (
           <div className="w-full">
             <iframe
