@@ -47,6 +47,7 @@ import PortfolioWebsiteDesign from "./pages/PortfolioWebsiteDesign";
 import PortfolioAIAutomation from "./pages/PortfolioAIAutomation";
 import PortfolioAdsManagement from "./pages/PortfolioAdsManagement";
 import BookApartment from "./pages/BookApartment";
+import DynamicPage from "./pages/DynamicPage";
 
 const queryClient = new QueryClient();
 
@@ -99,6 +100,7 @@ const App = () => (
                   <Route path="/terms" element={<Terms />} />
                   <Route path="/admin-login" element={<AdminLogin />} />
                   <Route path="/admin-dashboard/*" element={<AdminDashboard />} />
+                  <Route path="/page/:slug" element={<DynamicPage />} />
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                   <Route path="*" element={<NotFound />} />
                 </Routes>

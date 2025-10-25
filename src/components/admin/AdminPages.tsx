@@ -32,6 +32,7 @@ interface Page {
   title: string;
   slug: string;
   content: string;
+  iframe_url?: string | null;
   visible: boolean;
   created_at: string;
   updated_at: string;
@@ -46,6 +47,7 @@ const AdminPages = () => {
     title: '',
     slug: '',
     content: '',
+    iframe_url: '',
     visible: true
   });
 
@@ -75,6 +77,7 @@ const AdminPages = () => {
       title: page.title,
       slug: page.slug,
       content: page.content,
+      iframe_url: page.iframe_url || '',
       visible: page.visible
     });
     setIsDialogOpen(true);
@@ -86,6 +89,7 @@ const AdminPages = () => {
       title: '',
       slug: '',
       content: '',
+      iframe_url: '',
       visible: true
     });
     setIsDialogOpen(true);
@@ -206,9 +210,21 @@ const AdminPages = () => {
                   id="content"
                   value={formData.content}
                   onChange={(e) => setFormData({...formData, content: e.target.value})}
-                  placeholder="Enter page content..."
+                  placeholder="Enter page content (leave empty if using iframe)..."
                   className="min-h-[100px]"
                 />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="iframe_url">External Website URL (iframe)</Label>
+                <Input
+                  id="iframe_url"
+                  value={formData.iframe_url}
+                  onChange={(e) => setFormData({...formData, iframe_url: e.target.value})}
+                  placeholder="https://example.com (optional - embeds external site)"
+                />
+                <p className="text-xs text-muted-foreground">
+                  If provided, this URL will be embedded with your header/footer
+                </p>
               </div>
               <div className="flex items-center space-x-2">
                 <Switch

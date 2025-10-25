@@ -151,6 +151,7 @@ export type Database = {
           content: string
           created_at: string
           id: string
+          iframe_url: string | null
           slug: string
           title: string
           updated_at: string
@@ -160,6 +161,7 @@ export type Database = {
           content: string
           created_at?: string
           id?: string
+          iframe_url?: string | null
           slug: string
           title: string
           updated_at?: string
@@ -169,6 +171,7 @@ export type Database = {
           content?: string
           created_at?: string
           id?: string
+          iframe_url?: string | null
           slug?: string
           title?: string
           updated_at?: string
