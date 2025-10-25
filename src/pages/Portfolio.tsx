@@ -444,10 +444,11 @@ const Portfolio = () => {
               <BarChart3 className="w-6 h-6 mr-3" />
               Premium Collection
             </Badge>
-            <h2 className="text-3xl lg:text-5xl font-black mb-8 leading-tight">
+            <h2 className="text-3xl lg:text-5xl font-black mb-3 leading-tight">
               <span className="text-foreground">More</span>{" "}
               <span className="premium-gradient-text">Masterpieces</span>
             </h2>
+            <p className="text-sm text-muted-foreground mb-4">All projects: {regularProjects.length}</p>
             <p className="text-lg lg:text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed font-light">
               Explore our complete collection of 
               <span className="text-accent-cta font-bold"> premium digital solutions</span> 
@@ -462,8 +463,12 @@ const Portfolio = () => {
                 <Skeleton className="h-[450px] rounded-3xl" />
                 <Skeleton className="h-[450px] rounded-3xl" />
               </>
+            ) : regularProjects.length === 0 ? (
+              <div className="col-span-full text-center py-12">
+                <p className="text-muted-foreground text-lg">No projects found in this category.</p>
+              </div>
             ) : regularProjects.map((project, index) => (
-              <Card key={index} className="luxury-card overflow-hidden group hover:scale-105 transition-all duration-500">
+              <Card key={project.id || index} className="luxury-card overflow-hidden group hover:scale-105 transition-all duration-500">
                 <div className="relative">
                   <img 
                     src={project.image} 
