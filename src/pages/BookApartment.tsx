@@ -296,7 +296,7 @@ const BookApartment = () => {
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-6 h-6 text-accent" />
-                  <span className="text-sm font-medium">500+ Projects</span>
+                  <span className="text-sm font-medium">50+ Projects</span>
                 </div>
               </div>
             </div>
