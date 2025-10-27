@@ -7,14 +7,37 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Lock, Mail, Eye, EyeOff } from 'lucide-react';
-
+import { supabase } from '@/integrations/supabase/client';
 const AdminLogin = () => {
-  const { isAdmin, loading, signIn } = useAdminAuth();
+  const { isAdmin, loading, signIn, signUp } = useAdminAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  const allowedEmail = 'shishirmd681@gmail.com';
+
+  const handleSignUp = async () => {
+    setError('');
+    if (email !== allowedEmail) {
+      setError('Only the owner can create the admin account.');
+      return;
+    }
+    setIsLoading(true);
+    const { error: signUpError } = await signUp(email, password, 'Admin');
+    if (signUpError) {
+      setError(signUpError.message || 'Sign up failed.');
+      setIsLoading(false);
+      return;
+    }
+    try {
+      await supabase.rpc('grant_admin_to_self_if_allowed');
+    } catch (_) {
+      // no-op: role assignment handled securely on the backend
+    }
+    setIsLoading(false);
+  };
 
   if (loading) {
     return (
@@ -109,6 +132,17 @@ const AdminLogin = () => {
               disabled={isLoading || !email || !password}
             >
               {isLoading ? 'Signing in...' : 'Sign In'}
+            </Button>
+
+            <div className="text-center text-sm text-muted-foreground">Only the owner can create the admin account</div>
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full mt-2"
+              onClick={handleSignUp}
+              disabled={isLoading || !email || !password || email !== allowedEmail}
+            >
+              {isLoading ? 'Processing...' : 'Create Admin Account'}
             </Button>
           </form>
         </CardContent>
