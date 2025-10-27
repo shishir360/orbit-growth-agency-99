@@ -37,6 +37,33 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log("Received booking from:", email);
 
+    // Derive timezone from IP if not provided by client
+    let tz = timezone;
+    let tzOffset = timezone_offset;
+    try {
+      if (!tz || tzOffset === undefined || tzOffset === null) {
+        const xff = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim();
+        const geoUrl = xff ? `https://ipapi.co/${xff}/json/` : 'https://ipapi.co/json/';
+        const geoRes = await fetch(geoUrl);
+        if (geoRes.ok) {
+          const geo = await geoRes.json();
+          if (!tz && geo?.timezone) tz = geo.timezone as string;
+          // ipapi returns utc_offset like "+0600" or "-0500"
+          if ((tzOffset === undefined || tzOffset === null) && typeof geo?.utc_offset === 'string') {
+            const u: string = geo.utc_offset; // e.g. +0600
+            const sign = u.startsWith('-') ? -1 : 1;
+            const hh = parseInt(u.slice(1, 3)) || 0;
+            const mm = parseInt(u.slice(3, 5)) || 0;
+            const total = sign * (hh * 60 + mm);
+            // Store like JS getTimezoneOffset: minutes to add to local to get UTC
+            tzOffset = -total;
+          }
+        }
+      }
+    } catch (e) {
+      console.log('GeoIP lookup failed', e);
+    }
+
     // Validate required fields
     if (!name || !email || !phone || !date || !time || !meeting_platform) {
       return new Response(
@@ -60,8 +87,8 @@ const handler = async (req: Request): Promise<Response> => {
         meeting_platform,
         notes,
         status: "pending",
-        timezone,
-        timezone_offset,
+        timezone: tz,
+        timezone_offset: tzOffset,
       })
       .select()
       .single();
@@ -101,7 +128,7 @@ const handler = async (req: Request): Promise<Response> => {
               <div class="info-box">
                 <h2>Your Booking Details:</h2>
                 <p><strong>📅 Date:</strong> ${date}</p>
-                <p><strong>🕐 Time:</strong> ${time} ${timezone ? `(${timezone})` : ''}</p>
+                <p><strong>🕐 Time:</strong> ${time} ${tz ? `(${tz})` : ''}</p>
                 <p><strong>💻 Platform:</strong> ${meeting_platform}</p>
                 <p><strong>📧 Email:</strong> ${email}</p>
                 <p><strong>📱 Phone:</strong> ${phone}</p>
@@ -156,8 +183,8 @@ const handler = async (req: Request): Promise<Response> => {
                 <p><strong>📧 Email:</strong> ${email}</p>
                 <p><strong>📱 Phone:</strong> ${phone}</p>
                 <p><strong>📅 Date:</strong> ${date}</p>
-                <p><strong>🕐 Time:</strong> ${time} ${timezone ? `(${timezone})` : ''}</p>
-                <p><strong>🌍 Timezone:</strong> ${timezone || 'Not specified'} ${timezone_offset !== undefined ? `(UTC${timezone_offset > 0 ? '-' : '+'}${Math.abs(timezone_offset/60)})` : ''}</p>
+                <p><strong>🕐 Time:</strong> ${time} ${tz ? `(${tz})` : ''}</p>
+                <p><strong>🌍 Timezone:</strong> ${tz || 'Not specified'} ${tzOffset !== undefined && tzOffset !== null ? `(UTC${tzOffset > 0 ? '-' : '+'}${Math.abs(tzOffset/60)})` : ''}</p>
                 <p><strong>💻 Platform:</strong> ${meeting_platform}</p>
                 ${notes ? `<p><strong>📝 Notes:</strong> ${notes}</p>` : ""}
                 <p><strong>Booking ID:</strong> ${booking.id}</p>

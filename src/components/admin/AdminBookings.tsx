@@ -25,6 +25,36 @@ interface Booking {
   updated_at: string;
 }
 
+// Helper functions to convert user's local time to Bangladesh time (Asia/Dhaka)
+const parseTimeToMinutes = (timeStr: string) => {
+  const [time, ampm] = timeStr.split(' ');
+  let [h, m] = time.split(':').map(Number);
+  if (ampm?.toUpperCase() === 'PM' && h !== 12) h += 12;
+  if (ampm?.toUpperCase() === 'AM' && h === 12) h = 0;
+  return h * 60 + (m || 0);
+};
+
+const formatMinutesTo12Hour = (mins: number) => {
+  const total = ((mins % (24 * 60)) + (24 * 60)) % (24 * 60);
+  let h = Math.floor(total / 60);
+  const m = total % 60;
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  h = h % 12;
+  if (h === 0) h = 12;
+  const hh = h.toString().padStart(2, '0');
+  const mm = m.toString().padStart(2, '0');
+  return `${hh}:${mm} ${ampm}`;
+};
+
+const toDhakaTime = (localTimeStr: string, userOffset: number | null | undefined) => {
+  if (userOffset === null || userOffset === undefined) return null;
+  const localMins = parseTimeToMinutes(localTimeStr);
+  const utcMins = localMins + userOffset; // getTimezoneOffset semantics
+  const dhakaOffset = -360; // Asia/Dhaka = UTC+6 -> getTimezoneOffset = -360
+  const dhakaMins = utcMins - dhakaOffset;
+  return formatMinutesTo12Hour(dhakaMins);
+};
+
 const AdminBookings = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [bookings, setBookings] = useState<Booking[]>([]);
@@ -242,6 +272,11 @@ const AdminBookings = () => {
                             <div className="text-xs text-primary font-semibold">
                               🌍 {booking.timezone}
                               {booking.timezone_offset !== null && ` (UTC${booking.timezone_offset > 0 ? '-' : '+'}${Math.abs(booking.timezone_offset/60)})`}
+                            </div>
+                          )}
+                          {typeof booking.timezone_offset === 'number' && (
+                            <div className="text-xs text-accent font-semibold">
+                              🇧🇩 BD Time: {toDhakaTime(booking.time, booking.timezone_offset)}
                             </div>
                           )}
                         </div>
