@@ -8,10 +8,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Search, Plus, FileText, Mail, Printer, Trash2, DollarSign, Users, Clock, CheckCircle } from 'lucide-react';
+import { Search, Plus, FileText, Mail, Printer, Trash2, DollarSign, Users, Clock, CheckCircle, Download } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 import { format } from 'date-fns';
+import InvoicePreview from './InvoicePreview';
 
 interface Client {
   id: string;
@@ -59,6 +60,7 @@ const AdminInvoices = () => {
   const [showClientDialog, setShowClientDialog] = useState(false);
   const [showInvoiceDialog, setShowInvoiceDialog] = useState(false);
   const [selectedInvoice, setSelectedInvoice] = useState<Invoice | null>(null);
+  const [showPreview, setShowPreview] = useState(false);
   
   // Client form state
   const [clientForm, setClientForm] = useState({
@@ -260,11 +262,7 @@ const AdminInvoices = () => {
 
   const handleViewInvoice = async (invoice: Invoice) => {
     setSelectedInvoice(invoice);
-    // This will open the print preview
-  };
-
-  const handlePrintInvoice = () => {
-    window.print();
+    setShowPreview(true);
   };
 
   const handleSendEmail = async (invoice: Invoice) => {
@@ -700,7 +698,7 @@ const AdminInvoices = () => {
                           {invoice.status}
                         </Badge>
                       </TableCell>
-                      <TableCell className="text-right">
+                       <TableCell className="text-right">
                         <div className="flex items-center justify-end gap-2">
                           <Button
                             size="sm"
@@ -708,9 +706,9 @@ const AdminInvoices = () => {
                             onClick={() => handleViewInvoice(invoice)}
                           >
                             <FileText className="h-3 w-3 mr-1" />
-                            View
+                            Preview
                           </Button>
-                          {invoice.status !== 'sent' && (
+                          {invoice.status === 'draft' && (
                             <Button
                               size="sm"
                               variant="outline"
@@ -737,6 +735,20 @@ const AdminInvoices = () => {
           )}
         </CardContent>
       </Card>
+
+      {/* Invoice Preview Dialog */}
+      <InvoicePreview
+        invoice={selectedInvoice}
+        open={showPreview}
+        onClose={() => {
+          setShowPreview(false);
+          setSelectedInvoice(null);
+        }}
+        onSendEmail={(invoice) => {
+          setShowPreview(false);
+          handleSendEmail(invoice);
+        }}
+      />
     </div>
   );
 };
