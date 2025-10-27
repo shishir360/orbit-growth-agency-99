@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { FileText, Upload, Trash2, Download, Eye, EyeOff, Plus } from 'lucide-react';
+import { FileText, Upload, Trash2, Download, Eye, EyeOff, Plus, ExternalLink } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
@@ -286,10 +286,21 @@ const AdminPDFDocuments = () => {
                   <TableCell>{format(new Date(doc.created_at), 'MMM dd, yyyy')}</TableCell>
                   <TableCell>
                     <div className="flex gap-2">
+                      {doc.slug && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => window.open(`/guide/${doc.slug}`, '_blank')}
+                          title="View Landing Page"
+                        >
+                          <ExternalLink className="h-4 w-4 text-primary" />
+                        </Button>
+                      )}
                       <Button
                         variant="ghost"
                         size="sm"
                         onClick={() => window.open(doc.file_url, '_blank')}
+                        title="Download PDF"
                       >
                         <Download className="h-4 w-4" />
                       </Button>
@@ -297,6 +308,7 @@ const AdminPDFDocuments = () => {
                         variant="ghost"
                         size="sm"
                         onClick={() => handleDelete(doc.id, doc.file_url)}
+                        title="Delete"
                       >
                         <Trash2 className="h-4 w-4 text-destructive" />
                       </Button>
