@@ -19,6 +19,8 @@ interface Booking {
   notes: string | null;
   status: string;
   source: string;
+  timezone: string | null;
+  timezone_offset: number | null;
   created_at: string;
   updated_at: string;
 }
@@ -236,6 +238,12 @@ const AdminBookings = () => {
                             <Clock className="h-3 w-3" />
                             <span className="text-xs">{booking.time}</span>
                           </div>
+                          {booking.timezone && (
+                            <div className="text-xs text-primary font-semibold">
+                              🌍 {booking.timezone}
+                              {booking.timezone_offset !== null && ` (UTC${booking.timezone_offset > 0 ? '-' : '+'}${Math.abs(booking.timezone_offset/60)})`}
+                            </div>
+                          )}
                         </div>
                       </TableCell>
                       <TableCell>
@@ -251,12 +259,8 @@ const AdminBookings = () => {
                       </TableCell>
                       <TableCell className="max-w-[200px]">
                         {booking.notes ? (
-                          <div className="text-xs space-y-1">
-                            {booking.notes.split('\n').map((line, i) => (
-                              <div key={i} className={line.includes('Timezone:') ? 'font-semibold text-primary' : 'text-muted-foreground'}>
-                                {line}
-                              </div>
-                            ))}
+                          <div className="text-xs text-muted-foreground">
+                            {booking.notes}
                           </div>
                         ) : (
                           <span className="text-xs text-muted-foreground">No notes</span>

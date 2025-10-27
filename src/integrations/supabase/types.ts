@@ -27,6 +27,8 @@ export type Database = {
           source: string
           status: string
           time: string
+          timezone: string | null
+          timezone_offset: number | null
           updated_at: string
         }
         Insert: {
@@ -41,6 +43,8 @@ export type Database = {
           source?: string
           status?: string
           time: string
+          timezone?: string | null
+          timezone_offset?: number | null
           updated_at?: string
         }
         Update: {
@@ -55,6 +59,8 @@ export type Database = {
           source?: string
           status?: string
           time?: string
+          timezone?: string | null
+          timezone_offset?: number | null
           updated_at?: string
         }
         Relationships: []

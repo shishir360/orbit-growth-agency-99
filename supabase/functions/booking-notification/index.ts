@@ -18,6 +18,8 @@ interface BookingRequest {
   time: string;
   meeting_platform: string;
   notes?: string;
+  timezone?: string;
+  timezone_offset?: number;
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -31,7 +33,7 @@ const handler = async (req: Request): Promise<Response> => {
       Deno.env.get("SUPABASE_ANON_KEY") ?? ""
     );
 
-    const { name, email, phone, date, time, meeting_platform, notes }: BookingRequest = await req.json();
+    const { name, email, phone, date, time, meeting_platform, notes, timezone, timezone_offset }: BookingRequest = await req.json();
 
     console.log("Received booking from:", email);
 
@@ -58,6 +60,8 @@ const handler = async (req: Request): Promise<Response> => {
         meeting_platform,
         notes,
         status: "pending",
+        timezone,
+        timezone_offset,
       })
       .select()
       .single();
@@ -97,7 +101,7 @@ const handler = async (req: Request): Promise<Response> => {
               <div class="info-box">
                 <h2>Your Booking Details:</h2>
                 <p><strong>📅 Date:</strong> ${date}</p>
-                <p><strong>🕐 Time:</strong> ${time}</p>
+                <p><strong>🕐 Time:</strong> ${time} ${timezone ? `(${timezone})` : ''}</p>
                 <p><strong>💻 Platform:</strong> ${meeting_platform}</p>
                 <p><strong>📧 Email:</strong> ${email}</p>
                 <p><strong>📱 Phone:</strong> ${phone}</p>
@@ -152,7 +156,8 @@ const handler = async (req: Request): Promise<Response> => {
                 <p><strong>📧 Email:</strong> ${email}</p>
                 <p><strong>📱 Phone:</strong> ${phone}</p>
                 <p><strong>📅 Date:</strong> ${date}</p>
-                <p><strong>🕐 Time:</strong> ${time}</p>
+                <p><strong>🕐 Time:</strong> ${time} ${timezone ? `(${timezone})` : ''}</p>
+                <p><strong>🌍 Timezone:</strong> ${timezone || 'Not specified'} ${timezone_offset !== undefined ? `(UTC${timezone_offset > 0 ? '-' : '+'}${Math.abs(timezone_offset/60)})` : ''}</p>
                 <p><strong>💻 Platform:</strong> ${meeting_platform}</p>
                 ${notes ? `<p><strong>📝 Notes:</strong> ${notes}</p>` : ""}
                 <p><strong>Booking ID:</strong> ${booking.id}</p>

@@ -206,7 +206,9 @@ const BookApartment = () => {
         date: format(date, 'PPP'),
         time: formData.time,
         meeting_platform: formData.meetingPlatform,
-        notes: `Timezone: ${userTimezone} (UTC${timezoneOffset > 0 ? '-' : '+'}${Math.abs(timezoneOffset/60)})\n${formData.notes || ''}`
+        notes: formData.notes || '',
+        timezone: userTimezone,
+        timezone_offset: timezoneOffset
       };
 
       // Call edge function to handle booking and notifications
