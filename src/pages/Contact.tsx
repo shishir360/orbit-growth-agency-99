@@ -10,55 +10,38 @@ import { MessageSquare, Mail, Phone, Sparkles, Zap, Send } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import SocialMedia from "@/components/ui/social-media";
 import SEO from "@/components/ui/seo";
+import { supabase } from "@/integrations/supabase/client";
 
 const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
-  const webhookUrl = "https://iamfts0bbb.app.n8n.cloud/webhook-test/contacus";
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
-    if (!webhookUrl) {
-      toast({
-        title: "Setup Required",
-        description: "Please enter your Zapier webhook URL in the admin section above.",
-        variant: "destructive",
-      });
-      return;
-    }
-
     setIsSubmitting(true);
 
     const form = e.target as HTMLFormElement;
     const formData = new FormData(form);
 
     const payload = {
-      firstName: formData.get("firstName"),
-      lastName: formData.get("lastName"),
-      email: formData.get("email"),
-      phone: formData.get("phone"),
-      countryCode: formData.get("countryCode"),
-      company: formData.get("company"),
-      service: formData.get("service"),
-      message: formData.get("message"),
-      timestamp: new Date().toISOString(),
-      source: "Contact Form"
+      name: `${formData.get("firstName")} ${formData.get("lastName")}`,
+      email: formData.get("email") as string,
+      phone: `${formData.get("countryCode")} ${formData.get("phone")}`,
+      company: formData.get("company") as string || undefined,
+      message: `Service: ${formData.get("service")}\n\n${formData.get("message")}`,
     };
 
     try {
-      await fetch(webhookUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        mode: "no-cors",
-        body: JSON.stringify(payload),
+      // Call edge function to handle submission
+      const { data, error } = await supabase.functions.invoke('submit-contact', {
+        body: payload,
       });
+
+      if (error) throw error;
 
       toast({
         title: "Message sent!",
-        description: "We'll get back to you within 24 hours.",
+        description: "We'll get back to you within 24 hours. Check your email for confirmation.",
       });
       
       form.reset();
@@ -69,9 +52,9 @@ const Contact = () => {
         description: "Please try again or contact us directly via email.",
         variant: "destructive",
       });
+    } finally {
+      setIsSubmitting(false);
     }
-
-    setIsSubmitting(false);
   };
 
   const contactMethods = [
