@@ -25,45 +25,59 @@ const AdminNavigation = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900">Navigation Management</h1>
-        <p className="text-gray-600 mt-2">Control which menu items appear in your website header</p>
+    <div className="space-y-6 max-w-6xl">
+      <div className="space-y-1">
+        <h1 className="text-3xl font-bold tracking-tight">Navigation Management</h1>
+        <p className="text-muted-foreground">Control which menu items appear in your website header</p>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Header Menu Items</CardTitle>
-          <CardDescription>
-            Toggle visibility of navigation menu items. {content.navigation.filter(item => item.visible).length} of {content.navigation.length} items visible.
-          </CardDescription>
+      <Card className="shadow-sm">
+        <CardHeader className="border-b bg-muted/30">
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="flex items-center gap-2">
+                <Menu className="h-5 w-5 text-primary" />
+                Header Menu Items
+              </CardTitle>
+              <CardDescription className="mt-1.5">
+                {content.navigation.filter(item => item.visible).length} of {content.navigation.length} items visible
+              </CardDescription>
+            </div>
+          </div>
         </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
+        <CardContent className="p-6">
+          <div className="space-y-3">
             {content.navigation.map((item) => (
-              <div key={item.id} className="flex items-center justify-between p-4 border rounded-lg">
-                <div className="flex items-center space-x-3">
-                  <Menu className="w-4 h-4 text-gray-400" />
+              <div 
+                key={item.id} 
+                className="flex items-center justify-between p-4 border rounded-xl hover:border-primary/50 transition-colors bg-card"
+              >
+                <div className="flex items-center space-x-4">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted">
+                    <Menu className="w-4 h-4 text-muted-foreground" />
+                  </div>
                   <div>
-                    <div className="font-medium">{item.name}</div>
-                    <div className="text-sm text-gray-500">{item.href}</div>
+                    <div className="font-semibold text-sm">{item.name}</div>
+                    <div className="text-xs text-muted-foreground font-mono">{item.href}</div>
                   </div>
                 </div>
                 
-                <div className="flex items-center space-x-4">
-                  <Badge variant={item.visible ? "default" : "secondary"}>
-                    {item.visible ? 'Visible' : 'Hidden'}
+                <div className="flex items-center gap-4">
+                  <Badge 
+                    variant={item.visible ? "default" : "secondary"}
+                    className="px-3 py-1"
+                  >
+                    {item.visible ? (
+                      <><Eye className="w-3 h-3 mr-1" />Visible</>
+                    ) : (
+                      <><EyeOff className="w-3 h-3 mr-1" />Hidden</>
+                    )}
                   </Badge>
                   
-                  <div className="flex items-center space-x-2">
-                    <Switch
-                      checked={item.visible}
-                      onCheckedChange={() => toggleVisibility(item.id)}
-                    />
-                    <Label className="text-sm">
-                      {item.visible ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
-                    </Label>
-                  </div>
+                  <Switch
+                    checked={item.visible}
+                    onCheckedChange={() => toggleVisibility(item.id)}
+                  />
                 </div>
               </div>
             ))}

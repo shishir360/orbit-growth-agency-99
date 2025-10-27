@@ -51,19 +51,24 @@ const AdminDashboard = () => {
 
   return (
     <SidebarProvider defaultOpen={false}>
-      <div className="flex min-h-screen w-full">
+      <div className="flex min-h-screen w-full bg-muted/30">
         <AdminSidebar />
         
         <SidebarInset className="flex-1 w-full">
-          <header className="sticky top-0 z-10 flex h-14 items-center gap-2 border-b bg-background px-2 sm:px-4">
+          <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4 sm:px-6">
             <SidebarTrigger className="-ml-1" />
             <div className="flex items-center justify-between flex-1 min-w-0">
-              <h1 className="text-sm sm:text-lg font-semibold truncate">Admin Dashboard</h1>
+              <div>
+                <h1 className="text-xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+                  Admin Dashboard
+                </h1>
+                <p className="text-xs text-muted-foreground">Manage your business operations</p>
+              </div>
               <AdminNotifications />
             </div>
           </header>
 
-          <main className="flex-1 overflow-auto p-2 sm:p-4 md:p-6">
+          <main className="flex-1 overflow-auto p-4 sm:p-6 md:p-8">
             <Routes>
               <Route index element={<AdminOverview />} />
               <Route path="hero" element={<AdminHero />} />
