@@ -454,8 +454,8 @@ const BookApartment = () => {
                                   <div className="flex items-center justify-between w-full gap-2">
                                     <span>{time}</span>
                                     {isBooked && (
-                                      <span className="text-xs text-destructive font-medium">
-                                        (Booked)
+                                      <span className="text-xs text-amber-600 font-medium">
+                                        ⚠️ Occupied
                                       </span>
                                     )}
                                   </div>
@@ -466,8 +466,9 @@ const BookApartment = () => {
                         </Select>
                       )}
                       {bookedSlots.length > 0 && date && (
-                        <p className="text-xs text-muted-foreground">
-                          {bookedSlots.length} slot(s) already booked for this date
+                        <p className="text-xs text-amber-600 flex items-center gap-1">
+                          <span>⚠️</span>
+                          <span>{bookedSlots.length} time slot(s) already occupied - Please select another time</span>
                         </p>
                       )}
                     </div>
