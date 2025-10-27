@@ -60,7 +60,6 @@ export const SafeImage: React.FC<SafeImageProps> = ({
       alt={alt}
       className={className}
       loading={loading}
-      fetchPriority={fetchPriority}
       decoding="async"
       width={width}
       height={height}

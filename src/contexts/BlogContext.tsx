@@ -69,7 +69,7 @@ useEffect(() => {
       author: r.author,
       publishDate: r.publish_date,
       updatedAt: r.updated_at || r.created_at,
-      image: r.image_url || undefined,
+      image: r.image_url,
       readTime: undefined,
       category: undefined,
       featured: false,
