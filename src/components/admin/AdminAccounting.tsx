@@ -132,20 +132,58 @@ const AdminAccounting = () => {
 
   const fetchData = async () => {
     try {
+      setLoading(true);
+      
+      // Check if user is authenticated
+      const { data: { user }, error: authError } = await supabase.auth.getUser();
+      
+      if (authError || !user) {
+        toast({
+          title: "Authentication Required",
+          description: "Please log in to access the accounting section.",
+          variant: "destructive"
+        });
+        setLoading(false);
+        return;
+      }
+
       const [expensesRes, incomeRes, clientsRes] = await Promise.all([
         supabase.from('expenses').select('*').order('date', { ascending: false }),
         supabase.from('income').select('*').order('date', { ascending: false }),
         supabase.from('clients').select('id, name')
       ]);
 
-      if (expensesRes.error) throw expensesRes.error;
-      if (incomeRes.error) throw incomeRes.error;
-      if (clientsRes.error) throw clientsRes.error;
+      if (expensesRes.error) {
+        console.error('Expenses error:', expensesRes.error);
+        toast({
+          title: "Error loading expenses",
+          description: expensesRes.error.message,
+          variant: "destructive"
+        });
+      }
+      
+      if (incomeRes.error) {
+        console.error('Income error:', incomeRes.error);
+        toast({
+          title: "Error loading income",
+          description: incomeRes.error.message,
+          variant: "destructive"
+        });
+      }
+      
+      if (clientsRes.error) {
+        console.error('Clients error:', clientsRes.error);
+        toast({
+          title: "Error loading clients",
+          description: clientsRes.error.message,
+          variant: "destructive"
+        });
+      }
 
       setExpenses(expensesRes.data || []);
       setIncome(incomeRes.data || []);
       setClients(clientsRes.data || []);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error fetching data:', error);
       toast({
         title: "Error",
