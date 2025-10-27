@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Navigation from '@/components/ui/navigation';
 import Footer from '@/components/ui/footer';
 import SEO from '@/components/ui/seo';
@@ -18,6 +18,8 @@ import { supabase } from '@/integrations/supabase/client';
 const BookApartment = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [date, setDate] = useState<Date>();
+  const [bookedSlots, setBookedSlots] = useState<string[]>([]);
+  const [loadingSlots, setLoadingSlots] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -67,6 +69,35 @@ const BookApartment = () => {
     '05:00 PM', '06:00 PM', '07:00 PM', '08:00 PM'
   ];
 
+
+  // Fetch booked time slots when date changes
+  useEffect(() => {
+    const fetchBookedSlots = async () => {
+      if (!date) return;
+      
+      setLoadingSlots(true);
+      try {
+        const formattedDate = format(date, 'PPP');
+        const { data, error } = await supabase
+          .from('apartment_bookings')
+          .select('time')
+          .eq('date', formattedDate)
+          .neq('status', 'cancelled');
+
+        if (error) throw error;
+        
+        const slots = data?.map(booking => booking.time) || [];
+        setBookedSlots(slots);
+      } catch (error) {
+        console.error('Error fetching booked slots:', error);
+      } finally {
+        setLoadingSlots(false);
+      }
+    };
+
+    fetchBookedSlots();
+  }, [date]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -74,6 +105,16 @@ const BookApartment = () => {
       toast({
         title: "Error",
         description: "Please fill in all required fields",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // Check if the time slot is already booked
+    if (bookedSlots.includes(formData.time)) {
+      toast({
+        title: "Time Slot Unavailable",
+        description: "This time slot has already been booked. Please select another time.",
         variant: "destructive"
       });
       return;
@@ -369,7 +410,11 @@ const BookApartment = () => {
                             mode="single"
                             selected={date}
                             onSelect={setDate}
-                            disabled={(date) => date < new Date()}
+                            disabled={(date) => {
+                              const today = new Date();
+                              today.setHours(0, 0, 0, 0);
+                              return date < today;
+                            }}
                             initialFocus
                             className="pointer-events-auto"
                           />
@@ -383,21 +428,48 @@ const BookApartment = () => {
                         <Clock className="w-4 h-4 text-primary" />
                         Preferred Time *
                       </Label>
-                      <Select
-                        value={formData.time}
-                        onValueChange={(value) => setFormData({...formData, time: value})}
-                      >
-                        <SelectTrigger className="h-12 bg-background/50 border-border">
-                          <SelectValue placeholder="Select a time slot" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {timeSlots.map((time) => (
-                            <SelectItem key={time} value={time}>
-                              {time}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                      {loadingSlots ? (
+                        <div className="h-12 bg-background/50 border border-border rounded-md flex items-center justify-center">
+                          <span className="text-sm text-muted-foreground">Loading available slots...</span>
+                        </div>
+                      ) : (
+                        <Select
+                          value={formData.time}
+                          onValueChange={(value) => setFormData({...formData, time: value})}
+                          disabled={!date}
+                        >
+                          <SelectTrigger className="h-12 bg-background/50 border-border">
+                            <SelectValue placeholder={date ? "Select a time slot" : "Please select a date first"} />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {timeSlots.map((time) => {
+                              const isBooked = bookedSlots.includes(time);
+                              return (
+                                <SelectItem 
+                                  key={time} 
+                                  value={time}
+                                  disabled={isBooked}
+                                  className={isBooked ? "opacity-50" : ""}
+                                >
+                                  <div className="flex items-center justify-between w-full gap-2">
+                                    <span>{time}</span>
+                                    {isBooked && (
+                                      <span className="text-xs text-destructive font-medium">
+                                        (Booked)
+                                      </span>
+                                    )}
+                                  </div>
+                                </SelectItem>
+                              );
+                            })}
+                          </SelectContent>
+                        </Select>
+                      )}
+                      {bookedSlots.length > 0 && date && (
+                        <p className="text-xs text-muted-foreground">
+                          {bookedSlots.length} slot(s) already booked for this date
+                        </p>
+                      )}
                     </div>
 
                     {/* Meeting Platform */}
