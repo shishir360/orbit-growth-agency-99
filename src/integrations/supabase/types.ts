@@ -251,6 +251,72 @@ export type Database = {
         }
         Relationships: []
       }
+      expenses: {
+        Row: {
+          amount: number
+          category: string
+          client_id: string | null
+          created_at: string
+          date: string
+          description: string
+          id: string
+          invoice_id: string | null
+          notes: string | null
+          payment_method: string
+          receipt_url: string | null
+          status: string
+          updated_at: string
+          vendor: string | null
+        }
+        Insert: {
+          amount?: number
+          category: string
+          client_id?: string | null
+          created_at?: string
+          date?: string
+          description: string
+          id?: string
+          invoice_id?: string | null
+          notes?: string | null
+          payment_method: string
+          receipt_url?: string | null
+          status?: string
+          updated_at?: string
+          vendor?: string | null
+        }
+        Update: {
+          amount?: number
+          category?: string
+          client_id?: string | null
+          created_at?: string
+          date?: string
+          description?: string
+          id?: string
+          invoice_id?: string | null
+          notes?: string | null
+          payment_method?: string
+          receipt_url?: string | null
+          status?: string
+          updated_at?: string
+          vendor?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "expenses_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "expenses_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoices"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       images: {
         Row: {
           id: string
@@ -277,6 +343,69 @@ export type Database = {
           url?: string
         }
         Relationships: []
+      }
+      income: {
+        Row: {
+          amount: number
+          client_id: string | null
+          created_at: string
+          date: string
+          description: string
+          id: string
+          invoice_id: string | null
+          notes: string | null
+          payment_method: string
+          receipt_url: string | null
+          source: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          amount?: number
+          client_id?: string | null
+          created_at?: string
+          date?: string
+          description: string
+          id?: string
+          invoice_id?: string | null
+          notes?: string | null
+          payment_method: string
+          receipt_url?: string | null
+          source: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          client_id?: string | null
+          created_at?: string
+          date?: string
+          description?: string
+          id?: string
+          invoice_id?: string | null
+          notes?: string | null
+          payment_method?: string
+          receipt_url?: string | null
+          source?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "income_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "income_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoices"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       invoice_items: {
         Row: {
@@ -751,7 +880,22 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      transactions: {
+        Row: {
+          amount: number | null
+          category: string | null
+          client_id: string | null
+          created_at: string | null
+          date: string | null
+          description: string | null
+          id: string | null
+          invoice_id: string | null
+          payment_method: string | null
+          status: string | null
+          type: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       generate_invoice_number: { Args: never; Returns: string }

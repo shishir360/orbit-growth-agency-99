@@ -85,6 +85,7 @@ export function AdminSidebar() {
     { to: '/admin-dashboard/contact-submissions', icon: MessageSquare, label: 'Contact Submissions', section: 'company' },
     { to: '/admin-dashboard/bookings', icon: Calendar, label: 'Bookings', section: 'company' },
     { to: '/admin-dashboard/invoices', icon: Receipt, label: 'Invoices', section: 'company' },
+    { to: '/admin-dashboard/accounting', icon: DollarSign, label: 'Accounting', section: 'company' },
     { to: '/admin-dashboard/pdf-documents', icon: FileText, label: 'PDF Documents', section: 'company' },
     { to: '/admin-dashboard/pdf-leads', icon: Users, label: 'PDF Leads', section: 'company' },
     
