@@ -250,9 +250,17 @@ const AdminBookings = () => {
                         </Badge>
                       </TableCell>
                       <TableCell className="max-w-[200px]">
-                        <span className="text-xs text-muted-foreground line-clamp-2">
-                          {booking.notes || 'No notes'}
-                        </span>
+                        {booking.notes ? (
+                          <div className="text-xs space-y-1">
+                            {booking.notes.split('\n').map((line, i) => (
+                              <div key={i} className={line.includes('Timezone:') ? 'font-semibold text-primary' : 'text-muted-foreground'}>
+                                {line}
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <span className="text-xs text-muted-foreground">No notes</span>
+                        )}
                       </TableCell>
                       <TableCell className="text-right">
                         <div className="flex items-center justify-end gap-2">

@@ -195,6 +195,10 @@ const BookApartment = () => {
     }
     setIsLoading(true);
     try {
+      // Get user's timezone
+      const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      const timezoneOffset = new Date().getTimezoneOffset();
+      
       const bookingData = {
         name: formData.name,
         email: formData.email,
@@ -202,7 +206,7 @@ const BookApartment = () => {
         date: format(date, 'PPP'),
         time: formData.time,
         meeting_platform: formData.meetingPlatform,
-        notes: formData.notes || ''
+        notes: `Timezone: ${userTimezone} (UTC${timezoneOffset > 0 ? '-' : '+'}${Math.abs(timezoneOffset/60)})\n${formData.notes || ''}`
       };
 
       // Call edge function to handle booking and notifications
