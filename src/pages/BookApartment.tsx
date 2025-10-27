@@ -29,13 +29,36 @@ const BookApartment = () => {
   });
 
   const countryCodes = [
-    { code: '+880', country: 'Bangladesh' },
-    { code: '+1', country: 'USA/Canada' },
-    { code: '+44', country: 'UK' },
-    { code: '+91', country: 'India' },
-    { code: '+971', country: 'UAE' },
-    { code: '+966', country: 'Saudi Arabia' },
-    { code: '+92', country: 'Pakistan' }
+    { code: '+880', country: 'Bangladesh', flag: '🇧🇩' },
+    { code: '+1', country: 'USA/Canada', flag: '🇺🇸' },
+    { code: '+44', country: 'UK', flag: '🇬🇧' },
+    { code: '+91', country: 'India', flag: '🇮🇳' },
+    { code: '+971', country: 'UAE', flag: '🇦🇪' },
+    { code: '+966', country: 'Saudi Arabia', flag: '🇸🇦' },
+    { code: '+92', country: 'Pakistan', flag: '🇵🇰' },
+    { code: '+86', country: 'China', flag: '🇨🇳' },
+    { code: '+81', country: 'Japan', flag: '🇯🇵' },
+    { code: '+82', country: 'South Korea', flag: '🇰🇷' },
+    { code: '+61', country: 'Australia', flag: '🇦🇺' },
+    { code: '+49', country: 'Germany', flag: '🇩🇪' },
+    { code: '+33', country: 'France', flag: '🇫🇷' },
+    { code: '+39', country: 'Italy', flag: '🇮🇹' },
+    { code: '+34', country: 'Spain', flag: '🇪🇸' },
+    { code: '+7', country: 'Russia', flag: '🇷🇺' },
+    { code: '+65', country: 'Singapore', flag: '🇸🇬' },
+    { code: '+60', country: 'Malaysia', flag: '🇲🇾' },
+    { code: '+62', country: 'Indonesia', flag: '🇮🇩' },
+    { code: '+63', country: 'Philippines', flag: '🇵🇭' },
+    { code: '+66', country: 'Thailand', flag: '🇹🇭' },
+    { code: '+84', country: 'Vietnam', flag: '🇻🇳' },
+    { code: '+90', country: 'Turkey', flag: '🇹🇷' },
+    { code: '+20', country: 'Egypt', flag: '🇪🇬' },
+    { code: '+27', country: 'South Africa', flag: '🇿🇦' },
+    { code: '+52', country: 'Mexico', flag: '🇲🇽' },
+    { code: '+55', country: 'Brazil', flag: '🇧🇷' },
+    { code: '+54', country: 'Argentina', flag: '🇦🇷' },
+    { code: '+41', country: 'Switzerland', flag: '🇨🇭' },
+    { code: '+31', country: 'Netherlands', flag: '🇳🇱' }
   ];
 
   const timeSlots = [
@@ -289,13 +312,24 @@ const BookApartment = () => {
                           value={formData.countryCode}
                           onValueChange={(value) => setFormData({...formData, countryCode: value})}
                         >
-                          <SelectTrigger className="w-[180px] h-12 bg-background/50 border-border">
-                            <SelectValue />
+                          <SelectTrigger className="w-[200px] h-12 bg-background/50 border-border focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all">
+                            <SelectValue>
+                              <div className="flex items-center gap-2">
+                                <span className="text-xl">
+                                  {countryCodes.find(c => c.code === formData.countryCode)?.flag}
+                                </span>
+                                <span className="font-medium">{formData.countryCode}</span>
+                              </div>
+                            </SelectValue>
                           </SelectTrigger>
-                          <SelectContent>
+                          <SelectContent className="max-h-[300px]">
                             {countryCodes.map((item) => (
                               <SelectItem key={item.code} value={item.code}>
-                                {item.code} ({item.country})
+                                <div className="flex items-center gap-3">
+                                  <span className="text-xl">{item.flag}</span>
+                                  <span className="font-medium">{item.code}</span>
+                                  <span className="text-muted-foreground text-sm">({item.country})</span>
+                                </div>
                               </SelectItem>
                             ))}
                           </SelectContent>
@@ -306,7 +340,7 @@ const BookApartment = () => {
                           value={formData.phone}
                           onChange={(e) => setFormData({...formData, phone: e.target.value})}
                           placeholder="1234567890"
-                          className="flex-1 h-12 bg-background/50 border-border focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+                          className="flex-1 h-12 bg-background/50 border-border focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all font-medium"
                         />
                       </div>
                     </div>
