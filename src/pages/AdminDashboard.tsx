@@ -32,6 +32,7 @@ import AdminContacts from '@/components/admin/AdminContacts';
 import AdminPDFDocuments from '@/components/admin/AdminPDFDocuments';
 import AdminPDFLeads from '@/components/admin/AdminPDFLeads';
 import AdminAccounting from '@/components/admin/AdminAccounting';
+import AdminClients from '@/components/admin/AdminClients';
 
 const AdminDashboard = () => {
   const { isAdmin, loading } = useAdminAuth();
@@ -93,6 +94,7 @@ const AdminDashboard = () => {
               <Route path="pdf-documents" element={<AdminPDFDocuments />} />
               <Route path="pdf-leads" element={<AdminPDFLeads />} />
               <Route path="accounting" element={<AdminAccounting />} />
+              <Route path="clients" element={<AdminClients />} />
             </Routes>
           </main>
         </SidebarInset>

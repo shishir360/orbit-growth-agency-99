@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Bell, X, MessageSquare, Calendar } from 'lucide-react';
+import { Bell, X, MessageSquare, Calendar, BellRing } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -11,6 +11,12 @@ import {
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
 import { toast } from '@/hooks/use-toast';
+import { 
+  requestNotificationPermission, 
+  notifyNewContact, 
+  notifyNewBooking,
+  checkNotificationPermission 
+} from '@/utils/notifications';
 
 interface Notification {
   id: string;
@@ -24,9 +30,12 @@ interface Notification {
 export function AdminNotifications() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [notificationPermission, setNotificationPermission] = useState<NotificationPermission>('default');
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Check notification permission on mount
+    setNotificationPermission(checkNotificationPermission());
     loadNotifications();
     
     // Subscribe to new contact submissions
@@ -50,6 +59,9 @@ export function AdminNotifications() {
           };
           setNotifications(prev => [newNotification, ...prev]);
           setUnreadCount(prev => prev + 1);
+          
+          // Browser notification
+          notifyNewContact(payload.new.name, payload.new.email);
           
           toast({
             title: "🔔 New Contact Submission",
@@ -80,6 +92,9 @@ export function AdminNotifications() {
           };
           setNotifications(prev => [newNotification, ...prev]);
           setUnreadCount(prev => prev + 1);
+          
+          // Browser notification
+          notifyNewBooking(payload.new.name, payload.new.date, payload.new.time);
           
           toast({
             title: "🔔 New Booking",
@@ -162,67 +177,98 @@ export function AdminNotifications() {
     setUnreadCount(0);
   };
 
+  const handleEnableNotifications = async () => {
+    const granted = await requestNotificationPermission();
+    if (granted) {
+      setNotificationPermission('granted');
+      toast({
+        title: "Notifications Enabled",
+        description: "You will now receive browser notifications for new activity",
+      });
+    } else {
+      toast({
+        title: "Notifications Blocked",
+        description: "Please enable notifications in your browser settings",
+        variant: "destructive"
+      });
+    }
+  };
+
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="relative">
-          <Bell className="h-5 w-5" />
-          {unreadCount > 0 && (
-            <Badge 
-              variant="destructive" 
-              className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs"
-            >
-              {unreadCount > 9 ? '9+' : unreadCount}
-            </Badge>
-          )}
+    <div className="flex items-center gap-2">
+      {notificationPermission === 'default' && (
+        <Button 
+          variant="outline" 
+          size="sm"
+          onClick={handleEnableNotifications}
+          className="gap-2"
+        >
+          <BellRing className="h-4 w-4" />
+          Enable Notifications
         </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-80">
-        <div className="flex items-center justify-between px-4 py-2 border-b">
-          <h3 className="font-semibold">Notifications</h3>
-          {notifications.length > 0 && (
-            <Button variant="ghost" size="sm" onClick={clearNotifications}>
-              <X className="h-4 w-4" />
-            </Button>
-          )}
-        </div>
-        
-        {notifications.length === 0 ? (
-          <div className="p-4 text-center text-muted-foreground">
-            No new notifications
-          </div>
-        ) : (
-          <div className="max-h-96 overflow-y-auto">
-            {notifications.map((notification) => (
-              <DropdownMenuItem
-                key={notification.id}
-                className={`flex items-start gap-3 p-4 cursor-pointer ${
-                  !notification.read ? 'bg-primary/5' : ''
-                }`}
-                onClick={() => handleNotificationClick(notification)}
+      )}
+      
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" size="icon" className="relative">
+            <Bell className="h-5 w-5" />
+            {unreadCount > 0 && (
+              <Badge 
+                variant="destructive" 
+                className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs"
               >
-                <div className={`mt-1 ${notification.type === 'contact' ? 'text-blue-500' : 'text-green-500'}`}>
-                  {notification.type === 'contact' ? (
-                    <MessageSquare className="h-5 w-5" />
-                  ) : (
-                    <Calendar className="h-5 w-5" />
-                  )}
-                </div>
-                <div className="flex-1 space-y-1">
-                  <p className="text-sm font-medium">{notification.title}</p>
-                  <p className="text-xs text-muted-foreground">{notification.message}</p>
-                  <p className="text-xs text-muted-foreground">
-                    {new Date(notification.createdAt).toLocaleString()}
-                  </p>
-                </div>
-                {!notification.read && (
-                  <div className="w-2 h-2 bg-primary rounded-full mt-2" />
-                )}
-              </DropdownMenuItem>
-            ))}
+                {unreadCount > 9 ? '9+' : unreadCount}
+              </Badge>
+            )}
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="w-80">
+          <div className="flex items-center justify-between px-4 py-2 border-b">
+            <h3 className="font-semibold">Notifications</h3>
+            {notifications.length > 0 && (
+              <Button variant="ghost" size="sm" onClick={clearNotifications}>
+                <X className="h-4 w-4" />
+              </Button>
+            )}
           </div>
-        )}
-      </DropdownMenuContent>
-    </DropdownMenu>
+          
+          {notifications.length === 0 ? (
+            <div className="p-4 text-center text-muted-foreground">
+              No new notifications
+            </div>
+          ) : (
+            <div className="max-h-96 overflow-y-auto">
+              {notifications.map((notification) => (
+                <DropdownMenuItem
+                  key={notification.id}
+                  className={`flex items-start gap-3 p-4 cursor-pointer ${
+                    !notification.read ? 'bg-primary/5' : ''
+                  }`}
+                  onClick={() => handleNotificationClick(notification)}
+                >
+                  <div className={`mt-1 ${notification.type === 'contact' ? 'text-blue-500' : 'text-green-500'}`}>
+                    {notification.type === 'contact' ? (
+                      <MessageSquare className="h-5 w-5" />
+                    ) : (
+                      <Calendar className="h-5 w-5" />
+                    )}
+                  </div>
+                  <div className="flex-1 space-y-1">
+                    <p className="text-sm font-medium">{notification.title}</p>
+                    <p className="text-xs text-muted-foreground">{notification.message}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {new Date(notification.createdAt).toLocaleString()}
+                    </p>
+                  </div>
+                  {!notification.read && (
+                    <div className="w-2 h-2 bg-primary rounded-full mt-2" />
+                  )}
+                </DropdownMenuItem>
+              ))}
+            </div>
+          )}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
   );
 }

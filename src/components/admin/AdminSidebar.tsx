@@ -80,6 +80,7 @@ export function AdminSidebar() {
     
     // Company & Contact
     { to: '/admin-dashboard/company', icon: Building2, label: 'Company Info', section: 'company' },
+    { to: '/admin-dashboard/clients', icon: Users, label: 'Clients', section: 'company' },
     { to: '/admin-dashboard/testimonials', icon: Star, label: 'Testimonials', section: 'company' },
     { to: '/admin-dashboard/contact', icon: Mail, label: 'Contact Forms', section: 'company' },
     { to: '/admin-dashboard/contact-submissions', icon: MessageSquare, label: 'Contact Submissions', section: 'company' },
