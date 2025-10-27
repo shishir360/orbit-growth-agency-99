@@ -9,10 +9,11 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { CalendarIcon, Clock, Video, Phone, Mail, User, CheckCircle2, Sparkles } from 'lucide-react';
+import { CalendarIcon, Clock, Video, Phone, Mail, User, CheckCircle2, Sparkles, Star, Award, Zap } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { toast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 const BookApartment = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -64,39 +65,44 @@ const BookApartment = () => {
         phone: `${formData.countryCode}${formData.phone}`,
         date: format(date, 'PPP'),
         time: formData.time,
-        meetingPlatform: formData.meetingPlatform,
-        notes: formData.notes,
-        submittedAt: new Date().toISOString()
+        meeting_platform: formData.meetingPlatform,
+        notes: formData.notes || ''
       };
 
-      const response = await fetch('https://iamfts0bbb.app.n8n.cloud/webhook-test/Apt-booking', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(bookingData),
-      });
+      // Save to Supabase
+      const { error: dbError } = await supabase
+        .from('apartment_bookings')
+        .insert([bookingData]);
 
-      if (response.ok) {
-        toast({
-          title: "Success!",
-          description: "Your booking has been submitted successfully. We'll contact you shortly.",
+      if (dbError) throw dbError;
+
+      // Also send to webhook
+      try {
+        await fetch('https://iamfts0bbb.app.n8n.cloud/webhook-test/Apt-booking', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ...bookingData, submittedAt: new Date().toISOString() }),
         });
-        
-        // Reset form
-        setFormData({
-          name: '',
-          email: '',
-          countryCode: '+880',
-          phone: '',
-          time: '',
-          meetingPlatform: '',
-          notes: ''
-        });
-        setDate(undefined);
-      } else {
-        throw new Error('Submission failed');
+      } catch (webhookError) {
+        console.warn('Webhook notification failed:', webhookError);
       }
+
+      toast({
+        title: "Success!",
+        description: "Your booking has been submitted successfully. We'll contact you shortly.",
+      });
+      
+      // Reset form
+      setFormData({
+        name: '',
+        email: '',
+        countryCode: '+880',
+        phone: '',
+        time: '',
+        meetingPlatform: '',
+        notes: ''
+      });
+      setDate(undefined);
     } catch (error) {
       console.error('Booking error:', error);
       toast({
@@ -123,73 +129,126 @@ const BookApartment = () => {
         description="Schedule a free consultation with our experts. Book your appointment through Google Meet, Zoom, or phone call."
         keywords="book appointment, schedule consultation, free consultation, online meeting"
       />
-      <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+      <div className="min-h-screen flex flex-col ultra-premium-hero relative overflow-hidden">
+        {/* Animated Background Elements */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-20 left-10 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent-luxury/10 rounded-full blur-3xl animate-pulse delay-1000" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-accent-cta/5 rounded-full blur-3xl" />
+        </div>
+
         <Navigation />
         
-        <main className="flex-grow container mx-auto px-4 py-24 md:py-32">
-          <div className="max-w-6xl mx-auto">
-            {/* Hero Section */}
-            <div className="text-center mb-16">
-              <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/20 rounded-full px-4 py-2 mb-6">
-                <Sparkles className="w-4 h-4 text-primary" />
-                <span className="text-sm font-medium text-primary">Free Strategy Session</span>
+        <main className="flex-grow container mx-auto px-4 py-24 md:py-32 relative z-10">
+          <div className="max-w-7xl mx-auto">
+            {/* Ultra Premium Hero Section */}
+            <div className="text-center mb-20">
+              <div className="inline-flex items-center gap-3 glass-card px-6 py-3 mb-8 shadow-lg">
+                <Star className="w-5 h-5 text-primary icon-glow" />
+                <span className="text-sm font-semibold premium-gradient-text">Premium Strategy Session - Worth $500</span>
+                <Star className="w-5 h-5 text-primary icon-glow" />
               </div>
-              <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white via-primary to-secondary bg-clip-text text-transparent leading-tight">
-                Book Your Free Consultation
+              <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-8 leading-[0.95]">
+                <span className="text-foreground">Elevate Your</span>
+                <br />
+                <span className="premium-gradient-text">Digital Presence</span>
               </h1>
-              <p className="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
-                Schedule a personalized meeting with our team. We'll discuss your project, answer your questions, 
-                and provide actionable insights to help you achieve your goals.
+              <p className="text-xl md:text-2xl text-muted-foreground max-w-4xl mx-auto leading-relaxed font-light mb-12">
+                Join the elite. Schedule an exclusive consultation with our award-winning team and transform your vision into reality.
               </p>
+              
+              {/* Trust Indicators */}
+              <div className="flex flex-wrap justify-center gap-8 mb-12">
+                <div className="flex items-center gap-2">
+                  <Award className="w-6 h-6 text-primary" />
+                  <span className="text-sm font-medium">Industry Leaders</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Zap className="w-6 h-6 text-accent-cta" />
+                  <span className="text-sm font-medium">24hr Response</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-6 h-6 text-accent" />
+                  <span className="text-sm font-medium">500+ Projects</span>
+                </div>
+              </div>
             </div>
 
-            <div className="grid lg:grid-cols-2 gap-8 items-start">
-              {/* Left Side - Features */}
-              <div className="space-y-6">
-                <Card className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 border-slate-700/50 backdrop-blur-sm">
-                  <CardContent className="p-8">
-                    <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
-                      <CheckCircle2 className="w-6 h-6 text-primary" />
-                      What You'll Get
+            <div className="grid lg:grid-cols-2 gap-12 items-start">
+              {/* Left Side - Premium Features */}
+              <div className="space-y-8">
+                <Card className="luxury-card overflow-hidden">
+                  <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-primary/20 to-accent-luxury/20 blur-3xl" />
+                  <CardContent className="p-10 relative">
+                    <div className="inline-flex items-center gap-2 bg-primary/10 rounded-full px-4 py-2 mb-6">
+                      <Sparkles className="w-4 h-4 text-primary" />
+                      <span className="text-xs font-bold uppercase tracking-wider text-primary">Exclusive Benefits</span>
+                    </div>
+                    <h2 className="text-3xl font-black mb-8 text-foreground">
+                      What You'll <span className="premium-gradient-text">Experience</span>
                     </h2>
-                    <ul className="space-y-4">
+                    <ul className="space-y-6">
                       {features.map((feature, index) => (
-                        <li key={index} className="flex items-start gap-3 text-gray-300">
-                          <div className="mt-1 w-5 h-5 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
-                            <div className="w-2 h-2 rounded-full bg-primary" />
+                        <li key={index} className="flex items-start gap-4 group">
+                          <div className="mt-1 w-10 h-10 rounded-2xl bg-gradient-to-br from-primary to-accent-luxury flex items-center justify-center flex-shrink-0 shadow-lg group-hover:scale-110 transition-transform">
+                            <CheckCircle2 className="w-5 h-5 text-white" />
                           </div>
-                          <span className="text-base">{feature}</span>
+                          <span className="text-lg font-medium text-foreground leading-tight">{feature}</span>
                         </li>
                       ))}
                     </ul>
                   </CardContent>
                 </Card>
 
-                <Card className="bg-gradient-to-br from-primary/10 to-secondary/10 border-primary/20 backdrop-blur-sm">
-                  <CardContent className="p-8">
-                    <h3 className="text-xl font-bold text-white mb-4">Why Book With Us?</h3>
-                    <p className="text-gray-300 leading-relaxed">
-                      We've helped hundreds of businesses achieve their digital goals. 
-                      Our expert team will provide you with a customized strategy tailored to your specific needs. 
-                      No sales pressure - just honest advice and actionable insights.
+                <Card className="luxury-card overflow-hidden border-accent-cta/30">
+                  <div className="h-2 bg-gradient-to-r from-primary via-accent-luxury to-accent-cta" />
+                  <CardContent className="p-10">
+                    <h3 className="text-2xl font-black mb-4 text-foreground">
+                      The <span className="text-accent-cta">Elite</span> Advantage
+                    </h3>
+                    <p className="text-muted-foreground leading-relaxed text-lg mb-6">
+                      Join 500+ successful businesses who've transformed their digital presence with our guidance. 
+                      Our award-winning team delivers personalized strategies backed by proven results.
                     </p>
+                    <div className="grid grid-cols-3 gap-4 pt-6 border-t">
+                      <div className="text-center">
+                        <div className="text-3xl font-black premium-gradient-text">98%</div>
+                        <div className="text-xs text-muted-foreground mt-1">Satisfaction</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-3xl font-black premium-gradient-text">24h</div>
+                        <div className="text-xs text-muted-foreground mt-1">Response</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-3xl font-black premium-gradient-text">500+</div>
+                        <div className="text-xs text-muted-foreground mt-1">Projects</div>
+                      </div>
+                    </div>
                   </CardContent>
                 </Card>
               </div>
 
-              {/* Right Side - Booking Form */}
-              <Card className="bg-gradient-to-br from-slate-800/80 to-slate-900/80 border-slate-700/50 backdrop-blur-sm shadow-2xl">
-                <CardContent className="p-8">
-                  <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
-                    <CalendarIcon className="w-6 h-6 text-primary" />
-                    Schedule Your Meeting
-                  </h2>
+              {/* Right Side - Ultra Premium Booking Form */}
+              <Card className="luxury-card overflow-hidden relative">
+                <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-primary via-accent-luxury to-accent-cta" />
+                <div className="absolute -top-10 -right-10 w-40 h-40 bg-primary/10 rounded-full blur-3xl" />
+                <CardContent className="p-10 relative">
+                  <div className="mb-8">
+                    <div className="inline-flex items-center gap-2 bg-primary/10 rounded-full px-4 py-2 mb-4">
+                      <CalendarIcon className="w-4 h-4 text-primary" />
+                      <span className="text-xs font-bold uppercase tracking-wider text-primary">Secure Your Spot</span>
+                    </div>
+                    <h2 className="text-3xl font-black text-foreground mb-2">
+                      Reserve Your <span className="premium-gradient-text">Session</span>
+                    </h2>
+                    <p className="text-muted-foreground">Limited slots available this month</p>
+                  </div>
                   
-                  <form onSubmit={handleSubmit} className="space-y-6">
+                  <form onSubmit={handleSubmit} className="space-y-7">
                     {/* Name */}
-                    <div className="space-y-2">
-                      <Label htmlFor="name" className="flex items-center gap-2 text-gray-200">
-                        <User className="w-4 h-4" />
+                    <div className="space-y-3">
+                      <Label htmlFor="name" className="flex items-center gap-2 text-foreground font-semibold text-sm">
+                        <User className="w-4 h-4 text-primary" />
                         Full Name *
                       </Label>
                       <Input
@@ -197,15 +256,15 @@ const BookApartment = () => {
                         required
                         value={formData.name}
                         onChange={(e) => setFormData({...formData, name: e.target.value})}
-                        placeholder="Enter your full name"
-                        className="bg-slate-900/50 border-slate-600 text-white placeholder:text-gray-500 focus:border-primary"
+                        placeholder="John Doe"
+                        className="h-12 bg-background/50 border-border focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
                       />
                     </div>
 
                     {/* Email */}
-                    <div className="space-y-2">
-                      <Label htmlFor="email" className="flex items-center gap-2 text-gray-200">
-                        <Mail className="w-4 h-4" />
+                    <div className="space-y-3">
+                      <Label htmlFor="email" className="flex items-center gap-2 text-foreground font-semibold text-sm">
+                        <Mail className="w-4 h-4 text-primary" />
                         Email Address *
                       </Label>
                       <Input
@@ -214,23 +273,23 @@ const BookApartment = () => {
                         required
                         value={formData.email}
                         onChange={(e) => setFormData({...formData, email: e.target.value})}
-                        placeholder="example@email.com"
-                        className="bg-slate-900/50 border-slate-600 text-white placeholder:text-gray-500 focus:border-primary"
+                        placeholder="john@company.com"
+                        className="h-12 bg-background/50 border-border focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
                       />
                     </div>
 
                     {/* Phone with Country Code */}
-                    <div className="space-y-2">
-                      <Label className="flex items-center gap-2 text-gray-200">
-                        <Phone className="w-4 h-4" />
+                    <div className="space-y-3">
+                      <Label className="flex items-center gap-2 text-foreground font-semibold text-sm">
+                        <Phone className="w-4 h-4 text-primary" />
                         Phone Number *
                       </Label>
-                      <div className="flex gap-2">
+                      <div className="flex gap-3">
                         <Select
                           value={formData.countryCode}
                           onValueChange={(value) => setFormData({...formData, countryCode: value})}
                         >
-                          <SelectTrigger className="w-[180px] bg-slate-900/50 border-slate-600 text-white">
+                          <SelectTrigger className="w-[180px] h-12 bg-background/50 border-border">
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
@@ -247,15 +306,15 @@ const BookApartment = () => {
                           value={formData.phone}
                           onChange={(e) => setFormData({...formData, phone: e.target.value})}
                           placeholder="1234567890"
-                          className="flex-1 bg-slate-900/50 border-slate-600 text-white placeholder:text-gray-500 focus:border-primary"
+                          className="flex-1 h-12 bg-background/50 border-border focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
                         />
                       </div>
                     </div>
 
                     {/* Date Picker */}
-                    <div className="space-y-2">
-                      <Label className="flex items-center gap-2 text-gray-200">
-                        <CalendarIcon className="w-4 h-4" />
+                    <div className="space-y-3">
+                      <Label className="flex items-center gap-2 text-foreground font-semibold text-sm">
+                        <CalendarIcon className="w-4 h-4 text-primary" />
                         Preferred Date *
                       </Label>
                       <Popover>
@@ -263,8 +322,8 @@ const BookApartment = () => {
                           <Button
                             variant="outline"
                             className={cn(
-                              "w-full justify-start text-left font-normal bg-slate-900/50 border-slate-600 text-white hover:bg-slate-800 hover:text-white",
-                              !date && "text-gray-500"
+                              "w-full h-12 justify-start text-left font-normal bg-background/50 border-border hover:bg-background hover:border-primary transition-all",
+                              !date && "text-muted-foreground"
                             )}
                           >
                             <CalendarIcon className="mr-2 h-4 w-4" />
@@ -285,16 +344,16 @@ const BookApartment = () => {
                     </div>
 
                     {/* Time Selection */}
-                    <div className="space-y-2">
-                      <Label className="flex items-center gap-2 text-gray-200">
-                        <Clock className="w-4 h-4" />
+                    <div className="space-y-3">
+                      <Label className="flex items-center gap-2 text-foreground font-semibold text-sm">
+                        <Clock className="w-4 h-4 text-primary" />
                         Preferred Time *
                       </Label>
                       <Select
                         value={formData.time}
                         onValueChange={(value) => setFormData({...formData, time: value})}
                       >
-                        <SelectTrigger className="bg-slate-900/50 border-slate-600 text-white">
+                        <SelectTrigger className="h-12 bg-background/50 border-border">
                           <SelectValue placeholder="Select a time slot" />
                         </SelectTrigger>
                         <SelectContent>
@@ -308,16 +367,16 @@ const BookApartment = () => {
                     </div>
 
                     {/* Meeting Platform */}
-                    <div className="space-y-2">
-                      <Label className="flex items-center gap-2 text-gray-200">
-                        <Video className="w-4 h-4" />
+                    <div className="space-y-3">
+                      <Label className="flex items-center gap-2 text-foreground font-semibold text-sm">
+                        <Video className="w-4 h-4 text-primary" />
                         Meeting Platform *
                       </Label>
                       <Select
                         value={formData.meetingPlatform}
                         onValueChange={(value) => setFormData({...formData, meetingPlatform: value})}
                       >
-                        <SelectTrigger className="bg-slate-900/50 border-slate-600 text-white">
+                        <SelectTrigger className="h-12 bg-background/50 border-border">
                           <SelectValue placeholder="Choose your preferred platform" />
                         </SelectTrigger>
                         <SelectContent>
@@ -344,38 +403,60 @@ const BookApartment = () => {
                     </div>
 
                     {/* Notes */}
-                    <div className="space-y-2">
-                      <Label htmlFor="notes" className="text-gray-200">
+                    <div className="space-y-3">
+                      <Label htmlFor="notes" className="text-foreground font-semibold text-sm">
                         Additional Information (Optional)
                       </Label>
                       <Input
                         id="notes"
                         value={formData.notes}
                         onChange={(e) => setFormData({...formData, notes: e.target.value})}
-                        placeholder="Tell us about your project or any specific requirements"
-                        className="bg-slate-900/50 border-slate-600 text-white placeholder:text-gray-500 focus:border-primary"
+                        placeholder="Tell us about your project or specific requirements..."
+                        className="h-12 bg-background/50 border-border focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
                       />
                     </div>
 
-                    <Button 
-                      type="submit" 
-                      className="w-full text-lg py-6 bg-gradient-to-r from-primary to-secondary hover:opacity-90 transition-opacity"
-                      disabled={isLoading}
-                    >
-                      {isLoading ? 'Submitting...' : 'Confirm Booking'}
-                    </Button>
+                    <div className="pt-4">
+                      <Button 
+                        type="submit" 
+                        className="w-full h-14 text-lg font-bold bg-gradient-to-r from-primary via-accent-luxury to-accent-cta hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 relative overflow-hidden group"
+                        disabled={isLoading}
+                      >
+                        <span className="relative z-10 flex items-center justify-center gap-2">
+                          {isLoading ? (
+                            <>
+                              <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                              Securing Your Spot...
+                            </>
+                          ) : (
+                            <>
+                              <Sparkles className="w-5 h-5" />
+                              Secure My Premium Session
+                              <Sparkles className="w-5 h-5" />
+                            </>
+                          )}
+                        </span>
+                        <div className="absolute inset-0 bg-gradient-to-r from-accent-cta via-primary to-accent-luxury opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      </Button>
+                      <p className="text-xs text-center text-muted-foreground mt-3">
+                        🔒 Your information is secure and confidential
+                      </p>
+                    </div>
                   </form>
                 </CardContent>
               </Card>
             </div>
 
-            <div className="mt-12 text-center">
-              <p className="text-sm text-gray-400">
-                Need help? Contact us directly at 
-                <a href="/contact" className="text-primary hover:underline ml-1">
-                  our contact page
-                </a>
-              </p>
+            <div className="mt-16 text-center">
+              <div className="inline-flex items-center gap-2 text-muted-foreground">
+                <CheckCircle2 className="w-4 h-4 text-primary" />
+                <p className="text-sm">
+                  Need immediate assistance? 
+                  <a href="/contact" className="text-primary hover:underline ml-1 font-semibold">
+                    Contact our support team
+                  </a>
+                </p>
+              </div>
             </div>
           </div>
         </main>

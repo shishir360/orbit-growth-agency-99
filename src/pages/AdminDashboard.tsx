@@ -27,6 +27,7 @@ import AdminAIAutomation from '@/components/admin/AdminAIAutomation';
 import AdminQuestions from '@/components/admin/AdminQuestions';
 import AdminCategories from '@/components/admin/AdminCategories';
 import AdminPricing from '@/components/admin/AdminPricing';
+import AdminBookings from '@/components/admin/AdminBookings';
 
 const AdminDashboard = () => {
   const { isAuthenticated } = useAdminAuth();
@@ -84,6 +85,7 @@ const AdminDashboard = () => {
             <Route path="analytics" element={<AdminAnalytics />} />
             <Route path="users" element={<AdminUsers />} />
             <Route path="pricing" element={<AdminPricing />} />
+            <Route path="bookings" element={<AdminBookings />} />
           </Routes>
         </div>
       </main>

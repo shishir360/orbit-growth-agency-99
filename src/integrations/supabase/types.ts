@@ -14,6 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
+      apartment_bookings: {
+        Row: {
+          created_at: string
+          date: string
+          email: string
+          id: string
+          meeting_platform: string
+          name: string
+          notes: string | null
+          phone: string
+          source: string
+          status: string
+          time: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          date: string
+          email: string
+          id?: string
+          meeting_platform: string
+          name: string
+          notes?: string | null
+          phone: string
+          source?: string
+          status?: string
+          time: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          date?: string
+          email?: string
+          id?: string
+          meeting_platform?: string
+          name?: string
+          notes?: string | null
+          phone?: string
+          source?: string
+          status?: string
+          time?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       blog_posts: {
         Row: {
           author: string
