@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAdminAuth } from '@/contexts/AdminAuthContext';
 import { SidebarProvider, SidebarTrigger, SidebarInset } from '@/components/ui/sidebar';
 import { AdminSidebar } from '@/components/admin/AdminSidebar';
+import { AdminNotifications } from '@/components/admin/AdminNotifications';
 import AdminOverview from '@/components/admin/AdminOverview';
 import AdminServices from '@/components/admin/AdminServices';
 import AdminHero from '@/components/admin/AdminHero';
@@ -54,8 +55,9 @@ const AdminDashboard = () => {
         <SidebarInset className="flex-1">
           <header className="sticky top-0 z-10 flex h-14 items-center gap-2 border-b bg-background px-4">
             <SidebarTrigger className="-ml-1" />
-            <div className="flex items-center gap-2">
+            <div className="flex items-center justify-between flex-1">
               <h1 className="text-lg font-semibold">Admin Dashboard</h1>
+              <AdminNotifications />
             </div>
           </header>
 

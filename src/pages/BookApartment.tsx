@@ -205,30 +205,16 @@ const BookApartment = () => {
         notes: formData.notes || ''
       };
 
-      // Save to Supabase
-      const {
-        error: dbError
-      } = await supabase.from('apartment_bookings').insert([bookingData]);
-      if (dbError) throw dbError;
+      // Call edge function to handle booking and notifications
+      const { error: functionError } = await supabase.functions.invoke('booking-notification', {
+        body: bookingData,
+      });
 
-      // Also send to webhook
-      try {
-        await fetch('https://iamfts0bbb.app.n8n.cloud/webhook-test/Apt-booking', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            ...bookingData,
-            submittedAt: new Date().toISOString()
-          })
-        });
-      } catch (webhookError) {
-        console.warn('Webhook notification failed:', webhookError);
-      }
+      if (functionError) throw functionError;
+
       toast({
         title: "Success!",
-        description: "Your booking has been submitted successfully. We'll contact you shortly."
+        description: "Your booking has been confirmed. Check your email for details."
       });
 
       // Reset form
