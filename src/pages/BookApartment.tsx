@@ -14,7 +14,6 @@ import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { toast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-
 const BookApartment = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [date, setDate] = useState<Date>();
@@ -29,63 +28,141 @@ const BookApartment = () => {
     meetingPlatform: '',
     notes: ''
   });
-
-  const countryCodes = [
-    { code: '+880', country: 'Bangladesh', flag: '🇧🇩' },
-    { code: '+1', country: 'USA/Canada', flag: '🇺🇸' },
-    { code: '+44', country: 'UK', flag: '🇬🇧' },
-    { code: '+91', country: 'India', flag: '🇮🇳' },
-    { code: '+971', country: 'UAE', flag: '🇦🇪' },
-    { code: '+966', country: 'Saudi Arabia', flag: '🇸🇦' },
-    { code: '+92', country: 'Pakistan', flag: '🇵🇰' },
-    { code: '+86', country: 'China', flag: '🇨🇳' },
-    { code: '+81', country: 'Japan', flag: '🇯🇵' },
-    { code: '+82', country: 'South Korea', flag: '🇰🇷' },
-    { code: '+61', country: 'Australia', flag: '🇦🇺' },
-    { code: '+49', country: 'Germany', flag: '🇩🇪' },
-    { code: '+33', country: 'France', flag: '🇫🇷' },
-    { code: '+39', country: 'Italy', flag: '🇮🇹' },
-    { code: '+34', country: 'Spain', flag: '🇪🇸' },
-    { code: '+7', country: 'Russia', flag: '🇷🇺' },
-    { code: '+65', country: 'Singapore', flag: '🇸🇬' },
-    { code: '+60', country: 'Malaysia', flag: '🇲🇾' },
-    { code: '+62', country: 'Indonesia', flag: '🇮🇩' },
-    { code: '+63', country: 'Philippines', flag: '🇵🇭' },
-    { code: '+66', country: 'Thailand', flag: '🇹🇭' },
-    { code: '+84', country: 'Vietnam', flag: '🇻🇳' },
-    { code: '+90', country: 'Turkey', flag: '🇹🇷' },
-    { code: '+20', country: 'Egypt', flag: '🇪🇬' },
-    { code: '+27', country: 'South Africa', flag: '🇿🇦' },
-    { code: '+52', country: 'Mexico', flag: '🇲🇽' },
-    { code: '+55', country: 'Brazil', flag: '🇧🇷' },
-    { code: '+54', country: 'Argentina', flag: '🇦🇷' },
-    { code: '+41', country: 'Switzerland', flag: '🇨🇭' },
-    { code: '+31', country: 'Netherlands', flag: '🇳🇱' }
-  ];
-
-  const timeSlots = [
-    '09:00 AM', '10:00 AM', '11:00 AM', '12:00 PM',
-    '01:00 PM', '02:00 PM', '03:00 PM', '04:00 PM',
-    '05:00 PM', '06:00 PM', '07:00 PM', '08:00 PM'
-  ];
-
+  const countryCodes = [{
+    code: '+880',
+    country: 'Bangladesh',
+    flag: '🇧🇩'
+  }, {
+    code: '+1',
+    country: 'USA/Canada',
+    flag: '🇺🇸'
+  }, {
+    code: '+44',
+    country: 'UK',
+    flag: '🇬🇧'
+  }, {
+    code: '+91',
+    country: 'India',
+    flag: '🇮🇳'
+  }, {
+    code: '+971',
+    country: 'UAE',
+    flag: '🇦🇪'
+  }, {
+    code: '+966',
+    country: 'Saudi Arabia',
+    flag: '🇸🇦'
+  }, {
+    code: '+92',
+    country: 'Pakistan',
+    flag: '🇵🇰'
+  }, {
+    code: '+86',
+    country: 'China',
+    flag: '🇨🇳'
+  }, {
+    code: '+81',
+    country: 'Japan',
+    flag: '🇯🇵'
+  }, {
+    code: '+82',
+    country: 'South Korea',
+    flag: '🇰🇷'
+  }, {
+    code: '+61',
+    country: 'Australia',
+    flag: '🇦🇺'
+  }, {
+    code: '+49',
+    country: 'Germany',
+    flag: '🇩🇪'
+  }, {
+    code: '+33',
+    country: 'France',
+    flag: '🇫🇷'
+  }, {
+    code: '+39',
+    country: 'Italy',
+    flag: '🇮🇹'
+  }, {
+    code: '+34',
+    country: 'Spain',
+    flag: '🇪🇸'
+  }, {
+    code: '+7',
+    country: 'Russia',
+    flag: '🇷🇺'
+  }, {
+    code: '+65',
+    country: 'Singapore',
+    flag: '🇸🇬'
+  }, {
+    code: '+60',
+    country: 'Malaysia',
+    flag: '🇲🇾'
+  }, {
+    code: '+62',
+    country: 'Indonesia',
+    flag: '🇮🇩'
+  }, {
+    code: '+63',
+    country: 'Philippines',
+    flag: '🇵🇭'
+  }, {
+    code: '+66',
+    country: 'Thailand',
+    flag: '🇹🇭'
+  }, {
+    code: '+84',
+    country: 'Vietnam',
+    flag: '🇻🇳'
+  }, {
+    code: '+90',
+    country: 'Turkey',
+    flag: '🇹🇷'
+  }, {
+    code: '+20',
+    country: 'Egypt',
+    flag: '🇪🇬'
+  }, {
+    code: '+27',
+    country: 'South Africa',
+    flag: '🇿🇦'
+  }, {
+    code: '+52',
+    country: 'Mexico',
+    flag: '🇲🇽'
+  }, {
+    code: '+55',
+    country: 'Brazil',
+    flag: '🇧🇷'
+  }, {
+    code: '+54',
+    country: 'Argentina',
+    flag: '🇦🇷'
+  }, {
+    code: '+41',
+    country: 'Switzerland',
+    flag: '🇨🇭'
+  }, {
+    code: '+31',
+    country: 'Netherlands',
+    flag: '🇳🇱'
+  }];
+  const timeSlots = ['09:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '01:00 PM', '02:00 PM', '03:00 PM', '04:00 PM', '05:00 PM', '06:00 PM', '07:00 PM', '08:00 PM'];
 
   // Fetch booked time slots when date changes
   useEffect(() => {
     const fetchBookedSlots = async () => {
       if (!date) return;
-      
       setLoadingSlots(true);
       try {
         const formattedDate = format(date, 'PPP');
-        const { data, error } = await supabase
-          .from('apartment_bookings')
-          .select('time')
-          .eq('date', formattedDate)
-          .neq('status', 'cancelled');
-
+        const {
+          data,
+          error
+        } = await supabase.from('apartment_bookings').select('time').eq('date', formattedDate).neq('status', 'cancelled');
         if (error) throw error;
-        
         const slots = data?.map(booking => booking.time) || [];
         setBookedSlots(slots);
       } catch (error) {
@@ -94,13 +171,10 @@ const BookApartment = () => {
         setLoadingSlots(false);
       }
     };
-
     fetchBookedSlots();
   }, [date]);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     if (!date || !formData.time || !formData.meetingPlatform) {
       toast({
         title: "Error",
@@ -119,9 +193,7 @@ const BookApartment = () => {
       });
       return;
     }
-
     setIsLoading(true);
-
     try {
       const bookingData = {
         name: formData.name,
@@ -134,28 +206,31 @@ const BookApartment = () => {
       };
 
       // Save to Supabase
-      const { error: dbError } = await supabase
-        .from('apartment_bookings')
-        .insert([bookingData]);
-
+      const {
+        error: dbError
+      } = await supabase.from('apartment_bookings').insert([bookingData]);
       if (dbError) throw dbError;
 
       // Also send to webhook
       try {
         await fetch('https://iamfts0bbb.app.n8n.cloud/webhook-test/Apt-booking', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ ...bookingData, submittedAt: new Date().toISOString() }),
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            ...bookingData,
+            submittedAt: new Date().toISOString()
+          })
         });
       } catch (webhookError) {
         console.warn('Webhook notification failed:', webhookError);
       }
-
       toast({
         title: "Success!",
-        description: "Your booking has been submitted successfully. We'll contact you shortly.",
+        description: "Your booking has been submitted successfully. We'll contact you shortly."
       });
-      
+
       // Reset form
       setFormData({
         name: '',
@@ -178,21 +253,9 @@ const BookApartment = () => {
       setIsLoading(false);
     }
   };
-
-  const features = [
-    "Free consultation with our experts",
-    "Flexible meeting options (Google Meet, Zoom, Phone)",
-    "Get personalized recommendations",
-    "No commitment required"
-  ];
-
-  return (
-    <>
-      <SEO 
-        title="Book Your Appointment - LUNEXO MEDIA"
-        description="Schedule a free consultation with our experts. Book your appointment through Google Meet, Zoom, or phone call."
-        keywords="book appointment, schedule consultation, free consultation, online meeting"
-      />
+  const features = ["Free consultation with our experts", "Flexible meeting options (Google Meet, Zoom, Phone)", "Get personalized recommendations", "No commitment required"];
+  return <>
+      <SEO title="Book Your Appointment - LUNEXO MEDIA" description="Schedule a free consultation with our experts. Book your appointment through Google Meet, Zoom, or phone call." keywords="book appointment, schedule consultation, free consultation, online meeting" />
       <div className="min-h-screen flex flex-col ultra-premium-hero relative overflow-hidden">
         {/* Animated Background Elements */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -252,14 +315,12 @@ const BookApartment = () => {
                       What You'll <span className="premium-gradient-text">Experience</span>
                     </h2>
                     <ul className="space-y-6">
-                      {features.map((feature, index) => (
-                        <li key={index} className="flex items-start gap-4 group">
+                      {features.map((feature, index) => <li key={index} className="flex items-start gap-4 group">
                           <div className="mt-1 w-10 h-10 rounded-2xl bg-gradient-to-br from-primary to-accent-luxury flex items-center justify-center flex-shrink-0 shadow-lg group-hover:scale-110 transition-transform">
                             <CheckCircle2 className="w-5 h-5 text-white" />
                           </div>
                           <span className="text-lg font-medium text-foreground leading-tight">{feature}</span>
-                        </li>
-                      ))}
+                        </li>)}
                     </ul>
                   </CardContent>
                 </Card>
@@ -284,7 +345,7 @@ const BookApartment = () => {
                         <div className="text-xs text-muted-foreground mt-1">Response</div>
                       </div>
                       <div className="text-center">
-                        <div className="text-3xl font-black premium-gradient-text">500+</div>
+                        <div className="text-3xl font-black premium-gradient-text">50+</div>
                         <div className="text-xs text-muted-foreground mt-1">Projects</div>
                       </div>
                     </div>
@@ -315,14 +376,10 @@ const BookApartment = () => {
                         <User className="w-4 h-4 text-primary" />
                         Full Name *
                       </Label>
-                      <Input
-                        id="name"
-                        required
-                        value={formData.name}
-                        onChange={(e) => setFormData({...formData, name: e.target.value})}
-                        placeholder="John Doe"
-                        className="h-12 bg-background/50 border-border focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
-                      />
+                      <Input id="name" required value={formData.name} onChange={e => setFormData({
+                      ...formData,
+                      name: e.target.value
+                    })} placeholder="John Doe" className="h-12 bg-background/50 border-border focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all" />
                     </div>
 
                     {/* Email */}
@@ -331,15 +388,10 @@ const BookApartment = () => {
                         <Mail className="w-4 h-4 text-primary" />
                         Email Address *
                       </Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        required
-                        value={formData.email}
-                        onChange={(e) => setFormData({...formData, email: e.target.value})}
-                        placeholder="john@company.com"
-                        className="h-12 bg-background/50 border-border focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
-                      />
+                      <Input id="email" type="email" required value={formData.email} onChange={e => setFormData({
+                      ...formData,
+                      email: e.target.value
+                    })} placeholder="john@company.com" className="h-12 bg-background/50 border-border focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all" />
                     </div>
 
                     {/* Phone with Country Code */}
@@ -349,10 +401,10 @@ const BookApartment = () => {
                         Phone Number *
                       </Label>
                       <div className="flex gap-3">
-                        <Select
-                          value={formData.countryCode}
-                          onValueChange={(value) => setFormData({...formData, countryCode: value})}
-                        >
+                        <Select value={formData.countryCode} onValueChange={value => setFormData({
+                        ...formData,
+                        countryCode: value
+                      })}>
                           <SelectTrigger className="w-[200px] h-12 bg-background/50 border-border focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all">
                             <SelectValue>
                               <div className="flex items-center gap-2">
@@ -364,25 +416,19 @@ const BookApartment = () => {
                             </SelectValue>
                           </SelectTrigger>
                           <SelectContent className="max-h-[300px]">
-                            {countryCodes.map((item) => (
-                              <SelectItem key={item.code} value={item.code}>
+                            {countryCodes.map(item => <SelectItem key={item.code} value={item.code}>
                                 <div className="flex items-center gap-3">
                                   <span className="text-xl">{item.flag}</span>
                                   <span className="font-medium">{item.code}</span>
                                   <span className="text-muted-foreground text-sm">({item.country})</span>
                                 </div>
-                              </SelectItem>
-                            ))}
+                              </SelectItem>)}
                           </SelectContent>
                         </Select>
-                        <Input
-                          required
-                          type="tel"
-                          value={formData.phone}
-                          onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                          placeholder="1234567890"
-                          className="flex-1 h-12 bg-background/50 border-border focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all font-medium"
-                        />
+                        <Input required type="tel" value={formData.phone} onChange={e => setFormData({
+                        ...formData,
+                        phone: e.target.value
+                      })} placeholder="1234567890" className="flex-1 h-12 bg-background/50 border-border focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all font-medium" />
                       </div>
                     </div>
 
@@ -394,30 +440,17 @@ const BookApartment = () => {
                       </Label>
                       <Popover>
                         <PopoverTrigger asChild>
-                          <Button
-                            variant="outline"
-                            className={cn(
-                              "w-full h-12 justify-start text-left font-normal bg-background/50 border-border hover:bg-background hover:border-primary transition-all",
-                              !date && "text-muted-foreground"
-                            )}
-                          >
+                          <Button variant="outline" className={cn("w-full h-12 justify-start text-left font-normal bg-background/50 border-border hover:bg-background hover:border-primary transition-all", !date && "text-muted-foreground")}>
                             <CalendarIcon className="mr-2 h-4 w-4" />
                             {date ? format(date, 'PPP') : "Pick a date"}
                           </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-auto p-0" align="start">
-                          <Calendar
-                            mode="single"
-                            selected={date}
-                            onSelect={setDate}
-                            disabled={(date) => {
-                              const today = new Date();
-                              today.setHours(0, 0, 0, 0);
-                              return date < today;
-                            }}
-                            initialFocus
-                            className="pointer-events-auto"
-                          />
+                          <Calendar mode="single" selected={date} onSelect={setDate} disabled={date => {
+                          const today = new Date();
+                          today.setHours(0, 0, 0, 0);
+                          return date < today;
+                        }} initialFocus className="pointer-events-auto" />
                         </PopoverContent>
                       </Popover>
                     </div>
@@ -428,43 +461,29 @@ const BookApartment = () => {
                         <Clock className="w-4 h-4 text-primary" />
                         Preferred Time *
                       </Label>
-                      {loadingSlots ? (
-                        <div className="h-12 bg-background/50 border border-border rounded-md flex items-center justify-center">
+                      {loadingSlots ? <div className="h-12 bg-background/50 border border-border rounded-md flex items-center justify-center">
                           <span className="text-sm text-muted-foreground">Loading available slots...</span>
-                        </div>
-                      ) : (
-                        <Select
-                          value={formData.time}
-                          onValueChange={(value) => setFormData({...formData, time: value})}
-                          disabled={!date}
-                        >
+                        </div> : <Select value={formData.time} onValueChange={value => setFormData({
+                      ...formData,
+                      time: value
+                    })} disabled={!date}>
                           <SelectTrigger className="h-12 bg-background/50 border-border">
                             <SelectValue placeholder={date ? "Select a time slot" : "Please select a date first"} />
                           </SelectTrigger>
                           <SelectContent>
-                            {timeSlots.map((time) => {
-                              const isBooked = bookedSlots.includes(time);
-                              return (
-                                <SelectItem 
-                                  key={time} 
-                                  value={time}
-                                  disabled={isBooked}
-                                  className={isBooked ? "opacity-50" : ""}
-                                >
+                            {timeSlots.map(time => {
+                          const isBooked = bookedSlots.includes(time);
+                          return <SelectItem key={time} value={time} disabled={isBooked} className={isBooked ? "opacity-50" : ""}>
                                   <div className="flex items-center justify-between w-full gap-2">
                                     <span>{time}</span>
-                                    {isBooked && (
-                                      <span className="text-xs text-amber-600 font-medium">
+                                    {isBooked && <span className="text-xs text-amber-600 font-medium">
                                         ⚠️ Occupied
-                                      </span>
-                                    )}
+                                      </span>}
                                   </div>
-                                </SelectItem>
-                              );
-                            })}
+                                </SelectItem>;
+                        })}
                           </SelectContent>
-                        </Select>
-                      )}
+                        </Select>}
                     </div>
 
                     {/* Meeting Platform */}
@@ -473,10 +492,10 @@ const BookApartment = () => {
                         <Video className="w-4 h-4 text-primary" />
                         Meeting Platform *
                       </Label>
-                      <Select
-                        value={formData.meetingPlatform}
-                        onValueChange={(value) => setFormData({...formData, meetingPlatform: value})}
-                      >
+                      <Select value={formData.meetingPlatform} onValueChange={value => setFormData({
+                      ...formData,
+                      meetingPlatform: value
+                    })}>
                         <SelectTrigger className="h-12 bg-background/50 border-border">
                           <SelectValue placeholder="Choose your preferred platform" />
                         </SelectTrigger>
@@ -508,34 +527,23 @@ const BookApartment = () => {
                       <Label htmlFor="notes" className="text-foreground font-semibold text-sm">
                         Additional Information (Optional)
                       </Label>
-                      <Input
-                        id="notes"
-                        value={formData.notes}
-                        onChange={(e) => setFormData({...formData, notes: e.target.value})}
-                        placeholder="Tell us about your project or specific requirements..."
-                        className="h-12 bg-background/50 border-border focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
-                      />
+                      <Input id="notes" value={formData.notes} onChange={e => setFormData({
+                      ...formData,
+                      notes: e.target.value
+                    })} placeholder="Tell us about your project or specific requirements..." className="h-12 bg-background/50 border-border focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all" />
                     </div>
 
                     <div className="pt-4">
-                      <Button 
-                        type="submit" 
-                        className="w-full h-14 text-lg font-bold bg-gradient-to-r from-primary via-accent-luxury to-accent-cta hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 relative overflow-hidden group"
-                        disabled={isLoading}
-                      >
+                      <Button type="submit" className="w-full h-14 text-lg font-bold bg-gradient-to-r from-primary via-accent-luxury to-accent-cta hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 relative overflow-hidden group" disabled={isLoading}>
                         <span className="relative z-10 flex items-center justify-center gap-2">
-                          {isLoading ? (
-                            <>
+                          {isLoading ? <>
                               <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                               Securing Your Spot...
-                            </>
-                          ) : (
-                            <>
+                            </> : <>
                               <Sparkles className="w-5 h-5" />
                               Secure My Premium Session
                               <Sparkles className="w-5 h-5" />
-                            </>
-                          )}
+                            </>}
                         </span>
                         <div className="absolute inset-0 bg-gradient-to-r from-accent-cta via-primary to-accent-luxury opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                       </Button>
@@ -564,8 +572,6 @@ const BookApartment = () => {
 
         <Footer />
       </div>
-    </>
-  );
+    </>;
 };
-
 export default BookApartment;
