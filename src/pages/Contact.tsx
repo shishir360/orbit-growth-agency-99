@@ -243,12 +243,12 @@ const Contact = () => {
                         
                         <div className="space-y-3">
                           <Label htmlFor="phone" className="text-foreground font-semibold text-lg">Phone Number *</Label>
-                          <div className="flex gap-3">
+                          <div className="flex flex-col sm:flex-row gap-3">
                             <select 
                               id="countryCode" 
                               name="countryCode"
                               required
-                              className="h-14 px-4 border-2 border-primary/20 rounded-xl bg-white/50 text-foreground text-lg min-w-[120px] focus:border-primary focus:bg-white transition-all duration-300"
+                              className="h-14 px-4 border-2 border-primary/20 rounded-xl bg-white/50 text-foreground text-base sm:text-lg w-full sm:min-w-[140px] sm:max-w-[180px] focus:border-primary focus:bg-white transition-all duration-300"
                             >
                               <option value="+1">🇺🇸 +1</option>
                               <option value="+44">🇬🇧 +44</option>
@@ -280,7 +280,7 @@ const Contact = () => {
                               type="tel" 
                               required
                               placeholder="123 456 7890"
-                              className="flex-1 h-14 text-lg bg-white/50 border-2 border-primary/20 focus:border-primary focus:bg-white transition-all duration-300 rounded-xl"
+                              className="flex-1 h-14 text-base sm:text-lg bg-white/50 border-2 border-primary/20 focus:border-primary focus:bg-white transition-all duration-300 rounded-xl"
                             />
                           </div>
                         </div>

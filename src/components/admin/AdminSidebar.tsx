@@ -114,10 +114,10 @@ export function AdminSidebar() {
 
   return (
     <Sidebar className={collapsed ? 'w-14' : 'w-60'} collapsible="icon">
-      <SidebarHeader className="border-b border-sidebar-border p-4">
+      <SidebarHeader className="border-b border-sidebar-border p-3 sm:p-4">
         <div className="flex items-center gap-2">
-          <Shield className="h-6 w-6 text-primary" />
-          {!collapsed && <span className="font-bold text-lg">Admin Panel</span>}
+          <Shield className="h-5 w-5 sm:h-6 sm:w-6 text-primary flex-shrink-0" />
+          {!collapsed && <span className="font-bold text-base sm:text-lg truncate">Admin Panel</span>}
         </div>
       </SidebarHeader>
 
@@ -152,14 +152,14 @@ export function AdminSidebar() {
         </ScrollArea>
       </SidebarContent>
 
-      <SidebarFooter className="border-t border-sidebar-border p-4">
+      <SidebarFooter className="border-t border-sidebar-border p-2 sm:p-4">
         <Button
           variant="ghost"
           onClick={handleLogout}
-          className="w-full justify-start"
+          className="w-full justify-start text-sm sm:text-base"
         >
-          <LogOut className="h-5 w-5" />
-          {!collapsed && <span className="ml-3">Logout</span>}
+          <LogOut className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
+          {!collapsed && <span className="ml-2 sm:ml-3 truncate">Logout</span>}
         </Button>
       </SidebarFooter>
     </Sidebar>

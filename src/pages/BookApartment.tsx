@@ -392,12 +392,12 @@ const BookApartment = () => {
                         <Phone className="w-4 h-4 text-primary" />
                         Phone Number *
                       </Label>
-                      <div className="flex gap-3">
+                      <div className="flex flex-col sm:flex-row gap-3">
                         <Select value={formData.countryCode} onValueChange={value => setFormData({
                         ...formData,
                         countryCode: value
                       })}>
-                          <SelectTrigger className="w-[200px] h-12 bg-background/50 border-border focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all">
+                          <SelectTrigger className="w-full sm:w-[160px] h-12 bg-background/50 border-border focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all">
                             <SelectValue>
                               <div className="flex items-center gap-2">
                                 <span className="text-xl">
