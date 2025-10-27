@@ -48,11 +48,11 @@ interface AdminSidebarProps {
 }
 
 const AdminSidebar: React.FC<AdminSidebarProps> = ({ collapsed, onToggle, mobileOpen, setMobileOpen }) => {
-  const { logout } = useAdminAuth();
+  const { signOut } = useAdminAuth();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await signOut();
     navigate('/admin-login');
   };
 
