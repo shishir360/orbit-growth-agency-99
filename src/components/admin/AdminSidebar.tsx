@@ -36,7 +36,8 @@ import {
   Folder,
   HelpCircle,
   DollarSign,
-  Calendar
+  Calendar,
+  Receipt
 } from 'lucide-react';
 
 interface AdminSidebarProps {
@@ -83,6 +84,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ collapsed, onToggle, mobile
     { to: '/admin-dashboard/testimonials', icon: Star, label: 'Testimonials', section: 'company' },
     { to: '/admin-dashboard/contact', icon: Mail, label: 'Contact Forms', section: 'company' },
     { to: '/admin-dashboard/bookings', icon: Calendar, label: 'Bookings', section: 'company' },
+    { to: '/admin-dashboard/invoices', icon: Receipt, label: 'Invoices', section: 'company' },
     
     // Technical & Analytics
     { to: '/admin-dashboard/seo-meta', icon: Search, label: 'SEO & Meta Tags', section: 'technical' },
