@@ -49,6 +49,7 @@ import PortfolioAdsManagement from "./pages/PortfolioAdsManagement";
 import BookApartment from "./pages/BookApartment";
 import DynamicPage from "./pages/DynamicPage";
 import CatchAllPage from "./pages/CatchAllPage";
+import GuidePage from "./pages/GuidePage";
 
 const queryClient = new QueryClient();
 
@@ -102,6 +103,7 @@ const App = () => (
                   <Route path="/admin-login" element={<AdminLogin />} />
                   <Route path="/admin-dashboard/*" element={<AdminDashboard />} />
                   <Route path="/page/:slug" element={<DynamicPage />} />
+                  <Route path="/guide/:slug" element={<GuidePage />} />
                   {/* Catch-all to resolve dynamic admin-created pages by slug, else 404 */}
                   <Route path="*" element={<CatchAllPage />} />
                 </Routes>

@@ -31,6 +31,7 @@ import AdminBookings from '@/components/admin/AdminBookings';
 import AdminInvoices from '@/components/admin/AdminInvoices';
 import AdminContacts from '@/components/admin/AdminContacts';
 import AdminPDFDocuments from '@/components/admin/AdminPDFDocuments';
+import AdminPDFLeads from '@/components/admin/AdminPDFLeads';
 
 const AdminDashboard = () => {
   const { isAdmin, loading } = useAdminAuth();
@@ -100,6 +101,7 @@ const AdminDashboard = () => {
             <Route path="invoices" element={<AdminInvoices />} />
             <Route path="contact-submissions" element={<AdminContacts />} />
             <Route path="pdf-documents" element={<AdminPDFDocuments />} />
+            <Route path="pdf-leads" element={<AdminPDFLeads />} />
           </Routes>
         </div>
       </main>

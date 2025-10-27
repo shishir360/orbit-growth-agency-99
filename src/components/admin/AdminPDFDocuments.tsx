@@ -19,6 +19,7 @@ interface PDFDocument {
   file_url: string;
   file_size?: number;
   category?: string;
+  slug?: string;
   visible: boolean;
   created_at: string;
   updated_at: string;
@@ -35,6 +36,7 @@ const AdminPDFDocuments = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
+  const [slug, setSlug] = useState('');
   const [file, setFile] = useState<File | null>(null);
 
   const fetchDocuments = async () => {
@@ -109,6 +111,7 @@ const AdminPDFDocuments = () => {
           title,
           description,
           category,
+          slug: slug || null,
           file_url: publicUrl,
           file_size: file.size,
           visible: true,
@@ -125,6 +128,7 @@ const AdminPDFDocuments = () => {
       setTitle('');
       setDescription('');
       setCategory('');
+      setSlug('');
       setFile(null);
       setShowAddDialog(false);
       fetchDocuments();
@@ -246,6 +250,7 @@ const AdminPDFDocuments = () => {
               <TableRow>
                 <TableHead>Title</TableHead>
                 <TableHead>Category</TableHead>
+                <TableHead>Landing Page</TableHead>
                 <TableHead>File Size</TableHead>
                 <TableHead>Visible</TableHead>
                 <TableHead>Uploaded</TableHead>
@@ -257,6 +262,20 @@ const AdminPDFDocuments = () => {
                 <TableRow key={doc.id}>
                   <TableCell className="font-medium">{doc.title}</TableCell>
                   <TableCell>{doc.category || '-'}</TableCell>
+                  <TableCell>
+                    {doc.slug ? (
+                      <a 
+                        href={`/guide/${doc.slug}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-primary hover:underline text-sm"
+                      >
+                        /guide/{doc.slug}
+                      </a>
+                    ) : (
+                      <span className="text-muted-foreground text-sm">No slug</span>
+                    )}
+                  </TableCell>
                   <TableCell>{formatFileSize(doc.file_size)}</TableCell>
                   <TableCell>
                     <Switch
@@ -324,6 +343,20 @@ const AdminPDFDocuments = () => {
                 onChange={(e) => setCategory(e.target.value)}
                 placeholder="e.g., Terms, Privacy, Guides"
               />
+            </div>
+            <div>
+              <Label htmlFor="slug">URL Slug (for landing page)</Label>
+              <Input
+                id="slug"
+                value={slug}
+                onChange={(e) => setSlug(e.target.value.toLowerCase().replace(/\s+/g, '-'))}
+                placeholder="e.g., ultimate-marketing-guide"
+              />
+              {slug && (
+                <p className="text-sm text-muted-foreground mt-1">
+                  Landing page: /guide/{slug}
+                </p>
+              )}
             </div>
             <div>
               <Label htmlFor="file">PDF File *</Label>

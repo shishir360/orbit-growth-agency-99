@@ -417,6 +417,44 @@ export type Database = {
         }
         Relationships: []
       }
+      pdf_access_requests: {
+        Row: {
+          company: string | null
+          created_at: string
+          email: string
+          id: string
+          name: string
+          pdf_id: string
+          phone: string | null
+        }
+        Insert: {
+          company?: string | null
+          created_at?: string
+          email: string
+          id?: string
+          name: string
+          pdf_id: string
+          phone?: string | null
+        }
+        Update: {
+          company?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          name?: string
+          pdf_id?: string
+          phone?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pdf_access_requests_pdf_id_fkey"
+            columns: ["pdf_id"]
+            isOneToOne: false
+            referencedRelation: "pdf_documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       pdf_documents: {
         Row: {
           category: string | null
@@ -425,6 +463,7 @@ export type Database = {
           file_size: number | null
           file_url: string
           id: string
+          slug: string | null
           title: string
           updated_at: string
           visible: boolean
@@ -436,6 +475,7 @@ export type Database = {
           file_size?: number | null
           file_url: string
           id?: string
+          slug?: string | null
           title: string
           updated_at?: string
           visible?: boolean
@@ -447,6 +487,7 @@ export type Database = {
           file_size?: number | null
           file_url?: string
           id?: string
+          slug?: string | null
           title?: string
           updated_at?: string
           visible?: boolean

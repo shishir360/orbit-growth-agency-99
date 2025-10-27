@@ -87,6 +87,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ collapsed, onToggle, mobile
     { to: '/admin-dashboard/bookings', icon: Calendar, label: 'Bookings', section: 'company' },
     { to: '/admin-dashboard/invoices', icon: Receipt, label: 'Invoices', section: 'company' },
     { to: '/admin-dashboard/pdf-documents', icon: FileText, label: 'PDF Documents', section: 'company' },
+    { to: '/admin-dashboard/pdf-leads', icon: Users, label: 'PDF Leads', section: 'company' },
     
     // Technical & Analytics
     { to: '/admin-dashboard/seo-meta', icon: Search, label: 'SEO & Meta Tags', section: 'technical' },
