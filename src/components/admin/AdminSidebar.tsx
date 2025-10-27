@@ -1,24 +1,30 @@
-import React from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useAdminAuth } from '@/contexts/AdminAuthContext';
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
+  SidebarFooter,
+  SidebarHeader,
+  useSidebar,
+} from '@/components/ui/sidebar';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import {
   LayoutDashboard,
   Settings,
   FileText,
-  Image,
-  Menu,
   Globe,
   LogOut,
   Shield,
-  BarChart3,
   Target,
   Bot,
   MessageSquare,
-  Eye,
-  Code,
   Users,
   BookOpen,
   Briefcase,
@@ -26,10 +32,6 @@ import {
   Star,
   Navigation,
   Building2,
-  Home,
-  Zap,
-  Grid,
-  Monitor,
   PlayCircle,
   Activity,
   Search,
@@ -37,19 +39,16 @@ import {
   HelpCircle,
   DollarSign,
   Calendar,
-  Receipt
+  Receipt,
+  Image,
 } from 'lucide-react';
 
-interface AdminSidebarProps {
-  collapsed: boolean;
-  onToggle: () => void;
-  mobileOpen: boolean;
-  setMobileOpen: (open: boolean) => void;
-}
-
-const AdminSidebar: React.FC<AdminSidebarProps> = ({ collapsed, onToggle, mobileOpen, setMobileOpen }) => {
+export function AdminSidebar() {
   const { signOut } = useAdminAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const { state } = useSidebar();
+  const collapsed = state === 'collapsed';
 
   const handleLogout = async () => {
     await signOut();
@@ -97,213 +96,70 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ collapsed, onToggle, mobile
     { to: '/admin-dashboard/users', icon: Users, label: 'User Management', section: 'technical' }
   ];
 
-  const SidebarContent = () => (
-    <>
-      {/* Header */}
-      <div className="p-4 border-b border-slate-700">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Shield className="w-6 h-6 text-primary" />
-            <span className="font-bold text-lg">Admin Panel</span>
-          </div>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={onToggle}
-            className="text-white hover:bg-slate-800 hidden md:flex"
-          >
-            <Menu className="w-4 h-4" />
-          </Button>
+  const getNavCls = (path: string) => {
+    const isActive = location.pathname === path || (path === '/admin-dashboard' && location.pathname === '/admin-dashboard');
+    return isActive;
+  };
+
+  const sections = [
+    { id: 'core', label: 'Dashboard' },
+    { id: 'content', label: 'Content' },
+    { id: 'services', label: 'Services' },
+    { id: 'resources', label: 'Resources' },
+    { id: 'company', label: 'Company' },
+    { id: 'technical', label: 'Technical' },
+  ];
+
+  return (
+    <Sidebar className={collapsed ? 'w-14' : 'w-60'} collapsible="icon">
+      <SidebarHeader className="border-b border-sidebar-border p-4">
+        <div className="flex items-center gap-2">
+          <Shield className="h-6 w-6 text-primary" />
+          {!collapsed && <span className="font-bold text-lg">Admin Panel</span>}
         </div>
-      </div>
+      </SidebarHeader>
 
-      {/* Navigation */}
-      <nav className="flex-1 p-4 overflow-y-auto">
-        {/* Core Dashboard */}
-        <div className="mb-6">
-          <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Dashboard</h3>
-          <ul className="space-y-1">
-            {menuItems.filter(item => item.section === 'core').map((item) => (
-              <li key={item.to}>
-                <NavLink
-                  to={item.to}
-                  end={item.to === '/admin-dashboard'}
-                  onClick={() => setMobileOpen(false)}
-                  className={({ isActive }) =>
-                    `flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
-                      isActive
-                        ? 'bg-primary text-primary-foreground'
-                        : 'text-slate-300 hover:bg-slate-800 hover:text-white'
-                    }`
-                  }
-                >
-                  <item.icon className="w-4 h-4 flex-shrink-0" />
-                  <span className="text-sm">{item.label}</span>
-                </NavLink>
-              </li>
-            ))}
-          </ul>
-        </div>
+      <SidebarContent>
+        <ScrollArea className="flex-1">
+          {sections.map((section) => {
+            const sectionItems = menuItems.filter(item => item.section === section.id);
+            
+            return (
+              <SidebarGroup key={section.id}>
+                <SidebarGroupLabel>{section.label}</SidebarGroupLabel>
+                <SidebarGroupContent>
+                  <SidebarMenu>
+                    {sectionItems.map((item) => {
+                      const isActive = getNavCls(item.to);
+                      return (
+                        <SidebarMenuItem key={item.to}>
+                          <SidebarMenuButton asChild isActive={isActive}>
+                            <NavLink to={item.to} end={item.to === '/admin-dashboard'}>
+                              <item.icon className="h-4 w-4" />
+                              {!collapsed && <span>{item.label}</span>}
+                            </NavLink>
+                          </SidebarMenuButton>
+                        </SidebarMenuItem>
+                      );
+                    })}
+                  </SidebarMenu>
+                </SidebarGroupContent>
+              </SidebarGroup>
+            );
+          })}
+        </ScrollArea>
+      </SidebarContent>
 
-        {/* Content Management */}
-        <div className="mb-6">
-          <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Content</h3>
-          <ul className="space-y-1">
-            {menuItems.filter(item => item.section === 'content').map((item) => (
-              <li key={item.to}>
-                <NavLink
-                  to={item.to}
-                  onClick={() => setMobileOpen(false)}
-                  className={({ isActive }) =>
-                    `flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
-                      isActive
-                        ? 'bg-primary text-primary-foreground'
-                        : 'text-slate-300 hover:bg-slate-800 hover:text-white'
-                    }`
-                  }
-                >
-                  <item.icon className="w-4 h-4 flex-shrink-0" />
-                  <span className="text-sm">{item.label}</span>
-                </NavLink>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Services */}
-        <div className="mb-6">
-          <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Services</h3>
-          <ul className="space-y-1">
-            {menuItems.filter(item => item.section === 'services').map((item) => (
-              <li key={item.to}>
-                <NavLink
-                  to={item.to}
-                  onClick={() => setMobileOpen(false)}
-                  className={({ isActive }) =>
-                    `flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
-                      isActive
-                        ? 'bg-primary text-primary-foreground'
-                        : 'text-slate-300 hover:bg-slate-800 hover:text-white'
-                    }`
-                  }
-                >
-                  <item.icon className="w-4 h-4 flex-shrink-0" />
-                  <span className="text-sm">{item.label}</span>
-                </NavLink>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Resources */}
-        <div className="mb-6">
-          <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Resources</h3>
-          <ul className="space-y-1">
-            {menuItems.filter(item => item.section === 'resources').map((item) => (
-              <li key={item.to}>
-                <NavLink
-                  to={item.to}
-                  onClick={() => setMobileOpen(false)}
-                  className={({ isActive }) =>
-                    `flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
-                      isActive
-                        ? 'bg-primary text-primary-foreground'
-                        : 'text-slate-300 hover:bg-slate-800 hover:text-white'
-                    }`
-                  }
-                >
-                  <item.icon className="w-4 h-4 flex-shrink-0" />
-                  <span className="text-sm">{item.label}</span>
-                </NavLink>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Company */}
-        <div className="mb-6">
-          <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Company</h3>
-          <ul className="space-y-1">
-            {menuItems.filter(item => item.section === 'company').map((item) => (
-              <li key={item.to}>
-                <NavLink
-                  to={item.to}
-                  onClick={() => setMobileOpen(false)}
-                  className={({ isActive }) =>
-                    `flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
-                      isActive
-                        ? 'bg-primary text-primary-foreground'
-                        : 'text-slate-300 hover:bg-slate-800 hover:text-white'
-                    }`
-                  }
-                >
-                  <item.icon className="w-4 h-4 flex-shrink-0" />
-                  <span className="text-sm">{item.label}</span>
-                </NavLink>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Technical & Analytics */}
-        <div className="mb-6">
-          <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Technical</h3>
-          <ul className="space-y-1">
-            {menuItems.filter(item => item.section === 'technical').map((item) => (
-              <li key={item.to}>
-                <NavLink
-                  to={item.to}
-                  onClick={() => setMobileOpen(false)}
-                  className={({ isActive }) =>
-                    `flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
-                      isActive
-                        ? 'bg-primary text-primary-foreground'
-                        : 'text-slate-300 hover:bg-slate-800 hover:text-white'
-                    }`
-                  }
-                >
-                  <item.icon className="w-4 h-4 flex-shrink-0" />
-                  <span className="text-sm">{item.label}</span>
-                </NavLink>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </nav>
-
-      <Separator className="bg-slate-700" />
-
-      {/* Footer */}
-      <div className="p-4">
+      <SidebarFooter className="border-t border-sidebar-border p-4">
         <Button
           variant="ghost"
           onClick={handleLogout}
-          className="w-full justify-start text-slate-300 hover:bg-slate-800 hover:text-white"
+          className="w-full justify-start"
         >
-          <LogOut className="w-5 h-5 flex-shrink-0" />
-          <span className="ml-3">Logout</span>
+          <LogOut className="h-5 w-5" />
+          {!collapsed && <span className="ml-3">Logout</span>}
         </Button>
-      </div>
-    </>
+      </SidebarFooter>
+    </Sidebar>
   );
-
-  return (
-    <>
-      {/* Desktop Sidebar */}
-      <div className={`hidden md:flex bg-slate-900 text-white transition-all duration-300 ${collapsed ? 'w-16' : 'w-64'} min-h-screen flex-col`}>
-        <SidebarContent />
-      </div>
-
-      {/* Mobile Sheet */}
-      <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-        <SheetContent side="left" className="w-64 bg-slate-900 text-white border-slate-700 p-0">
-          <div className="min-h-screen flex flex-col">
-            <SidebarContent />
-          </div>
-        </SheetContent>
-      </Sheet>
-    </>
-  );
-};
-
-export default AdminSidebar;
+}

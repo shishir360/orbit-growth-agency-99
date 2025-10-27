@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Menu } from 'lucide-react';
 import { useAdminAuth } from '@/contexts/AdminAuthContext';
-import AdminSidebar from '@/components/admin/AdminSidebar';
+import { SidebarProvider, SidebarTrigger, SidebarInset } from '@/components/ui/sidebar';
+import { AdminSidebar } from '@/components/admin/AdminSidebar';
 import AdminOverview from '@/components/admin/AdminOverview';
 import AdminServices from '@/components/admin/AdminServices';
 import AdminHero from '@/components/admin/AdminHero';
@@ -35,8 +33,6 @@ import AdminPDFLeads from '@/components/admin/AdminPDFLeads';
 
 const AdminDashboard = () => {
   const { isAdmin, loading } = useAdminAuth();
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
 
   if (loading) {
     return (
@@ -51,61 +47,53 @@ const AdminDashboard = () => {
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      <AdminSidebar 
-        collapsed={sidebarCollapsed} 
-        onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
-        mobileOpen={mobileOpen}
-        setMobileOpen={setMobileOpen}
-      />
-      
-      <main className="flex-1 overflow-auto">
-        {/* Mobile Header */}
-        <div className="md:hidden bg-white border-b border-gray-200 p-4">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setMobileOpen(true)}
-            className="text-gray-600 hover:bg-gray-100"
-          >
-            <Menu className="w-5 h-5" />
-          </Button>
-        </div>
+    <SidebarProvider defaultOpen>
+      <div className="flex min-h-screen w-full">
+        <AdminSidebar />
         
-        <div className="p-4 md:p-6">
-          <Routes>
-            <Route index element={<AdminOverview />} />
-            <Route path="hero" element={<AdminHero />} />
-            <Route path="services" element={<AdminServices />} />
-            <Route path="website-design" element={<AdminWebsiteDesign />} />
-            <Route path="ads-management" element={<AdminAdsManagement />} />
-            <Route path="ai-automation" element={<AdminAIAutomation />} />
-            <Route path="blog" element={<AdminBlog />} />
-            <Route path="questions" element={<AdminQuestions />} />
-            <Route path="categories" element={<AdminCategories />} />
-            <Route path="tutorials" element={<AdminTutorials />} />
-            <Route path="portfolio" element={<AdminPortfolio />} />
-            <Route path="testimonials" element={<AdminTestimonials />} />
-            <Route path="reviews" element={<AdminReviews />} />
-            <Route path="company" element={<AdminCompany />} />
-            <Route path="contact" element={<AdminContact />} />
-            <Route path="pages" element={<AdminPages />} />
-            <Route path="images" element={<AdminImages />} />
-            <Route path="navigation" element={<AdminNavigation />} />
-            <Route path="seo-meta" element={<AdminSEOMeta />} />
-            <Route path="tracking" element={<AdminTracking />} />
-            <Route path="analytics" element={<AdminAnalytics />} />
-            <Route path="users" element={<AdminUsers />} />
-            <Route path="pricing" element={<AdminPricing />} />
-            <Route path="bookings" element={<AdminBookings />} />
-            <Route path="invoices" element={<AdminInvoices />} />
-            <Route path="contact-submissions" element={<AdminContacts />} />
-            <Route path="pdf-documents" element={<AdminPDFDocuments />} />
-            <Route path="pdf-leads" element={<AdminPDFLeads />} />
-          </Routes>
-        </div>
-      </main>
-    </div>
+        <SidebarInset className="flex-1">
+          <header className="sticky top-0 z-10 flex h-14 items-center gap-2 border-b bg-background px-4">
+            <SidebarTrigger className="-ml-1" />
+            <div className="flex items-center gap-2">
+              <h1 className="text-lg font-semibold">Admin Dashboard</h1>
+            </div>
+          </header>
+
+          <main className="flex-1 overflow-auto p-4 md:p-6">
+            <Routes>
+              <Route index element={<AdminOverview />} />
+              <Route path="hero" element={<AdminHero />} />
+              <Route path="services" element={<AdminServices />} />
+              <Route path="website-design" element={<AdminWebsiteDesign />} />
+              <Route path="ads-management" element={<AdminAdsManagement />} />
+              <Route path="ai-automation" element={<AdminAIAutomation />} />
+              <Route path="blog" element={<AdminBlog />} />
+              <Route path="questions" element={<AdminQuestions />} />
+              <Route path="categories" element={<AdminCategories />} />
+              <Route path="tutorials" element={<AdminTutorials />} />
+              <Route path="portfolio" element={<AdminPortfolio />} />
+              <Route path="testimonials" element={<AdminTestimonials />} />
+              <Route path="reviews" element={<AdminReviews />} />
+              <Route path="company" element={<AdminCompany />} />
+              <Route path="contact" element={<AdminContact />} />
+              <Route path="pages" element={<AdminPages />} />
+              <Route path="images" element={<AdminImages />} />
+              <Route path="navigation" element={<AdminNavigation />} />
+              <Route path="seo-meta" element={<AdminSEOMeta />} />
+              <Route path="tracking" element={<AdminTracking />} />
+              <Route path="analytics" element={<AdminAnalytics />} />
+              <Route path="users" element={<AdminUsers />} />
+              <Route path="pricing" element={<AdminPricing />} />
+              <Route path="bookings" element={<AdminBookings />} />
+              <Route path="invoices" element={<AdminInvoices />} />
+              <Route path="contact-submissions" element={<AdminContacts />} />
+              <Route path="pdf-documents" element={<AdminPDFDocuments />} />
+              <Route path="pdf-leads" element={<AdminPDFLeads />} />
+            </Routes>
+          </main>
+        </SidebarInset>
+      </div>
+    </SidebarProvider>
   );
 };
 
