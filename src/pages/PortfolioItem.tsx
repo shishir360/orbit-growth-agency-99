@@ -70,7 +70,8 @@ const PortfolioItem = () => {
         title={`${project.title} | Portfolio Case Study | LUNEXO MEDIA`}
         description={project.description}
         url={`https://www.lunexomedia.com/portfolio/${id}`}
-        image={project.image_url}
+        image={project.image_url || "https://www.lunexomedia.com/og-image-new.jpg"}
+        keywords={`${project.category}, portfolio, case study, ${project.title}, web design, digital marketing`}
       />
       <Navigation />
       

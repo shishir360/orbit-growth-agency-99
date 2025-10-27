@@ -255,7 +255,13 @@ const BookApartment = () => {
   };
   const features = ["Free consultation with our experts", "Flexible meeting options (Google Meet, Zoom, Phone)", "Get personalized recommendations", "No commitment required"];
   return <>
-      <SEO title="Book Your Appointment - LUNEXO MEDIA" description="Schedule a free consultation with our experts. Book your appointment through Google Meet, Zoom, or phone call." keywords="book appointment, schedule consultation, free consultation, online meeting" />
+      <SEO 
+        title="Book Your Appointment - LUNEXO MEDIA" 
+        description="Schedule a free consultation with our experts. Book your appointment through Google Meet, Zoom, or phone call." 
+        image="https://www.lunexomedia.com/og-image-new.jpg"
+        url="https://www.lunexomedia.com/book-apartment"
+        keywords="book appointment, schedule consultation, free consultation, online meeting" 
+      />
       <div className="min-h-screen flex flex-col ultra-premium-hero relative overflow-hidden">
         {/* Animated Background Elements */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">

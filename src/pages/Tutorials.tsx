@@ -150,7 +150,9 @@ const Tutorials = () => {
       <SEO
         title="Marketing & Automation Tutorials | Learn with Lunexo Media"
         description="Free tutorials on SEO, ads, website tools, and AI automation. Learn from experts and take your digital skills to the next level."
+        image="https://www.lunexomedia.com/og-image-new.jpg"
         url="https://www.lunexomedia.com/tutorials"
+        keywords="tutorials, guides, SEO tutorials, digital marketing, AI automation, web design tutorials"
       />
       
       {/* Background Effects */}

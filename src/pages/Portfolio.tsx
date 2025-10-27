@@ -224,8 +224,9 @@ const Portfolio = () => {
       <SEO
         title="Our Work & Case Studies | Lunexo Media"
         description="See how Lunexo Media helped businesses achieve real growth. Browse our portfolio and case studies showcasing SEO, ads, and web design success."
-        image="https://www.lunexomedia.com/og-image.jpg"
+        image="https://www.lunexomedia.com/og-image-new.jpg"
         url="https://www.lunexomedia.com/portfolio"
+        keywords="portfolio, case studies, web design portfolio, digital marketing results, client success stories"
       />
       <Navigation />
       

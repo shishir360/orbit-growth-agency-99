@@ -203,8 +203,9 @@ const AIAutomation = () => {
       <SEO
         title="AI Automation for Business | Lunexo Media"
         description="Save time and increase productivity with AI-powered automation. Chatbots, workflows, and intelligent agents built for your business growth."
-        image="https://www.lunexomedia.com/og-image.jpg"
+        image="https://www.lunexomedia.com/og-image-new.jpg"
         url="https://www.lunexomedia.com/ai-automation"
+        keywords="AI automation, chatbots, workflow automation, business automation, AI agents, productivity tools"
       />
       
       <Navigation />

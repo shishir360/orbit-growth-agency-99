@@ -214,8 +214,9 @@ const Pricing = () => {
       <SEO
         title="Affordable Digital Marketing Packages | Lunexo Media Pricing"
         description="Transparent pricing for SEO, ads, website design, and AI automation. Find the perfect plan for your business."
-        image="https://www.lunexomedia.com/og-image.jpg"
+        image="https://www.lunexomedia.com/og-image-new.jpg"
         url="https://www.lunexomedia.com/pricing"
+        keywords="pricing, packages, digital marketing pricing, web design cost, SEO packages, ads management pricing"
       />
       
       {/* Background Effects */}

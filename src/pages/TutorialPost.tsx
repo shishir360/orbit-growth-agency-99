@@ -113,7 +113,7 @@ const TutorialPost = () => {
         title={`${tutorial.title} | LUNEXO MEDIA Tutorials`}
         description={`Learn ${tutorial.title} - ${tutorial.category} tutorial with step-by-step instructions. Perfect for ${tutorial.difficulty.toLowerCase()} level learners.`}
         url={`https://www.lunexomedia.com/tutorials/${slug}`}
-        image={tutorial.image}
+        image={tutorial.image || "https://www.lunexomedia.com/og-image-new.jpg"}
         type="article"
         keywords={`${tutorial.category}, ${tutorial.title}, tutorial, guide, ${tutorial.difficulty}, LUNEXO MEDIA`}
         author={tutorial.author}

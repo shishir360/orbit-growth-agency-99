@@ -53,7 +53,9 @@ const Reviews = () => {
       <SEO
         title="Client Testimonials | Success Stories with Lunexo Media"
         description="Hear from our happy clients who achieved growth through Lunexo Media's SEO, ads, and digital marketing services."
+        image="https://www.lunexomedia.com/og-image-new.jpg"
         url="https://www.lunexomedia.com/reviews"
+        keywords="testimonials, client reviews, success stories, customer feedback, Lunexo Media reviews"
       />
       <Navigation />
       

@@ -111,8 +111,9 @@ const Contact = () => {
       <SEO
         title="Contact Lunexo Media | Let's Grow Your Business"
         description="Get in touch with Lunexo Media for SEO, paid ads, and web design solutions. Let's discuss how we can scale your business together."
-        image="https://www.lunexomedia.com/og-image.jpg"
+        image="https://www.lunexomedia.com/og-image-new.jpg"
         url="https://www.lunexomedia.com/contact"
+        keywords="contact us, get in touch, digital marketing consultation, web design quote, free consultation"
       />
       
       <Navigation />

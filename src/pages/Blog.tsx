@@ -58,7 +58,7 @@ const Blog = () => {
       <SEO
         title="Digital Marketing Blog | Tips, Trends & Insights"
         description="Stay updated with Lunexo Media's blog. Read expert articles on SEO, paid ads, web design, and AI automation to grow your online presence."
-        image="https://www.lunexomedia.com/og-image.jpg"
+        image="https://www.lunexomedia.com/og-image-new.jpg"
         url="https://www.lunexomedia.com/blog"
         keywords="digital marketing, SEO tips, advertising insights, AI tools, business growth, Lunexo Media blog"
       />

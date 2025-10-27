@@ -121,8 +121,9 @@ const Index = () => {
       <SEO
         title="Lunexo Media | Digital Marketing & Growth Solutions"
         description="Lunexo Media helps businesses grow with SEO, paid ads, web design, and AI automation. Get data-driven strategies to scale your brand."
-        image="https://www.lunexomedia.com/og-image.jpg"
+        image="https://www.lunexomedia.com/og-image-new.jpg"
         url="https://www.lunexomedia.com"
+        keywords="digital marketing, SEO services, Google ads, web design, AI automation, business growth, Lunexo Media"
       />
       
       {/* Modern gradient mesh background */}

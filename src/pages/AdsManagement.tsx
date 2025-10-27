@@ -202,8 +202,9 @@ const AdsManagement = () => {
       <SEO
         title="Paid Advertising & PPC Management | Lunexo Media"
         description="Maximize ROI with targeted Google Ads, Facebook Ads, and social media ad campaigns managed by Lunexo Media's digital experts."
-        image="https://www.lunexomedia.com/og-image.jpg"
+        image="https://www.lunexomedia.com/og-image-new.jpg"
         url="https://www.lunexomedia.com/ads-management"
+        keywords="Google Ads, Facebook Ads, PPC management, paid advertising, digital advertising, ROI optimization"
       />
       
       <Navigation />

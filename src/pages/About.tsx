@@ -94,8 +94,9 @@ const About = () => {
       <SEO
         title="About Lunexo Media | Your Partner in Digital Growth"
         description="Learn more about Lunexo Media, our mission, vision, and expert team dedicated to driving your business success with innovative marketing."
-        image="https://www.lunexomedia.com/og-image.jpg"
+        image="https://www.lunexomedia.com/og-image-new.jpg"
         url="https://www.lunexomedia.com/about"
+        keywords="about us, digital agency, Farhan Tanvir, our story, our mission, digital marketing team"
       />
       
       {/* Background Effects */}

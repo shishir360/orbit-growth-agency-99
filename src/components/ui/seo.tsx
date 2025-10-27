@@ -23,7 +23,7 @@ interface SEOProps {
 const SEO: React.FC<SEOProps> = ({
   title = "LUNEXO MEDIA | Digital Services Agency",
   description = "Launch faster, grow smarter. Lunexo Media helps you scale with SEO, paid ads, web design, and AI automations — everything your business needs to thrive.",
-  image = "https://www.lunexomedia.com/favicon.png",
+  image = "https://www.lunexomedia.com/og-image-new.jpg",
   url = "https://www.lunexomedia.com",
   type = "website",
   keywords = "website design, digital marketing, SEO, Google ads, Facebook ads, AI automation, web development",

@@ -115,8 +115,9 @@ const WebsiteDesign = () => {
       <SEO
         title="Web Design & Development | Modern, Fast & Responsive Websites"
         description="Build fast, mobile-friendly, and conversion-focused websites. Lunexo Media offers creative web design and professional development services."
-        image="https://www.lunexomedia.com/og-image.jpg"
+        image="https://www.lunexomedia.com/og-image-new.jpg"
         url="https://www.lunexomedia.com/website-design"
+        keywords="web design, website development, responsive design, modern websites, custom web design"
       />
       
       <Navigation />
