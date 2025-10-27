@@ -272,7 +272,7 @@ const BookApartment = () => {
             <div className="text-center mb-20">
               <div className="inline-flex items-center gap-3 glass-card px-6 py-3 mb-8 shadow-lg">
                 <Star className="w-5 h-5 text-primary icon-glow" />
-                <span className="text-sm font-semibold premium-gradient-text">Premium Strategy Session - Worth $500</span>
+                <span className="text-sm font-semibold premium-gradient-text">Premium Strategy Session - Worth </span>
                 <Star className="w-5 h-5 text-primary icon-glow" />
               </div>
               <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-8 leading-[0.95]">
