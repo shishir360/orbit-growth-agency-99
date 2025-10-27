@@ -1,6 +1,7 @@
 import Navigation from "@/components/ui/navigation";
 import Footer from "@/components/ui/footer";
 import SEO from "@/components/ui/seo";
+import BreadcrumbSEO from "@/components/ui/breadcrumb-seo";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -229,6 +230,13 @@ const Portfolio = () => {
         keywords="portfolio, case studies, web design portfolio, digital marketing results, client success stories"
       />
       <Navigation />
+      
+      <div className="container-wide section-padding pt-8">
+        <BreadcrumbSEO 
+          items={[]}
+          currentPage="Portfolio"
+        />
+      </div>
       
       {/* Premium Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">

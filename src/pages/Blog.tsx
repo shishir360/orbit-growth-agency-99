@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Navigation from "@/components/ui/navigation";
 import Footer from "@/components/ui/footer";
+import BreadcrumbSEO from "@/components/ui/breadcrumb-seo";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -64,6 +65,13 @@ const Blog = () => {
       />
       
       <Navigation />
+      
+      <div className="container-wide section-padding pt-8">
+        <BreadcrumbSEO 
+          items={[]}
+          currentPage="Blog"
+        />
+      </div>
       
       {/* Hero Section */}
       <section className="py-16 bg-background">

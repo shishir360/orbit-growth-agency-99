@@ -7,6 +7,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Navigation from "@/components/ui/navigation";
 import Footer from "@/components/ui/footer";
 import SEO from "@/components/ui/seo";
+import ServiceSchema from "@/components/ui/service-schema";
+import FAQSchema from "@/components/ui/faq-schema";
+import BreadcrumbSEO from "@/components/ui/breadcrumb-seo";
 import { 
   Target, 
   BarChart3, 
@@ -207,7 +210,31 @@ const AdsManagement = () => {
         keywords="Google Ads, Facebook Ads, PPC management, paid advertising, digital advertising, ROI optimization"
       />
       
+      <ServiceSchema
+        name="Paid Advertising & PPC Management"
+        description="Expert PPC management services for Google Ads, Facebook Ads, and social media campaigns. We maximize your ROI with data-driven strategies and continuous optimization."
+        provider="Lunexo Media"
+        areaServed="Worldwide"
+        serviceType="PPC Management, Google Ads, Facebook Ads, Social Media Advertising"
+        url="https://www.lunexomedia.com/ads-management"
+        image="https://www.lunexomedia.com/og-image-new.jpg"
+        priceRange="$$"
+        aggregateRating={{
+          ratingValue: 4.9,
+          reviewCount: 98
+        }}
+      />
+      
       <Navigation />
+      
+      <div className="container-wide section-padding pt-8">
+        <BreadcrumbSEO 
+          items={[
+            { label: "Services", href: "/services-explore" }
+          ]}
+          currentPage="Ads Management"
+        />
+      </div>
       
       {/* Premium Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-background via-muted/5 to-background">

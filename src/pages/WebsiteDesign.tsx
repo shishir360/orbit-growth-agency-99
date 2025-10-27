@@ -8,6 +8,9 @@ import Navigation from "@/components/ui/navigation";
 import Footer from "@/components/ui/footer";
 import SEO from "@/components/ui/seo";
 import HeroSection from "@/components/ui/hero-section";
+import ServiceSchema from "@/components/ui/service-schema";
+import FAQSchema from "@/components/ui/faq-schema";
+import BreadcrumbSEO from "@/components/ui/breadcrumb-seo";
 import { 
   Zap, 
   ArrowRight,
@@ -120,7 +123,31 @@ const WebsiteDesign = () => {
         keywords="web design, website development, responsive design, modern websites, custom web design"
       />
       
+      <ServiceSchema
+        name="Website Design & Development"
+        description="Professional web design and development services. We create fast, mobile-friendly, and conversion-focused websites tailored to your business needs."
+        provider="Lunexo Media"
+        areaServed="Worldwide"
+        serviceType="Web Design, Web Development, Responsive Design"
+        url="https://www.lunexomedia.com/website-design"
+        image="https://www.lunexomedia.com/og-image-new.jpg"
+        priceRange="$$"
+        aggregateRating={{
+          ratingValue: 4.9,
+          reviewCount: 127
+        }}
+      />
+      
       <Navigation />
+      
+      <div className="container-wide section-padding pt-8">
+        <BreadcrumbSEO 
+          items={[
+            { label: "Services", href: "/services-explore" }
+          ]}
+          currentPage="Website Design"
+        />
+      </div>
       
       {/* Premium Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -416,6 +443,56 @@ const WebsiteDesign = () => {
                 </a>
               </Button>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section with Schema */}
+      <section className="py-20 bg-background">
+        <div className="container-wide section-padding">
+          <div className="text-center mb-16">
+            <Badge variant="outline" className="mb-6 px-6 py-3 text-base font-bold">
+              Frequently Asked Questions
+            </Badge>
+            <h2 className="text-3xl lg:text-5xl font-black mb-4">
+              <span className="text-foreground">Got</span>{" "}
+              <span className="premium-gradient-text">Questions?</span>
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Everything you need to know about our web design services
+            </p>
+          </div>
+          
+          <div className="max-w-3xl mx-auto">
+            <FAQSchema 
+              faqs={[
+                {
+                  question: "How long does it take to design and develop a website?",
+                  answer: "Typically, a professional website takes 2-6 weeks depending on complexity. Simple websites can be completed in 2-3 weeks, while e-commerce or custom web applications may take 4-6 weeks or more. We provide a detailed timeline during our initial consultation."
+                },
+                {
+                  question: "Do you provide mobile-responsive designs?",
+                  answer: "Absolutely! All our websites are fully mobile-responsive and optimized for all devices including smartphones, tablets, and desktops. Mobile-first design is a core part of our development process."
+                },
+                {
+                  question: "Will I be able to update the website content myself?",
+                  answer: "Yes! We build websites with user-friendly Content Management Systems (CMS) like WordPress or custom solutions that allow you to easily update text, images, and content without any technical knowledge. We also provide training and documentation."
+                },
+                {
+                  question: "What is included in your web design packages?",
+                  answer: "Our packages include custom design, responsive development, SEO optimization, contact forms, Google Analytics setup, social media integration, and ongoing support. E-commerce packages also include payment gateway integration and product management systems."
+                },
+                {
+                  question: "Do you offer website maintenance and support?",
+                  answer: "Yes! We offer ongoing maintenance packages that include security updates, content updates, performance optimization, backups, and technical support. Our basic packages include 1-6 months of support, with extended plans available."
+                },
+                {
+                  question: "Will my website be SEO-friendly?",
+                  answer: "Absolutely! We implement SEO best practices including proper heading structure, meta tags, image optimization, fast loading speeds, mobile optimization, and clean code. This gives your website a strong foundation for search engine rankings."
+                }
+              ]}
+              className="w-full"
+            />
           </div>
         </div>
       </section>

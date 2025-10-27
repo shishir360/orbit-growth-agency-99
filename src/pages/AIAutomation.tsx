@@ -7,6 +7,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Navigation from "@/components/ui/navigation";
 import Footer from "@/components/ui/footer";
 import SEO from "@/components/ui/seo";
+import ServiceSchema from "@/components/ui/service-schema";
+import FAQSchema from "@/components/ui/faq-schema";
+import BreadcrumbSEO from "@/components/ui/breadcrumb-seo";
 import { 
   Brain, 
   MessageSquare, 
@@ -208,7 +211,31 @@ const AIAutomation = () => {
         keywords="AI automation, chatbots, workflow automation, business automation, AI agents, productivity tools"
       />
       
+      <ServiceSchema
+        name="AI Automation Services"
+        description="Transform your business with AI-powered automation. We build intelligent chatbots, workflow automation, email automation, and voice AI agents to increase productivity and reduce costs."
+        provider="Lunexo Media"
+        areaServed="Worldwide"
+        serviceType="AI Automation, Chatbots, Workflow Automation, Voice AI, Email Automation"
+        url="https://www.lunexomedia.com/ai-automation"
+        image="https://www.lunexomedia.com/og-image-new.jpg"
+        priceRange="$$"
+        aggregateRating={{
+          ratingValue: 5.0,
+          reviewCount: 84
+        }}
+      />
+      
       <Navigation />
+      
+      <div className="container-wide section-padding pt-8">
+        <BreadcrumbSEO 
+          items={[
+            { label: "Services", href: "/services-explore" }
+          ]}
+          currentPage="AI Automation"
+        />
+      </div>
       
       {/* Premium Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">

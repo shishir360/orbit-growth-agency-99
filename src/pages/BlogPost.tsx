@@ -3,6 +3,7 @@ import Footer from "@/components/ui/footer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import BreadcrumbSEO from "@/components/ui/breadcrumb-seo";
 import { CalendarDays, Clock, ArrowLeft, Share2, Copy, Check, BookOpen, ArrowRight } from "lucide-react";
 import { useParams, Navigate } from "react-router-dom";
 import { useState } from "react";
@@ -164,10 +165,18 @@ const BlogPost = () => {
       
       <Navigation />
       
-      {/* Back to Blog */}
+      {/* Breadcrumb Navigation */}
       <section className="bg-white py-8 border-b">
         <div className="container-wide section-padding">
-          <Button variant="ghost" asChild>
+          <BreadcrumbSEO 
+            items={[
+              { label: "Blog", href: "/blog" },
+              { label: blogPost.category || "Article", href: "/blog" }
+            ]}
+            currentPage={blogPost.title}
+          />
+          
+          <Button variant="ghost" asChild className="mt-4">
             <a href="/blog">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Blog
