@@ -69,7 +69,8 @@ const AdminAccounting = () => {
   const [income, setIncome] = useState<Income[]>([]);
   const [clients, setClients] = useState<Client[]>([]);
   const [loading, setLoading] = useState(true);
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [incomeDialogOpen, setIncomeDialogOpen] = useState(false);
+  const [expenseDialogOpen, setExpenseDialogOpen] = useState(false);
   const [currentTab, setCurrentTab] = useState('overview');
   const { toast } = useToast();
 
@@ -176,7 +177,7 @@ const AdminAccounting = () => {
         description: "Expense added successfully"
       });
 
-      setDialogOpen(false);
+      setExpenseDialogOpen(false);
       setExpenseForm({
         date: new Date(),
         category: '',
@@ -217,7 +218,7 @@ const AdminAccounting = () => {
         description: "Income added successfully"
       });
 
-      setDialogOpen(false);
+      setIncomeDialogOpen(false);
       setIncomeForm({
         date: new Date(),
         source: '',
@@ -462,7 +463,7 @@ const AdminAccounting = () => {
 
         <TabsContent value="income" className="space-y-4">
           <div className="flex justify-end">
-            <Dialog open={dialogOpen && currentTab === 'income'} onOpenChange={setDialogOpen}>
+            <Dialog open={incomeDialogOpen} onOpenChange={setIncomeDialogOpen}>
               <DialogTrigger asChild>
                 <Button>
                   <Plus className="w-4 h-4 mr-2" />
@@ -589,7 +590,7 @@ const AdminAccounting = () => {
                 </div>
 
                 <div className="flex justify-end gap-2">
-                  <Button variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
+                  <Button variant="outline" onClick={() => setIncomeDialogOpen(false)}>Cancel</Button>
                   <Button onClick={handleAddIncome}>Add Income</Button>
                 </div>
               </DialogContent>
@@ -643,7 +644,7 @@ const AdminAccounting = () => {
 
         <TabsContent value="expenses" className="space-y-4">
           <div className="flex justify-end">
-            <Dialog open={dialogOpen && currentTab === 'expenses'} onOpenChange={setDialogOpen}>
+            <Dialog open={expenseDialogOpen} onOpenChange={setExpenseDialogOpen}>
               <DialogTrigger asChild>
                 <Button>
                   <Plus className="w-4 h-4 mr-2" />
@@ -782,7 +783,7 @@ const AdminAccounting = () => {
                 </div>
 
                 <div className="flex justify-end gap-2">
-                  <Button variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
+                  <Button variant="outline" onClick={() => setExpenseDialogOpen(false)}>Cancel</Button>
                   <Button onClick={handleAddExpense}>Add Expense</Button>
                 </div>
               </DialogContent>
