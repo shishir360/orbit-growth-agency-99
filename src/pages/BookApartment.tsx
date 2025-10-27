@@ -465,12 +465,6 @@ const BookApartment = () => {
                           </SelectContent>
                         </Select>
                       )}
-                      {bookedSlots.length > 0 && date && (
-                        <p className="text-xs text-amber-600 flex items-center gap-1">
-                          <span>⚠️</span>
-                          <span>{bookedSlots.length} time slot(s) already occupied - Please select another time</span>
-                        </p>
-                      )}
                     </div>
 
                     {/* Meeting Platform */}
