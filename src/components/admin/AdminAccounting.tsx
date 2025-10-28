@@ -204,7 +204,7 @@ const AdminAccounting = () => {
         amount: parseFloat(expenseForm.amount),
         payment_method: expenseForm.payment_method,
         vendor: expenseForm.vendor || null,
-        client_id: expenseForm.client_id || null,
+        client_id: expenseForm.client_id && expenseForm.client_id !== 'none' ? expenseForm.client_id : null,
         notes: expenseForm.notes || null
       }]);
 
@@ -245,7 +245,7 @@ const AdminAccounting = () => {
         description: incomeForm.description,
         amount: parseFloat(incomeForm.amount),
         payment_method: incomeForm.payment_method,
-        client_id: incomeForm.client_id || null,
+        client_id: incomeForm.client_id && incomeForm.client_id !== 'none' ? incomeForm.client_id : null,
         notes: incomeForm.notes || null
       }]);
 
@@ -608,7 +608,7 @@ const AdminAccounting = () => {
                         <SelectValue placeholder="Select client" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="">None</SelectItem>
+                        <SelectItem value="none">None</SelectItem>
                         {clients.map(client => (
                           <SelectItem key={client.id} value={client.id}>{client.name}</SelectItem>
                         ))}
@@ -800,7 +800,7 @@ const AdminAccounting = () => {
                           <SelectValue placeholder="Select client" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="">None</SelectItem>
+                          <SelectItem value="none">None</SelectItem>
                           {clients.map(client => (
                             <SelectItem key={client.id} value={client.id}>{client.name}</SelectItem>
                           ))}
