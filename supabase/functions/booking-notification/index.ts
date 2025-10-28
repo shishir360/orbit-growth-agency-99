@@ -225,7 +225,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send customer confirmation email
     await resend.emails.send({
-      from: "Lunexo Media <onboarding@resend.dev>",
+      from: "Lunexo Media <hello@lunexomedia.com>",
       to: [email],
       subject: "Booking Confirmed - Lunexo Media",
       html: customerEmailHtml,
@@ -233,7 +233,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send admin notification email
     await resend.emails.send({
-      from: "Lunexo Media Notifications <onboarding@resend.dev>",
+      from: "Lunexo Media <hello@lunexomedia.com>",
       to: [ADMIN_EMAIL],
       subject: `🔔 New Booking: ${name} - ${date} at ${time}`,
       html: adminEmailHtml,

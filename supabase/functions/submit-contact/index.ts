@@ -178,7 +178,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send customer confirmation
     const { error: emailError } = await resend.emails.send({
-      from: "Contact Form <onboarding@resend.dev>",
+      from: "Lunexo Media <hello@lunexomedia.com>",
       to: [email],
       subject: "We Received Your Message - Thank You!",
       html: customerEmailHtml,
@@ -192,7 +192,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send admin notification
     const { error: adminEmailError } = await resend.emails.send({
-      from: "Contact Form Notifications <onboarding@resend.dev>",
+      from: "Lunexo Media <hello@lunexomedia.com>",
       to: [ADMIN_EMAIL],
       subject: `🔔 New Contact: ${name} - ${email}`,
       html: adminEmailHtml,
