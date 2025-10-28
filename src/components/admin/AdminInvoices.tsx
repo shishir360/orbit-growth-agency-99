@@ -370,6 +370,13 @@ const AdminInvoices = () => {
         description: "Preparing invoice email"
       });
 
+      // Call edge function to send email
+      const { data, error: emailError } = await supabase.functions.invoke('send-invoice-email', {
+        body: { invoiceId: invoice.id }
+      });
+
+      if (emailError) throw emailError;
+
       // Update invoice status to sent
       const { error } = await supabase
         .from('invoices')
@@ -380,15 +387,16 @@ const AdminInvoices = () => {
 
       toast({
         title: "Success",
-        description: "Invoice sent successfully"
+        description: `Invoice email sent to ${invoice.clients?.email}`
       });
 
+      setShowPreview(false);
       fetchData();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error sending invoice:', error);
       toast({
         title: "Error",
-        description: "Failed to send invoice",
+        description: error.message || "Failed to send invoice email",
         variant: "destructive"
       });
     }

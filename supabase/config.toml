@@ -11,3 +11,6 @@ verify_jwt = true
 
 [functions.generate-invoice-ai]
 verify_jwt = true
+
+[functions.send-invoice-email]
+verify_jwt = true
