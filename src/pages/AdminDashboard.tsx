@@ -13,6 +13,7 @@ import AdminAnalytics from '@/components/admin/AdminAnalytics';
 import AdminTestimonials from '@/components/admin/AdminTestimonials';
 import AdminCompany from '@/components/admin/AdminCompany';
 import AdminPages from '@/components/admin/AdminPages';
+import AdminLandingPages from '@/components/admin/AdminLandingPages';
 import AdminSEOMeta from '@/components/admin/AdminSEOMeta';
 import AdminTracking from '@/components/admin/AdminTracking';
 import AdminReviews from '@/components/admin/AdminReviews';
@@ -86,6 +87,7 @@ const AdminDashboard = () => {
               <Route path="company" element={<AdminCompany />} />
               <Route path="contact" element={<AdminContact />} />
               <Route path="pages" element={<AdminPages />} />
+              <Route path="landing-pages" element={<AdminLandingPages />} />
               <Route path="images" element={<AdminImages />} />
               <Route path="navigation" element={<AdminNavigation />} />
               <Route path="seo-meta" element={<AdminSEOMeta />} />

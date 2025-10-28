@@ -41,6 +41,7 @@ import {
   Calendar,
   Receipt,
   Image,
+  Upload,
 } from 'lucide-react';
 
 export function AdminSidebar() {
@@ -62,6 +63,7 @@ export function AdminSidebar() {
     // Content Management
     { to: '/admin-dashboard/hero', icon: Shield, label: 'Hero Section', section: 'content' },
     { to: '/admin-dashboard/pages', icon: Globe, label: 'Pages Management', section: 'content' },
+    { to: '/admin-dashboard/landing-pages', icon: Upload, label: 'Landing Pages', section: 'content' },
     { to: '/admin-dashboard/navigation', icon: Navigation, label: 'Navigation', section: 'content' },
     
     // Services

@@ -48,6 +48,7 @@ import PortfolioAIAutomation from "./pages/PortfolioAIAutomation";
 import PortfolioAdsManagement from "./pages/PortfolioAdsManagement";
 import BookApartment from "./pages/BookApartment";
 import DynamicPage from "./pages/DynamicPage";
+import LandingPage from "./pages/LandingPage";
 import CatchAllPage from "./pages/CatchAllPage";
 import GuidePage from "./pages/GuidePage";
 
@@ -102,6 +103,7 @@ const App = () => (
                   <Route path="/terms" element={<Terms />} />
                   <Route path="/admin-login" element={<AdminLogin />} />
                   <Route path="/admin-dashboard/*" element={<AdminDashboard />} />
+                  <Route path="/landing/:slug" element={<LandingPage />} />
                   <Route path="/page/:slug" element={<DynamicPage />} />
                   <Route path="/guide/:slug" element={<GuidePage />} />
                   {/* Catch-all to resolve dynamic admin-created pages by slug, else 404 */}

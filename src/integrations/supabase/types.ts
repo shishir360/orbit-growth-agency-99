@@ -529,8 +529,10 @@ export type Database = {
         Row: {
           content: string
           created_at: string
+          html_file_url: string | null
           id: string
           iframe_url: string | null
+          is_landing_page: boolean | null
           slug: string
           title: string
           updated_at: string
@@ -539,8 +541,10 @@ export type Database = {
         Insert: {
           content: string
           created_at?: string
+          html_file_url?: string | null
           id?: string
           iframe_url?: string | null
+          is_landing_page?: boolean | null
           slug: string
           title: string
           updated_at?: string
@@ -549,8 +553,10 @@ export type Database = {
         Update: {
           content?: string
           created_at?: string
+          html_file_url?: string | null
           id?: string
           iframe_url?: string | null
+          is_landing_page?: boolean | null
           slug?: string
           title?: string
           updated_at?: string
