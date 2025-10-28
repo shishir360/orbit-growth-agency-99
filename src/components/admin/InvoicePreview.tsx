@@ -41,7 +41,7 @@ interface Invoice {
   total: number;
   notes: string | null;
   payment_terms: string | null;
-  payment_receipt_url: string | null;
+  receipt_url: string | null;
   clients?: Client;
 }
 

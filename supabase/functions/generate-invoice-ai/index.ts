@@ -5,60 +5,72 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+interface InvoiceRequest {
+  paymentDetails: string;
+  clientInfo?: {
+    name?: string;
+    email?: string;
+    company?: string;
+  };
+}
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const { paymentDetails, clientInfo } = await req.json();
-    const OPENROUTER_API_KEY = Deno.env.get('OPENROUTER_API_KEY');
+    const { paymentDetails, clientInfo }: InvoiceRequest = await req.json();
+    console.log('Generating AI invoice with details:', { paymentDetails, clientInfo });
 
+    const OPENROUTER_API_KEY = Deno.env.get('OPENROUTER_API_KEY');
     if (!OPENROUTER_API_KEY) {
-      throw new Error('OPENROUTER_API_KEY not configured');
+      throw new Error('OPENROUTER_API_KEY is not configured');
     }
 
-    console.log('Generating invoice with AI...', { paymentDetails, clientInfo });
+    const prompt = `Based on the following payment information, generate a detailed invoice structure.
+
+Payment Details: ${paymentDetails}
+${clientInfo ? `Client Info: ${JSON.stringify(clientInfo)}` : ''}
+
+Please provide a JSON response with the following structure:
+{
+  "items": [
+    {
+      "description": "Service/Product description",
+      "quantity": 1,
+      "unit_price": 0.00,
+      "amount": 0.00
+    }
+  ],
+  "notes": "Additional notes or payment details",
+  "payment_terms": "Net 30"
+}
+
+Extract all relevant details from the payment information provided. Be precise with amounts and descriptions.`;
 
     const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
         'Content-Type': 'application/json',
-        'HTTP-Referer': 'https://lovable.dev',
+        'HTTP-Referer': 'https://your-app.lovable.dev',
         'X-Title': 'Invoice Generator'
       },
       body: JSON.stringify({
-        model: 'openai/gpt-4o',
+        model: 'openai/gpt-4o-mini',
         messages: [
           {
             role: 'system',
-            content: `You are a professional invoice generator. Generate structured invoice data based on payment information provided. 
-            Return ONLY valid JSON with this structure:
-            {
-              "items": [
-                {
-                  "description": "Service/Product description",
-                  "quantity": 1,
-                  "unit_price": 0,
-                  "amount": 0
-                }
-              ],
-              "notes": "Professional invoice notes",
-              "payment_terms": "Net 30"
-            }`
+            content: 'You are a professional accounting assistant that helps generate accurate invoice details from payment information. Always respond with valid JSON only.'
           },
           {
             role: 'user',
-            content: `Generate invoice items from this payment information:
-            Payment Details: ${paymentDetails}
-            Client Info: ${JSON.stringify(clientInfo)}
-            
-            Please create appropriate line items with descriptions, quantities, and prices.`
+            content: prompt
           }
         ],
         temperature: 0.3,
-        max_tokens: 1000
+        max_tokens: 2000
       })
     });
 
@@ -69,31 +81,40 @@ serve(async (req) => {
     }
 
     const data = await response.json();
-    console.log('AI Response:', data);
-
-    const aiContent = data.choices?.[0]?.message?.content;
-    if (!aiContent) {
-      throw new Error('No content in AI response');
+    console.log('OpenRouter response received');
+    
+    const aiResponse = data.choices[0].message.content;
+    
+    // Extract JSON from the response (in case it's wrapped in markdown)
+    let invoiceData;
+    try {
+      const jsonMatch = aiResponse.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        invoiceData = JSON.parse(jsonMatch[0]);
+      } else {
+        invoiceData = JSON.parse(aiResponse);
+      }
+    } catch (parseError) {
+      console.error('Failed to parse AI response:', aiResponse);
+      throw new Error('Failed to parse AI response as JSON');
     }
 
-    // Extract JSON from the response
-    const jsonMatch = aiContent.match(/\{[\s\S]*\}/);
-    const invoiceData = jsonMatch ? JSON.parse(jsonMatch[0]) : JSON.parse(aiContent);
+    console.log('Generated invoice data:', invoiceData);
 
     return new Response(
       JSON.stringify(invoiceData),
-      { 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 200 
+      {
+        status: 200,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       }
     );
-  } catch (error) {
-    console.error('Error in generate-invoice-ai:', error);
+  } catch (error: any) {
+    console.error('Error in generate-invoice-ai function:', error);
     return new Response(
       JSON.stringify({ error: error.message }),
-      { 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 500 
+      {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       }
     );
   }

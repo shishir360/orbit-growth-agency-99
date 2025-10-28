@@ -1,5 +1,11 @@
 project_id = "qiczzqaevdztzhllgnlg"
 
+[functions.booking-notification]
+verify_jwt = false
+
+[functions.submit-contact]
+verify_jwt = false
+
 [functions.create-blog-post]
 verify_jwt = false
 

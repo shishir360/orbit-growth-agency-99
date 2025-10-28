@@ -49,7 +49,7 @@ interface Invoice {
   total: number;
   notes: string | null;
   payment_terms: string | null;
-  payment_receipt_url: string | null;
+  receipt_url: string | null;
   clients?: Client;
 }
 
@@ -83,16 +83,18 @@ const AdminInvoices = () => {
     due_date: '',
     tax_rate: 0,
     notes: '',
-    payment_terms: 'Net 30'
+    payment_terms: 'Net 30',
+    receipt_url: ''
   });
+
+  const [paymentDetails, setPaymentDetails] = useState('');
+  const [isGeneratingAI, setIsGeneratingAI] = useState(false);
+  const [receiptFile, setReceiptFile] = useState<File | null>(null);
 
   const [invoiceItems, setInvoiceItems] = useState<InvoiceItem[]>([
     { description: '', quantity: 1, unit_price: 0, amount: 0, display_order: 0 }
   ]);
 
-  const [paymentDetails, setPaymentDetails] = useState('');
-  const [isGeneratingAI, setIsGeneratingAI] = useState(false);
-  const [receiptFile, setReceiptFile] = useState<File | null>(null);
   const [receiptUrl, setReceiptUrl] = useState<string | null>(null);
 
   useEffect(() => {
@@ -299,7 +301,7 @@ const AdminInvoices = () => {
           total,
           notes: invoiceForm.notes,
           payment_terms: invoiceForm.payment_terms,
-          payment_receipt_url: receiptUrl
+          receipt_url: receiptUrl
         }])
         .select()
         .single();
@@ -347,7 +349,8 @@ const AdminInvoices = () => {
       due_date: '',
       tax_rate: 0,
       notes: '',
-      payment_terms: 'Net 30'
+      payment_terms: 'Net 30',
+      receipt_url: ''
     });
     setInvoiceItems([{ description: '', quantity: 1, unit_price: 0, amount: 0, display_order: 0 }]);
     setPaymentDetails('');
