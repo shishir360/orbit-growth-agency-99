@@ -26,10 +26,10 @@ interface BookingRequest {
 const BookingSchema = z.object({
   name: z.string().trim().min(2, "Name must be at least 2 characters").max(100, "Name too long"),
   email: z.string().email("Invalid email address").max(255, "Email too long"),
-  phone: z.string().regex(/^[\d\s\+\-\(\)]+$/, "Invalid phone format").min(7).max(20),
-  date: z.string().refine(val => !isNaN(Date.parse(val)), "Invalid date"),
-  time: z.string().regex(/^\d{1,2}:\d{2} (AM|PM)$/, "Invalid time format"),
-  meeting_platform: z.enum(['google_meet', 'zoom', 'phone', 'Google Meet', 'Zoom', 'Phone']),
+  phone: z.string().min(7).max(30),
+  date: z.string().min(1, "Date is required"),
+  time: z.string().min(1, "Time is required"),
+  meeting_platform: z.string().min(1, "Meeting platform is required"),
   notes: z.string().max(500, "Notes too long").optional(),
   timezone: z.string().max(100).optional(),
   timezone_offset: z.number().int().min(-720).max(840).optional()
