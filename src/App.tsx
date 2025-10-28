@@ -103,7 +103,7 @@ const App = () => (
                   <Route path="/terms" element={<Terms />} />
                   <Route path="/admin-login" element={<AdminLogin />} />
                   <Route path="/admin-dashboard/*" element={<AdminDashboard />} />
-                  <Route path="/landing/:slug" element={<LandingPage />} />
+                  
                   <Route path="/page/:slug" element={<DynamicPage />} />
                   <Route path="/guide/:slug" element={<GuidePage />} />
                   {/* Catch-all to resolve dynamic admin-created pages by slug, else 404 */}

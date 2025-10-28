@@ -213,7 +213,7 @@ export default function AdminLandingPages() {
               required
             />
             <p className="text-xs text-muted-foreground mt-1">
-              URL will be: /{slug}
+              URL will be: /{slug} (হেডার/ফুটার ছাড়া)
             </p>
           </div>
         </div>

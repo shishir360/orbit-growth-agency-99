@@ -6,6 +6,7 @@ import Footer from '@/components/ui/footer';
 import SEO from '@/components/ui/seo';
 import { Skeleton } from '@/components/ui/skeleton';
 import NotFound from './NotFound';
+import DOMPurify from 'isomorphic-dompurify';
 
 interface Page {
   id: string;
@@ -13,7 +14,9 @@ interface Page {
   slug: string;
   content: string;
   iframe_url?: string | null;
+  html_file_url?: string | null;
   visible: boolean;
+  is_landing_page?: boolean;
 }
 
 const CatchAllPage = () => {
@@ -60,6 +63,33 @@ const CatchAllPage = () => {
     return <NotFound />;
   }
 
+  // If it's a landing page, render without header/footer
+  if (page.is_landing_page) {
+    return (
+      <>
+        <SEO
+          title={page.title}
+          description={`Landing page: ${page.title}`}
+          url={`https://www.lunexomedia.com${location.pathname}`}
+        />
+
+        {page.iframe_url ? (
+          <iframe
+            src={page.iframe_url}
+            className="w-full h-screen border-0"
+            title={page.title}
+          />
+        ) : page.html_file_url || page.content ? (
+          <div
+            className="min-h-screen"
+            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(page.content) }}
+          />
+        ) : null}
+      </>
+    );
+  }
+
+  // Regular page with navigation and footer
   return (
     <>
       <SEO 
