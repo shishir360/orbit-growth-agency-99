@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { Resend } from "npm:resend@4.0.0";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 const ADMIN_EMAIL = "shishirmd681@gmail.com";
@@ -22,6 +23,18 @@ interface BookingRequest {
   timezone_offset?: number;
 }
 
+const BookingSchema = z.object({
+  name: z.string().trim().min(2, "Name must be at least 2 characters").max(100, "Name too long"),
+  email: z.string().email("Invalid email address").max(255, "Email too long"),
+  phone: z.string().regex(/^[\d\s\+\-\(\)]+$/, "Invalid phone format").min(7).max(20),
+  date: z.string().refine(val => !isNaN(Date.parse(val)), "Invalid date"),
+  time: z.string().regex(/^\d{1,2}:\d{2} (AM|PM)$/, "Invalid time format"),
+  meeting_platform: z.enum(['google_meet', 'zoom', 'phone', 'Google Meet', 'Zoom', 'Phone']),
+  notes: z.string().max(500, "Notes too long").optional(),
+  timezone: z.string().max(100).optional(),
+  timezone_offset: z.number().int().min(-720).max(840).optional()
+});
+
 const handler = async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -33,9 +46,25 @@ const handler = async (req: Request): Promise<Response> => {
       Deno.env.get("SUPABASE_ANON_KEY") ?? ""
     );
 
-    const { name, email, phone, date, time, meeting_platform, notes, timezone, timezone_offset }: BookingRequest = await req.json();
+    const requestBody = await req.json();
+    
+    // Validate input
+    let validatedData: BookingRequest;
+    try {
+      validatedData = BookingSchema.parse(requestBody);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return new Response(
+          JSON.stringify({ error: "Invalid input data", details: error.errors }),
+          { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } }
+        );
+      }
+      throw error;
+    }
 
-    console.log("Received booking from:", email);
+    const { name, email, phone, date, time, meeting_platform, notes, timezone, timezone_offset } = validatedData;
+
+    console.log("Received validated booking from:", email);
 
     // Derive timezone from IP if not provided by client
     let tz = timezone;
@@ -64,16 +93,7 @@ const handler = async (req: Request): Promise<Response> => {
       console.log('GeoIP lookup failed', e);
     }
 
-    // Validate required fields
-    if (!name || !email || !phone || !date || !time || !meeting_platform) {
-      return new Response(
-        JSON.stringify({ error: "All required fields must be filled" }),
-        {
-          status: 400,
-          headers: { "Content-Type": "application/json", ...corsHeaders },
-        }
-      );
-    }
+    // Additional validation already done by Zod schema
 
     // Save to database
     const { data: booking, error: dbError } = await supabaseClient

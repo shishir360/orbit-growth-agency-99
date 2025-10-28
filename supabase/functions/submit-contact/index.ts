@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { Resend } from "npm:resend@4.0.0";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 const ADMIN_EMAIL = "shishirmd681@gmail.com";
@@ -18,6 +19,14 @@ interface ContactRequest {
   message: string;
 }
 
+const ContactSchema = z.object({
+  name: z.string().trim().min(2, "Name must be at least 2 characters").max(100, "Name too long"),
+  email: z.string().email("Invalid email address").max(255, "Email too long"),
+  phone: z.string().max(20).optional(),
+  company: z.string().max(100).optional(),
+  message: z.string().trim().min(10, "Message must be at least 10 characters").max(2000, "Message too long")
+});
+
 const handler = async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -29,20 +38,25 @@ const handler = async (req: Request): Promise<Response> => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
     );
 
-    const { name, email, phone, company, message }: ContactRequest = await req.json();
-
-    console.log("Received contact submission from:", email);
-
-    // Validate required fields
-    if (!name || !email || !message) {
-      return new Response(
-        JSON.stringify({ error: "Name, email, and message are required" }),
-        {
-          status: 400,
-          headers: { "Content-Type": "application/json", ...corsHeaders },
-        }
-      );
+    const requestBody = await req.json();
+    
+    // Validate input
+    let validatedData: ContactRequest;
+    try {
+      validatedData = ContactSchema.parse(requestBody);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return new Response(
+          JSON.stringify({ error: "Invalid input data", details: error.errors }),
+          { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } }
+        );
+      }
+      throw error;
     }
+
+    const { name, email, phone, company, message } = validatedData;
+
+    console.log("Received validated contact submission from:", email);
 
     // Save to database
     const { data: submission, error: dbError } = await supabaseClient

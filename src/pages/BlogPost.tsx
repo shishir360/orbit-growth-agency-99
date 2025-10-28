@@ -8,6 +8,7 @@ import { CalendarDays, Clock, ArrowLeft, Share2, Copy, Check, BookOpen, ArrowRig
 import { useParams, Navigate } from "react-router-dom";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import DOMPurify from 'dompurify';
 import { useBlog } from "@/contexts/BlogContext";
 import SEO from "@/components/ui/seo";
 import { BlogEngagement, KeyTakeaways, QuickActionCTA } from "@/components/ui/blog-engagement";
@@ -251,7 +252,13 @@ const BlogPost = () => {
                   {/* Article Body */}
                   <div 
                     className="prose prose-lg max-w-none prose-headings:font-space prose-headings:font-bold prose-h1:text-4xl prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-6 prose-h3:text-2xl prose-h3:mt-8 prose-h3:mb-4 prose-p:leading-relaxed prose-p:mb-6 prose-p:text-foreground/90 prose-ul:mb-6 prose-ol:mb-6 prose-li:mb-2 prose-strong:text-foreground prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-img:rounded-lg prose-img:shadow-lg prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:bg-muted/50 prose-blockquote:p-6 prose-blockquote:rounded-r-lg prose-blockquote:not-italic prose-blockquote:font-medium"
-                    dangerouslySetInnerHTML={{ __html: blogPost.content }}
+                    dangerouslySetInnerHTML={{ 
+                      __html: DOMPurify.sanitize(blogPost.content, {
+                        ALLOWED_TAGS: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'ul', 'ol', 'li', 'a', 'strong', 'em', 'img', 'blockquote', 'code', 'pre', 'br', 'hr', 'table', 'thead', 'tbody', 'tr', 'th', 'td'],
+                        ALLOWED_ATTR: ['href', 'src', 'alt', 'title', 'class', 'target', 'rel'],
+                        ALLOW_DATA_ATTR: false
+                      })
+                    }}
                   />
                   
                   {/* Key Takeaways */}

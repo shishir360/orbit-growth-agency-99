@@ -7,7 +7,7 @@ verify_jwt = false
 verify_jwt = false
 
 [functions.create-blog-post]
-verify_jwt = false
+verify_jwt = true
 
 [functions.generate-invoice-ai]
-verify_jwt = false
+verify_jwt = true

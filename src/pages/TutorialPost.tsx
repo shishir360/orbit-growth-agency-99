@@ -5,6 +5,7 @@ import SEO from "@/components/ui/seo";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Clock, User } from "lucide-react";
+import DOMPurify from 'dompurify';
 
 const TutorialPost = () => {
   const { slug } = useParams();
@@ -173,7 +174,13 @@ const TutorialPost = () => {
           <div className="max-w-3xl mx-auto">
             <div 
               className="prose prose-lg max-w-none"
-              dangerouslySetInnerHTML={{ __html: tutorial.content }}
+              dangerouslySetInnerHTML={{ 
+                __html: DOMPurify.sanitize(tutorial.content, {
+                  ALLOWED_TAGS: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'ul', 'ol', 'li', 'a', 'strong', 'em', 'img', 'blockquote', 'code', 'pre', 'br', 'hr'],
+                  ALLOWED_ATTR: ['href', 'src', 'alt', 'title', 'class', 'target', 'rel'],
+                  ALLOW_DATA_ATTR: false
+                })
+              }}
             />
           </div>
         </div>

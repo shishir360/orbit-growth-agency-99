@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, ExternalLink } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import DOMPurify from 'dompurify';
 
 const PortfolioItem = () => {
   const { id } = useParams();
@@ -121,7 +122,13 @@ const PortfolioItem = () => {
           <div className="container-wide section-padding">
             <div className="max-w-4xl mx-auto">
               <div className="prose prose-lg max-w-none">
-                <div dangerouslySetInnerHTML={{ __html: project.content }} />
+                <div dangerouslySetInnerHTML={{ 
+                  __html: DOMPurify.sanitize(project.content, {
+                    ALLOWED_TAGS: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'ul', 'ol', 'li', 'a', 'strong', 'em', 'img', 'blockquote', 'code', 'pre', 'br', 'hr'],
+                    ALLOWED_ATTR: ['href', 'src', 'alt', 'title', 'class', 'target', 'rel'],
+                    ALLOW_DATA_ATTR: false
+                  })
+                }} />
               </div>
             </div>
           </div>
