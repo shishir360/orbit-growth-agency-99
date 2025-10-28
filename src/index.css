@@ -126,12 +126,21 @@ All colors MUST be HSL.
     @apply border-border;
   }
 
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
   body {
     @apply bg-background text-foreground;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
     font-feature-settings: 'cv11', 'ss01';
     font-variant-numeric: oldstyle-nums;
-    padding-top: 64px; /* Account for fixed header height */
+  }
+
+  /* Only apply padding-top for non-landing pages */
+  body:not(.landing-page) {
+    padding-top: 64px;
   }
 
   h1, h2, h3, h4, h5, h6 {

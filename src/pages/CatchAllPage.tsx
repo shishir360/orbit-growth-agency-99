@@ -28,12 +28,12 @@ const CatchAllPage = () => {
     const fetchPage = async () => {
       setLoading(true);
 
-      // Normalize path to match stored slug (usually without leading slash)
-      const rawPath = location.pathname; // e.g. "/promo-offer"
-      const normalizedSlug = rawPath.replace(/^\/+|\/+$/g, ""); // "promo-offer"
+      // Normalize path to match stored slug
+      const rawPath = location.pathname;
+      const normalizedSlug = rawPath.replace(/^\/+|\/+$/g, "");
 
       // Try without leading slash first
-      let { data, error } = await supabase
+      let { data } = await supabase
         .from('pages')
         .select('*')
         .eq('slug', normalizedSlug)
@@ -54,8 +54,19 @@ const CatchAllPage = () => {
 
       setPage(data ?? null);
       setLoading(false);
+
+      // Add/remove landing-page class on body
+      if (data?.is_landing_page) {
+        document.body.classList.add('landing-page');
+      } else {
+        document.body.classList.remove('landing-page');
+      }
     };
     fetchPage();
+
+    return () => {
+      document.body.classList.remove('landing-page');
+    };
   }, [location.pathname]);
 
   if (loading) {
@@ -90,16 +101,17 @@ const CatchAllPage = () => {
         />
 
         {page.iframe_url ? (
-          <div className="w-full">
+          <div className="fixed inset-0 m-0 p-0">
             <iframe
               src={page.iframe_url}
-              className="w-full border-0 block"
+              className="w-full h-full border-0 m-0 p-0"
               style={{ 
-                minHeight: '100vh',
-                height: '200vh',
                 display: 'block',
-                margin: 0,
-                padding: 0
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%'
               }}
               title={page.title}
               sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox allow-top-navigation"
@@ -108,7 +120,7 @@ const CatchAllPage = () => {
           </div>
         ) : page.html_file_url || page.content ? (
           <div
-            className="min-h-screen"
+            className="min-h-screen m-0 p-0"
             dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(page.content) }}
           />
         ) : null}
