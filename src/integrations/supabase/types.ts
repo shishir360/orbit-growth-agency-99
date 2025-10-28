@@ -464,6 +464,7 @@ export type Database = {
           issue_date: string
           notes: string | null
           paid_at: string | null
+          payment_receipt_url: string | null
           payment_terms: string | null
           sent_at: string | null
           status: string
@@ -482,6 +483,7 @@ export type Database = {
           issue_date?: string
           notes?: string | null
           paid_at?: string | null
+          payment_receipt_url?: string | null
           payment_terms?: string | null
           sent_at?: string | null
           status?: string
@@ -500,6 +502,7 @@ export type Database = {
           issue_date?: string
           notes?: string | null
           paid_at?: string | null
+          payment_receipt_url?: string | null
           payment_terms?: string | null
           sent_at?: string | null
           status?: string

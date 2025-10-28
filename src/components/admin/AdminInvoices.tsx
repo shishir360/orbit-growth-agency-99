@@ -8,7 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Search, Plus, FileText, Mail, Printer, Trash2, DollarSign, Users, Clock, CheckCircle, Download } from 'lucide-react';
+import { Search, Plus, FileText, Mail, Printer, Trash2, DollarSign, Users, Clock, CheckCircle, Download, Upload, Sparkles } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 import { format } from 'date-fns';
@@ -49,6 +49,7 @@ interface Invoice {
   total: number;
   notes: string | null;
   payment_terms: string | null;
+  payment_receipt_url: string | null;
   clients?: Client;
 }
 
@@ -88,6 +89,11 @@ const AdminInvoices = () => {
   const [invoiceItems, setInvoiceItems] = useState<InvoiceItem[]>([
     { description: '', quantity: 1, unit_price: 0, amount: 0, display_order: 0 }
   ]);
+
+  const [paymentDetails, setPaymentDetails] = useState('');
+  const [isGeneratingAI, setIsGeneratingAI] = useState(false);
+  const [receiptFile, setReceiptFile] = useState<File | null>(null);
+  const [receiptUrl, setReceiptUrl] = useState<string | null>(null);
 
   useEffect(() => {
     fetchData();
@@ -185,6 +191,91 @@ const AdminInvoices = () => {
     setInvoiceItems(invoiceItems.filter((_, i) => i !== index));
   };
 
+  const handleReceiptUpload = async (file: File) => {
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Math.random()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('invoice-receipts')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('invoice-receipts')
+        .getPublicUrl(filePath);
+
+      setReceiptUrl(publicUrl);
+      toast({
+        title: "Success",
+        description: "Receipt uploaded successfully"
+      });
+    } catch (error) {
+      console.error('Error uploading receipt:', error);
+      toast({
+        title: "Error",
+        description: "Failed to upload receipt",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleGenerateWithAI = async () => {
+    if (!paymentDetails || !invoiceForm.client_id) {
+      toast({
+        title: "Missing Information",
+        description: "Please select a client and provide payment details",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setIsGeneratingAI(true);
+    try {
+      const selectedClient = clients.find(c => c.id === invoiceForm.client_id);
+      
+      const { data, error } = await supabase.functions.invoke('generate-invoice-ai', {
+        body: {
+          paymentDetails,
+          clientInfo: selectedClient
+        }
+      });
+
+      if (error) throw error;
+
+      if (data.items && Array.isArray(data.items)) {
+        setInvoiceItems(data.items.map((item: any, index: number) => ({
+          ...item,
+          display_order: index
+        })));
+      }
+
+      if (data.notes) {
+        setInvoiceForm(prev => ({ ...prev, notes: data.notes }));
+      }
+
+      if (data.payment_terms) {
+        setInvoiceForm(prev => ({ ...prev, payment_terms: data.payment_terms }));
+      }
+
+      toast({
+        title: "Success",
+        description: "Invoice items generated with AI!"
+      });
+    } catch (error) {
+      console.error('Error generating with AI:', error);
+      toast({
+        title: "Error",
+        description: "Failed to generate invoice with AI",
+        variant: "destructive"
+      });
+    } finally {
+      setIsGeneratingAI(false);
+    }
+  };
+
   const handleCreateInvoice = async () => {
     try {
       // Generate invoice number
@@ -207,7 +298,8 @@ const AdminInvoices = () => {
           tax_amount: taxAmount,
           total,
           notes: invoiceForm.notes,
-          payment_terms: invoiceForm.payment_terms
+          payment_terms: invoiceForm.payment_terms,
+          payment_receipt_url: receiptUrl
         }])
         .select()
         .single();
@@ -258,6 +350,9 @@ const AdminInvoices = () => {
       payment_terms: 'Net 30'
     });
     setInvoiceItems([{ description: '', quantity: 1, unit_price: 0, amount: 0, display_order: 0 }]);
+    setPaymentDetails('');
+    setReceiptFile(null);
+    setReceiptUrl(null);
   };
 
   const handleViewInvoice = async (invoice: Invoice) => {
@@ -625,6 +720,60 @@ const AdminInvoices = () => {
                       <span className="font-bold">${calculateInvoiceTotal().total.toFixed(2)}</span>
                     </div>
                   </div>
+                </div>
+              </div>
+
+              {/* AI Generation Section */}
+              <div className="border-t pt-4 space-y-4">
+                <div className="bg-gradient-to-r from-primary/10 to-primary/5 p-4 rounded-lg">
+                  <Label className="flex items-center gap-2 mb-2">
+                    <Sparkles className="h-4 w-4 text-primary" />
+                    AI Invoice Generation
+                  </Label>
+                  <Textarea
+                    value={paymentDetails}
+                    onChange={(e) => setPaymentDetails(e.target.value)}
+                    placeholder="Describe the payment received, services provided, or paste payment details here. AI will generate invoice items for you."
+                    rows={3}
+                    className="mb-2"
+                  />
+                  <Button 
+                    type="button" 
+                    onClick={handleGenerateWithAI}
+                    disabled={isGeneratingAI || !paymentDetails || !invoiceForm.client_id}
+                    className="w-full"
+                  >
+                    {isGeneratingAI ? (
+                      <>Generating with AI...</>
+                    ) : (
+                      <>
+                        <Sparkles className="h-4 w-4 mr-2" />
+                        Generate Invoice Items with AI
+                      </>
+                    )}
+                  </Button>
+                </div>
+
+                {/* Receipt Upload */}
+                <div>
+                  <Label className="flex items-center gap-2 mb-2">
+                    <Upload className="h-4 w-4" />
+                    Payment Receipt (Optional)
+                  </Label>
+                  <Input
+                    type="file"
+                    accept="image/*,.pdf"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        setReceiptFile(file);
+                        handleReceiptUpload(file);
+                      }
+                    }}
+                  />
+                  {receiptUrl && (
+                    <p className="text-sm text-green-600 mt-2">✓ Receipt uploaded successfully</p>
+                  )}
                 </div>
               </div>
 

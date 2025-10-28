@@ -2,3 +2,6 @@ project_id = "qiczzqaevdztzhllgnlg"
 
 [functions.create-blog-post]
 verify_jwt = false
+
+[functions.generate-invoice-ai]
+verify_jwt = false
