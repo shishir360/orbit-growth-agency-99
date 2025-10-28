@@ -46,6 +46,13 @@ const handler = async (req: Request): Promise<Response> => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
     );
 
+    // Fetch company info for email
+    const { data: companyInfo } = await supabaseClient
+      .from('company_info')
+      .select('*')
+      .limit(1)
+      .single();
+
     const requestBody = await req.json();
     
     // Validate input
@@ -225,15 +232,15 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send customer confirmation email
     await resend.emails.send({
-      from: "Lunexo Media <hello@lunexomedia.com>",
+      from: companyInfo?.email ? `${companyInfo.company_name} <${companyInfo.email}>` : 'Booking <onboarding@resend.dev>',
       to: [email],
-      subject: "Booking Confirmed - Lunexo Media",
+      subject: `Booking Confirmed - ${companyInfo?.company_name || 'Lunexo Media'}`,
       html: customerEmailHtml,
     });
 
     // Send admin notification email
     await resend.emails.send({
-      from: "Lunexo Media <hello@lunexomedia.com>",
+      from: companyInfo?.email ? `${companyInfo.company_name} <${companyInfo.email}>` : 'Booking <onboarding@resend.dev>',
       to: [ADMIN_EMAIL],
       subject: `🔔 New Booking: ${name} - ${date} at ${time}`,
       html: adminEmailHtml,
