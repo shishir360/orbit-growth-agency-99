@@ -5,7 +5,7 @@ import SEO from "@/components/ui/seo";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Clock, User } from "lucide-react";
-import DOMPurify from 'dompurify';
+import DOMPurify from 'isomorphic-dompurify';
 
 const TutorialPost = () => {
   const { slug } = useParams();

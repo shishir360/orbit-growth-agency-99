@@ -8,7 +8,7 @@ import { CalendarDays, Clock, ArrowLeft, Share2, Copy, Check, BookOpen, ArrowRig
 import { useParams, Navigate } from "react-router-dom";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import DOMPurify from 'dompurify';
+import DOMPurify from 'isomorphic-dompurify';
 import { useBlog } from "@/contexts/BlogContext";
 import SEO from "@/components/ui/seo";
 import { BlogEngagement, KeyTakeaways, QuickActionCTA } from "@/components/ui/blog-engagement";
