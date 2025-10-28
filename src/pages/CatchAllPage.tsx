@@ -27,14 +27,30 @@ const CatchAllPage = () => {
   useEffect(() => {
     const fetchPage = async () => {
       setLoading(true);
-      const path = location.pathname; // e.g. "/shishir"
 
-      const { data } = await supabase
+      // Normalize path to match stored slug (usually without leading slash)
+      const rawPath = location.pathname; // e.g. "/promo-offer"
+      const normalizedSlug = rawPath.replace(/^\/+|\/+$/g, ""); // "promo-offer"
+
+      // Try without leading slash first
+      let { data, error } = await supabase
         .from('pages')
         .select('*')
-        .eq('slug', path)
+        .eq('slug', normalizedSlug)
         .eq('visible', true)
         .maybeSingle();
+
+      // Fallback: try with leading slash if not found
+      if (!data) {
+        const altSlug = `/${normalizedSlug}`;
+        const resp = await supabase
+          .from('pages')
+          .select('*')
+          .eq('slug', altSlug)
+          .eq('visible', true)
+          .maybeSingle();
+        data = resp.data ?? null;
+      }
 
       setPage(data ?? null);
       setLoading(false);
