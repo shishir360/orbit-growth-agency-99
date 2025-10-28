@@ -74,11 +74,22 @@ const CatchAllPage = () => {
         />
 
         {page.iframe_url ? (
-          <iframe
-            src={page.iframe_url}
-            className="w-full h-screen border-0"
-            title={page.title}
-          />
+          <div className="w-full">
+            <iframe
+              src={page.iframe_url}
+              className="w-full border-0 block"
+              style={{ 
+                minHeight: '100vh',
+                height: '200vh',
+                display: 'block',
+                margin: 0,
+                padding: 0
+              }}
+              title={page.title}
+              sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox allow-top-navigation"
+              loading="lazy"
+            />
+          </div>
         ) : page.html_file_url || page.content ? (
           <div
             className="min-h-screen"
