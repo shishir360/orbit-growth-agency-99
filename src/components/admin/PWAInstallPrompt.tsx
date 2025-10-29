@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Download, X } from 'lucide-react';
 import { Card } from '@/components/ui/card';
@@ -9,10 +10,15 @@ interface BeforeInstallPromptEvent extends Event {
 }
 
 export function PWAInstallPrompt() {
+  const location = useLocation();
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showPrompt, setShowPrompt] = useState(false);
 
+  // Only show on admin pages
+  const isAdminPage = location.pathname.startsWith('/admin');
+
   useEffect(() => {
+    if (!isAdminPage) return;
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
@@ -24,7 +30,7 @@ export function PWAInstallPrompt() {
     return () => {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
     };
-  }, []);
+  }, [isAdminPage]);
 
   const handleInstallClick = async () => {
     if (!deferredPrompt) return;
@@ -44,7 +50,7 @@ export function PWAInstallPrompt() {
     setShowPrompt(false);
   };
 
-  if (!showPrompt) return null;
+  if (!showPrompt || !isAdminPage) return null;
 
   return (
     <Card className="fixed bottom-4 right-4 z-50 p-4 shadow-xl border-2 border-primary/20 bg-background/95 backdrop-blur max-w-sm">
