@@ -25,23 +25,28 @@ export const sendBrowserNotification = (title: string, options?: NotificationOpt
   }
 
   if (Notification.permission === 'granted') {
-    const notification = new Notification(title, {
-      icon: '/logo.png',
-      badge: '/favicon.png',
+    const notificationOptions: NotificationOptions = {
+      icon: '/app-icon.webp',
+      badge: '/app-icon.webp',
+      requireInteraction: true,
       ...options
-    });
+    };
+
+    const notification = new Notification(title, notificationOptions);
 
     notification.onclick = () => {
       window.focus();
       notification.close();
     };
 
-    // Auto close after 10 seconds
+    // Auto close after 15 seconds
     setTimeout(() => {
       notification.close();
-    }, 10000);
+    }, 15000);
 
     return notification;
+  } else {
+    console.log('Notification permission not granted:', Notification.permission);
   }
 };
 
@@ -53,19 +58,23 @@ export const checkNotificationPermission = (): NotificationPermission => {
 };
 
 export const notifyNewContact = (name: string, email: string) => {
-  sendBrowserNotification('🔔 New Contact Submission', {
-    body: `${name} (${email}) sent you a message`,
+  sendBrowserNotification('🔔 নতুন কন্টাক্ট মেসেজ', {
+    body: `${name} (${email}) আপনাকে মেসেজ পাঠিয়েছে`,
     tag: 'contact-submission',
     requireInteraction: true,
+    icon: '/app-icon.webp',
+    badge: '/app-icon.webp',
     data: { type: 'contact', email }
   });
 };
 
 export const notifyNewBooking = (name: string, date: string, time: string) => {
-  sendBrowserNotification('📅 New Booking', {
-    body: `${name} scheduled an appointment for ${date} at ${time}`,
+  sendBrowserNotification('📅 নতুন অ্যাপয়েন্টমেন্ট বুকিং', {
+    body: `${name} ${date} তারিখে ${time} সময়ে অ্যাপয়েন্টমেন্ট বুক করেছে`,
     tag: 'booking',
     requireInteraction: true,
+    icon: '/app-icon.webp',
+    badge: '/app-icon.webp',
     data: { type: 'booking', name, date, time }
   });
 };

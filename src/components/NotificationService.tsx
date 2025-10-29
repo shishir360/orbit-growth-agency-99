@@ -13,8 +13,21 @@ import { toast } from '@/hooks/use-toast';
  */
 export function NotificationService() {
   useEffect(() => {
-    // Request notification permission on mount
-    requestNotificationPermission();
+    // Request notification permission on mount with user interaction
+    const enableNotifications = async () => {
+      const granted = await requestNotificationPermission();
+      if (granted) {
+        console.log('✅ Notification permission granted');
+        toast({
+          title: "নোটিফিকেশন চালু হয়েছে",
+          description: "আপনি এখন নতুন বুকিং এবং মেসেজের নোটিফিকেশন পাবেন",
+        });
+      } else {
+        console.log('❌ Notification permission denied');
+      }
+    };
+    
+    enableNotifications();
 
     // Subscribe to new contact submissions
     const contactChannel = supabase
