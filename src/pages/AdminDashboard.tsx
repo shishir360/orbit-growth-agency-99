@@ -3,6 +3,7 @@ import { useAdminAuth } from '@/contexts/AdminAuthContext';
 import { SidebarProvider, SidebarTrigger, SidebarInset } from '@/components/ui/sidebar';
 import { AdminSidebar } from '@/components/admin/AdminSidebar';
 import { AdminNotifications } from '@/components/admin/AdminNotifications';
+import { PWAInstallPrompt } from '@/components/admin/PWAInstallPrompt';
 import AdminOverview from '@/components/admin/AdminOverview';
 import AdminServices from '@/components/admin/AdminServices';
 import AdminHero from '@/components/admin/AdminHero';
@@ -51,7 +52,7 @@ const AdminDashboard = () => {
   }
 
   return (
-    <SidebarProvider defaultOpen={false}>
+    <SidebarProvider defaultOpen={true}>
       <div className="flex min-h-screen w-full bg-muted/30">
         <AdminSidebar />
         
@@ -105,6 +106,8 @@ const AdminDashboard = () => {
             </Routes>
           </main>
         </SidebarInset>
+        
+        <PWAInstallPrompt />
       </div>
     </SidebarProvider>
   );
