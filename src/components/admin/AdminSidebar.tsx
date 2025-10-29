@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useAdminAuth } from '@/contexts/AdminAuthContext';
 import {
@@ -49,7 +50,23 @@ export function AdminSidebar() {
   const navigate = useNavigate();
   const location = useLocation();
   const { state } = useSidebar();
-  const collapsed = state === 'collapsed';
+const collapsed = state === 'collapsed';
+
+  // Force expanded sidebar on mobile so labels are visible
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 768px)');
+    const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    setIsMobile(mq.matches);
+    if (mq.addEventListener) mq.addEventListener('change', onChange);
+    else (mq as any).addListener(onChange);
+    return () => {
+      if (mq.removeEventListener) mq.removeEventListener('change', onChange);
+      else (mq as any).removeListener(onChange);
+    };
+  }, []);
+
+  const effectiveCollapsed = isMobile ? false : collapsed;
 
   const handleLogout = async () => {
     await signOut();
@@ -115,13 +132,13 @@ export function AdminSidebar() {
   ];
 
   return (
-    <Sidebar className={collapsed ? 'w-16' : 'w-64'} collapsible="icon">
+    <Sidebar className={effectiveCollapsed ? 'w-16' : 'w-64'} collapsible={isMobile ? undefined : 'icon'}>
       <SidebarHeader className="border-b border-sidebar-border p-4 bg-gradient-to-br from-primary/5 to-primary/10">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/80 shadow-lg">
             <Shield className="h-5 w-5 text-primary-foreground" />
           </div>
-          {!collapsed && (
+          {!effectiveCollapsed && (
             <div className="flex flex-col">
               <span className="font-bold text-lg bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
                 LUNEXO
@@ -149,7 +166,7 @@ export function AdminSidebar() {
                           <SidebarMenuButton asChild isActive={isActive}>
                             <NavLink to={item.to} end={item.to === '/admin-dashboard'}>
                               <item.icon className="h-4 w-4" />
-                              {!collapsed && <span>{item.label}</span>}
+                              {!effectiveCollapsed && <span>{item.label}</span>}
                             </NavLink>
                           </SidebarMenuButton>
                         </SidebarMenuItem>
@@ -170,7 +187,7 @@ export function AdminSidebar() {
           className="w-full justify-start hover:bg-destructive/10 hover:text-destructive transition-colors"
         >
           <LogOut className="h-4 w-4" />
-          {!collapsed && <span className="ml-3">Sign Out</span>}
+          {!effectiveCollapsed && <span className="ml-3">Sign Out</span>}
         </Button>
       </SidebarFooter>
     </Sidebar>
