@@ -15,11 +15,11 @@ export default defineConfig(({ mode }) => ({
     mode === 'development' && componentTagger(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.png', 'logo.png', 'user-logo-optimized.webp'],
+      includeAssets: ['favicon.png', 'app-icon.webp', 'user-logo-optimized.webp'],
       manifest: {
-        name: 'Orbit Growth Agency Admin',
-        short_name: 'Orbit Admin',
-        description: 'Admin Panel for Orbit Growth Agency',
+        name: 'Lunexo Media Admin',
+        short_name: 'Lunexo Admin',
+        description: 'Admin Panel for Lunexo Media',
         theme_color: '#0F172A',
         background_color: '#0F172A',
         display: 'standalone',
@@ -28,15 +28,15 @@ export default defineConfig(({ mode }) => ({
         scope: '/',
         icons: [
           {
-            src: '/logo.png',
+            src: '/app-icon.webp',
             sizes: '192x192',
-            type: 'image/png',
+            type: 'image/webp',
             purpose: 'any maskable'
           },
           {
-            src: '/logo.png',
+            src: '/app-icon.webp',
             sizes: '512x512',
-            type: 'image/png',
+            type: 'image/webp',
             purpose: 'any maskable'
           }
         ]

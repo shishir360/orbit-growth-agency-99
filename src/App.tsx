@@ -8,6 +8,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import { AdminAuthProvider } from "@/contexts/AdminAuthContext";
 import { ContentProvider } from "@/contexts/ContentContext";
 import { BlogProvider } from "@/contexts/BlogContext";
+import { NotificationService } from "@/components/NotificationService";
 import Index from "./pages/Index";
 import WebsiteDesign from "./pages/WebsiteDesign";
 import AdsManagement from "./pages/AdsManagement";
@@ -63,6 +64,7 @@ const App = () => (
             <TooltipProvider>
               <Toaster />
               <Sonner />
+              <NotificationService />
               <BrowserRouter>
                 <Routes>
                   <Route path="/" element={<Index />} />
