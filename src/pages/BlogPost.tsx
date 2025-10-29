@@ -13,6 +13,7 @@ import { useBlog } from "@/contexts/BlogContext";
 import SEO from "@/components/ui/seo";
 import { BlogEngagement, KeyTakeaways, QuickActionCTA } from "@/components/ui/blog-engagement";
 import SafeImage from "@/components/ui/safe-image";
+import { BlogNotificationPrompt } from "@/components/BlogNotificationPrompt";
 
 const BlogPost = () => {
   const { slug } = useParams();
@@ -139,6 +140,7 @@ const BlogPost = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <BlogNotificationPrompt />
       <SEO
         title={`${blogPost.title} | LUNEXO MEDIA Blog`}
         description={blogPost.excerpt}

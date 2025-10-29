@@ -12,7 +12,7 @@ serve(async (req) => {
   }
 
   try {
-    const { subscription } = await req.json()
+    const { subscription, is_admin = true } = await req.json()
 
     const supabaseClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
@@ -27,7 +27,7 @@ serve(async (req) => {
         p256dh: subscription.keys.p256dh,
         auth: subscription.keys.auth,
         user_agent: req.headers.get('user-agent'),
-        is_admin: true
+        is_admin: is_admin
       })
 
     if (error) {

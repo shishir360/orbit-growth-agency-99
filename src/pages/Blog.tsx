@@ -11,6 +11,7 @@ import { CalendarDays, Clock, ArrowRight, Sparkles, BookOpen, TrendingUp, Search
 import { useBlog } from "@/contexts/BlogContext";
 import SEO from "@/components/ui/seo";
 import SafeImage from "@/components/ui/safe-image";
+import { BlogNotificationPrompt } from "@/components/BlogNotificationPrompt";
 
 const Blog = () => {
   const { getPublishedPosts } = useBlog();
@@ -64,6 +65,7 @@ const Blog = () => {
         keywords="digital marketing, SEO tips, advertising insights, AI tools, business growth, Lunexo Media blog"
       />
       
+      <BlogNotificationPrompt />
       <Navigation />
       
       <div className="container-wide section-padding pt-8">

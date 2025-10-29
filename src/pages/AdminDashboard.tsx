@@ -4,6 +4,7 @@ import { SidebarProvider, SidebarTrigger, SidebarInset } from '@/components/ui/s
 import { AdminSidebar } from '@/components/admin/AdminSidebar';
 import { AdminNotifications } from '@/components/admin/AdminNotifications';
 import { PWAInstallPrompt } from '@/components/admin/PWAInstallPrompt';
+import { NotificationService } from '@/components/NotificationService';
 import AdminOverview from '@/components/admin/AdminOverview';
 import AdminServices from '@/components/admin/AdminServices';
 import AdminHero from '@/components/admin/AdminHero';
@@ -53,6 +54,7 @@ const AdminDashboard = () => {
 
   return (
     <SidebarProvider defaultOpen={true}>
+      <NotificationService isAdmin={true} />
       <div className="flex min-h-screen w-full bg-muted/30">
         <AdminSidebar />
         

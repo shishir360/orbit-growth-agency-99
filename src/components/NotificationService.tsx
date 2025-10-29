@@ -12,33 +12,34 @@ import { toast } from '@/hooks/use-toast';
  * Global notification service that runs in the background
  * Handles real-time notifications for bookings and contacts
  */
-export function NotificationService() {
+export function NotificationService({ isAdmin = false }: { isAdmin?: boolean }) {
   useEffect(() => {
-    // Setup both browser notifications and push notifications
-    const enableNotifications = async () => {
-      // First request basic notification permission
-      const granted = await requestNotificationPermission();
-      if (granted) {
-        console.log('✅ Browser notification permission granted');
-        
-        // Then setup push notifications for background delivery
-        const pushEnabled = await setupPushNotifications();
-        if (pushEnabled) {
-          console.log('✅ Push notifications enabled');
-          toast({
-            title: "নোটিফিকেশন চালু হয়েছে ✅",
-            description: "এখন অ্যাপ বন্ধ থাকলেও আপনি পুশ নোটিফিকেশন পাবেন",
-          });
+    // Only setup push notifications for admin users
+    if (isAdmin) {
+      const enableNotifications = async () => {
+        // First request basic notification permission
+        const granted = await requestNotificationPermission();
+        if (granted) {
+          console.log('✅ Browser notification permission granted');
+          
+          // Then setup push notifications for background delivery
+          const pushEnabled = await setupPushNotifications();
+          if (pushEnabled) {
+            console.log('✅ Push notifications enabled');
+            toast({
+              title: "নোটিফিকেশন চালু হয়েছে ✅",
+              description: "এখন অ্যাপ বন্ধ থাকলেও আপনি পুশ নোটিফিকেশন পাবেন",
+            });
 
-          // Send initial push notification from backend when new events occur
-          await sendPushOnNewEvents();
+            // Send initial push notification from backend when new events occur
+            await sendPushOnNewEvents();
+          }
+        } else {
+          console.log('❌ Notification permission denied');
         }
-      } else {
-        console.log('❌ Notification permission denied');
-      }
-    };
-    
-    enableNotifications();
+      };
+      
+      enableNotifications();
 
     // Function to trigger push notifications from backend
     const sendPushOnNewEvents = async () => {
@@ -173,7 +174,8 @@ export function NotificationService() {
       supabase.removeChannel(contactChannel);
       supabase.removeChannel(bookingChannel);
     };
-  }, []);
+    }
+  }, [isAdmin]);
 
   return null; // This component doesn't render anything
 }
