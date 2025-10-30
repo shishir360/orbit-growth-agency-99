@@ -63,8 +63,6 @@ export default function AdminPDFLandingPages() {
     main_headline: '20 Crave-worthy Keto Recipes',
     subheadline: 'Think going keto is hard? Think again.',
     hero_description: 'Meet your low-carb fat-burning goals with this collection of our 20 most popular family-friendly keto recipes that are both EASY to make and DELICIOUS.',
-    conversion_rate: '88%',
-    conversion_badge_color: '#6366f1',
     hero_cta_text: 'Get the Free eBook',
     hero_cta_bg_color: '#ffffff',
     hero_cta_text_color: '#000000',
@@ -202,8 +200,6 @@ export default function AdminPDFLandingPages() {
       main_headline: '20 Crave-worthy Keto Recipes',
       subheadline: 'Think going keto is hard? Think again.',
       hero_description: 'Meet your low-carb fat-burning goals with this collection of our 20 most popular family-friendly keto recipes that are both EASY to make and DELICIOUS.',
-      conversion_rate: '88%',
-      conversion_badge_color: '#6366f1',
       hero_cta_text: 'Get the Free eBook',
       hero_cta_bg_color: '#ffffff',
       hero_cta_text_color: '#000000',
@@ -349,25 +345,6 @@ export default function AdminPDFLandingPages() {
                     onChange={(e) => setFormData({ ...formData, hero_image_url: e.target.value })}
                     placeholder="https://example.com/image.png"
                   />
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="conversion_rate">Conversion Rate</Label>
-                    <Input
-                      id="conversion_rate"
-                      value={formData.conversion_rate}
-                      onChange={(e) => setFormData({ ...formData, conversion_rate: e.target.value })}
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="conversion_badge_color">Badge Color</Label>
-                    <Input
-                      id="conversion_badge_color"
-                      type="color"
-                      value={formData.conversion_badge_color}
-                      onChange={(e) => setFormData({ ...formData, conversion_badge_color: e.target.value })}
-                    />
-                  </div>
                 </div>
                 <div className="grid grid-cols-3 gap-4">
                   <div>

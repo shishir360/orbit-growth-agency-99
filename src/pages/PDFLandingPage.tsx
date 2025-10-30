@@ -18,8 +18,6 @@ interface PDFLandingPageData {
   subheadline: string;
   hero_description: string;
   hero_image_url: string;
-  conversion_rate: string;
-  conversion_badge_color: string;
   hero_cta_text: string;
   hero_cta_bg_color: string;
   hero_cta_text_color: string;
@@ -94,6 +92,27 @@ export default function PDFLandingPage() {
 
       if (leadError) throw leadError;
 
+      // Get PDF document details
+      const { data: pdfDoc, error: pdfError } = await supabase
+        .from('pdf_documents')
+        .select('file_url, title')
+        .eq('id', pageData?.pdf_document_id)
+        .single();
+
+      if (pdfError) throw pdfError;
+
+      // Send email with PDF
+      const { error: emailError } = await supabase.functions.invoke('send-pdf-email', {
+        body: {
+          name: formData.firstName,
+          email: formData.email,
+          pdfUrl: pdfDoc.file_url,
+          pdfTitle: pdfDoc.title,
+        },
+      });
+
+      if (emailError) throw emailError;
+
       toast({
         title: 'Success!',
         description: 'Check your email for the free eBook!',
@@ -133,6 +152,19 @@ export default function PDFLandingPage() {
       <SEO
         title={pageData.main_headline}
         description={pageData.hero_description || pageData.subheadline}
+        keywords="keto recipes, free ebook, low carb, keto diet, healthy recipes"
+        type="website"
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "name": pageData.main_headline,
+          "description": pageData.hero_description || pageData.subheadline,
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+          }
+        }}
       />
 
       <div className="min-h-screen">
@@ -141,16 +173,6 @@ export default function PDFLandingPage() {
           className="relative overflow-hidden py-16 lg:py-20"
           style={{ backgroundColor: pageData.hero_bg_color }}
         >
-          {/* Conversion Badge */}
-          {pageData.conversion_rate && (
-            <div 
-              className="absolute top-8 right-8 px-6 py-4 rounded-full text-white shadow-lg z-10"
-              style={{ backgroundColor: pageData.conversion_badge_color }}
-            >
-              <div className="text-xs font-semibold uppercase tracking-wider">Conversion Rate</div>
-              <div className="text-4xl font-bold">{pageData.conversion_rate}</div>
-            </div>
-          )}
 
           <div className="container mx-auto px-4">
             {/* Logo */}

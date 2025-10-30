@@ -18,6 +18,7 @@ interface SEOProps {
     section?: string;
     tags?: string[];
   };
+  structuredData?: any;
 }
 
 const SEO: React.FC<SEOProps> = ({
@@ -30,13 +31,14 @@ const SEO: React.FC<SEOProps> = ({
   author = "Lunexo Media",
   siteName = "LUNEXO MEDIA",
   locale = "en_US",
-  article
+  article,
+  structuredData: customStructuredData
 }) => {
   // Ensure absolute URL for image
   const absoluteImageUrl = image?.startsWith('http') ? image : `https://www.lunexomedia.com${image}`;
   
   // Generate structured data based on content type
-  const structuredData = type === 'article' && article ? {
+  const structuredData = customStructuredData || (type === 'article' && article ? {
     "@context": "https://schema.org",
     "@type": "Article",
     "headline": title,
@@ -77,7 +79,7 @@ const SEO: React.FC<SEOProps> = ({
         "url": "https://www.lunexomedia.com/favicon.png"
       }
     }
-  };
+  });
   
   return (
     <Helmet>
