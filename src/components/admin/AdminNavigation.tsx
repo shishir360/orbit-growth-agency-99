@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { Menu, Eye, EyeOff } from 'lucide-react';
+import { Menu, Eye, EyeOff, FileText, Users, LayoutDashboard } from 'lucide-react';
 import { useContent } from '@/contexts/ContentContext';
 import { useToast } from '@/hooks/use-toast';
 

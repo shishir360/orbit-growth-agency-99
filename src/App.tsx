@@ -52,6 +52,7 @@ import DynamicPage from "./pages/DynamicPage";
 import LandingPage from "./pages/LandingPage";
 import CatchAllPage from "./pages/CatchAllPage";
 import GuidePage from "./pages/GuidePage";
+import PDFLandingPage from "./pages/PDFLandingPage";
 
 const queryClient = new QueryClient();
 
@@ -108,6 +109,7 @@ const App = () => (
                   
                   <Route path="/page/:slug" element={<DynamicPage />} />
                   <Route path="/guide/:slug" element={<GuidePage />} />
+                  <Route path="/pdf/:slug" element={<PDFLandingPage />} />
                   {/* Catch-all to resolve dynamic admin-created pages by slug, else 404 */}
                   <Route path="*" element={<CatchAllPage />} />
                 </Routes>

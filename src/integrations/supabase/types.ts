@@ -641,6 +641,157 @@ export type Database = {
         }
         Relationships: []
       }
+      pdf_landing_pages: {
+        Row: {
+          conversion_badge_color: string | null
+          conversion_rate: string | null
+          created_at: string | null
+          footer_bg_color: string | null
+          footer_text: string | null
+          hero_bg_color: string | null
+          hero_cta_bg_color: string | null
+          hero_cta_text: string | null
+          hero_cta_text_color: string | null
+          hero_description: string | null
+          hero_image_url: string | null
+          id: string
+          is_active: boolean | null
+          logo_text: string | null
+          main_headline: string | null
+          mid_cta_bg_color: string | null
+          mid_cta_text: string | null
+          mid_cta_text_color: string | null
+          mid_description: string | null
+          mid_headline: string | null
+          mid_image_1_url: string | null
+          mid_image_2_url: string | null
+          mid_image_3_url: string | null
+          pdf_document_id: string | null
+          popup_button_bg_color: string | null
+          popup_button_text: string | null
+          popup_button_text_color: string | null
+          popup_subtitle: string | null
+          popup_title: string | null
+          privacy_text: string | null
+          slug: string
+          subheadline: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          conversion_badge_color?: string | null
+          conversion_rate?: string | null
+          created_at?: string | null
+          footer_bg_color?: string | null
+          footer_text?: string | null
+          hero_bg_color?: string | null
+          hero_cta_bg_color?: string | null
+          hero_cta_text?: string | null
+          hero_cta_text_color?: string | null
+          hero_description?: string | null
+          hero_image_url?: string | null
+          id?: string
+          is_active?: boolean | null
+          logo_text?: string | null
+          main_headline?: string | null
+          mid_cta_bg_color?: string | null
+          mid_cta_text?: string | null
+          mid_cta_text_color?: string | null
+          mid_description?: string | null
+          mid_headline?: string | null
+          mid_image_1_url?: string | null
+          mid_image_2_url?: string | null
+          mid_image_3_url?: string | null
+          pdf_document_id?: string | null
+          popup_button_bg_color?: string | null
+          popup_button_text?: string | null
+          popup_button_text_color?: string | null
+          popup_subtitle?: string | null
+          popup_title?: string | null
+          privacy_text?: string | null
+          slug: string
+          subheadline?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          conversion_badge_color?: string | null
+          conversion_rate?: string | null
+          created_at?: string | null
+          footer_bg_color?: string | null
+          footer_text?: string | null
+          hero_bg_color?: string | null
+          hero_cta_bg_color?: string | null
+          hero_cta_text?: string | null
+          hero_cta_text_color?: string | null
+          hero_description?: string | null
+          hero_image_url?: string | null
+          id?: string
+          is_active?: boolean | null
+          logo_text?: string | null
+          main_headline?: string | null
+          mid_cta_bg_color?: string | null
+          mid_cta_text?: string | null
+          mid_cta_text_color?: string | null
+          mid_description?: string | null
+          mid_headline?: string | null
+          mid_image_1_url?: string | null
+          mid_image_2_url?: string | null
+          mid_image_3_url?: string | null
+          pdf_document_id?: string | null
+          popup_button_bg_color?: string | null
+          popup_button_text?: string | null
+          popup_button_text_color?: string | null
+          popup_subtitle?: string | null
+          popup_title?: string | null
+          privacy_text?: string | null
+          slug?: string
+          subheadline?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pdf_landing_pages_pdf_document_id_fkey"
+            columns: ["pdf_document_id"]
+            isOneToOne: false
+            referencedRelation: "pdf_documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pdf_leads: {
+        Row: {
+          created_at: string | null
+          email: string
+          id: string
+          name: string
+          pdf_document_id: string | null
+          source: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          id?: string
+          name: string
+          pdf_document_id?: string | null
+          source?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          id?: string
+          name?: string
+          pdf_document_id?: string | null
+          source?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pdf_leads_pdf_document_id_fkey"
+            columns: ["pdf_document_id"]
+            isOneToOne: false
+            referencedRelation: "pdf_documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       portfolio: {
         Row: {
           blocked: boolean

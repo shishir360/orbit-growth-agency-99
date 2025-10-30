@@ -34,6 +34,7 @@ import AdminInvoices from '@/components/admin/AdminInvoices';
 import AdminContacts from '@/components/admin/AdminContacts';
 import AdminPDFDocuments from '@/components/admin/AdminPDFDocuments';
 import AdminPDFLeads from '@/components/admin/AdminPDFLeads';
+import AdminPDFLandingPages from '@/components/admin/AdminPDFLandingPages';
 import AdminAccounting from '@/components/admin/AdminAccounting';
 import AdminClients from '@/components/admin/AdminClients';
 
@@ -103,6 +104,7 @@ const AdminDashboard = () => {
               <Route path="contact-submissions" element={<AdminContacts />} />
               <Route path="pdf-documents" element={<AdminPDFDocuments />} />
               <Route path="pdf-leads" element={<AdminPDFLeads />} />
+              <Route path="pdf-landing-pages" element={<AdminPDFLandingPages />} />
               <Route path="accounting" element={<AdminAccounting />} />
               <Route path="clients" element={<AdminClients />} />
             </Routes>
