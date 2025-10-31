@@ -8,6 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { X, Loader2 } from 'lucide-react';
 import SEO from '@/components/ui/seo';
 import SafeImage from '@/components/ui/safe-image';
+import { getVisitorLocation, trackVisitorActivity } from '@/utils/visitorTracking';
 
 interface PDFLandingPageData {
   id: string;
@@ -93,16 +94,23 @@ export default function PDFLandingPage() {
     setSubmitting(true);
 
     try {
+      const locationData = await getVisitorLocation();
+
       // Save lead to database
-      const { error: leadError } = await supabase
+      const { data: leadData, error: leadError } = await supabase
         .from('pdf_leads')
         .insert([{
           pdf_document_id: pageData?.pdf_document_id,
           name: formData.firstName,
           email: formData.email,
           phone: formData.phone,
+          visitor_ip: locationData?.ip,
+          visitor_country: locationData?.country,
+          visitor_city: locationData?.city,
           source: `landing-page-${slug}`,
-        } as any]);
+        } as any])
+        .select()
+        .single();
 
       if (leadError) throw leadError;
 
@@ -126,6 +134,16 @@ export default function PDFLandingPage() {
       });
 
       if (emailError) throw emailError;
+
+      // Track activity
+      await trackVisitorActivity({
+        activity_type: 'pdf_download',
+        related_id: leadData?.id,
+        metadata: {
+          pdf_title: pdfDoc.title,
+          name: formData.firstName,
+        },
+      });
 
       toast({
         title: 'Success!',

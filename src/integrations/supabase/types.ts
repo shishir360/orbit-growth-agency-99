@@ -30,6 +30,9 @@ export type Database = {
           timezone: string | null
           timezone_offset: number | null
           updated_at: string
+          visitor_city: string | null
+          visitor_country: string | null
+          visitor_ip: string | null
         }
         Insert: {
           created_at?: string
@@ -46,6 +49,9 @@ export type Database = {
           timezone?: string | null
           timezone_offset?: number | null
           updated_at?: string
+          visitor_city?: string | null
+          visitor_country?: string | null
+          visitor_ip?: string | null
         }
         Update: {
           created_at?: string
@@ -62,6 +68,9 @@ export type Database = {
           timezone?: string | null
           timezone_offset?: number | null
           updated_at?: string
+          visitor_city?: string | null
+          visitor_country?: string | null
+          visitor_ip?: string | null
         }
         Relationships: []
       }
@@ -230,6 +239,9 @@ export type Database = {
           phone: string | null
           status: string
           updated_at: string
+          visitor_city: string | null
+          visitor_country: string | null
+          visitor_ip: string | null
         }
         Insert: {
           company?: string | null
@@ -242,6 +254,9 @@ export type Database = {
           phone?: string | null
           status?: string
           updated_at?: string
+          visitor_city?: string | null
+          visitor_country?: string | null
+          visitor_ip?: string | null
         }
         Update: {
           company?: string | null
@@ -254,6 +269,9 @@ export type Database = {
           phone?: string | null
           status?: string
           updated_at?: string
+          visitor_city?: string | null
+          visitor_country?: string | null
+          visitor_ip?: string | null
         }
         Relationships: []
       }
@@ -766,6 +784,9 @@ export type Database = {
           pdf_document_id: string | null
           phone: string | null
           source: string | null
+          visitor_city: string | null
+          visitor_country: string | null
+          visitor_ip: string | null
         }
         Insert: {
           created_at?: string | null
@@ -775,6 +796,9 @@ export type Database = {
           pdf_document_id?: string | null
           phone?: string | null
           source?: string | null
+          visitor_city?: string | null
+          visitor_country?: string | null
+          visitor_ip?: string | null
         }
         Update: {
           created_at?: string | null
@@ -784,6 +808,9 @@ export type Database = {
           pdf_document_id?: string | null
           phone?: string | null
           source?: string | null
+          visitor_city?: string | null
+          visitor_country?: string | null
+          visitor_ip?: string | null
         }
         Relationships: [
           {
@@ -1077,6 +1104,69 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
+        }
+        Relationships: []
+      }
+      visitor_activities: {
+        Row: {
+          activity_type: string
+          created_at: string | null
+          id: string
+          metadata: Json | null
+          page_title: string | null
+          page_url: string | null
+          referrer: string | null
+          related_id: string | null
+          user_agent: string | null
+          visitor_city: string | null
+          visitor_country: string | null
+          visitor_country_code: string | null
+          visitor_ip: string | null
+          visitor_isp: string | null
+          visitor_latitude: number | null
+          visitor_longitude: number | null
+          visitor_region: string | null
+          visitor_timezone: string | null
+        }
+        Insert: {
+          activity_type: string
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          page_title?: string | null
+          page_url?: string | null
+          referrer?: string | null
+          related_id?: string | null
+          user_agent?: string | null
+          visitor_city?: string | null
+          visitor_country?: string | null
+          visitor_country_code?: string | null
+          visitor_ip?: string | null
+          visitor_isp?: string | null
+          visitor_latitude?: number | null
+          visitor_longitude?: number | null
+          visitor_region?: string | null
+          visitor_timezone?: string | null
+        }
+        Update: {
+          activity_type?: string
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          page_title?: string | null
+          page_url?: string | null
+          referrer?: string | null
+          related_id?: string | null
+          user_agent?: string | null
+          visitor_city?: string | null
+          visitor_country?: string | null
+          visitor_country_code?: string | null
+          visitor_ip?: string | null
+          visitor_isp?: string | null
+          visitor_latitude?: number | null
+          visitor_longitude?: number | null
+          visitor_region?: string | null
+          visitor_timezone?: string | null
         }
         Relationships: []
       }

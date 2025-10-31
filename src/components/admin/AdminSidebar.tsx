@@ -43,6 +43,7 @@ import {
   Receipt,
   Image,
   Upload,
+  MapPin,
 } from 'lucide-react';
 
 export function AdminSidebar() {
@@ -113,6 +114,7 @@ const collapsed = state === 'collapsed';
     // Technical & Analytics
     { to: '/admin-dashboard/seo-meta', icon: Search, label: 'SEO & Meta Tags', section: 'technical' },
     { to: '/admin-dashboard/tracking', icon: Activity, label: 'Analytics & Tracking', section: 'technical' },
+    { to: '/admin-dashboard/visitor-tracking', icon: MapPin, label: 'Visitor Tracking', section: 'technical' },
     { to: '/admin-dashboard/reviews', icon: MessageSquare, label: 'Reviews & Feedback', section: 'technical' },
     { to: '/admin-dashboard/images', icon: Image, label: 'Media Library', section: 'technical' },
     { to: '/admin-dashboard/users', icon: Users, label: 'User Management', section: 'technical' }
