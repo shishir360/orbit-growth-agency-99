@@ -1,17 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { toast } from 'sonner';
-import { Download, Trash2, Search, Mail, Phone, Building } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Loader2, Download, Trash2, Mail, Phone } from 'lucide-react';
+import { format } from 'date-fns';
 
-const AdminPDFLeads = () => {
-  const [leads, setLeads] = useState<any[]>([]);
+interface PDFLead {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  source: string;
+  created_at: string;
+  pdf_document_id: string;
+  pdf_documents?: {
+    title: string;
+  };
+}
+
+export default function AdminPDFLeads() {
+  const { toast } = useToast();
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [leads, setLeads] = useState<PDFLead[]>([]);
 
   useEffect(() => {
     fetchLeads();
@@ -20,12 +32,11 @@ const AdminPDFLeads = () => {
   const fetchLeads = async () => {
     try {
       const { data, error } = await supabase
-        .from('pdf_access_requests')
+        .from('pdf_leads')
         .select(`
           *,
           pdf_documents (
-            title,
-            slug
+            title
           )
         `)
         .order('created_at', { ascending: false });
@@ -33,8 +44,11 @@ const AdminPDFLeads = () => {
       if (error) throw error;
       setLeads(data || []);
     } catch (error: any) {
-      console.error('Error fetching leads:', error);
-      toast.error('Failed to load leads');
+      toast({
+        title: 'Error',
+        description: error.message,
+        variant: 'destructive',
+      });
     } finally {
       setLoading(false);
     }
@@ -45,211 +59,137 @@ const AdminPDFLeads = () => {
 
     try {
       const { error } = await supabase
-        .from('pdf_access_requests')
+        .from('pdf_leads')
         .delete()
         .eq('id', id);
 
       if (error) throw error;
-
-      toast.success('Lead deleted successfully');
+      toast({ title: 'Lead deleted successfully!' });
       fetchLeads();
     } catch (error: any) {
-      console.error('Error deleting lead:', error);
-      toast.error('Failed to delete lead');
+      toast({
+        title: 'Error',
+        description: error.message,
+        variant: 'destructive',
+      });
     }
   };
 
   const exportToCSV = () => {
-    const headers = ['Name', 'Email', 'Phone', 'Company', 'PDF Title', 'Date'];
-    const rows = filteredLeads.map(lead => [
+    const headers = ['Name', 'Email', 'Phone', 'PDF', 'Source', 'Date'];
+    const rows = leads.map(lead => [
       lead.name,
       lead.email,
       lead.phone || '',
-      lead.company || '',
       lead.pdf_documents?.title || 'N/A',
-      new Date(lead.created_at).toLocaleDateString()
+      lead.source,
+      format(new Date(lead.created_at), 'yyyy-MM-dd HH:mm')
     ]);
 
-    const csvContent = [
+    const csv = [
       headers.join(','),
       ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
     ].join('\n');
 
-    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const blob = new Blob([csv], { type: 'text/csv' });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `pdf-leads-${new Date().toISOString().split('T')[0]}.csv`;
+    a.download = `pdf-leads-${format(new Date(), 'yyyy-MM-dd')}.csv`;
     a.click();
-    window.URL.revokeObjectURL(url);
   };
-
-  const filteredLeads = leads.filter(lead =>
-    lead.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    lead.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (lead.company && lead.company.toLowerCase().includes(searchTerm.toLowerCase())) ||
-    (lead.pdf_documents?.title && lead.pdf_documents.title.toLowerCase().includes(searchTerm.toLowerCase()))
-  );
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center p-12">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader2 className="h-8 w-8 animate-spin" />
       </div>
     );
   }
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">PDF Leads</h2>
-          <p className="text-muted-foreground">
-            Manage and export leads generated from PDF downloads
-          </p>
+          <h2 className="text-3xl font-bold">PDF Leads</h2>
+          <p className="text-muted-foreground">Manage leads from your PDF landing pages</p>
         </div>
-        <Button onClick={exportToCSV} disabled={filteredLeads.length === 0}>
-          <Download className="mr-2 h-4 w-4" />
+        <Button onClick={exportToCSV} variant="outline">
+          <Download className="h-4 w-4 mr-2" />
           Export CSV
         </Button>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-3">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Leads</CardTitle>
-            <Download className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{leads.length}</div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">This Week</CardTitle>
-            <Download className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {leads.filter(l => {
-                const weekAgo = new Date();
-                weekAgo.setDate(weekAgo.getDate() - 7);
-                return new Date(l.created_at) > weekAgo;
-              }).length}
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Today</CardTitle>
-            <Download className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {leads.filter(l => {
-                const today = new Date();
-                const leadDate = new Date(l.created_at);
-                return leadDate.toDateString() === today.toDateString();
-              }).length}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
       <Card>
         <CardHeader>
-          <div className="flex items-center gap-4">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Search by name, email, company, or PDF title..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
-              />
-            </div>
-          </div>
+          <CardTitle>All Leads ({leads.length})</CardTitle>
+          <CardDescription>View and manage all PDF download leads</CardDescription>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>Phone</TableHead>
-                <TableHead>Company</TableHead>
-                <TableHead>PDF</TableHead>
-                <TableHead>Date</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredLeads.length === 0 ? (
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
                 <TableRow>
-                  <TableCell colSpan={7} className="text-center text-muted-foreground">
-                    No leads found
-                  </TableCell>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Email</TableHead>
+                  <TableHead>Phone</TableHead>
+                  <TableHead>PDF</TableHead>
+                  <TableHead>Source</TableHead>
+                  <TableHead>Date</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
-              ) : (
-                filteredLeads.map((lead) => (
-                  <TableRow key={lead.id}>
-                    <TableCell className="font-medium">{lead.name}</TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-2">
-                        <Mail className="h-4 w-4 text-muted-foreground" />
-                        <a href={`mailto:${lead.email}`} className="text-primary hover:underline">
-                          {lead.email}
-                        </a>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      {lead.phone ? (
-                        <div className="flex items-center gap-2">
-                          <Phone className="h-4 w-4 text-muted-foreground" />
-                          {lead.phone}
-                        </div>
-                      ) : (
-                        <span className="text-muted-foreground">-</span>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      {lead.company ? (
-                        <div className="flex items-center gap-2">
-                          <Building className="h-4 w-4 text-muted-foreground" />
-                          {lead.company}
-                        </div>
-                      ) : (
-                        <span className="text-muted-foreground">-</span>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="secondary">
-                        {lead.pdf_documents?.title || 'N/A'}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      {new Date(lead.created_at).toLocaleDateString()}
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleDelete(lead.id)}
-                      >
-                        <Trash2 className="h-4 w-4 text-destructive" />
-                      </Button>
+              </TableHeader>
+              <TableBody>
+                {leads.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={7} className="text-center text-muted-foreground py-8">
+                      No leads yet
                     </TableCell>
                   </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
+                ) : (
+                  leads.map((lead) => (
+                    <TableRow key={lead.id}>
+                      <TableCell className="font-medium">{lead.name}</TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-2">
+                          <Mail className="h-4 w-4 text-muted-foreground" />
+                          {lead.email}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        {lead.phone ? (
+                          <div className="flex items-center gap-2">
+                            <Phone className="h-4 w-4 text-muted-foreground" />
+                            {lead.phone}
+                          </div>
+                        ) : (
+                          <span className="text-muted-foreground">-</span>
+                        )}
+                      </TableCell>
+                      <TableCell>{lead.pdf_documents?.title || 'N/A'}</TableCell>
+                      <TableCell>
+                        <code className="text-xs bg-muted px-2 py-1 rounded">{lead.source}</code>
+                      </TableCell>
+                      <TableCell className="text-sm text-muted-foreground">
+                        {format(new Date(lead.created_at), 'MMM dd, yyyy HH:mm')}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <Button
+                          onClick={() => handleDelete(lead.id)}
+                          variant="ghost"
+                          size="sm"
+                        >
+                          <Trash2 className="h-4 w-4 text-destructive" />
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </div>
         </CardContent>
       </Card>
     </div>
   );
-};
-
-export default AdminPDFLeads;
+}

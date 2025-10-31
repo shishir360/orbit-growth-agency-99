@@ -261,14 +261,14 @@ export default function AdminPDFLandingPages() {
                       placeholder="keto-recipes"
                     />
                   </div>
-                  <div>
-                    <Label htmlFor="pdf">PDF Document</Label>
+                  <div className="col-span-2">
+                    <Label htmlFor="pdf">PDF Document *</Label>
                     <Select
                       value={formData.pdf_document_id}
                       onValueChange={(value) => setFormData({ ...formData, pdf_document_id: value })}
                     >
                       <SelectTrigger>
-                        <SelectValue placeholder="Select PDF" />
+                        <SelectValue placeholder="Select PDF Document" />
                       </SelectTrigger>
                       <SelectContent>
                         {pdfDocuments.map((doc) => (
@@ -278,6 +278,9 @@ export default function AdminPDFLandingPages() {
                         ))}
                       </SelectContent>
                     </Select>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      Upload PDFs in the "PDF Documents" section first
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-2">

@@ -764,6 +764,7 @@ export type Database = {
           id: string
           name: string
           pdf_document_id: string | null
+          phone: string | null
           source: string | null
         }
         Insert: {
@@ -772,6 +773,7 @@ export type Database = {
           id?: string
           name: string
           pdf_document_id?: string | null
+          phone?: string | null
           source?: string | null
         }
         Update: {
@@ -780,6 +782,7 @@ export type Database = {
           id?: string
           name?: string
           pdf_document_id?: string | null
+          phone?: string | null
           source?: string | null
         }
         Relationships: [
