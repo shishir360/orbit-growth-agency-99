@@ -229,7 +229,7 @@ const handler = async (req: Request): Promise<Response> => {
 
               <p class="message" style="margin-top: 40px; font-weight: 500;">
                 Warm regards,<br>
-                <span style="color: #667eea; font-size: 18px;">Our Team</span>
+                <span style="color: #667eea; font-size: 18px;">Lunexo Media Team</span>
               </p>
             </div>
             
@@ -245,9 +245,9 @@ const handler = async (req: Request): Promise<Response> => {
     `;
 
     const { error: emailError } = await resend.emails.send({
-      from: "Welcome <onboarding@resend.dev>",
+      from: "Lunexo Media <onboarding@resend.dev>",
       to: [clientEmail],
-      subject: "🎉 Welcome! Thank You for Working With Us",
+      subject: `🎉 Welcome ${clientName}! - Lunexo Media`,
       html: welcomeEmailHtml,
     });
 
