@@ -133,6 +133,7 @@ export type Database = {
           phone: string | null
           state: string | null
           updated_at: string
+          work_types: string[] | null
           zip_code: string | null
         }
         Insert: {
@@ -148,6 +149,7 @@ export type Database = {
           phone?: string | null
           state?: string | null
           updated_at?: string
+          work_types?: string[] | null
           zip_code?: string | null
         }
         Update: {
@@ -163,6 +165,7 @@ export type Database = {
           phone?: string | null
           state?: string | null
           updated_at?: string
+          work_types?: string[] | null
           zip_code?: string | null
         }
         Relationships: []
@@ -1167,6 +1170,24 @@ export type Database = {
           visitor_longitude?: number | null
           visitor_region?: string | null
           visitor_timezone?: string | null
+        }
+        Relationships: []
+      }
+      work_types: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
         }
         Relationships: []
       }

@@ -8,6 +8,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import {
   Plus,
   Search,
@@ -21,7 +23,9 @@ import {
   FileText,
   Calendar,
   Eye,
-  Send
+  Send,
+  X,
+  Check
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -39,8 +43,14 @@ interface Client {
   zip_code?: string;
   country: string;
   notes?: string;
+  work_types?: string[];
   created_at: string;
   updated_at: string;
+}
+
+interface WorkType {
+  id: string;
+  name: string;
 }
 
 interface Invoice {
@@ -76,6 +86,10 @@ const AdminClients = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [detailsOpen, setDetailsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [workTypes, setWorkTypes] = useState<WorkType[]>([]);
+  const [selectedWorkTypes, setSelectedWorkTypes] = useState<string[]>([]);
+  const [customWorkType, setCustomWorkType] = useState('');
+  const [workTypeOpen, setWorkTypeOpen] = useState(false);
   const { toast } = useToast();
 
   const [formData, setFormData] = useState({
@@ -88,12 +102,28 @@ const AdminClients = () => {
     state: '',
     zip_code: '',
     country: 'USA',
-    notes: ''
+    notes: '',
+    work_types: [] as string[]
   });
 
   useEffect(() => {
     fetchClients();
+    fetchWorkTypes();
   }, []);
+
+  const fetchWorkTypes = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('work_types')
+        .select('*')
+        .order('name');
+
+      if (error) throw error;
+      setWorkTypes(data || []);
+    } catch (error) {
+      console.error('Error fetching work types:', error);
+    }
+  };
 
   const fetchClients = async () => {
     try {
@@ -158,8 +188,10 @@ const AdminClients = () => {
         state: '',
         zip_code: '',
         country: 'USA',
-        notes: ''
+        notes: '',
+        work_types: []
       });
+      setSelectedWorkTypes([]);
       fetchClients();
     } catch (error) {
       console.error('Error adding client:', error);
@@ -169,6 +201,51 @@ const AdminClients = () => {
         variant: "destructive"
       });
     }
+  };
+
+  const handleAddCustomWorkType = async () => {
+    if (!customWorkType.trim()) return;
+
+    try {
+      const { error } = await supabase.from('work_types').insert([{ name: customWorkType.trim() }]);
+
+      if (error) throw error;
+
+      toast({
+        title: "Success",
+        description: "Work type added successfully"
+      });
+
+      setCustomWorkType('');
+      fetchWorkTypes();
+      
+      // Add the new work type to selected types
+      const newWorkTypes = [...selectedWorkTypes, customWorkType.trim()];
+      setSelectedWorkTypes(newWorkTypes);
+      setFormData({ ...formData, work_types: newWorkTypes });
+    } catch (error) {
+      console.error('Error adding work type:', error);
+      toast({
+        title: "Error",
+        description: "Failed to add work type",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const toggleWorkType = (workType: string) => {
+    const newWorkTypes = selectedWorkTypes.includes(workType)
+      ? selectedWorkTypes.filter(t => t !== workType)
+      : [...selectedWorkTypes, workType];
+    
+    setSelectedWorkTypes(newWorkTypes);
+    setFormData({ ...formData, work_types: newWorkTypes });
+  };
+
+  const removeWorkType = (workType: string) => {
+    const newWorkTypes = selectedWorkTypes.filter(t => t !== workType);
+    setSelectedWorkTypes(newWorkTypes);
+    setFormData({ ...formData, work_types: newWorkTypes });
   };
 
   const handleDeleteClient = async (id: string) => {
@@ -355,6 +432,99 @@ const AdminClients = () => {
               </div>
 
               <div className="space-y-2">
+                <Label>Work Types</Label>
+                <Popover open={workTypeOpen} onOpenChange={setWorkTypeOpen}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="w-full justify-start text-left font-normal"
+                    >
+                      <Plus className="mr-2 h-4 w-4" />
+                      Select or Add Work Types
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-full p-0" align="start">
+                    <Command>
+                      <CommandInput placeholder="Search work types..." />
+                      <CommandList>
+                        <CommandEmpty>
+                          <div className="p-2">
+                            <p className="text-sm text-muted-foreground mb-2">No work type found. Add custom:</p>
+                            <div className="flex gap-2">
+                              <Input
+                                placeholder="Custom work type"
+                                value={customWorkType}
+                                onChange={(e) => setCustomWorkType(e.target.value)}
+                                onKeyDown={(e) => {
+                                  if (e.key === 'Enter') {
+                                    e.preventDefault();
+                                    handleAddCustomWorkType();
+                                  }
+                                }}
+                              />
+                              <Button size="sm" onClick={handleAddCustomWorkType}>
+                                Add
+                              </Button>
+                            </div>
+                          </div>
+                        </CommandEmpty>
+                        <CommandGroup>
+                          {workTypes.map((type) => (
+                            <CommandItem
+                              key={type.id}
+                              onSelect={() => toggleWorkType(type.name)}
+                            >
+                              <div className="flex items-center gap-2">
+                                <div className={`w-4 h-4 border rounded flex items-center justify-center ${
+                                  selectedWorkTypes.includes(type.name) ? 'bg-primary border-primary' : ''
+                                }`}>
+                                  {selectedWorkTypes.includes(type.name) && (
+                                    <Check className="w-3 h-3 text-primary-foreground" />
+                                  )}
+                                </div>
+                                {type.name}
+                              </div>
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                    <div className="p-2 border-t">
+                      <div className="flex gap-2">
+                        <Input
+                          placeholder="Add custom work type..."
+                          value={customWorkType}
+                          onChange={(e) => setCustomWorkType(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              e.preventDefault();
+                              handleAddCustomWorkType();
+                            }
+                          }}
+                        />
+                        <Button size="sm" onClick={handleAddCustomWorkType}>
+                          <Plus className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </PopoverContent>
+                </Popover>
+                {selectedWorkTypes.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {selectedWorkTypes.map((type) => (
+                      <Badge key={type} variant="secondary" className="gap-1">
+                        {type}
+                        <X
+                          className="w-3 h-3 cursor-pointer"
+                          onClick={() => removeWorkType(type)}
+                        />
+                      </Badge>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div className="space-y-2">
                 <Label htmlFor="notes">Notes</Label>
                 <Textarea
                   id="notes"
@@ -395,6 +565,7 @@ const AdminClients = () => {
                 <TableHead>Client</TableHead>
                 <TableHead>Contact</TableHead>
                 <TableHead>Company</TableHead>
+                <TableHead>Work Types</TableHead>
                 <TableHead>Location</TableHead>
                 <TableHead>Added</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
@@ -426,6 +597,20 @@ const AdminClients = () => {
                         {client.company}
                       </div>
                     )}
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex flex-wrap gap-1">
+                      {client.work_types?.slice(0, 2).map((type) => (
+                        <Badge key={type} variant="outline" className="text-xs">
+                          {type}
+                        </Badge>
+                      ))}
+                      {client.work_types && client.work_types.length > 2 && (
+                        <Badge variant="outline" className="text-xs">
+                          +{client.work_types.length - 2}
+                        </Badge>
+                      )}
+                    </div>
                   </TableCell>
                   <TableCell>
                     {client.city && client.state && (
