@@ -20,7 +20,8 @@ import {
   DollarSign,
   FileText,
   Calendar,
-  Eye
+  Eye,
+  Send
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -197,6 +198,33 @@ const AdminClients = () => {
     setSelectedClient(client);
     setDetailsOpen(true);
     await fetchClientDetails(client.id);
+  };
+
+  const handleSendWelcomeEmail = async (client: Client) => {
+    try {
+      const { error } = await supabase.functions.invoke('send-welcome-email', {
+        body: {
+          clientName: client.name,
+          clientEmail: client.email,
+          clientPhone: client.phone,
+          clientCompany: client.company
+        }
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Success",
+        description: `Welcome email sent to ${client.name}`
+      });
+    } catch (error) {
+      console.error('Error sending welcome email:', error);
+      toast({
+        title: "Error",
+        description: "Failed to send welcome email",
+        variant: "destructive"
+      });
+    }
   };
 
   const filteredClients = clients.filter(client =>
@@ -412,6 +440,14 @@ const AdminClients = () => {
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleSendWelcomeEmail(client)}
+                        title="Send Welcome Email"
+                      >
+                        <Send className="h-4 w-4 text-primary" />
+                      </Button>
                       <Button
                         variant="ghost"
                         size="sm"
