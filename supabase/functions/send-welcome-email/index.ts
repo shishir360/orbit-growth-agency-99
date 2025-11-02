@@ -245,7 +245,7 @@ const handler = async (req: Request): Promise<Response> => {
     `;
 
     const { error: emailError } = await resend.emails.send({
-      from: "Lunexo Media <onboarding@resend.dev>",
+      from: "Lunexo Media <hello@lunexomedia.com>",
       to: [clientEmail],
       subject: `🎉 Welcome ${clientName}! - Lunexo Media`,
       html: welcomeEmailHtml,
