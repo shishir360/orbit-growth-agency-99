@@ -284,7 +284,9 @@ const AdminClients = () => {
           clientName: client.name,
           clientEmail: client.email,
           clientPhone: client.phone,
-          clientCompany: client.company
+          clientCompany: client.company,
+          workTypes: client.work_types || [],
+          notes: client.notes || ''
         }
       });
 

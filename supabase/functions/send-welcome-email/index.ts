@@ -13,6 +13,8 @@ interface WelcomeEmailRequest {
   clientEmail: string;
   clientPhone?: string;
   clientCompany?: string;
+  workTypes?: string[];
+  notes?: string;
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -21,7 +23,7 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const { clientName, clientEmail, clientPhone, clientCompany }: WelcomeEmailRequest = await req.json();
+    const { clientName, clientEmail, clientPhone, clientCompany, workTypes, notes }: WelcomeEmailRequest = await req.json();
 
     const welcomeEmailHtml = `
       <!DOCTYPE html>
@@ -100,6 +102,48 @@ const handler = async (req: Request): Promise<Response> => {
               min-width: 120px; 
               color: #667eea; 
             }
+            .work-types-box {
+              background: #fff7ed;
+              border-left: 5px solid #f97316;
+              padding: 20px;
+              margin: 20px 0;
+              border-radius: 8px;
+            }
+            .work-types-box h3 {
+              color: #f97316;
+              margin-top: 0;
+              font-size: 18px;
+              font-weight: 600;
+            }
+            .work-type-tag {
+              display: inline-block;
+              background: #fff;
+              color: #f97316;
+              padding: 8px 16px;
+              margin: 6px 6px 6px 0;
+              border-radius: 20px;
+              font-size: 14px;
+              font-weight: 500;
+              border: 2px solid #fed7aa;
+            }
+            .notes-box {
+              background: #f0fdf4;
+              border-left: 5px solid #22c55e;
+              padding: 20px;
+              margin: 20px 0;
+              border-radius: 8px;
+            }
+            .notes-box h3 {
+              color: #22c55e;
+              margin-top: 0;
+              font-size: 18px;
+              font-weight: 600;
+            }
+            .notes-box p {
+              color: #166534;
+              line-height: 1.6;
+              margin: 0;
+            }
             .cta-button { 
               display: inline-block; 
               background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
@@ -162,38 +206,39 @@ const handler = async (req: Request): Promise<Response> => {
         <body>
           <div class="container">
             <div class="header">
-              <h1>🎉 Welcome to Our Family!</h1>
-              <p>We're excited to have you on board</p>
+              <h1>🎉 Welcome to Luxeno Media!</h1>
+              <p>Your success is our priority</p>
             </div>
             
             <div class="content">
-              <div class="greeting">Hello ${clientName}! 👋</div>
-              
+              <div class="greeting">Welcome to Luxeno Media, ${clientName}!</div>
               <p class="message">
-                Thank you for choosing to work with us! We're absolutely thrilled to welcome you as our valued client. 
-                Your trust in our services means the world to us, and we're committed to delivering exceptional results 
-                that exceed your expectations.
+                We're thrilled to welcome you to Luxeno Media! Thank you for trusting us with your business needs. 
+                We're committed to delivering exceptional results and providing you with outstanding service every step of the way.
               </p>
-
+              
               <div class="info-box">
-                <h2>Your Client Profile</h2>
-                <div class="info-item">
-                  <strong>Name:</strong> <span>${clientName}</span>
-                </div>
-                <div class="info-item">
-                  <strong>Email:</strong> <span>${clientEmail}</span>
-                </div>
-                ${clientPhone ? `
-                <div class="info-item">
-                  <strong>Phone:</strong> <span>${clientPhone}</span>
-                </div>
-                ` : ''}
-                ${clientCompany ? `
-                <div class="info-item">
-                  <strong>Company:</strong> <span>${clientCompany}</span>
-                </div>
-                ` : ''}
+                <h2>📋 Your Account Details</h2>
+                ${clientCompany ? `<div class="info-item"><strong>Company:</strong> ${clientCompany}</div>` : ''}
+                ${clientPhone ? `<div class="info-item"><strong>Phone:</strong> ${clientPhone}</div>` : ''}
+                <div class="info-item"><strong>Email:</strong> ${clientEmail}</div>
               </div>
+
+              ${workTypes && workTypes.length > 0 ? `
+              <div class="work-types-box">
+                <h3>🎯 Services We'll Provide</h3>
+                <div>
+                  ${workTypes.map(type => `<span class="work-type-tag">${type}</span>`).join('')}
+                </div>
+              </div>
+              ` : ''}
+
+              ${notes ? `
+              <div class="notes-box">
+                <h3>📝 Project Notes</h3>
+                <p>${notes}</p>
+              </div>
+              ` : ''}
 
               <div class="benefits">
                 <h2 style="margin-top: 0; color: #667eea; font-size: 18px;">What You Can Expect From Us:</h2>
