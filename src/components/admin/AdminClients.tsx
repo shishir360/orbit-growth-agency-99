@@ -658,9 +658,9 @@ const AdminClients = () => {
 
       {/* Client Details Dialog */}
       <Dialog open={detailsOpen} onOpenChange={setDetailsOpen}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto w-[95vw] sm:w-full">
           <DialogHeader>
-            <DialogTitle>Client Details</DialogTitle>
+            <DialogTitle className="text-lg sm:text-xl">Client Details</DialogTitle>
           </DialogHeader>
 
           {selectedClient && (
