@@ -246,10 +246,10 @@ const Terms = () => {
             
             <div className="text-center">
               <Button size="lg" asChild className="text-xl font-bold px-12 py-6 rounded-2xl mr-4">
-                <Link to="/contact">Contact Legal Team</Link>
+                <a href="/contact">Contact Legal Team</a>
               </Button>
               <Button size="lg" variant="outline" asChild className="text-xl font-bold px-12 py-6 rounded-2xl border-2 border-primary/30">
-                <Link to="/privacy">View Privacy Policy</Link>
+                <a href="/privacy">View Privacy Policy</a>
               </Button>
             </div>
           </div>
