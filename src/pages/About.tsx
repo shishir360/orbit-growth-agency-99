@@ -2,173 +2,117 @@ import { useEffect } from "react";
 import Navigation from "@/components/ui/navigation";
 import Footer from "@/components/ui/footer";
 import { Button } from "@/components/ui/button";
-// React Router Link removed for full page reloads
 import SEO from "@/components/ui/seo";
-import { Check, Zap, Clock, Users, Heart, ArrowRight, Sparkles, Code, Palette, Rocket, Target, Globe, Bot, Star, Award, TrendingUp } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { Check, Zap, Users, Heart, ArrowRight, Sparkles, Globe, Target, Bot, Star, Award, TrendingUp, Shield, Clock } from "lucide-react";
+import { Link } from "react-router-dom";
 import founderImage from "@/assets/founder-farhan.jpg";
 
 const About = () => {
-  const services = [
-    {
-      icon: <Globe className="w-10 h-10" />,
-      bgGradient: "from-blue-500 via-purple-500 to-indigo-600",
-      iconBg: "bg-gradient-to-br from-blue-100 to-purple-100",
-      title: "Website Design & Development", 
-      description: "We create stunning, high-converting websites that not only look incredible but drive real business results. From concept to launch, every detail is crafted to perfection.",
-      perfectFor: ["Small Businesses", "E-commerce Stores", "Professional Services", "SaaS Platforms"],
-      included: ["Custom responsive design", "Advanced SEO optimization", "Performance optimization", "CMS integration", "E-commerce functionality"],
-      cta: "Start Your Website",
-      accent: "bg-gradient-to-r from-blue-600 to-purple-600",
-      stats: "300+ websites built"
-    },
-    {
-      icon: <Target className="w-10 h-10" />,
-      bgGradient: "from-emerald-500 via-teal-500 to-cyan-500",
-      iconBg: "bg-gradient-to-br from-emerald-100 to-teal-100",
-      title: "Google & Facebook Ads",
-      description: "Data-driven advertising campaigns that maximize your ROI. We don't just run ads - we create strategic campaigns that turn clicks into customers and scale your business profitably.",
-      perfectFor: ["Lead Generation", "E-commerce Sales", "Brand Awareness", "Local Businesses"],
-      included: ["Campaign strategy & setup", "Ad creative development", "Advanced targeting", "Performance optimization", "Detailed analytics & reporting"],
-      cta: "Scale Your Ads",
-      accent: "bg-gradient-to-r from-emerald-600 to-teal-600",
-      stats: "$10K+ ad spend managed"
-    },
-    {
-      icon: <Bot className="w-10 h-10" />,
-      bgGradient: "from-purple-500 via-pink-500 to-rose-500",
-      iconBg: "bg-gradient-to-br from-purple-100 to-pink-100",
-      title: "AI Automation Solutions",
-      description: "Transform your business operations with intelligent automation. From chatbots to workflow automation, we help you work smarter, not harder, with cutting-edge AI technology.",
-      perfectFor: ["Customer Support", "Lead Qualification", "Data Processing", "Marketing Automation"],
-      included: ["AI chatbot development", "Workflow automation", "CRM integrations", "Custom AI models", "24/7 monitoring & support"],
-      cta: "Automate Your Business",
-      accent: "bg-gradient-to-r from-purple-600 to-pink-600",
-      stats: "80% efficiency increase"
-    }
-  ];
-
-  const whyChooseUs = [
-    {
-      icon: <Award className="w-10 h-10" />,
-      title: "Proven Results",
-      description: "Track record of delivering measurable growth for 500+ businesses",
-      color: "from-yellow-500 to-orange-500"
-    },
-    {
-      icon: <Zap className="w-10 h-10" />,
-      title: "Lightning Fast", 
-      description: "Get your project launched in weeks, not months",
-      color: "from-blue-500 to-purple-500"
-    },
-    {
-      icon: <Heart className="w-10 h-10" />,
-      title: "White-Glove Service",
-      description: "Dedicated support and personalized attention for every client",
-      color: "from-pink-500 to-rose-500"
-    },
-    {
-      icon: <TrendingUp className="w-10 h-10" />,
-      title: "Growth Focused",
-      description: "Every solution is designed to scale and grow with your business",
-      color: "from-emerald-500 to-teal-500"
-    }
-  ];
-
-  const approach = [
-    "Fast turnaround on all projects",
-    "User-focused design principles", 
-    "Ongoing support & maintenance"
-  ];
-
   useEffect(() => {
     document.title = "About Lunexo Media | Your Partner in Digital Growth";
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription) {
-      metaDescription.setAttribute('content', 'Learn more about Lunexo Media, our mission, vision, and expert team dedicated to driving your business success with innovative marketing.');
-    }
   }, []);
 
+  const services = [
+    {
+      icon: Globe,
+      title: "Website Design",
+      description: "Stunning, high-converting websites that drive business results.",
+      stats: "300+ websites built",
+      color: "from-red-500 to-orange-500"
+    },
+    {
+      icon: Target,
+      title: "Ads Management",
+      description: "Data-driven campaigns that maximize your ROI.",
+      stats: "$10K+ ad spend managed",
+      color: "from-orange-500 to-yellow-500"
+    },
+    {
+      icon: Bot,
+      title: "AI Automation",
+      description: "Intelligent automation that streamlines operations.",
+      stats: "80% efficiency increase",
+      color: "from-purple-500 to-pink-500"
+    }
+  ];
+
+  const values = [
+    { icon: Award, title: "Proven Results", desc: "Track record of delivering measurable growth", color: "from-yellow-500 to-orange-500" },
+    { icon: Zap, title: "Lightning Fast", desc: "Get your project launched in weeks, not months", color: "from-blue-500 to-purple-500" },
+    { icon: Heart, title: "White-Glove Service", desc: "Dedicated support for every client", color: "from-pink-500 to-rose-500" },
+    { icon: TrendingUp, title: "Growth Focused", desc: "Every solution designed to scale", color: "from-emerald-500 to-teal-500" }
+  ];
+
   return (
-    <div className="min-h-screen bg-background relative overflow-hidden">
+    <div className="min-h-screen bg-[#0a0a0f]">
       <SEO
         title="About Lunexo Media | Your Partner in Digital Growth"
-        description="Learn more about Lunexo Media, our mission, vision, and expert team dedicated to driving your business success with innovative marketing."
+        description="Learn more about Lunexo Media, our mission, vision, and expert team dedicated to driving your business success."
         image="https://www.lunexomedia.com/og-image-new.jpg"
         url="https://www.lunexomedia.com/about"
-        keywords="about us, digital agency, Farhan Tanvir, our story, our mission, digital marketing team"
+        keywords="about us, digital agency, Farhan Tanvir, our story, digital marketing team"
       />
-      
-      {/* Background Effects */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-blue-500/20 to-purple-600/20 rounded-full blur-3xl"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-emerald-500/20 to-cyan-600/20 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-br from-purple-500/10 to-pink-600/10 rounded-full blur-3xl"></div>
-      </div>
       
       <Navigation />
       
       {/* Hero Section */}
-      <section className="relative py-20 lg:py-32 ultra-premium-hero">
-        <div className="container-wide section-padding relative z-10">
+      <section className="relative min-h-[80vh] flex items-center overflow-hidden">
+        <div className="absolute top-20 left-10 w-[500px] h-[500px] bg-gradient-to-r from-blue-600/20 to-cyan-500/15 rounded-full blur-[150px] animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-[400px] h-[400px] bg-gradient-to-r from-purple-600/15 to-pink-500/10 rounded-full blur-[120px] animate-pulse"></div>
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.015)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.015)_1px,transparent_1px)] bg-[size:80px_80px]"></div>
+        
+        <div className="container-wide section-padding relative z-10 pt-24">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div className="animate-fade-in">
-              <div className="inline-flex items-center gap-2 px-6 py-3 text-sm font-medium text-primary bg-white/60 backdrop-blur-sm border border-white/20 rounded-full mb-8 shadow-lg">
+            <div className="space-y-8">
+              <div className="inline-flex items-center gap-3 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border border-blue-500/20 text-blue-400 px-6 py-3 rounded-full text-sm font-medium backdrop-blur-xl">
                 <Sparkles className="w-4 h-4" />
                 Our Story
               </div>
-              <h1 className="text-5xl lg:text-7xl font-bold mb-8 leading-tight">
-                <span className="bg-gradient-to-r from-gray-900 via-blue-800 to-purple-800 bg-clip-text text-transparent">
-                  About Lunexo Media
+              
+              <h1 className="text-4xl lg:text-6xl font-bold text-white leading-tight" style={{fontFamily: "'Playfair Display', serif"}}>
+                About
+                <br />
+                <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-teal-400 bg-clip-text text-transparent">
+                  Lunexo Media
                 </span>
               </h1>
-              <p className="text-xl text-muted-foreground leading-relaxed mb-6">
-                We're not just another digital agency. We're your strategic partner in building 
-                <span className="font-semibold premium-gradient-text"> scalable, profitable digital solutions</span> that drive real business growth.
-              </p>
-              <p className="text-lg text-muted-foreground leading-relaxed mb-8">
-                From stunning websites to powerful AI automation, we combine cutting-edge technology with proven strategies to deliver exceptional results.
+              
+              <p className="text-lg text-white/50 leading-relaxed max-w-xl">
+                We're not just another digital agency. We're your strategic partner in building scalable, profitable digital solutions that drive real business growth.
               </p>
               
-              {/* Stats */}
-              <div className="grid grid-cols-3 gap-6 mb-8">
+              <div className="grid grid-cols-3 gap-6">
                 {[
-                  { number: "50+", label: "Clients Served" },
-                  { number: "300+", label: "Websites Built" },
-                  { number: "$10K+", label: "Ad Spend Managed" }
-                ].map((stat, index) => (
-                  <div key={index} className="text-center">
-                    <div className="text-2xl font-bold premium-gradient-text">{stat.number}</div>
-                    <div className="text-sm text-muted-foreground">{stat.label}</div>
+                  { number: "50+", label: "Clients" },
+                  { number: "300+", label: "Projects" },
+                  { number: "$10K+", label: "Revenue" }
+                ].map((stat, i) => (
+                  <div key={i} className="text-center bg-white/5 border border-white/10 rounded-xl p-4">
+                    <div className="text-2xl font-bold text-white">{stat.number}</div>
+                    <div className="text-xs text-white/50 uppercase tracking-wider">{stat.label}</div>
                   </div>
                 ))}
               </div>
               
-              <Button asChild size="lg" className="group bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white border-0 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
-                <a href="/contact">
-                  Start Your Project
-                  <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </a>
+              <Button asChild size="lg" className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white hover:from-blue-600 hover:to-cyan-600 rounded-full px-8">
+                <Link to="/contact">
+                  Start Your Project <ArrowRight className="w-4 h-4 ml-2" />
+                </Link>
               </Button>
             </div>
             
-            <div className="relative animate-fade-in delay-200">
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-3xl blur-xl"></div>
-              <div className="luxury-card relative p-8">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-3 h-3 bg-red-400 rounded-full"></div>
-                  <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
-                  <div className="w-3 h-3 bg-green-400 rounded-full"></div>
-                  <span className="text-sm text-muted-foreground ml-2">Our Mission</span>
-                </div>
-                <h3 className="text-2xl font-bold mb-6 bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
-                  Making Digital Growth Accessible
-                </h3>
-                <div className="space-y-4">
-                  {approach.map((item, index) => (
-                    <div key={index} className="flex items-center gap-4 group hover:bg-white/50 p-3 rounded-xl transition-all duration-200">
-                      <div className="w-2 h-2 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex-shrink-0 group-hover:scale-150 transition-transform"></div>
-                      <span className="text-foreground font-medium">{item}</span>
+            <div className="relative">
+              <div className="absolute -inset-6 bg-gradient-to-r from-blue-500/30 to-cyan-500/20 rounded-3xl blur-3xl opacity-50"></div>
+              <div className="relative bg-white/5 border border-white/10 rounded-2xl p-8 backdrop-blur-sm">
+                <h3 className="text-xl font-bold text-white mb-6">Our Mission</h3>
+                <p className="text-white/60 leading-relaxed mb-6">
+                  Making digital growth accessible to businesses of all sizes through innovative technology and proven strategies.
+                </p>
+                <div className="space-y-3">
+                  {["Fast turnaround on all projects", "User-focused design principles", "Ongoing support & maintenance"].map((item, i) => (
+                    <div key={i} className="flex items-center gap-3 text-white/70">
+                      <Check className="w-5 h-5 text-green-400" />
+                      {item}
                     </div>
                   ))}
                 </div>
@@ -178,85 +122,32 @@ const About = () => {
         </div>
       </section>
 
-      {/* Services Section */}
-      <section className="relative py-20 bg-gradient-to-b from-transparent to-gray-50/30">
+      {/* Services */}
+      <section className="py-32 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-r from-purple-600/10 to-pink-500/10 rounded-full blur-[150px]"></div>
+        
         <div className="container-wide section-padding relative z-10">
           <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 px-6 py-3 text-sm font-medium text-purple-600 bg-purple-100/60 backdrop-blur-sm border border-purple-200/50 rounded-full mb-6">
-              <Code className="w-4 h-4" />
+            <div className="inline-flex items-center gap-3 bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/20 text-purple-400 px-6 py-3 rounded-full text-sm font-medium mb-8">
+              <Star className="w-4 h-4" />
               Our Expertise
             </div>
-            <h2 className="text-4xl lg:text-6xl font-bold mb-6 bg-gradient-to-r from-gray-900 via-blue-800 to-purple-800 bg-clip-text text-transparent">
-              Our Mission & Vision
+            <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6" style={{fontFamily: "'Playfair Display', serif"}}>
+              What We <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">Do Best</span>
             </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Three core services designed to accelerate your digital growth and maximize your success
-            </p>
           </div>
           
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {services.map((service, index) => (
-              <div key={index} className="group relative">
-                {/* Glow effect */}
-                <div className={`absolute inset-0 bg-gradient-to-r ${service.bgGradient} rounded-3xl blur-xl opacity-20 group-hover:opacity-30 transition-opacity duration-500`}></div>
-                
-                <div className="luxury-card relative h-full p-8">
-                  <div className="text-center mb-8">
-                    <div className={`w-20 h-20 bg-gradient-to-r ${service.bgGradient} rounded-2xl flex items-center justify-center mx-auto mb-6 text-white shadow-lg group-hover:scale-110 transition-transform duration-300`}>
-                      {service.icon}
-                    </div>
-                    <h3 className="text-2xl font-bold mb-3 bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
-                      {service.title}
-                    </h3>
-                    <Badge variant="outline" className="mb-4">
-                      {service.stats}
-                    </Badge>
+            {services.map((service, i) => (
+              <div key={i} className="group relative">
+                <div className={`absolute inset-0 bg-gradient-to-r ${service.color} rounded-2xl blur-xl opacity-0 group-hover:opacity-20 transition-opacity duration-500`}></div>
+                <div className="relative bg-white/5 border border-white/10 rounded-2xl p-8 backdrop-blur-sm hover:bg-white/8 transition-all duration-300 h-full text-center">
+                  <div className={`w-20 h-20 rounded-xl bg-gradient-to-r ${service.color} flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:scale-110 transition-transform`}>
+                    <service.icon className="w-10 h-10 text-white" />
                   </div>
-                  
-                  <p className="text-muted-foreground leading-relaxed mb-8 text-center">
-                    {service.description}
-                  </p>
-
-                  <div className="mb-8">
-                    <div className="flex items-center gap-2 mb-4">
-                      <Star className="w-5 h-5 text-yellow-500" />
-                      <span className="text-sm font-bold text-foreground">Perfect for:</span>
-                    </div>
-                    <div className="space-y-2">
-                      {service.perfectFor.map((item, idx) => (
-                        <div key={idx} className="flex items-center gap-3 p-2 rounded-lg hover:bg-white/50 transition-colors">
-                          <div className="w-2 h-2 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"></div>
-                          <span className="text-sm text-muted-foreground font-medium">{item}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="mb-8">
-                    <div className="flex items-center gap-2 mb-4">
-                      <Check className="w-5 h-5 text-green-500" />
-                      <span className="text-sm font-bold text-foreground">What's Included:</span>
-                    </div>
-                    <div className="space-y-2">
-                      {service.included.map((item, idx) => (
-                        <div key={idx} className="flex items-start gap-3 p-2 rounded-lg hover:bg-white/50 transition-colors">
-                          <Check className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
-                          <span className="text-sm text-muted-foreground">{item}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <Button 
-                    asChild 
-                    className={`w-full group/btn ${service.accent} hover:shadow-xl hover:scale-105 transition-all duration-300 text-white border-0`}
-                    size="lg"
-                  >
-                    <a href="/contact">
-                      {service.cta} 
-                      <ArrowRight className="ml-2 w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-                    </a>
-                  </Button>
+                  <div className="text-sm text-white/40 mb-2">{service.stats}</div>
+                  <h3 className="text-2xl font-bold text-white mb-4">{service.title}</h3>
+                  <p className="text-white/50">{service.description}</p>
                 </div>
               </div>
             ))}
@@ -264,104 +155,106 @@ const About = () => {
         </div>
       </section>
 
-      {/* Why Choose Us Section */}
-      <section className="relative py-20 bg-gradient-to-br from-gray-50/50 to-blue-50/30">
+      {/* Values */}
+      <section className="py-32 relative overflow-hidden">
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-r from-green-600/10 to-emerald-500/10 rounded-full blur-[150px]"></div>
+        
         <div className="container-wide section-padding relative z-10">
           <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 px-6 py-3 text-sm font-medium text-indigo-600 bg-indigo-100/60 backdrop-blur-sm border border-indigo-200/50 rounded-full mb-6">
-              <Heart className="w-4 h-4" />
+            <div className="inline-flex items-center gap-3 bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/20 text-green-400 px-6 py-3 rounded-full text-sm font-medium mb-8">
+              <Shield className="w-4 h-4" />
               Why Choose Us
             </div>
-            <h2 className="text-4xl lg:text-6xl font-bold mb-6 bg-gradient-to-r from-gray-900 via-indigo-800 to-purple-800 bg-clip-text text-transparent">
-              Meet Our Team
+            <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6" style={{fontFamily: "'Playfair Display', serif"}}>
+              Our <span className="bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">Values</span>
             </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              We don't just deliver projects—we create partnerships that drive long-term success and measurable growth.
-            </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {whyChooseUs.map((item, index) => (
-              <div key={index} className="group relative">
-                <div className={`absolute inset-0 bg-gradient-to-r ${item.color} rounded-2xl blur-xl opacity-20 group-hover:opacity-30 transition-opacity duration-500`}></div>
-                <div className="luxury-card relative text-center h-full p-8">
-                  <div className={`w-20 h-20 bg-gradient-to-r ${item.color} rounded-2xl flex items-center justify-center mx-auto mb-6 text-white shadow-lg group-hover:scale-110 transition-transform duration-300`}>
-                    {item.icon}
-                  </div>
-                  <h3 className="text-xl font-bold mb-4 bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">{item.title}</h3>
-                  <p className="text-muted-foreground leading-relaxed">{item.description}</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {values.map((value, i) => (
+              <div key={i} className="group bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-sm hover:bg-white/8 transition-all duration-300 text-center">
+                <div className={`w-16 h-16 rounded-xl bg-gradient-to-r ${value.color} flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:scale-110 transition-transform`}>
+                  <value.icon className="w-8 h-8 text-white" />
                 </div>
+                <h3 className="text-lg font-bold text-white mb-2">{value.title}</h3>
+                <p className="text-white/50 text-sm">{value.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Founder Note Section */}
-      <section className="relative py-20 bg-white">
+      {/* Founder */}
+      <section className="py-32 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-r from-teal-600/10 to-cyan-500/10 rounded-full blur-[150px]"></div>
+        
         <div className="container-wide section-padding relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="relative group">
-              <div className="absolute inset-0 bg-gradient-to-br from-teal-500/20 to-blue-600/20 rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-500"></div>
-              <div className="relative bg-gradient-to-br from-teal-500 to-blue-600 rounded-3xl p-8 lg:p-12 flex items-center justify-center shadow-2xl group-hover:scale-105 transition-transform duration-500">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div className="relative">
+              <div className="absolute -inset-6 bg-gradient-to-r from-teal-500/30 to-cyan-500/20 rounded-3xl blur-3xl opacity-50"></div>
+              <div className="relative bg-gradient-to-br from-teal-500 to-cyan-500 rounded-3xl p-8 flex items-center justify-center">
                 <img
                   src={founderImage}
                   alt="Farhan Tanvir - Founder & CEO"
-                  className="w-40 h-40 rounded-full object-cover border-4 border-white shadow-xl"
+                  className="w-48 h-48 rounded-full object-cover border-4 border-white shadow-2xl"
                 />
               </div>
             </div>
+            
             <div className="space-y-6">
-              <div className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-teal-600 bg-teal-100/60 backdrop-blur-sm border border-teal-200/50 rounded-full">
+              <div className="inline-flex items-center gap-3 bg-gradient-to-r from-teal-500/10 to-cyan-500/10 border border-teal-500/20 text-teal-400 px-6 py-3 rounded-full text-sm font-medium">
                 <Users className="w-4 h-4" />
                 Meet Our Founder
               </div>
-              <h2 className="text-4xl lg:text-5xl font-bold bg-gradient-to-r from-gray-900 via-teal-800 to-blue-800 bg-clip-text text-transparent">
-                Our Story
+              
+              <h2 className="text-4xl lg:text-5xl font-bold text-white" style={{fontFamily: "'Playfair Display', serif"}}>
+                Farhan <span className="bg-gradient-to-r from-teal-400 to-cyan-400 bg-clip-text text-transparent">Tanvir</span>
               </h2>
-              <div className="prose prose-xl text-gray-600 space-y-6">
-                <p className="text-lg leading-relaxed">
-                  Hi, I'm Farhan Tanvir, Founder & CEO of Lunexo Media. I started Lunexo Media with a clear vision – to help businesses grow faster and smarter through modern web design, SEO, and digital marketing solutions.
-                </p>
-                <p className="text-lg leading-relaxed">
-                  With strong expertise in website development, search engine optimization, social media marketing, and AI-driven automation tools, I have helped businesses build a professional online presence that attracts customers and increases sales.
-                </p>
-                <p className="text-lg leading-relaxed">
-                  At Lunexo Media, we believe every business deserves the right digital strategy to succeed. That's why we offer comprehensive solutions tailored to your unique needs and goals.
-                </p>
-                <p className="text-2xl font-bold bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">— Farhan Tanvir</p>
-              </div>
+              
+              <p className="text-white/50 leading-relaxed">
+                I started Lunexo Media with a clear vision – to help businesses grow faster and smarter through modern web design, SEO, and digital marketing solutions.
+              </p>
+              
+              <p className="text-white/50 leading-relaxed">
+                With years of experience in the digital space, I've helped countless businesses transform their online presence and achieve their goals.
+              </p>
+              
+              <Button asChild className="bg-gradient-to-r from-teal-500 to-cyan-500 text-white hover:from-teal-600 hover:to-cyan-600 rounded-full px-8">
+                <Link to="/founder">
+                  Learn More <ArrowRight className="w-4 h-4 ml-2" />
+                </Link>
+              </Button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="relative py-20 bg-gradient-to-br from-blue-600 via-purple-600 to-teal-600 text-white overflow-hidden">
-        <div className="absolute inset-0 bg-black/10"></div>
-        <div className="absolute -top-20 -right-20 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
-        <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
+      {/* CTA */}
+      <section className="py-32 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 via-transparent to-purple-600/10"></div>
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded-full blur-[100px]"></div>
         
-        <div className="container-wide section-padding text-center relative z-10">
-          <div className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white/80 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full mb-8">
-            <Rocket className="w-4 h-4" />
-            Ready to Launch?
+        <div className="container-wide section-padding relative z-10">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-4xl lg:text-6xl font-bold text-white mb-6" style={{fontFamily: "'Playfair Display', serif"}}>
+              Ready to <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">Get Started?</span>
+            </h2>
+            <p className="text-lg text-white/50 mb-10 max-w-2xl mx-auto">
+              Let's discuss your project and create a strategy for success.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button asChild size="lg" className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white hover:from-blue-600 hover:to-cyan-600 rounded-full px-10 py-7">
+                <Link to="/contact">
+                  Start Your Project <ArrowRight className="w-4 h-4 ml-2" />
+                </Link>
+              </Button>
+              <Button asChild variant="outline" size="lg" className="border border-white/20 text-white bg-white/5 hover:bg-white/10 rounded-full px-10 py-7">
+                <Link to="/portfolio">
+                  View Our Work
+                </Link>
+              </Button>
+            </div>
           </div>
-          <h2 className="text-4xl lg:text-6xl font-bold mb-8 text-white">
-            Let's Build Something
-            <span className="block bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
-              Amazing Together
-            </span>
-          </h2>
-          <p className="text-xl mb-10 opacity-90 max-w-3xl mx-auto leading-relaxed">
-            Need help deciding between a website or an AI automation? Book a free discovery call—we'll walk you through both options and help map out a plan.
-          </p>
-          <Button asChild size="lg" className="group bg-white text-gray-900 hover:bg-gray-100 text-xl px-10 py-6 shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-105">
-            <a href="/book-apartment">
-              Book a Discovery Call 
-              <ArrowRight className="ml-3 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </a>
-          </Button>
         </div>
       </section>
 

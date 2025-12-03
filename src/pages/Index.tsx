@@ -2,112 +2,16 @@ import { YouTubeFacade } from '@/components/ui/youtube-facade';
 import { Button } from "@/components/ui/button";
 import Navigation from "@/components/ui/navigation";
 import Footer from "@/components/ui/footer";
-import ServiceCard from "@/components/ui/service-card";
-import TestimonialCard from "@/components/ui/testimonial-card";
 import TrustedBy from "@/components/ui/trusted-by";
 import SEO from "@/components/ui/seo";
 import { useContent } from "@/contexts/ContentContext";
-import { Globe, Target, Bot, Sparkles, ArrowRight, Zap, Check, Star, Calendar, Users, Award, TrendingUp, Play, ChevronRight } from "lucide-react";
-import { lazy, Suspense } from "react";
-
-// Proper ES6 image imports
-import heroDashboard from "@/assets/hero-dashboard-optimized.webp";
-import websiteDesignHero from "@/assets/website-design-hero.jpg";
-import adsManagementHero from "@/assets/ads-management-hero.jpg";
-import aiAutomationHero from "@/assets/ai-automation-hero.jpg";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { ExternalLink } from "lucide-react";
+import { Globe, Target, Bot, Sparkles, ArrowRight, Zap, Check, Star, Calendar, Users, Award, TrendingUp, Play, ChevronRight, MessageSquare, Clock, Shield } from "lucide-react";
 import { useEffect, useState, useMemo } from "react";
+import heroDashboard from "@/assets/hero-dashboard-optimized.webp";
+import { Link } from "react-router-dom";
 
 const Index = () => {
   const { content } = useContent();
-  const [api2, setApi2] = useState<any>();
-  const [api3, setApi3] = useState<any>();
-
-  // Simplified auto-scroll for performance
-  useEffect(() => {
-    if (!api2) return;
-    const interval = setInterval(() => api2.scrollNext(), 6000);
-    return () => clearInterval(interval);
-  }, [api2]);
-
-  useEffect(() => {
-    if (!api3) return;
-    const interval = setInterval(() => api3.scrollNext(), 5000);
-    return () => clearInterval(interval);
-  }, [api3]);
-
-  // Lighter featured projects data (simplified)
-  const featuredProjects = useMemo(() => [
-    {
-      id: "device-rescue-nyc",
-      title: "DeviceRescue NYC",
-      description: "Expert device repair website with online booking and service catalog.",
-      category: "Website Design",
-      timeline: "3 weeks",
-      results: "200% booking increase",
-      liveUrl: "https://devicerescue.us/"
-    },
-    {
-      id: "fix-and-more", 
-      title: "Fix and More",
-      description: "Modern repair service website with professional design and e-commerce.",
-      category: "Website Design",
-      timeline: "4 weeks",
-      results: "150% conversion rate",
-      liveUrl: "https://fixandmore.us/"
-    }
-  ], []);
-
-  const getServiceIcon = (iconName: string) => {
-    switch (iconName) {
-      case 'Globe':
-        return <Globe className="w-6 h-6" />;
-      case 'Target':
-        return <Target className="w-6 h-6" />;
-      case 'Bot':
-        return <Bot className="w-6 h-6" />;
-      default:
-        return <Globe className="w-6 h-6" />;
-    }
-  };
-
-  const getServiceImage = useMemo(() => (imagePath: string) => {
-    switch (imagePath) {
-      case '/src/assets/website-design-hero.jpg':
-        return websiteDesignHero;
-      case '/src/assets/ads-management-hero.jpg':
-        return adsManagementHero;
-      case '/src/assets/ai-automation-hero.jpg':
-        return aiAutomationHero;
-      default:
-        return websiteDesignHero;
-    }
-  }, []);
-
-  const getHeroImage = useMemo(() => (imagePath: string) => {
-    switch (imagePath) {
-      case '/src/assets/hero-dashboard-optimized.webp':
-        return heroDashboard;
-      default:
-        return heroDashboard;
-    }
-  }, []);
-
-  const visibleServices = useMemo(() => 
-    content.services
-      .filter(service => service.visible)
-      .sort((a, b) => a.order - b.order)
-      .map(service => ({
-        title: service.title,
-        description: service.description,
-        icon: getServiceIcon(service.icon),
-        iconName: service.icon,
-        href: service.href,
-        image: getServiceImage(service.image),
-      })), [content.services, getServiceImage]);
 
   const visibleTestimonials = useMemo(() => 
     content.testimonials
@@ -115,7 +19,7 @@ const Index = () => {
       .sort((a, b) => a.order - b.order), [content.testimonials]);
 
   return (
-    <div className="min-h-screen bg-background relative overflow-hidden">
+    <div className="min-h-screen bg-[#0a0a0f]">
       <SEO
         title="Lunexo Media | Digital Marketing & Growth Solutions"
         description="Lunexo Media helps businesses grow with SEO, paid ads, web design, and AI automation. Get data-driven strategies to scale your brand."
@@ -123,9 +27,6 @@ const Index = () => {
         url="https://www.lunexomedia.com"
         keywords="digital marketing, SEO services, Google ads, web design, AI automation, business growth, Lunexo Media"
       />
-      
-      {/* Modern gradient mesh background */}
-      <div className="absolute inset-0 bg-gradient-mesh opacity-40"></div>
       
       <Navigation />
       
@@ -138,11 +39,6 @@ const Index = () => {
         
         {/* Grid pattern overlay */}
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.015)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.015)_1px,transparent_1px)] bg-[size:80px_80px]"></div>
-        
-        {/* Floating particles */}
-        <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-red-500/50 rounded-full animate-pulse"></div>
-        <div className="absolute top-1/3 right-1/3 w-1.5 h-1.5 bg-orange-500/50 rounded-full animate-pulse" style={{animationDelay: '0.5s'}}></div>
-        <div className="absolute bottom-1/3 left-1/3 w-1 h-1 bg-purple-500/50 rounded-full animate-pulse" style={{animationDelay: '1.5s'}}></div>
         
         <div className="container-wide section-padding relative z-10 pt-20">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
@@ -171,20 +67,20 @@ const Index = () => {
               
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
                 <Button asChild size="lg" className="group text-base px-10 py-7 bg-gradient-to-r from-red-500 to-orange-500 text-white hover:from-red-600 hover:to-orange-600 rounded-full transition-all duration-300 hover:scale-105 font-semibold shadow-lg shadow-red-500/25">
-                  <a href="/contact" className="flex items-center gap-2">
+                  <Link to="/contact" className="flex items-center gap-2">
                     Start Your Project
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </a>
+                  </Link>
                 </Button>
                 <Button asChild variant="outline" size="lg" className="group text-base px-10 py-7 border border-white/20 text-white bg-white/5 hover:bg-white/10 rounded-full transition-all duration-300 backdrop-blur-sm">
-                  <a href="/portfolio" className="flex items-center gap-2">
+                  <Link to="/portfolio" className="flex items-center gap-2">
                     <Play className="w-4 h-4" />
                     View Portfolio
-                  </a>
+                  </Link>
                 </Button>
               </div>
               
-              {/* Trust indicators - Enhanced */}
+              {/* Trust indicators */}
               <div className="flex items-center gap-6 lg:gap-10 pt-10 border-t border-white/10">
                 <div className="text-center">
                   <div className="text-3xl lg:text-4xl font-bold text-white">200%</div>
@@ -228,7 +124,7 @@ const Index = () => {
             </div>
           </div>
 
-          {/* Premium Service Pills - Enhanced */}
+          {/* Service Pills */}
           <div className="flex flex-wrap justify-center gap-4 mt-20 lg:mt-28">
             {[
               { icon: Globe, label: "Web Design", color: "from-red-500 to-orange-500", href: "/website-design" },
@@ -236,9 +132,9 @@ const Index = () => {
               { icon: Bot, label: "AI Automation", color: "from-purple-500 to-pink-500", href: "/ai-automation" },
               { icon: Sparkles, label: "Strategy", color: "from-blue-500 to-cyan-500", href: "/contact" },
             ].map((service, i) => (
-              <a 
+              <Link 
                 key={i} 
-                href={service.href}
+                to={service.href}
                 className="group flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/25 rounded-full px-6 py-4 transition-all duration-300 cursor-pointer hover:scale-105"
               >
                 <div className={`w-10 h-10 rounded-full bg-gradient-to-r ${service.color} flex items-center justify-center shadow-lg`}>
@@ -246,814 +142,166 @@ const Index = () => {
                 </div>
                 <span className="text-white/80 font-medium">{service.label}</span>
                 <ChevronRight className="w-4 h-4 text-white/40 group-hover:text-white/70 group-hover:translate-x-1 transition-all" />
-              </a>
+              </Link>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Ultra Premium Case Studies Preview */}
+      {/* Trusted By */}
+      <TrustedBy />
+
+      {/* Services Section */}
       <section className="py-32 bg-[#0a0a0f] relative overflow-hidden">
-        {/* Premium gradient orbs */}
-        <div className="absolute top-20 left-10 w-[500px] h-[500px] bg-gradient-to-r from-red-600/15 to-orange-500/10 rounded-full blur-[150px]"></div>
-        <div className="absolute bottom-20 right-10 w-[400px] h-[400px] bg-gradient-to-r from-purple-600/10 to-blue-500/10 rounded-full blur-[120px]"></div>
-        
-        {/* Grid pattern */}
+        <div className="absolute top-20 left-10 w-[500px] h-[500px] bg-gradient-to-r from-blue-600/15 to-cyan-500/10 rounded-full blur-[150px]"></div>
+        <div className="absolute bottom-20 right-10 w-[400px] h-[400px] bg-gradient-to-r from-purple-600/10 to-pink-500/10 rounded-full blur-[120px]"></div>
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.01)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.01)_1px,transparent_1px)] bg-[size:60px_60px]"></div>
         
         <div className="container-wide section-padding relative z-10">
-          <div className="relative max-w-6xl mx-auto">
-            {/* Premium Header */}
-            <div className="text-center mb-20 animate-fade-in">
-              <div className="inline-flex items-center gap-3 bg-gradient-to-r from-red-500/10 to-orange-500/10 border border-red-500/20 text-red-400 px-6 py-3 rounded-full text-sm font-medium backdrop-blur-xl mb-8">
-                <Zap className="w-4 h-4" />
-                Proven Results
-                <span className="w-1.5 h-1.5 bg-red-400 rounded-full animate-pulse"></span>
-              </div>
-              
-              <h2 className="text-4xl lg:text-6xl font-bold mb-6 text-white" style={{fontFamily: "'Playfair Display', serif"}}>
-                Core Services That
-                <br />
-                <span className="bg-gradient-to-r from-red-500 via-orange-400 to-yellow-400 bg-clip-text text-transparent">
-                  Drive Growth
-                </span>
-              </h2>
-              <p className="text-lg lg:text-xl text-white/50 max-w-3xl mx-auto leading-relaxed font-light">
-                SEO, Paid Ads, Web Design & AI Automation — transforming businesses into market leaders
-              </p>
+          <div className="text-center mb-20">
+            <div className="inline-flex items-center gap-3 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border border-blue-500/20 text-blue-400 px-6 py-3 rounded-full text-sm font-medium backdrop-blur-xl mb-8">
+              <Zap className="w-4 h-4" />
+              Our Services
+              <span className="w-1.5 h-1.5 bg-blue-400 rounded-full animate-pulse"></span>
             </div>
             
-            {/* Premium Stats Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-20">
-              {[
-                { value: "200%", label: "Conversion Increase", icon: TrendingUp, color: "from-red-500 to-orange-500" },
-                { value: "10x", label: "ROI Improvement", icon: Award, color: "from-orange-500 to-yellow-500" },
-                { value: "30 Days", label: "Average Launch", icon: Zap, color: "from-purple-500 to-pink-500" }
-              ].map((stat, i) => (
-                <div key={i} className="group relative bg-white/5 border border-white/10 rounded-2xl p-8 backdrop-blur-sm hover:bg-white/8 hover:border-white/20 transition-all duration-500">
-                  <div className="absolute -inset-1 bg-gradient-to-r opacity-0 group-hover:opacity-20 rounded-2xl blur-xl transition-opacity duration-500" style={{backgroundImage: `linear-gradient(to right, var(--tw-gradient-stops))`}}></div>
-                  <div className={`w-14 h-14 rounded-xl bg-gradient-to-r ${stat.color} flex items-center justify-center mb-6 shadow-lg`}>
-                    <stat.icon className="w-7 h-7 text-white" />
+            <h2 className="text-4xl lg:text-6xl font-bold mb-6 text-white" style={{fontFamily: "'Playfair Display', serif"}}>
+              What We <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-teal-400 bg-clip-text text-transparent">Offer</span>
+            </h2>
+            <p className="text-lg lg:text-xl text-white/50 max-w-3xl mx-auto font-light">
+              Three core services designed to accelerate your digital growth
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {[
+              {
+                icon: Globe,
+                title: "Website Design",
+                description: "Stunning, SEO-optimized websites that convert visitors into customers.",
+                features: ["Custom Design", "SEO Optimization", "Mobile Responsive", "Fast Loading"],
+                color: "from-red-500 to-orange-500",
+                href: "/website-design"
+              },
+              {
+                icon: Target,
+                title: "Ads Management",
+                description: "Data-driven campaigns on Google, Facebook & TikTok that maximize ROI.",
+                features: ["Multi-Platform", "ROI Focused", "Advanced Targeting", "Analytics"],
+                color: "from-orange-500 to-yellow-500",
+                href: "/ads-management"
+              },
+              {
+                icon: Bot,
+                title: "AI Automation",
+                description: "Intelligent automation and chatbots that streamline your operations.",
+                features: ["Custom AI Solutions", "Workflow Automation", "Chatbots", "Integration"],
+                color: "from-purple-500 to-pink-500",
+                href: "/ai-automation"
+              }
+            ].map((service, i) => (
+              <div key={i} className="group relative">
+                <div className={`absolute inset-0 bg-gradient-to-r ${service.color} rounded-2xl blur-xl opacity-0 group-hover:opacity-20 transition-opacity duration-500`}></div>
+                <div className="relative bg-white/5 border border-white/10 rounded-2xl p-8 backdrop-blur-sm hover:bg-white/8 hover:border-white/20 transition-all duration-300 h-full">
+                  <div className={`w-16 h-16 rounded-xl bg-gradient-to-r ${service.color} flex items-center justify-center mb-6 shadow-lg`}>
+                    <service.icon className="w-8 h-8 text-white" />
                   </div>
-                  <div className="text-4xl lg:text-5xl font-bold text-white mb-2">{stat.value}</div>
-                  <div className="text-white/50 font-medium">{stat.label}</div>
-                </div>
-              ))}
-            </div>
-
-            {/* Premium Image Card */}
-            <div className="relative group animate-scale-in" style={{animationDelay: '0.2s'}}>
-              <div className="absolute -inset-6 bg-gradient-to-r from-red-500/30 via-orange-500/25 to-yellow-500/20 rounded-3xl blur-3xl opacity-50 group-hover:opacity-70 transition-opacity duration-700"></div>
-              <div className="relative bg-gradient-to-br from-white/10 to-white/5 p-2 rounded-3xl backdrop-blur-sm border border-white/15 shadow-2xl">
-                <img
-                  src={heroDashboard}
-                  alt="Client Success Dashboard Preview"
-                  className="w-full h-auto rounded-2xl transition-transform duration-700 group-hover:scale-[1.02]"
-                  loading="lazy"
-                />
-                
-                {/* Floating badges */}
-                <div className="absolute top-6 left-6 bg-gradient-to-r from-green-500 to-emerald-500 text-white px-4 py-2 rounded-xl text-sm font-semibold shadow-lg shadow-green-500/30 flex items-center gap-2">
-                  <TrendingUp className="w-4 h-4" />
-                  Live Dashboard
-                </div>
-                <div className="absolute bottom-6 right-6 bg-white/10 backdrop-blur-xl border border-white/20 text-white px-4 py-2 rounded-xl text-sm font-medium">
-                  Real-time Analytics
+                  <h3 className="text-2xl font-bold text-white mb-4">{service.title}</h3>
+                  <p className="text-white/50 mb-6 leading-relaxed">{service.description}</p>
+                  <ul className="space-y-3 mb-8">
+                    {service.features.map((feature, j) => (
+                      <li key={j} className="flex items-center gap-3 text-white/60">
+                        <Check className="w-4 h-4 text-green-400" />
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                  <Button asChild className={`w-full bg-gradient-to-r ${service.color} text-white hover:opacity-90 rounded-xl`}>
+                    <Link to={service.href}>
+                      Learn More <ArrowRight className="w-4 h-4 ml-2" />
+                    </Link>
+                  </Button>
                 </div>
               </div>
-            </div>
-            
-            {/* Premium CTA */}
-            <div className="text-center mt-16">
-              <Button asChild size="lg" className="group text-base px-10 py-7 bg-gradient-to-r from-red-500 to-orange-500 text-white hover:from-red-600 hover:to-orange-600 rounded-full transition-all duration-300 hover:scale-105 font-semibold shadow-lg shadow-red-500/25">
-                <a href="/portfolio" className="flex items-center gap-2">
-                  View All Case Studies
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </a>
-              </Button>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Trusted By Section */}
-      <TrustedBy />
+      {/* Stats Section */}
+      <section className="py-24 bg-[#0a0a0f] relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-red-600/5 via-transparent to-purple-600/5"></div>
+        <div className="container-wide section-padding relative z-10">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {[
+              { value: "200%", label: "Avg Growth", icon: TrendingUp, color: "from-red-500 to-orange-500" },
+              { value: "50+", label: "Happy Clients", icon: Users, color: "from-orange-500 to-yellow-500" },
+              { value: "10x", label: "ROI Achieved", icon: Award, color: "from-purple-500 to-pink-500" },
+              { value: "24/7", label: "Support", icon: Clock, color: "from-blue-500 to-cyan-500" }
+            ].map((stat, i) => (
+              <div key={i} className="group bg-white/5 border border-white/10 rounded-2xl p-8 backdrop-blur-sm hover:bg-white/8 transition-all duration-300 text-center">
+                <div className={`w-14 h-14 rounded-xl bg-gradient-to-r ${stat.color} flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:scale-110 transition-transform`}>
+                  <stat.icon className="w-7 h-7 text-white" />
+                </div>
+                <div className="text-4xl font-bold text-white mb-2">{stat.value}</div>
+                <div className="text-white/50 text-sm">{stat.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-      {/* Ultra Premium Team Section */}
+      {/* Why Choose Us */}
       <section className="py-32 bg-[#0a0a0f] relative overflow-hidden">
-        {/* Premium gradient orbs */}
-        <div className="absolute top-20 right-10 w-[500px] h-[500px] bg-gradient-to-r from-blue-600/15 to-cyan-500/10 rounded-full blur-[150px]"></div>
-        <div className="absolute bottom-20 left-10 w-[400px] h-[400px] bg-gradient-to-r from-purple-600/10 to-pink-500/10 rounded-full blur-[120px]"></div>
-        
-        {/* Grid pattern */}
+        <div className="absolute top-20 right-10 w-[500px] h-[500px] bg-gradient-to-r from-green-600/15 to-emerald-500/10 rounded-full blur-[150px]"></div>
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.01)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.01)_1px,transparent_1px)] bg-[size:60px_60px]"></div>
         
         <div className="container-wide section-padding relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-            <div className="animate-fade-in space-y-8">
-              {/* Premium Badge */}
-              <div className="inline-flex items-center gap-3 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border border-blue-500/20 text-blue-400 px-6 py-3 rounded-full text-sm font-medium backdrop-blur-xl">
-                <Users className="w-4 h-4" />
-                Expert Team
-                <span className="w-1.5 h-1.5 bg-blue-400 rounded-full animate-pulse"></span>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div className="space-y-8">
+              <div className="inline-flex items-center gap-3 bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/20 text-green-400 px-6 py-3 rounded-full text-sm font-medium backdrop-blur-xl">
+                <Shield className="w-4 h-4" />
+                Why Lunexo Media
               </div>
               
               <h2 className="text-4xl lg:text-6xl font-bold text-white" style={{fontFamily: "'Playfair Display', serif"}}>
-                Professional
-                <br />
-                <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-teal-400 bg-clip-text text-transparent">
-                  Development Team
-                </span>
+                Built for <span className="bg-gradient-to-r from-green-400 via-emerald-400 to-teal-400 bg-clip-text text-transparent">Success</span>
               </h2>
               
-              <p className="text-lg lg:text-xl text-white/50 leading-relaxed font-light max-w-xl">
-                Our expert developers work with cutting-edge technology to deliver exceptional results. From concept to deployment, we ensure your project meets the highest professional standards.
+              <p className="text-lg text-white/50 leading-relaxed">
+                We don't just build websites or run ads. We create comprehensive digital strategies that drive real business growth.
               </p>
               
-              {/* Premium Stats */}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-4">
                 {[
-                  { value: "50+", label: "Projects Delivered", icon: Zap, color: "from-blue-500 to-cyan-500" },
-                  { value: "24/7", label: "Support Available", icon: Star, color: "from-purple-500 to-pink-500" }
-                ].map((stat, i) => (
-                  <div key={i} className="group bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-sm hover:bg-white/8 hover:border-white/20 transition-all duration-300">
-                    <div className={`w-12 h-12 rounded-xl bg-gradient-to-r ${stat.color} flex items-center justify-center mb-4 shadow-lg`}>
-                      <stat.icon className="w-6 h-6 text-white" />
+                  { title: "30-Day Launch", desc: "From concept to live in 30 days" },
+                  { title: "Results Focused", desc: "Every decision driven by data" },
+                  { title: "Full Support", desc: "24/7 support and maintenance" }
+                ].map((item, i) => (
+                  <div key={i} className="flex items-start gap-4 bg-white/5 border border-white/10 rounded-xl p-4">
+                    <Check className="w-6 h-6 text-green-400 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <div className="font-semibold text-white">{item.title}</div>
+                      <div className="text-white/50 text-sm">{item.desc}</div>
                     </div>
-                    <div className="text-3xl lg:text-4xl font-bold text-white mb-1">{stat.value}</div>
-                    <div className="text-white/50 text-sm">{stat.label}</div>
                   </div>
                 ))}
               </div>
               
-              {/* CTA */}
-              <Button asChild size="lg" className="group text-base px-8 py-6 bg-gradient-to-r from-blue-500 to-cyan-500 text-white hover:from-blue-600 hover:to-cyan-600 rounded-full transition-all duration-300 hover:scale-105 font-semibold shadow-lg shadow-blue-500/25">
-                <a href="/contact" className="flex items-center gap-2">
-                  Work With Us
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </a>
+              <Button asChild size="lg" className="bg-gradient-to-r from-green-500 to-emerald-500 text-white hover:from-green-600 hover:to-emerald-600 rounded-full px-8">
+                <Link to="/contact">
+                  Get Started <ArrowRight className="w-4 h-4 ml-2" />
+                </Link>
               </Button>
             </div>
             
-            {/* Premium Image */}
-            <div className="relative animate-scale-in" style={{animationDelay: '0.3s'}}>
-              <div className="absolute -inset-6 bg-gradient-to-r from-blue-500/30 via-cyan-500/25 to-teal-500/20 rounded-3xl blur-3xl opacity-50 group-hover:opacity-70 transition-opacity duration-700"></div>
-              <div className="relative group">
-                <div className="relative bg-gradient-to-br from-white/10 to-white/5 p-2 rounded-3xl backdrop-blur-sm border border-white/15 shadow-2xl">
-                  <img
-                    src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=800&q=60"
-                    alt="Professional development team working"
-                    className="w-full h-auto rounded-2xl transition-transform duration-700 group-hover:scale-[1.02]"
-                    loading="lazy"
-                  />
-                  
-                  {/* Floating badge */}
-                  <div className="absolute top-6 right-6 bg-gradient-to-r from-green-500 to-emerald-500 text-white px-4 py-2 rounded-xl text-sm font-semibold shadow-lg shadow-green-500/30 flex items-center gap-2">
-                    <Check className="w-4 h-4" />
-                    Verified Team
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Modern Testimonials Section - Moved up for social proof */}
-      <section className="py-24 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative overflow-hidden">
-        <div className="container-wide section-padding relative z-10">
-          <div className="text-center mb-20 animate-fade-in">
-            <h2 className="text-4xl lg:text-5xl font-space font-bold mb-6 text-white">
-              What Our Clients Say
-            </h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-              Don't just take our word for it. See how we've helped businesses like yours achieve extraordinary results.
-            </p>
-          </div>
-          
-          <Carousel 
-            setApi={setApi2}
-            opts={{
-              align: "start",
-              loop: true,
-            }}
-            className="w-full max-w-7xl mx-auto"
-          >
-            <CarouselContent className="-ml-2 md:-ml-4">
-              {visibleTestimonials.map((testimonial, index) => (
-                <CarouselItem key={index} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
-                  <div className="group animate-scale-in" style={{animationDelay: `${index * 0.1}s`}}>
-                    <div className="modern-card h-full">
-                      <TestimonialCard {...testimonial} />
-                    </div>
-                  </div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious className="hidden md:flex" />
-            <CarouselNext className="hidden md:flex" />
-          </Carousel>
-        </div>
-      </section>
-
-      {/* Modern Services Section */}
-      <section className="py-24 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative overflow-hidden">
-        <div className="container-wide section-padding relative z-10">
-          <div className="text-center mb-20 animate-fade-in">
-            <h2 className="text-4xl lg:text-5xl font-space font-bold mb-6 text-white">
-              Why Choose Lunexo Media?
-            </h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-              We specialize in three key areas that help businesses build, launch, and grow their digital presence with cutting-edge technology.
-            </p>
-          </div>
-          
-          {/* Enhanced Services Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 mb-12 sm:mb-16">
-            {/* SEO Service */}
-            <div className="group animate-scale-in">
-              <div className="modern-card p-6 sm:p-8 h-full hover:shadow-glow transition-all duration-500 group-hover:scale-105">
-                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-primary rounded-2xl flex items-center justify-center mb-4 sm:mb-6 shadow-glow group-hover:animate-float">
-                  <Globe className="text-white w-6 h-6 sm:w-8 sm:h-8" />
-                </div>
-                <h3 className="text-xl sm:text-2xl font-space font-bold mb-3 sm:mb-4 group-hover:text-gradient transition-colors">
-                  SEO & Website Design
-                </h3>
-                <p className="text-muted-foreground leading-relaxed mb-4 sm:mb-6 text-sm sm:text-base">
-                  Build stunning, SEO-optimized websites that rank higher and convert better. Professional design meets technical excellence.
-                </p>
-                <ul className="space-y-2 mb-4 sm:mb-6">
-                  <li className="flex items-center gap-2 text-xs sm:text-sm">
-                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-primary flex-shrink-0" />
-                    <span>Custom Web Design</span>
-                  </li>
-                  <li className="flex items-center gap-2 text-xs sm:text-sm">
-                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-primary flex-shrink-0" />
-                    <span>SEO Optimization</span>
-                  </li>
-                  <li className="flex items-center gap-2 text-xs sm:text-sm">
-                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-primary flex-shrink-0" />
-                    <span>Mobile Responsive</span>
-                  </li>
-                  <li className="flex items-center gap-2 text-xs sm:text-sm">
-                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-primary flex-shrink-0" />
-                    <span>Performance Optimization</span>
-                  </li>
-                </ul>
-                <Button asChild variant="outline" size="sm" className="w-full text-xs sm:text-sm group-hover:bg-primary group-hover:text-white transition-all duration-300">
-                  <a href="/website-design">
-                    Explore Website Design
-                    <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 ml-2" />
-                  </a>
-                </Button>
-              </div>
-            </div>
-
-            {/* Ads Management Service */}
-            <div className="group animate-scale-in" style={{animationDelay: '0.1s'}}>
-              <div className="modern-card p-6 sm:p-8 h-full hover:shadow-glow transition-all duration-500 group-hover:scale-105">
-                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-accent rounded-2xl flex items-center justify-center mb-4 sm:mb-6 shadow-glow group-hover:animate-float">
-                  <Target className="text-white w-6 h-6 sm:w-8 sm:h-8" />
-                </div>
-                <h3 className="text-xl sm:text-2xl font-space font-bold mb-3 sm:mb-4 group-hover:text-gradient transition-colors">
-                  Ads Management
-                </h3>
-                <p className="text-muted-foreground leading-relaxed mb-4 sm:mb-6 text-sm sm:text-base">
-                  Drive targeted traffic and maximize ROI with expertly managed Google, Facebook, TikTok, and LinkedIn advertising campaigns.
-                </p>
-                <ul className="space-y-2 mb-4 sm:mb-6">
-                  <li className="flex items-center gap-2 text-xs sm:text-sm">
-                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-primary flex-shrink-0" />
-                    <span>Multi-Platform Campaigns</span>
-                  </li>
-                  <li className="flex items-center gap-2 text-xs sm:text-sm">
-                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-primary flex-shrink-0" />
-                    <span>ROI Optimization</span>
-                  </li>
-                  <li className="flex items-center gap-2 text-xs sm:text-sm">
-                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-primary flex-shrink-0" />
-                    <span>Advanced Targeting</span>
-                  </li>
-                  <li className="flex items-center gap-2 text-xs sm:text-sm">
-                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-primary flex-shrink-0" />
-                    <span>Performance Tracking</span>
-                  </li>
-                </ul>
-                <Button asChild variant="outline" size="sm" className="w-full text-xs sm:text-sm group-hover:bg-primary group-hover:text-white transition-all duration-300">
-                  <a href="/ads-management">
-                    Explore Ads Management
-                    <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 ml-2" />
-                  </a>
-                </Button>
-              </div>
-            </div>
-
-            {/* AI Automation Service */}
-            <div className="group animate-scale-in" style={{animationDelay: '0.2s'}}>
-              <div className="modern-card p-6 sm:p-8 h-full hover:shadow-glow transition-all duration-500 group-hover:scale-105">
-                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-secondary rounded-2xl flex items-center justify-center mb-4 sm:mb-6 shadow-glow group-hover:animate-float">
-                  <Bot className="text-white w-6 h-6 sm:w-8 sm:h-8" />
-                </div>
-                <h3 className="text-xl sm:text-2xl font-space font-bold mb-3 sm:mb-4 group-hover:text-gradient transition-colors">
-                  AI Automation
-                </h3>
-                <p className="text-muted-foreground leading-relaxed mb-4 sm:mb-6 text-sm sm:text-base">
-                  Streamline operations and boost productivity with custom AI solutions, chatbots, and intelligent automation workflows.
-                </p>
-                <ul className="space-y-2 mb-4 sm:mb-6">
-                  <li className="flex items-center gap-2 text-xs sm:text-sm">
-                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-primary flex-shrink-0" />
-                    <span>Custom AI Solutions</span>
-                  </li>
-                  <li className="flex items-center gap-2 text-xs sm:text-sm">
-                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-primary flex-shrink-0" />
-                    <span>Workflow Automation</span>
-                  </li>
-                  <li className="flex items-center gap-2 text-xs sm:text-sm">
-                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-primary flex-shrink-0" />
-                    <span>Chatbot Development</span>
-                  </li>
-                  <li className="flex items-center gap-2 text-xs sm:text-sm">
-                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-primary flex-shrink-0" />
-                    <span>Process Optimization</span>
-                  </li>
-                </ul>
-                <Button asChild variant="outline" size="sm" className="w-full text-xs sm:text-sm group-hover:bg-primary group-hover:text-white transition-all duration-300">
-                  <a href="/ai-automation">
-                    Explore AI Automation
-                    <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 ml-2" />
-                  </a>
-                </Button>
-              </div>
-            </div>
-
-            {/* Tutorials Service */}
-            <div className="group animate-scale-in" style={{animationDelay: '0.3s'}}>
-              <div className="modern-card p-6 sm:p-8 h-full hover:shadow-glow transition-all duration-500 group-hover:scale-105">
-                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-primary rounded-2xl flex items-center justify-center mb-4 sm:mb-6 shadow-glow group-hover:animate-float">
-                  <Calendar className="text-white w-6 h-6 sm:w-8 sm:h-8" />
-                </div>
-                <h3 className="text-xl sm:text-2xl font-space font-bold mb-3 sm:mb-4 group-hover:text-gradient transition-colors">
-                  Digital Tutorials
-                </h3>
-                <p className="text-muted-foreground leading-relaxed mb-4 sm:mb-6 text-sm sm:text-base">
-                  Learn essential digital marketing skills with our comprehensive tutorials, guides, and step-by-step courses.
-                </p>
-                <ul className="space-y-2 mb-4 sm:mb-6">
-                  <li className="flex items-center gap-2 text-xs sm:text-sm">
-                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-primary flex-shrink-0" />
-                    <span>SEO Tutorials</span>
-                  </li>
-                  <li className="flex items-center gap-2 text-xs sm:text-sm">
-                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-primary flex-shrink-0" />
-                    <span>Ads Management Guide</span>
-                  </li>
-                  <li className="flex items-center gap-2 text-xs sm:text-sm">
-                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-primary flex-shrink-0" />
-                    <span>Web Design Basics</span>
-                  </li>
-                  <li className="flex items-center gap-2 text-xs sm:text-sm">
-                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-primary flex-shrink-0" />
-                    <span>AI Tools Training</span>
-                  </li>
-                </ul>
-                <Button asChild variant="outline" size="sm" className="w-full text-xs sm:text-sm group-hover:bg-primary group-hover:text-white transition-all duration-300">
-                  <a href="/tutorials">
-                    Browse Tutorials
-                    <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 ml-2" />
-                  </a>
-                </Button>
-              </div>
-            </div>
-
-            {/* Pricing Service */}
-            <div className="group animate-scale-in" style={{animationDelay: '0.4s'}}>
-              <div className="modern-card p-6 sm:p-8 h-full hover:shadow-glow transition-all duration-500 group-hover:scale-105">
-                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-accent rounded-2xl flex items-center justify-center mb-4 sm:mb-6 shadow-glow group-hover:animate-float">
-                  <Star className="text-white w-6 h-6 sm:w-8 sm:h-8" />
-                </div>
-                <h3 className="text-xl sm:text-2xl font-space font-bold mb-3 sm:mb-4 group-hover:text-gradient transition-colors">
-                  Flexible Pricing
-                </h3>
-                <p className="text-muted-foreground leading-relaxed mb-4 sm:mb-6 text-sm sm:text-base">
-                  Choose from our transparent pricing plans designed to fit businesses of all sizes, from startups to enterprises.
-                </p>
-                <ul className="space-y-2 mb-4 sm:mb-6">
-                  <li className="flex items-center gap-2 text-xs sm:text-sm">
-                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-primary flex-shrink-0" />
-                    <span>Transparent Pricing</span>
-                  </li>
-                  <li className="flex items-center gap-2 text-xs sm:text-sm">
-                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-primary flex-shrink-0" />
-                    <span>Custom Packages</span>
-                  </li>
-                  <li className="flex items-center gap-2 text-xs sm:text-sm">
-                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-primary flex-shrink-0" />
-                    <span>No Hidden Fees</span>
-                  </li>
-                  <li className="flex items-center gap-2 text-xs sm:text-sm">
-                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-primary flex-shrink-0" />
-                    <span>Money-Back Guarantee</span>
-                  </li>
-                </ul>
-                <Button asChild variant="outline" size="sm" className="w-full text-xs sm:text-sm group-hover:bg-primary group-hover:text-white transition-all duration-300">
-                  <a href="/pricing">
-                    View Pricing
-                    <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 ml-2" />
-                  </a>
-                </Button>
-              </div>
-            </div>
-
-            {/* Blog Service */}
-            <div className="group animate-scale-in" style={{animationDelay: '0.5s'}}>
-              <div className="modern-card p-6 sm:p-8 h-full hover:shadow-glow transition-all duration-500 group-hover:scale-105">
-                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-secondary rounded-2xl flex items-center justify-center mb-4 sm:mb-6 shadow-glow group-hover:animate-float">
-                  <Users className="text-white w-6 h-6 sm:w-8 sm:h-8" />
-                </div>
-                <h3 className="text-xl sm:text-2xl font-space font-bold mb-3 sm:mb-4 group-hover:text-gradient transition-colors">
-                  Industry Insights
-                </h3>
-                <p className="text-muted-foreground leading-relaxed mb-4 sm:mb-6 text-sm sm:text-base">
-                  Stay updated with the latest digital marketing trends, case studies, and expert insights from our blog.
-                </p>
-                <ul className="space-y-2 mb-4 sm:mb-6">
-                  <li className="flex items-center gap-2 text-xs sm:text-sm">
-                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-primary flex-shrink-0" />
-                    <span>Expert Articles</span>
-                  </li>
-                  <li className="flex items-center gap-2 text-xs sm:text-sm">
-                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-primary flex-shrink-0" />
-                    <span>Case Studies</span>
-                  </li>
-                  <li className="flex items-center gap-2 text-xs sm:text-sm">
-                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-primary flex-shrink-0" />
-                    <span>Industry Trends</span>
-                  </li>
-                  <li className="flex items-center gap-2 text-xs sm:text-sm">
-                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-primary flex-shrink-0" />
-                    <span>How-To Guides</span>
-                  </li>
-                </ul>
-                <Button asChild variant="outline" size="sm" className="w-full text-xs sm:text-sm group-hover:bg-primary group-hover:text-white transition-all duration-300">
-                  <a href="/blog">
-                    Read Blog
-                    <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 ml-2" />
-                  </a>
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-
-      {/* Modern Features Section with Professional Images */}
-      <section className="py-24 bg-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-mesh opacity-30"></div>
-        <div className="container-wide section-padding relative z-10">
-          <div className="text-center mb-20 animate-fade-in">
-            <h2 className="text-4xl lg:text-5xl font-space font-bold mb-6">
-              Why Choose{" "}
-              <span className="text-gradient">
-                LUNEXO MEDIA
-              </span>
-              ?
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              Everything you need to launch and scale your business with next-generation technology and expert guidance.
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-            <div className="group animate-scale-in">
-              <div className="modern-card text-center p-10 h-full">
-                <div className="w-20 h-20 bg-gradient-primary rounded-2xl flex items-center justify-center mx-auto mb-8 shadow-glow group-hover:animate-float">
-                  <Zap className="text-white w-10 h-10" />
-                </div>
-                <h3 className="text-2xl font-space font-bold mb-4 group-hover:text-gradient transition-colors">
-                  30-Day Launch
-                </h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  From concept to live product in 30 days or less. No lengthy development cycles or technical delays.
-                </p>
-              </div>
-            </div>
-            
-            <div className="group animate-scale-in" style={{animationDelay: '0.1s'}}>
-              <div className="modern-card text-center p-10 h-full">
-                <div className="w-20 h-20 bg-gradient-accent rounded-2xl flex items-center justify-center mx-auto mb-8 shadow-glow group-hover:animate-float">
-                  <Sparkles className="text-white w-10 h-10" />
-                </div>
-                <h3 className="text-2xl font-space font-bold mb-4 group-hover:text-gradient transition-colors">
-                  No Coding Needed
-                </h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  Focus on your business while we handle all the technical implementation and maintenance.
-                </p>
-              </div>
-            </div>
-            
-            <div className="group animate-scale-in" style={{animationDelay: '0.2s'}}>
-              <div className="modern-card text-center p-10 h-full">
-                <div className="w-20 h-20 bg-gradient-secondary rounded-2xl flex items-center justify-center mx-auto mb-8 shadow-glow group-hover:animate-float">
-                  <ArrowRight className="text-foreground w-10 h-10" />
-                </div>
-                <h3 className="text-2xl font-space font-bold mb-4 group-hover:text-gradient transition-colors">
-                  Full Integration
-                </h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  Built-in payment processing, analytics, and growth tools. Start scaling from day one.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Professional Development Process */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div className="relative animate-scale-in">
-              <div className="relative group">
-                <div className="absolute inset-0 bg-gradient-primary rounded-3xl filter blur-2xl opacity-30 group-hover:opacity-50 transition-opacity duration-500"></div>
+            <div className="relative">
+              <div className="absolute -inset-6 bg-gradient-to-r from-green-500/30 to-emerald-500/20 rounded-3xl blur-3xl opacity-50"></div>
+              <div className="relative bg-gradient-to-br from-white/10 to-white/5 p-2 rounded-3xl border border-white/15">
                 <img
-                  src="https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?auto=format&fit=crop&w=1200&q=80"
-                  alt="Professional coding and development"
-                  className="relative w-full h-auto rounded-3xl shadow-elegant border border-border/50 transition-transform duration-500 group-hover:scale-105"
-                />
-              </div>
-            </div>
-            <div className="animate-fade-in" style={{animationDelay: '0.3s'}}>
-              <h3 className="text-3xl lg:text-4xl font-space font-bold mb-6 text-gradient">
-                Professional Development Process
-              </h3>
-              <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
-                We use industry-leading tools and methodologies to ensure your project is built to the highest standards with clean, maintainable code.
-              </p>
-              <div className="space-y-4">
-                <div className="flex items-center space-x-4">
-                  <div className="w-3 h-3 bg-primary rounded-full"></div>
-                  <span className="text-muted-foreground">Modern frameworks and technologies</span>
-                </div>
-                <div className="flex items-center space-x-4">
-                  <div className="w-3 h-3 bg-primary rounded-full"></div>
-                  <span className="text-muted-foreground">Responsive and mobile-first design</span>
-                </div>
-                <div className="flex items-center space-x-4">
-                  <div className="w-3 h-3 bg-primary rounded-full"></div>
-                  <span className="text-muted-foreground">SEO optimized and performance focused</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Pricing Section */}
-      <section id="pricing" className="py-24 bg-muted/30 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-mesh opacity-20"></div>
-        <div className="container-wide section-padding relative z-10">
-          <div className="text-center mb-20 animate-fade-in">
-            <h2 className="text-4xl lg:text-5xl font-space font-bold mb-6 text-gradient">
-              Simple, Transparent Pricing
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              Choose the perfect package for your business needs. No hidden fees, no surprises.
-            </p>
-          </div>
-
-          {/* Website Design Pricing */}
-          <div className="mb-20">
-            <div className="text-center mb-12">
-              <h3 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-                Website Design
-              </h3>
-              <p className="text-xl text-muted-foreground">
-                Choose the perfect plan for your website design needs
-              </p>
-            </div>
-            
-            <div className="grid md:grid-cols-3 gap-8 max-w-7xl mx-auto">
-              {/* Starter Package */}
-              <Card className="relative">
-                <CardHeader className="text-center pb-6">
-                  <CardTitle className="text-2xl font-bold">Starter</CardTitle>
-                  <CardDescription className="text-muted-foreground">
-                    Perfect for small businesses getting started online
-                  </CardDescription>
-                  <div className="mt-4">
-                    <span className="text-4xl font-bold text-foreground">$299</span>
-                    <span className="text-muted-foreground ml-1">/one-time</span>
-                  </div>
-                </CardHeader>
-                
-                <CardContent>
-                  <ul className="space-y-3 mb-8">
-                    <li className="flex items-center">
-                      <Check className="w-5 h-5 text-primary mr-3 flex-shrink-0" />
-                      <span className="text-muted-foreground">5-page responsive website</span>
-                    </li>
-                    <li className="flex items-center">
-                      <Check className="w-5 h-5 text-primary mr-3 flex-shrink-0" />
-                      <span className="text-muted-foreground">Mobile-optimized design</span>
-                    </li>
-                    <li className="flex items-center">
-                      <Check className="w-5 h-5 text-primary mr-3 flex-shrink-0" />
-                      <span className="text-muted-foreground">Basic SEO setup</span>
-                    </li>
-                    <li className="flex items-center">
-                      <Check className="w-5 h-5 text-primary mr-3 flex-shrink-0" />
-                      <span className="text-muted-foreground">Contact form integration</span>
-                    </li>
-                    <li className="flex items-center">
-                      <Check className="w-5 h-5 text-primary mr-3 flex-shrink-0" />
-                      <span className="text-muted-foreground">1 month support</span>
-                    </li>
-                    <li className="flex items-center">
-                      <Check className="w-5 h-5 text-primary mr-3 flex-shrink-0" />
-                      <span className="text-muted-foreground">Free domain setup</span>
-                    </li>
-                  </ul>
-                  
-                  <Button asChild className="w-full" variant="outline" size="lg">
-                    <a href="/contact">Choose Plan</a>
-                  </Button>
-                </CardContent>
-              </Card>
-
-              {/* Professional Package */}
-              <Card className="relative border-primary shadow-lg scale-105">
-                <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-primary text-primary-foreground">
-                  <Star className="w-3 h-3 mr-1" />
-                  Most Popular
-                </Badge>
-                
-                <CardHeader className="text-center pb-6">
-                  <CardTitle className="text-2xl font-bold">Professional</CardTitle>
-                  <CardDescription className="text-muted-foreground">
-                    Ideal for growing businesses with advanced needs
-                  </CardDescription>
-                  <div className="mt-4">
-                    <span className="text-4xl font-bold text-foreground">$599</span>
-                    <span className="text-muted-foreground ml-1">/one-time</span>
-                  </div>
-                </CardHeader>
-                
-                <CardContent>
-                  <ul className="space-y-3 mb-8">
-                    <li className="flex items-center">
-                      <Check className="w-5 h-5 text-primary mr-3 flex-shrink-0" />
-                      <span className="text-muted-foreground">10-page responsive website</span>
-                    </li>
-                    <li className="flex items-center">
-                      <Check className="w-5 h-5 text-primary mr-3 flex-shrink-0" />
-                      <span className="text-muted-foreground">Custom design & branding</span>
-                    </li>
-                    <li className="flex items-center">
-                      <Check className="w-5 h-5 text-primary mr-3 flex-shrink-0" />
-                      <span className="text-muted-foreground">Advanced SEO optimization</span>
-                    </li>
-                    <li className="flex items-center">
-                      <Check className="w-5 h-5 text-primary mr-3 flex-shrink-0" />
-                      <span className="text-muted-foreground">Google Analytics setup</span>
-                    </li>
-                    <li className="flex items-center">
-                      <Check className="w-5 h-5 text-primary mr-3 flex-shrink-0" />
-                      <span className="text-muted-foreground">Social media integration</span>
-                    </li>
-                    <li className="flex items-center">
-                      <Check className="w-5 h-5 text-primary mr-3 flex-shrink-0" />
-                      <span className="text-muted-foreground">3 months support</span>
-                    </li>
-                    <li className="flex items-center">
-                      <Check className="w-5 h-5 text-primary mr-3 flex-shrink-0" />
-                      <span className="text-muted-foreground">Free hosting for 1 year</span>
-                    </li>
-                    <li className="flex items-center">
-                      <Check className="w-5 h-5 text-primary mr-3 flex-shrink-0" />
-                      <span className="text-muted-foreground">Content management system</span>
-                    </li>
-                  </ul>
-                  
-                  <Button asChild className="w-full" size="lg">
-                    <a href="/contact">Get Started</a>
-                  </Button>
-                </CardContent>
-              </Card>
-
-              {/* Enterprise Package */}
-              <Card className="relative">
-                <CardHeader className="text-center pb-6">
-                  <CardTitle className="text-2xl font-bold">Enterprise</CardTitle>
-                  <CardDescription className="text-muted-foreground">
-                    Complete solution for established businesses
-                  </CardDescription>
-                  <div className="mt-4">
-                    <span className="text-4xl font-bold text-foreground">$1,299</span>
-                    <span className="text-muted-foreground ml-1">/one-time</span>
-                  </div>
-                </CardHeader>
-                
-                <CardContent>
-                  <ul className="space-y-3 mb-8">
-                    <li className="flex items-center">
-                      <Check className="w-5 h-5 text-primary mr-3 flex-shrink-0" />
-                      <span className="text-muted-foreground">Unlimited pages</span>
-                    </li>
-                    <li className="flex items-center">
-                      <Check className="w-5 h-5 text-primary mr-3 flex-shrink-0" />
-                      <span className="text-muted-foreground">Premium custom design</span>
-                    </li>
-                    <li className="flex items-center">
-                      <Check className="w-5 h-5 text-primary mr-3 flex-shrink-0" />
-                      <span className="text-muted-foreground">E-commerce functionality</span>
-                    </li>
-                    <li className="flex items-center">
-                      <Check className="w-5 h-5 text-primary mr-3 flex-shrink-0" />
-                      <span className="text-muted-foreground">Advanced analytics</span>
-                    </li>
-                    <li className="flex items-center">
-                      <Check className="w-5 h-5 text-primary mr-3 flex-shrink-0" />
-                      <span className="text-muted-foreground">Multi-language support</span>
-                    </li>
-                    <li className="flex items-center">
-                      <Check className="w-5 h-5 text-primary mr-3 flex-shrink-0" />
-                      <span className="text-muted-foreground">6 months support</span>
-                    </li>
-                    <li className="flex items-center">
-                      <Check className="w-5 h-5 text-primary mr-3 flex-shrink-0" />
-                      <span className="text-muted-foreground">Free hosting for 2 years</span>
-                    </li>
-                    <li className="flex items-center">
-                      <Check className="w-5 h-5 text-primary mr-3 flex-shrink-0" />
-                      <span className="text-muted-foreground">Priority support</span>
-                    </li>
-                    <li className="flex items-center">
-                      <Check className="w-5 h-5 text-primary mr-3 flex-shrink-0" />
-                      <span className="text-muted-foreground">Custom integrations</span>
-                    </li>
-                    <li className="flex items-center">
-                      <Check className="w-5 h-5 text-primary mr-3 flex-shrink-0" />
-                      <span className="text-muted-foreground">Performance optimization</span>
-                    </li>
-                  </ul>
-                  
-                  <Button asChild className="w-full" variant="outline" size="lg">
-                    <a href="/contact">Choose Plan</a>
-                  </Button>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-
-          {/* CTA Section */}
-          <div className="text-center">
-            <p className="text-muted-foreground mb-4">
-              Need a custom solution? We're here to help.
-            </p>
-            <Button asChild variant="outline" size="lg">
-              <a href="/contact">Contact Us for Custom Quote</a>
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* Technology Stack Section */}
-      <section className="py-24 bg-muted/20 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-mesh opacity-20"></div>
-        <div className="container-wide section-padding relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div className="animate-fade-in">
-              <h2 className="text-4xl lg:text-5xl font-space font-bold mb-6 text-gradient">
-                Cutting-Edge Technology
-              </h2>
-              <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
-                We leverage the latest technologies and industry best practices to deliver high-performance, scalable solutions that grow with your business.
-              </p>
-              <div className="grid grid-cols-2 gap-6">
-                <div className="modern-card p-6 text-center">
-                  <div className="text-2xl font-bold text-primary mb-2">React</div>
-                  <div className="text-sm text-muted-foreground">Frontend Framework</div>
-                </div>
-                <div className="modern-card p-6 text-center">
-                  <div className="text-2xl font-bold text-primary mb-2">Node.js</div>
-                  <div className="text-sm text-muted-foreground">Backend Runtime</div>
-                </div>
-                <div className="modern-card p-6 text-center">
-                  <div className="text-2xl font-bold text-primary mb-2">AWS</div>
-                  <div className="text-sm text-muted-foreground">Cloud Platform</div>
-                </div>
-                <div className="modern-card p-6 text-center">
-                  <div className="text-2xl font-bold text-primary mb-2">AI/ML</div>
-                  <div className="text-sm text-muted-foreground">Smart Automation</div>
-                </div>
-              </div>
-            </div>
-            <div className="relative animate-scale-in" style={{animationDelay: '0.3s'}}>
-              <div className="relative group">
-                <div className="absolute inset-0 bg-gradient-primary rounded-3xl filter blur-2xl opacity-30 group-hover:opacity-50 transition-opacity duration-500"></div>
-                <img
-                  src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=600&q=60"
-                  alt="Professional workspace with modern technology"
-                  className="relative w-full h-auto rounded-3xl shadow-elegant border border-border/50 transition-transform duration-500 group-hover:scale-105"
+                  src={heroDashboard}
+                  alt="Dashboard Preview"
+                  className="w-full h-auto rounded-2xl"
                   loading="lazy"
                 />
               </div>
@@ -1062,65 +310,83 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Simplified Featured Projects Section */}
-      <section className="py-16 bg-white relative">
-        <div className="container-wide section-padding">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl lg:text-4xl font-space font-bold mb-4 text-gradient">
-              Recent Success Stories
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Quick examples of our recent work and results.
-            </p>
-          </div>
+      {/* Testimonials */}
+      {visibleTestimonials.length > 0 && (
+        <section className="py-32 bg-[#0a0a0f] relative overflow-hidden">
+          <div className="absolute bottom-20 left-10 w-[400px] h-[400px] bg-gradient-to-r from-yellow-600/10 to-orange-500/10 rounded-full blur-[120px]"></div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            {featuredProjects.map((project, index) => (
-              <div key={project.id} className="modern-card p-6">
-                <Badge className="mb-4 bg-gradient-primary text-white border-0">
-                  {project.category}
-                </Badge>
-                <h3 className="text-xl font-space font-bold mb-3">{project.title}</h3>
-                <p className="text-muted-foreground mb-4 text-sm leading-relaxed">
-                  {project.description}
-                </p>
-                <div className="flex justify-between items-center text-xs text-muted-foreground mb-4">
-                  <span>Timeline: {project.timeline}</span>
-                  <span className="text-gradient font-semibold">{project.results}</span>
-                </div>
-                <Button variant="outline" size="sm" asChild className="w-full">
-                  <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">
-                    View Live Site <ExternalLink className="w-3 h-3 ml-1" />
-                  </a>
-                </Button>
+          <div className="container-wide section-padding relative z-10">
+            <div className="text-center mb-16">
+              <div className="inline-flex items-center gap-3 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/20 text-yellow-400 px-6 py-3 rounded-full text-sm font-medium backdrop-blur-xl mb-8">
+                <Star className="w-4 h-4" />
+                Client Reviews
               </div>
-            ))}
+              
+              <h2 className="text-4xl lg:text-6xl font-bold mb-6 text-white" style={{fontFamily: "'Playfair Display', serif"}}>
+                What Clients <span className="bg-gradient-to-r from-yellow-400 via-orange-400 to-red-400 bg-clip-text text-transparent">Say</span>
+              </h2>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+              {visibleTestimonials.slice(0, 3).map((testimonial, i) => (
+                <div key={i} className="bg-white/5 border border-white/10 rounded-2xl p-8 backdrop-blur-sm">
+                  <div className="flex gap-1 mb-4">
+                    {[...Array(5)].map((_, j) => (
+                      <Star key={j} className="w-5 h-5 text-yellow-400 fill-yellow-400" />
+                    ))}
+                  </div>
+                  <p className="text-white/70 leading-relaxed mb-6">"{testimonial.quote}"</p>
+                  <div className="flex items-center gap-4">
+                    {testimonial.image && (
+                      <img src={testimonial.image} alt={testimonial.author} className="w-12 h-12 rounded-full object-cover" />
+                    )}
+                    <div>
+                      <div className="font-semibold text-white">{testimonial.author}</div>
+                      <div className="text-white/50 text-sm">{testimonial.role}, {testimonial.company}</div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
-      {/* Modern CTA Section */}
-      <section className="py-24 bg-gradient-to-br from-red-600 via-red-700 to-red-800 text-white relative overflow-hidden">
-        <div className="container-narrow section-padding text-center relative z-10">
-          <div className="relative animate-fade-in">
-            <h2 className="text-4xl lg:text-6xl font-space font-bold mb-8">
-              Ready to Launch Something Amazing?
+      {/* CTA Section */}
+      <section className="py-32 bg-[#0a0a0f] relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-red-600/10 via-orange-500/5 to-red-600/10"></div>
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-r from-red-500/20 to-orange-500/20 rounded-full blur-[100px]"></div>
+        
+        <div className="container-wide section-padding relative z-10">
+          <div className="max-w-4xl mx-auto text-center">
+            <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 text-white/70 px-5 py-2.5 rounded-full text-sm font-medium backdrop-blur-xl mb-8">
+              <Zap className="w-4 h-4 text-yellow-400" />
+              Ready to Grow?
+            </div>
+            
+            <h2 className="text-4xl lg:text-6xl font-bold text-white mb-6" style={{fontFamily: "'Playfair Display', serif"}}>
+              Let's Build Your
+              <br />
+              <span className="bg-gradient-to-r from-red-500 via-orange-400 to-yellow-400 bg-clip-text text-transparent">
+                Digital Empire
+              </span>
             </h2>
-            <p className="text-xl text-red-100 mb-12 leading-relaxed max-w-3xl mx-auto">
-              We help founders, creators, and teams build scalable digital products without the usual delays, dev roadblocks, or messy handoffs.
+            
+            <p className="text-lg text-white/50 mb-10 max-w-2xl mx-auto font-light">
+              Ready to transform your business? Let's discuss your project and create a strategy for success.
             </p>
-            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-              <Button asChild size="lg" className="text-lg px-10 py-4 bg-white text-red-600 hover:bg-gray-100 border-0 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-110 rounded-full">
-                <a href="/contact">
-                  <Sparkles className="w-6 h-6 mr-2" />
-                  Schedule A Meeting
-                </a>
+            
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button asChild size="lg" className="group text-base px-10 py-7 bg-gradient-to-r from-red-500 to-orange-500 text-white hover:from-red-600 hover:to-orange-600 rounded-full transition-all duration-300 hover:scale-105 font-semibold shadow-lg shadow-red-500/25">
+                <Link to="/contact" className="flex items-center gap-2">
+                  Start Your Project
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </Link>
               </Button>
-              <Button asChild variant="outline" size="lg" className="text-lg px-10 py-4 bg-transparent text-white border-white hover:bg-white hover:text-red-600 hover:scale-110 transition-all duration-300 rounded-full">
-                <a href="/portfolio">
-                  View Our Work
-                  <ArrowRight className="w-6 h-6 ml-2" />
-                </a>
+              <Button asChild variant="outline" size="lg" className="text-base px-10 py-7 border border-white/20 text-white bg-white/5 hover:bg-white/10 rounded-full transition-all duration-300 backdrop-blur-sm">
+                <Link to="/book-apartment">
+                  Book a Call
+                </Link>
               </Button>
             </div>
           </div>
