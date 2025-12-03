@@ -50,11 +50,11 @@ const Founder = () => {
   return (
     <div className="min-h-screen bg-[#0a0a0f]">
       <SEO
-        title="Farhan Tanver - Founder & CEO | Lunexo Media"
-        description="Meet Farhan Tanver, the founder and CEO of Lunexo Media. A passionate digital strategist helping businesses grow through web design, marketing, and AI automation."
+        title="Farhan Tanvier - Founder & CEO | Lunexo Media"
+        description="Meet Farhan Tanvier, the founder and CEO of Lunexo Media. A passionate digital strategist helping businesses grow through web design, marketing, and AI automation."
         image="https://www.lunexomedia.com/og-image-new.jpg"
         url="https://www.lunexomedia.com/founder"
-        keywords="Farhan Tanver, Lunexo Media founder, CEO, digital marketing expert, web design, AI automation, business growth"
+        keywords="Farhan Tanvier, Lunexo Media founder, CEO, digital marketing expert, web design, AI automation, business growth"
       />
       <Navigation />
       
@@ -82,7 +82,7 @@ const Founder = () => {
                 Farhan
                 <br />
                 <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-teal-400 bg-clip-text text-transparent">
-                  Tanver
+                  Tanvier
                 </span>
               </h1>
               
@@ -125,7 +125,7 @@ const Founder = () => {
               <div className="relative bg-gradient-to-br from-white/10 to-white/5 p-2 rounded-3xl backdrop-blur-sm border border-white/15 shadow-2xl">
                 <img
                   src={founderImage}
-                  alt="Farhan Tanver - Founder & CEO of Lunexo Media"
+                  alt="Farhan Tanvier - Founder & CEO of Lunexo Media"
                   className="w-full h-auto rounded-2xl"
                 />
                 
@@ -179,7 +179,7 @@ const Founder = () => {
               
               <div className="space-y-4 text-white/60 leading-relaxed">
                 <p>
-                  I'm Farhan Tanver, a digital entrepreneur and the founder of Lunexo Media. My journey began with a simple passion: helping businesses succeed in the digital world.
+                  I'm Farhan Tanvier, a digital entrepreneur and the founder of Lunexo Media. My journey began with a simple passion: helping businesses succeed in the digital world.
                 </p>
                 <p>
                   Over the years, I've had the privilege of working with startups, small businesses, and established brands, helping them build their online presence, attract customers, and scale their operations.
