@@ -55,152 +55,10 @@ const Portfolio = () => {
     load();
   }, []);
 
-  const projects = [
-    // Website Design Projects
-    {
-      id: "device-rescue-nyc",
-      title: "DeviceRescue NYC",
-      description: "Expert device repair website for smartphones, tablets, and laptops in NYC. Features online booking, service catalog, and local SEO optimization.",
-      image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=800&q=80",
-      category: "Website Design",
-      technologies: ["React", "Tailwind CSS", "Local SEO", "Booking System"],
-      timeline: "3 weeks",
-      users: "5K+ customers",
-      results: "200% booking increase",
-      featured: true,
-      liveUrl: "https://devicerescue.us/"
-    },
-    {
-      id: "fix-and-more",
-      title: "Fix and More",
-      description: "Modern repair service website for computers and cellphones with professional design, online scheduling, and e-commerce integration.",
-      image: "https://images.unsplash.com/photo-1586953208448-b95a79798f07?auto=format&fit=crop&w=800&q=80",
-      category: "Website Design",
-      technologies: ["WordPress", "WooCommerce", "Booking Plugin", "SEO"],
-      timeline: "4 weeks",
-      users: "8K+ visitors/month",
-      results: "150% conversion rate",
-      featured: true,
-      liveUrl: "https://fixandmore.us/"
-    },
-    {
-      id: "ecommerce-fashion",
-      title: "Fashion Forward Store",
-      description: "Modern e-commerce platform for fashion brands with advanced filtering, wishlist, and seamless checkout experience.",
-      image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=800&q=80",
-      category: "Website Design",
-      technologies: ["React", "Tailwind CSS", "Stripe", "Framer Motion"],
-      timeline: "4 weeks",
-      users: "25K+ visitors/month",
-      results: "180% increase in conversions",
-      featured: false
-    },
-    {
-      id: "restaurant-booking",
-      title: "Culinary Reservations",
-      description: "Restaurant booking platform with real-time availability, menu showcase, and table management system.",
-      image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80",
-      category: "Website Design",
-      technologies: ["React", "Booking API", "Payment Gateway"],
-      timeline: "3 weeks",
-      users: "15K+ bookings",
-      results: "300% booking increase",
-      featured: false
-    },
-    {
-      id: "real-estate-portal",
-      title: "Property Showcase Pro",
-      description: "Premium real estate website with virtual tours, advanced search, and lead generation forms.",
-      image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=800&q=80",
-      category: "Website Design",
-      technologies: ["React", "Maps API", "Virtual Tour SDK"],
-      timeline: "5 weeks",
-      users: "50K+ property views",
-      results: "250% lead generation",
-      featured: false
-    },
-    
-    // Ads Management Projects
-    {
-      id: "saas-growth-campaign",
-      title: "SaaS Growth Campaign",
-      description: "Multi-platform advertising strategy that scaled a B2B SaaS from startup to 6-figure ARR.",
-      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80",
-      category: "Ads Management",
-      technologies: ["Google Ads", "Facebook Ads", "LinkedIn Ads", "Analytics"],
-      timeline: "6 months",
-      users: "500K+ impressions",
-      results: "400% ROAS improvement",
-      featured: false
-    },
-    {
-      id: "ecommerce-scaling",
-      title: "E-commerce Scaling Campaign",
-      description: "Performance marketing campaign that scaled an e-commerce brand from $10K to $100K monthly revenue.",
-      image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=800&q=80",
-      category: "Ads Management",
-      technologies: ["Meta Ads", "Google Shopping", "TikTok Ads"],
-      timeline: "4 months",
-      users: "1M+ reach",
-      results: "900% revenue growth",
-      featured: false
-    },
-    {
-      id: "local-business-ads",
-      title: "Local Business Boost",
-      description: "Hyperlocal advertising strategy for service businesses to dominate their local market.",
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80",
-      category: "Ads Management",
-      technologies: ["Google Local Ads", "Facebook Local", "Bing Ads"],
-      timeline: "3 months",
-      users: "100K+ local reach",
-      results: "350% local leads increase",
-      featured: false
-    },
-
-    // AI Automation Projects  
-    {
-      id: "customer-support-ai",
-      title: "AutoSupport AI",
-      description: "AI-powered customer support chatbot that reduced support tickets by 80% for e-commerce businesses.",
-      image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=800&q=80",
-      category: "AI Automation",
-      technologies: ["OpenAI", "Python", "React", "WebSocket"],
-      timeline: "3 weeks",
-      users: "50+ businesses",
-      results: "80% ticket reduction",
-      featured: false
-    },
-    {
-      id: "content-automation",
-      title: "Content Creation Engine",
-      description: "AI automation system that generates, schedules, and optimizes social media content across platforms.",
-      image: "https://images.unsplash.com/photo-1611224923853-80b023f02d71?auto=format&fit=crop&w=800&q=80",
-      category: "AI Automation",
-      technologies: ["GPT-4", "Social APIs", "Automation Tools"],
-      timeline: "4 weeks",
-      users: "200+ content creators",
-      results: "500% content efficiency",
-      featured: false
-    },
-    {
-      id: "lead-qualification-ai",
-      title: "Smart Lead Qualifier",
-      description: "AI system that automatically qualifies, scores, and routes leads to appropriate sales team members.",
-      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80",
-      category: "AI Automation",
-      technologies: ["Machine Learning", "CRM Integration", "API"],
-      timeline: "5 weeks",
-      users: "100+ sales teams",
-      results: "300% conversion rate",
-      featured: false
-    }
-  ];
-
   const categories = ["All", "Website Design", "Ads Management", "AI Automation"];
   
-  // Combine database projects with hardcoded projects
-  const allProjects = [...dbProjects.map(p => ({
+  // Only database projects
+  const allProjects = dbProjects.map(p => ({
     id: p.slug,
     title: p.title,
     description: p.description,
@@ -213,7 +71,7 @@ const Portfolio = () => {
     featured: p.featured,
     liveUrl: p.project_url,
     isFromDb: true
-  })), ...projects];
+  }));
   
   const filteredProjects = activeCategory === "All" 
     ? allProjects 
