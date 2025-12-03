@@ -92,6 +92,18 @@ const Navigation = () => {
               </DropdownMenuContent>
             </DropdownMenu>
             
+            {/* Portfolio Link */}
+            <a
+              href="/portfolio"
+              className={`text-sm font-medium transition-colors hover:text-red-400 ${
+                isActive("/portfolio")
+                  ? "text-red-400"
+                  : "text-gray-300"
+              }`}
+            >
+              Portfolio
+            </a>
+            
             {/* Other Navigation Items */}
             {otherNavItems.map((item) => (
               <a
@@ -160,6 +172,18 @@ const Navigation = () => {
                   </a>
                 ))}
               </div>
+              
+              {/* Portfolio Link */}
+              <a
+                href="/portfolio"
+                className={`text-sm font-medium transition-colors hover:text-red-400 ${
+                  isActive("/portfolio")
+                    ? "text-red-400"
+                    : "text-gray-300"
+                }`}
+              >
+                Portfolio
+              </a>
               
               {/* Other Navigation Items */}
               {otherNavItems.map((item) => (
