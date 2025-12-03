@@ -1,5 +1,6 @@
 import { ArrowRight, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 interface ServiceCardProps {
   title: string;
@@ -39,17 +40,17 @@ const ServiceCard = ({ title, description, icon, iconName, href, image }: Servic
         
         <div className="flex flex-col gap-2 sm:gap-3">
           <Button asChild size="sm" className="w-full justify-center text-xs sm:text-sm">
-            <a href="/contact" className="flex items-center">
+            <Link to="/contact" className="flex items-center">
               <ShoppingCart className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
               Order Now
-            </a>
+            </Link>
           </Button>
           
           <Button asChild variant="outline" size="sm" className="w-full justify-center text-xs sm:text-sm">
-            <a href={href} className="flex items-center">
+            <Link to={href} className="flex items-center">
               Learn more
               <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 ml-2" />
-            </a>
+            </Link>
           </Button>
         </div>
       </div>

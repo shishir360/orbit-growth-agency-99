@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import Navigation from "@/components/ui/navigation";
 import Footer from "@/components/ui/footer";
 import SEO from "@/components/ui/seo";
@@ -87,7 +87,7 @@ const TutorialPost = () => {
           <h1 className="text-4xl font-bold mb-4">Tutorial Not Found</h1>
           <p className="text-muted-foreground mb-8">The tutorial you're looking for doesn't exist.</p>
           <Button asChild>
-            <a href="/tutorials">Back to Tutorials</a>
+            <Link to="/tutorials">Back to Tutorials</Link>
           </Button>
         </div>
         <Footer />
@@ -132,10 +132,10 @@ const TutorialPost = () => {
         <div className="container mx-auto px-6">
           <div className="max-w-4xl mx-auto">
             <Button variant="ghost" size="sm" asChild className="mb-6">
-              <a href="/tutorials">
+              <Link to="/tutorials">
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Back to Tutorials
-              </a>
+              </Link>
             </Button>
             
             <div className="flex items-center gap-3 mb-6">
@@ -196,7 +196,7 @@ const TutorialPost = () => {
             Our team can help you build and launch your project in 30 days or less.
           </p>
           <Button size="lg" variant="secondary" asChild>
-            <a href="/contact">Schedule a Meeting</a>
+            <Link to="/contact">Schedule a Meeting</Link>
           </Button>
         </div>
       </section>

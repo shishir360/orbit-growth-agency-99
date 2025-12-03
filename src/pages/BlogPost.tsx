@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import BreadcrumbSEO from "@/components/ui/breadcrumb-seo";
 import { CalendarDays, Clock, ArrowLeft, Share2, Copy, Check, BookOpen, ArrowRight } from "lucide-react";
-import { useParams, Navigate } from "react-router-dom";
+import { useParams, Navigate, Link } from "react-router-dom";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import DOMPurify from 'isomorphic-dompurify';
@@ -180,10 +180,10 @@ const BlogPost = () => {
           />
           
           <Button variant="ghost" asChild className="mt-4">
-            <a href="/blog">
+            <Link to="/blog">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Blog
-            </a>
+            </Link>
           </Button>
         </div>
       </section>
@@ -296,10 +296,10 @@ const BlogPost = () => {
                           size="lg" 
                           className="bg-gradient-primary text-white border-0 shadow-glow hover:shadow-elegant transition-all duration-300 hover:scale-105"
                         >
-                          <a href="/contact">
+                          <Link to="/contact">
                             Get Expert Help Today
                             <ArrowRight className="w-5 h-5 ml-2" />
-                          </a>
+                          </Link>
                         </Button>
                       </div>
                     </div>
@@ -350,9 +350,9 @@ const BlogPost = () => {
                         size="sm" 
                         className="w-full bg-gradient-primary text-white border-0 hover:shadow-glow transition-all"
                       >
-                        <a href="/contact">
+                        <Link to="/contact">
                           Book Consultation
-                        </a>
+                        </Link>
                       </Button>
                     </CardContent>
                   </Card>
@@ -487,10 +487,10 @@ const BlogPost = () => {
                   size="lg" 
                   className="bg-white text-primary hover:bg-white/90 border-0 shadow-glow transition-all duration-300 hover:scale-105 font-semibold px-8"
                 >
-                  <a href="/contact">
+                  <Link to="/contact">
                     Book Your Free Consultation
                     <ArrowRight className="w-5 h-5 ml-2" />
-                  </a>
+                  </Link>
                 </Button>
                 <Button 
                   asChild 
@@ -498,9 +498,9 @@ const BlogPost = () => {
                   size="lg" 
                   className="border-white/30 text-white hover:bg-white/10 hover:border-white/50 transition-all duration-300"
                 >
-                  <a href="/portfolio">
+                  <Link to="/portfolio">
                     See Our Success Stories
-                  </a>
+                  </Link>
                 </Button>
               </div>
               
