@@ -34,7 +34,7 @@ const Footer = () => {
                 <span className="text-[10px] font-medium text-red-400 tracking-[0.2em] -mt-1">MEDIA</span>
               </div>
             </div>
-            <p className="text-white/50 text-sm leading-relaxed mb-6">
+            <p className="text-white/70 text-sm leading-relaxed mb-6">
               Transforming businesses with cutting-edge web design, strategic advertising, and intelligent automation solutions. Build faster, scale better.
             </p>
             <div className="flex items-center gap-4">
@@ -45,31 +45,31 @@ const Footer = () => {
           {/* Contact Info */}
           <div className="flex flex-col sm:flex-row gap-8 lg:gap-16">
             <div className="space-y-4">
-              <div className="flex items-center gap-3 text-white/60 hover:text-white transition-colors group">
+              <div className="flex items-center gap-3 text-white/70 hover:text-white transition-colors group">
                 <div className="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-red-500/50 transition-colors">
                   <Mail className="w-4 h-4" />
                 </div>
                 <div>
-                  <div className="text-xs text-white/40 mb-0.5">Email us</div>
+                  <div className="text-xs text-white/60 mb-0.5">Email us</div>
                   <a href="mailto:hello@lunexomedia.com" className="text-sm">hello@lunexomedia.com</a>
                 </div>
               </div>
-              <div className="flex items-center gap-3 text-white/60 hover:text-white transition-colors group">
+              <div className="flex items-center gap-3 text-white/70 hover:text-white transition-colors group">
                 <div className="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-red-500/50 transition-colors">
                   <Phone className="w-4 h-4" />
                 </div>
                 <div>
-                  <div className="text-xs text-white/40 mb-0.5">Call us</div>
+                  <div className="text-xs text-white/60 mb-0.5">Call us</div>
                   <a href="tel:+8801234567890" className="text-sm">+880 1234 567890</a>
                 </div>
               </div>
             </div>
-            <div className="flex items-start gap-3 text-white/60 group">
+            <div className="flex items-start gap-3 text-white/70 group">
               <div className="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center">
                 <MapPin className="w-4 h-4" />
               </div>
               <div>
-                <div className="text-xs text-white/40 mb-0.5">Location</div>
+                <div className="text-xs text-white/60 mb-0.5">Location</div>
                 <span className="text-sm">Dhaka, Bangladesh</span>
               </div>
             </div>
@@ -91,7 +91,7 @@ const Footer = () => {
                 <li key={link.to}>
                   <Link 
                     to={link.to} 
-                    className="group flex items-center gap-1 text-sm text-white/40 hover:text-white transition-all duration-300"
+                    className="group flex items-center gap-1 text-sm text-white/60 hover:text-white transition-all duration-300"
                   >
                     <span>{link.label}</span>
                     <ArrowUpRight className="w-3 h-3 opacity-0 -translate-y-1 translate-x-1 group-hover:opacity-100 group-hover:translate-y-0 group-hover:translate-x-0 transition-all duration-300" />
@@ -114,7 +114,7 @@ const Footer = () => {
                 <li key={link.to}>
                   <Link 
                     to={link.to} 
-                    className="group flex items-center gap-1 text-sm text-white/40 hover:text-white transition-all duration-300"
+                    className="group flex items-center gap-1 text-sm text-white/60 hover:text-white transition-all duration-300"
                   >
                     <span>{link.label}</span>
                     <ArrowUpRight className="w-3 h-3 opacity-0 -translate-y-1 translate-x-1 group-hover:opacity-100 group-hover:translate-y-0 group-hover:translate-x-0 transition-all duration-300" />
@@ -136,7 +136,7 @@ const Footer = () => {
                 <li key={link.to}>
                   <Link 
                     to={link.to} 
-                    className="group flex items-center gap-1 text-sm text-white/40 hover:text-white transition-all duration-300"
+                    className="group flex items-center gap-1 text-sm text-white/60 hover:text-white transition-all duration-300"
                   >
                     <span>{link.label}</span>
                     <ArrowUpRight className="w-3 h-3 opacity-0 -translate-y-1 translate-x-1 group-hover:opacity-100 group-hover:translate-y-0 group-hover:translate-x-0 transition-all duration-300" />
@@ -158,7 +158,7 @@ const Footer = () => {
                 <li key={link.to}>
                   <Link 
                     to={link.to} 
-                    className="group flex items-center gap-1 text-sm text-white/40 hover:text-white transition-all duration-300"
+                    className="group flex items-center gap-1 text-sm text-white/60 hover:text-white transition-all duration-300"
                   >
                     <span>{link.label}</span>
                     <ArrowUpRight className="w-3 h-3 opacity-0 -translate-y-1 translate-x-1 group-hover:opacity-100 group-hover:translate-y-0 group-hover:translate-x-0 transition-all duration-300" />
@@ -172,14 +172,14 @@ const Footer = () => {
         {/* Bottom section */}
         <div className="border-t border-white/10 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-xs text-white/30">
+            <p className="text-xs text-white/50">
               © {new Date().getFullYear()} LUNEXO MEDIA. All rights reserved.
             </p>
             <div className="flex items-center gap-6">
-              <span className="text-xs text-white/30">Build Faster. Scale Better.</span>
+              <span className="text-xs text-white/50">Build Faster. Scale Better.</span>
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-                <span className="text-xs text-white/40">All systems operational</span>
+                <span className="text-xs text-white/60">All systems operational</span>
               </div>
             </div>
           </div>

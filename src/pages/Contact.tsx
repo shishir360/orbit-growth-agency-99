@@ -119,7 +119,7 @@ const Contact = () => {
               </span>
             </h1>
             
-            <p className="text-lg text-white/50 max-w-2xl mx-auto">
+            <p className="text-lg text-white/70 max-w-2xl mx-auto">
               Ready to launch your next project? We'd love to hear about your vision and discuss how we can help.
             </p>
           </div>
@@ -142,7 +142,7 @@ const Contact = () => {
                   <method.icon className="w-7 h-7 text-white" />
                 </div>
                 <h3 className="text-lg font-bold text-white mb-1">{method.title}</h3>
-                <p className="text-white/50 text-sm mb-3">{method.description}</p>
+                <p className="text-white/70 text-sm mb-3">{method.description}</p>
                 <span className="text-blue-400 font-medium">{method.action}</span>
               </a>
             ))}
@@ -298,7 +298,7 @@ const Contact = () => {
             <h2 className="text-3xl lg:text-5xl font-bold text-white mb-6" style={{fontFamily: "'Playfair Display', serif"}}>
               Prefer a <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">Quick Call?</span>
             </h2>
-            <p className="text-lg text-white/50 mb-8">
+            <p className="text-lg text-white/70 mb-8">
               Book a free 15-minute strategy call with our team.
             </p>
             <Button asChild size="lg" className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white hover:from-blue-600 hover:to-cyan-600 rounded-full px-10 py-7">

@@ -77,7 +77,7 @@ const About = () => {
                 </span>
               </h1>
               
-              <p className="text-lg text-white/50 leading-relaxed max-w-xl">
+              <p className="text-lg text-white/70 leading-relaxed max-w-xl">
                 We're not just another digital agency. We're your strategic partner in building scalable, profitable digital solutions that drive real business growth.
               </p>
               
@@ -89,7 +89,7 @@ const About = () => {
                 ].map((stat, i) => (
                   <div key={i} className="text-center bg-white/5 border border-white/10 rounded-xl p-4">
                     <div className="text-2xl font-bold text-white">{stat.number}</div>
-                    <div className="text-xs text-white/50 uppercase tracking-wider">{stat.label}</div>
+                    <div className="text-xs text-white/60 uppercase tracking-wider">{stat.label}</div>
                   </div>
                 ))}
               </div>
@@ -105,7 +105,7 @@ const About = () => {
               <div className="absolute -inset-6 bg-gradient-to-r from-blue-500/30 to-cyan-500/20 rounded-3xl blur-3xl opacity-50"></div>
               <div className="relative bg-white/5 border border-white/10 rounded-2xl p-8 backdrop-blur-sm">
                 <h3 className="text-xl font-bold text-white mb-6">Our Mission</h3>
-                <p className="text-white/60 leading-relaxed mb-6">
+                <p className="text-white/70 leading-relaxed mb-6">
                   Making digital growth accessible to businesses of all sizes through innovative technology and proven strategies.
                 </p>
                 <div className="space-y-3">
@@ -145,9 +145,9 @@ const About = () => {
                   <div className={`w-20 h-20 rounded-xl bg-gradient-to-r ${service.color} flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:scale-110 transition-transform`}>
                     <service.icon className="w-10 h-10 text-white" />
                   </div>
-                  <div className="text-sm text-white/40 mb-2">{service.stats}</div>
+                  <div className="text-sm text-white/60 mb-2">{service.stats}</div>
                   <h3 className="text-2xl font-bold text-white mb-4">{service.title}</h3>
-                  <p className="text-white/50">{service.description}</p>
+                  <p className="text-white/70">{service.description}</p>
                 </div>
               </div>
             ))}
@@ -177,7 +177,7 @@ const About = () => {
                   <value.icon className="w-8 h-8 text-white" />
                 </div>
                 <h3 className="text-lg font-bold text-white mb-2">{value.title}</h3>
-                <p className="text-white/50 text-sm">{value.desc}</p>
+                <p className="text-white/70 text-sm">{value.desc}</p>
               </div>
             ))}
           </div>
@@ -211,11 +211,11 @@ const About = () => {
                 Farhan <span className="bg-gradient-to-r from-teal-400 to-cyan-400 bg-clip-text text-transparent">Tanvir</span>
               </h2>
               
-              <p className="text-white/50 leading-relaxed">
+              <p className="text-white/70 leading-relaxed">
                 I started Lunexo Media with a clear vision – to help businesses grow faster and smarter through modern web design, SEO, and digital marketing solutions.
               </p>
               
-              <p className="text-white/50 leading-relaxed">
+              <p className="text-white/70 leading-relaxed">
                 With years of experience in the digital space, I've helped countless businesses transform their online presence and achieve their goals.
               </p>
               
@@ -239,7 +239,7 @@ const About = () => {
             <h2 className="text-4xl lg:text-6xl font-bold text-white mb-6" style={{fontFamily: "'Playfair Display', serif"}}>
               Ready to <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">Get Started?</span>
             </h2>
-            <p className="text-lg text-white/50 mb-10 max-w-2xl mx-auto">
+            <p className="text-lg text-white/70 mb-10 max-w-2xl mx-auto">
               Let's discuss your project and create a strategy for success.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
