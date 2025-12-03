@@ -252,53 +252,83 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Enhanced Case Studies Preview */}
-      <section className="py-24 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative">
-        <div className="container-wide section-padding">
+      {/* Ultra Premium Case Studies Preview */}
+      <section className="py-32 bg-[#0a0a0f] relative overflow-hidden">
+        {/* Premium gradient orbs */}
+        <div className="absolute top-20 left-10 w-[500px] h-[500px] bg-gradient-to-r from-red-600/15 to-orange-500/10 rounded-full blur-[150px]"></div>
+        <div className="absolute bottom-20 right-10 w-[400px] h-[400px] bg-gradient-to-r from-purple-600/10 to-blue-500/10 rounded-full blur-[120px]"></div>
+        
+        {/* Grid pattern */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.01)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.01)_1px,transparent_1px)] bg-[size:60px_60px]"></div>
+        
+        <div className="container-wide section-padding relative z-10">
           <div className="relative max-w-6xl mx-auto">
+            {/* Premium Header */}
             <div className="text-center mb-20 animate-fade-in">
-            <h2 className="text-4xl lg:text-5xl font-space font-bold mb-6 text-white">
-              Our Core Services (SEO, Ads, Web Design, AI)
-            </h2>
-              <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-                Our client success stories - how we transformed their businesses
+              <div className="inline-flex items-center gap-3 bg-gradient-to-r from-red-500/10 to-orange-500/10 border border-red-500/20 text-red-400 px-6 py-3 rounded-full text-sm font-medium backdrop-blur-xl mb-8">
+                <Zap className="w-4 h-4" />
+                Proven Results
+                <span className="w-1.5 h-1.5 bg-red-400 rounded-full animate-pulse"></span>
+              </div>
+              
+              <h2 className="text-4xl lg:text-6xl font-bold mb-6 text-white" style={{fontFamily: "'Playfair Display', serif"}}>
+                Core Services That
+                <br />
+                <span className="bg-gradient-to-r from-red-500 via-orange-400 to-yellow-400 bg-clip-text text-transparent">
+                  Drive Growth
+                </span>
+              </h2>
+              <p className="text-lg lg:text-xl text-white/50 max-w-3xl mx-auto leading-relaxed font-light">
+                SEO, Paid Ads, Web Design & AI Automation — transforming businesses into market leaders
               </p>
             </div>
             
-            {/* Quick Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-              <div className="text-center bg-slate-800/50 rounded-2xl p-6 border border-slate-600">
-                <div className="text-3xl font-bold text-red-500 mb-2">200%</div>
-                <div className="text-gray-300">Average conversion increase</div>
-              </div>
-              <div className="text-center bg-slate-800/50 rounded-2xl p-6 border border-slate-600">
-                <div className="text-3xl font-bold text-red-500 mb-2">10x</div>
-                <div className="text-gray-300">ROI improvement</div>
-              </div>
-              <div className="text-center bg-slate-800/50 rounded-2xl p-6 border border-slate-600">
-                <div className="text-3xl font-bold text-red-500 mb-2">30 days</div>
-                <div className="text-gray-300">Average launch time</div>
-              </div>
+            {/* Premium Stats Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-20">
+              {[
+                { value: "200%", label: "Conversion Increase", icon: TrendingUp, color: "from-red-500 to-orange-500" },
+                { value: "10x", label: "ROI Improvement", icon: Award, color: "from-orange-500 to-yellow-500" },
+                { value: "30 Days", label: "Average Launch", icon: Zap, color: "from-purple-500 to-pink-500" }
+              ].map((stat, i) => (
+                <div key={i} className="group relative bg-white/5 border border-white/10 rounded-2xl p-8 backdrop-blur-sm hover:bg-white/8 hover:border-white/20 transition-all duration-500">
+                  <div className="absolute -inset-1 bg-gradient-to-r opacity-0 group-hover:opacity-20 rounded-2xl blur-xl transition-opacity duration-500" style={{backgroundImage: `linear-gradient(to right, var(--tw-gradient-stops))`}}></div>
+                  <div className={`w-14 h-14 rounded-xl bg-gradient-to-r ${stat.color} flex items-center justify-center mb-6 shadow-lg`}>
+                    <stat.icon className="w-7 h-7 text-white" />
+                  </div>
+                  <div className="text-4xl lg:text-5xl font-bold text-white mb-2">{stat.value}</div>
+                  <div className="text-white/50 font-medium">{stat.label}</div>
+                </div>
+              ))}
             </div>
 
+            {/* Premium Image Card */}
             <div className="relative group animate-scale-in" style={{animationDelay: '0.2s'}}>
-              <div className="absolute inset-0 bg-red-600 rounded-3xl filter blur-2xl opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
-              <div className="bg-slate-800 border border-slate-600 rounded-3xl overflow-hidden p-4">
+              <div className="absolute -inset-6 bg-gradient-to-r from-red-500/30 via-orange-500/25 to-yellow-500/20 rounded-3xl blur-3xl opacity-50 group-hover:opacity-70 transition-opacity duration-700"></div>
+              <div className="relative bg-gradient-to-br from-white/10 to-white/5 p-2 rounded-3xl backdrop-blur-sm border border-white/15 shadow-2xl">
                 <img
                   src={heroDashboard}
                   alt="Client Success Dashboard Preview"
-                  className="w-full h-auto rounded-2xl transition-transform duration-500 group-hover:scale-105"
+                  className="w-full h-auto rounded-2xl transition-transform duration-700 group-hover:scale-[1.02]"
                   loading="lazy"
                 />
+                
+                {/* Floating badges */}
+                <div className="absolute top-6 left-6 bg-gradient-to-r from-green-500 to-emerald-500 text-white px-4 py-2 rounded-xl text-sm font-semibold shadow-lg shadow-green-500/30 flex items-center gap-2">
+                  <TrendingUp className="w-4 h-4" />
+                  Live Dashboard
+                </div>
+                <div className="absolute bottom-6 right-6 bg-white/10 backdrop-blur-xl border border-white/20 text-white px-4 py-2 rounded-xl text-sm font-medium">
+                  Real-time Analytics
+                </div>
               </div>
             </div>
             
-            {/* Call to Action */}
-            <div className="text-center mt-12">
-              <Button asChild size="lg" className="bg-red-600 hover:bg-red-700 text-white rounded-full px-8">
-                <a href="/portfolio">
-                  View More Case Studies
-                  <ArrowRight className="w-5 h-5 ml-2" />
+            {/* Premium CTA */}
+            <div className="text-center mt-16">
+              <Button asChild size="lg" className="group text-base px-10 py-7 bg-gradient-to-r from-red-500 to-orange-500 text-white hover:from-red-600 hover:to-orange-600 rounded-full transition-all duration-300 hover:scale-105 font-semibold shadow-lg shadow-red-500/25">
+                <a href="/portfolio" className="flex items-center gap-2">
+                  View All Case Studies
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </a>
               </Button>
             </div>
