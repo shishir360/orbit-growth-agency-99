@@ -339,37 +339,80 @@ const Index = () => {
       {/* Trusted By Section */}
       <TrustedBy />
 
-      {/* Professional Team Section */}
-      <section className="py-24 bg-gradient-to-br from-slate-800 via-slate-700 to-slate-800 relative overflow-hidden">
+      {/* Ultra Premium Team Section */}
+      <section className="py-32 bg-[#0a0a0f] relative overflow-hidden">
+        {/* Premium gradient orbs */}
+        <div className="absolute top-20 right-10 w-[500px] h-[500px] bg-gradient-to-r from-blue-600/15 to-cyan-500/10 rounded-full blur-[150px]"></div>
+        <div className="absolute bottom-20 left-10 w-[400px] h-[400px] bg-gradient-to-r from-purple-600/10 to-pink-500/10 rounded-full blur-[120px]"></div>
+        
+        {/* Grid pattern */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.01)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.01)_1px,transparent_1px)] bg-[size:60px_60px]"></div>
+        
         <div className="container-wide section-padding relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div className="animate-fade-in">
-              <h2 className="text-4xl lg:text-5xl font-space font-bold mb-6 text-white">
-                Professional Development Team
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+            <div className="animate-fade-in space-y-8">
+              {/* Premium Badge */}
+              <div className="inline-flex items-center gap-3 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border border-blue-500/20 text-blue-400 px-6 py-3 rounded-full text-sm font-medium backdrop-blur-xl">
+                <Users className="w-4 h-4" />
+                Expert Team
+                <span className="w-1.5 h-1.5 bg-blue-400 rounded-full animate-pulse"></span>
+              </div>
+              
+              <h2 className="text-4xl lg:text-6xl font-bold text-white" style={{fontFamily: "'Playfair Display', serif"}}>
+                Professional
+                <br />
+                <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-teal-400 bg-clip-text text-transparent">
+                  Development Team
+                </span>
               </h2>
-              <p className="text-xl text-gray-300 mb-8 leading-relaxed">
+              
+              <p className="text-lg lg:text-xl text-white/50 leading-relaxed font-light max-w-xl">
                 Our expert developers work with cutting-edge technology to deliver exceptional results. From concept to deployment, we ensure your project meets the highest professional standards.
               </p>
-              <div className="grid grid-cols-2 gap-6">
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-red-500 mb-2">50+</div>
-                  <div className="text-gray-400">Projects Delivered</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-red-500 mb-2">24/7</div>
-                  <div className="text-gray-400">Support Available</div>
-                </div>
+              
+              {/* Premium Stats */}
+              <div className="grid grid-cols-2 gap-4">
+                {[
+                  { value: "50+", label: "Projects Delivered", icon: Zap, color: "from-blue-500 to-cyan-500" },
+                  { value: "24/7", label: "Support Available", icon: Star, color: "from-purple-500 to-pink-500" }
+                ].map((stat, i) => (
+                  <div key={i} className="group bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-sm hover:bg-white/8 hover:border-white/20 transition-all duration-300">
+                    <div className={`w-12 h-12 rounded-xl bg-gradient-to-r ${stat.color} flex items-center justify-center mb-4 shadow-lg`}>
+                      <stat.icon className="w-6 h-6 text-white" />
+                    </div>
+                    <div className="text-3xl lg:text-4xl font-bold text-white mb-1">{stat.value}</div>
+                    <div className="text-white/50 text-sm">{stat.label}</div>
+                  </div>
+                ))}
               </div>
+              
+              {/* CTA */}
+              <Button asChild size="lg" className="group text-base px-8 py-6 bg-gradient-to-r from-blue-500 to-cyan-500 text-white hover:from-blue-600 hover:to-cyan-600 rounded-full transition-all duration-300 hover:scale-105 font-semibold shadow-lg shadow-blue-500/25">
+                <a href="/contact" className="flex items-center gap-2">
+                  Work With Us
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </a>
+              </Button>
             </div>
+            
+            {/* Premium Image */}
             <div className="relative animate-scale-in" style={{animationDelay: '0.3s'}}>
+              <div className="absolute -inset-6 bg-gradient-to-r from-blue-500/30 via-cyan-500/25 to-teal-500/20 rounded-3xl blur-3xl opacity-50 group-hover:opacity-70 transition-opacity duration-700"></div>
               <div className="relative group">
-                <div className="absolute inset-0 bg-red-600 rounded-3xl filter blur-2xl opacity-30 group-hover:opacity-50 transition-opacity duration-500"></div>
-                <img
-                  src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=800&q=60"
-                  alt="Professional development team working"
-                  className="relative w-full h-auto rounded-3xl shadow-2xl border border-slate-600 transition-transform duration-500 group-hover:scale-105"
-                  loading="lazy"
-                />
+                <div className="relative bg-gradient-to-br from-white/10 to-white/5 p-2 rounded-3xl backdrop-blur-sm border border-white/15 shadow-2xl">
+                  <img
+                    src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=800&q=60"
+                    alt="Professional development team working"
+                    className="w-full h-auto rounded-2xl transition-transform duration-700 group-hover:scale-[1.02]"
+                    loading="lazy"
+                  />
+                  
+                  {/* Floating badge */}
+                  <div className="absolute top-6 right-6 bg-gradient-to-r from-green-500 to-emerald-500 text-white px-4 py-2 rounded-xl text-sm font-semibold shadow-lg shadow-green-500/30 flex items-center gap-2">
+                    <Check className="w-4 h-4" />
+                    Verified Team
+                  </div>
+                </div>
               </div>
             </div>
           </div>
