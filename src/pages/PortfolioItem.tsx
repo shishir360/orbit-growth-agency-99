@@ -68,7 +68,7 @@ const PortfolioItem = () => {
           <div className="absolute top-0 left-1/4 w-[400px] h-[400px] bg-gradient-to-r from-red-600/20 to-orange-500/10 rounded-full blur-[100px]"></div>
           <div className="container-wide section-padding text-center relative z-10">
             <h1 className="text-5xl font-bold mb-4 text-white" style={{fontFamily: "'Playfair Display', serif"}}>Project Not Found</h1>
-            <p className="text-white/50 mb-8 text-lg">The project you're looking for doesn't exist or has been removed.</p>
+            <p className="text-white/70 mb-8 text-lg">The project you're looking for doesn't exist or has been removed.</p>
             <Button asChild className="bg-white text-black hover:bg-white/90 rounded-full px-8 py-6">
               <Link to="/portfolio">Back to Portfolio</Link>
             </Button>
@@ -121,7 +121,7 @@ const PortfolioItem = () => {
                 {project.title}
               </h1>
               
-              <p className="text-lg lg:text-xl text-white/50 leading-relaxed max-w-xl font-light">
+              <p className="text-lg lg:text-xl text-white/70 leading-relaxed max-w-xl font-light">
                 {project.description}
               </p>
 
@@ -132,7 +132,7 @@ const PortfolioItem = () => {
                     <TrendingUp className="w-5 h-5 text-green-400" />
                   </div>
                   <div>
-                    <div className="text-xs text-white/40 uppercase tracking-wider">Results</div>
+                    <div className="text-xs text-white/60 uppercase tracking-wider">Results</div>
                     <div className="text-white font-semibold">200% Growth</div>
                   </div>
                 </div>
@@ -141,7 +141,7 @@ const PortfolioItem = () => {
                     <Calendar className="w-5 h-5 text-blue-400" />
                   </div>
                   <div>
-                    <div className="text-xs text-white/40 uppercase tracking-wider">Duration</div>
+                    <div className="text-xs text-white/60 uppercase tracking-wider">Duration</div>
                     <div className="text-white font-semibold">4 Weeks</div>
                   </div>
                 </div>
@@ -194,7 +194,7 @@ const PortfolioItem = () => {
                 </div>
                 <div>
                   <h2 className="text-2xl font-bold text-white" style={{fontFamily: "'Playfair Display', serif"}}>Technologies Used</h2>
-                  <p className="text-white/50 text-sm">Stack & tools that powered this project</p>
+                  <p className="text-white/70 text-sm">Stack & tools that powered this project</p>
                 </div>
               </div>
               
@@ -225,20 +225,21 @@ const PortfolioItem = () => {
                   </div>
                   <div>
                     <h2 className="text-2xl font-bold text-white" style={{fontFamily: "'Playfair Display', serif"}}>Project Details</h2>
-                    <p className="text-white/50 text-sm">Full case study breakdown</p>
+                    <p className="text-white/70 text-sm">Full case study breakdown</p>
                   </div>
                 </div>
                 
                 <div className="prose prose-lg prose-invert max-w-none 
                   prose-headings:text-white prose-headings:font-bold
-                  prose-p:text-white/70 prose-p:leading-relaxed
+                  prose-p:text-white/80 prose-p:leading-relaxed
                   prose-a:text-red-400 prose-a:no-underline hover:prose-a:underline
                   prose-strong:text-white
-                  prose-ul:text-white/70 prose-ol:text-white/70
+                  prose-ul:text-white/80 prose-ol:text-white/80
                   prose-li:marker:text-red-400
-                  prose-blockquote:border-l-red-500 prose-blockquote:text-white/60
+                  prose-blockquote:border-l-red-500 prose-blockquote:text-white/70
                   prose-code:bg-white/10 prose-code:px-2 prose-code:py-1 prose-code:rounded prose-code:text-red-400
                   prose-pre:bg-white/5 prose-pre:border prose-pre:border-white/10
+                  [&>*]:text-white/80
                 ">
                   <div dangerouslySetInnerHTML={{ 
                     __html: DOMPurify.sanitize(project.content, {
@@ -262,7 +263,7 @@ const PortfolioItem = () => {
               <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4" style={{fontFamily: "'Playfair Display', serif"}}>
                 Related Projects
               </h2>
-              <p className="text-white/50">More work in {project.category}</p>
+              <p className="text-white/70">More work in {project.category}</p>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -282,11 +283,11 @@ const PortfolioItem = () => {
                   </div>
                   
                   <div className="p-6">
-                    <span className="text-xs text-white/40 uppercase tracking-wider">{related.category}</span>
+                    <span className="text-xs text-white/60 uppercase tracking-wider">{related.category}</span>
                     <h3 className="text-lg font-bold text-white mt-1 group-hover:text-red-400 transition-colors">
                       {related.title}
                     </h3>
-                    <p className="text-white/50 text-sm mt-2 line-clamp-2">{related.description}</p>
+                    <p className="text-white/70 text-sm mt-2 line-clamp-2">{related.description}</p>
                   </div>
                 </Link>
               ))}
@@ -315,7 +316,7 @@ const PortfolioItem = () => {
               </span>
             </h2>
             
-            <p className="text-lg text-white/50 mb-10 max-w-2xl mx-auto font-light">
+            <p className="text-lg text-white/70 mb-10 max-w-2xl mx-auto font-light">
               Let's discuss how we can create transformative digital experiences that drive real results for your brand.
             </p>
             
