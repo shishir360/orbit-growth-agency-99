@@ -87,7 +87,7 @@ const TutorialPost = () => {
           <h1 className="text-4xl font-bold mb-4">Tutorial Not Found</h1>
           <p className="text-muted-foreground mb-8">The tutorial you're looking for doesn't exist.</p>
           <Button asChild>
-            <Link to="/tutorials">Back to Tutorials</Link>
+            <a href="/tutorials">Back to Tutorials</a>
           </Button>
         </div>
         <Footer />
@@ -132,10 +132,10 @@ const TutorialPost = () => {
         <div className="container mx-auto px-6">
           <div className="max-w-4xl mx-auto">
             <Button variant="ghost" size="sm" asChild className="mb-6">
-              <Link to="/tutorials">
+              <a href="/tutorials">
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Back to Tutorials
-              </Link>
+              </a>
             </Button>
             
             <div className="flex items-center gap-3 mb-6">
@@ -196,7 +196,7 @@ const TutorialPost = () => {
             Our team can help you build and launch your project in 30 days or less.
           </p>
           <Button size="lg" variant="secondary" asChild>
-            <Link to="/contact">Schedule a Meeting</Link>
+            <a href="/contact">Schedule a Meeting</a>
           </Button>
         </div>
       </section>
