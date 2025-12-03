@@ -17,7 +17,9 @@ import {
   Globe,
   Award,
   Zap,
-  BarChart3
+  BarChart3,
+  Layers,
+  Eye
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -241,21 +243,28 @@ const Portfolio = () => {
       {/* Ultra Premium Hero Section */}
       <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-[#0a0a0f]">
         {/* Animated gradient orbs */}
-        <div className="absolute top-0 right-1/4 w-[500px] h-[500px] bg-gradient-to-r from-red-600/20 to-orange-500/15 rounded-full blur-[100px] animate-pulse"></div>
-        <div className="absolute bottom-0 left-1/4 w-[400px] h-[400px] bg-gradient-to-r from-purple-600/15 to-blue-500/10 rounded-full blur-[80px] animate-pulse" style={{animationDelay: '1s'}}></div>
+        <div className="absolute top-20 right-10 w-[600px] h-[600px] bg-gradient-to-r from-red-600/25 to-orange-500/20 rounded-full blur-[130px] animate-pulse"></div>
+        <div className="absolute bottom-20 left-10 w-[500px] h-[500px] bg-gradient-to-r from-purple-600/20 to-blue-500/15 rounded-full blur-[100px] animate-pulse" style={{animationDelay: '1s'}}></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] bg-gradient-radial from-white/3 to-transparent rounded-full"></div>
         
         {/* Grid pattern overlay */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-[size:60px_60px]"></div>
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.015)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.015)_1px,transparent_1px)] bg-[size:80px_80px]"></div>
+
+        {/* Floating particles */}
+        <div className="absolute top-1/4 right-1/4 w-2 h-2 bg-yellow-500/50 rounded-full animate-pulse"></div>
+        <div className="absolute top-1/3 left-1/3 w-1.5 h-1.5 bg-red-500/50 rounded-full animate-pulse" style={{animationDelay: '0.5s'}}></div>
+        <div className="absolute bottom-1/4 right-1/3 w-1 h-1 bg-orange-500/50 rounded-full animate-pulse" style={{animationDelay: '1.5s'}}></div>
 
         <div className="container-wide section-padding relative z-10 pt-20">
           <div className="text-center max-w-5xl mx-auto animate-fade-in">
             {/* Premium badge */}
-            <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 text-white/70 px-5 py-2.5 rounded-full text-sm font-medium backdrop-blur-xl mb-8">
-              <Trophy className="w-4 h-4 text-yellow-400" />
+            <div className="inline-flex items-center gap-3 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/20 text-yellow-400 px-6 py-3 rounded-full text-sm font-medium backdrop-blur-xl mb-8">
+              <Trophy className="w-5 h-5" />
               Award-Winning Portfolio
+              <span className="w-1.5 h-1.5 bg-yellow-400 rounded-full animate-pulse"></span>
             </div>
             
-            <h1 className="text-4xl sm:text-5xl lg:text-7xl xl:text-8xl font-bold leading-[1.05] tracking-tight text-white mb-6" style={{fontFamily: "'Playfair Display', serif"}}>
+            <h1 className="text-4xl sm:text-5xl lg:text-7xl xl:text-[5.5rem] font-bold leading-[1.02] tracking-tight text-white mb-8" style={{fontFamily: "'Playfair Display', serif"}}>
               Our Work &
               <br />
               <span className="bg-gradient-to-r from-red-500 via-orange-400 to-yellow-400 bg-clip-text text-transparent">
@@ -263,34 +272,39 @@ const Portfolio = () => {
               </span>
             </h1>
             
-            <p className="text-lg lg:text-xl text-white/50 leading-relaxed mb-12 max-w-3xl mx-auto font-light">
+            <p className="text-lg lg:text-xl text-white/50 leading-relaxed mb-14 max-w-3xl mx-auto font-light">
               Transformative digital experiences that have revolutionized businesses and generated millions in revenue.
             </p>
 
-            {/* Premium Stats Row */}
-            <div className="flex flex-wrap justify-center gap-6 lg:gap-12 mb-12">
+            {/* Premium Stats Row - Enhanced */}
+            <div className="flex flex-wrap justify-center gap-4 lg:gap-6 mb-14">
               {[
-                { value: "50+", label: "Projects" },
-                { value: "$2M+", label: "Revenue" },
-                { value: "95%", label: "Satisfaction" },
-                { value: "30 Days", label: "Avg. Delivery" }
+                { value: "50+", label: "Projects", icon: Zap },
+                { value: "$2M+", label: "Revenue Generated", icon: TrendingUp },
+                { value: "95%", label: "Client Satisfaction", icon: Award },
+                { value: "30 Days", label: "Avg. Delivery", icon: Calendar }
               ].map((stat, index) => (
-                <div key={index} className="text-center">
-                  <div className="text-2xl lg:text-4xl font-bold text-white mb-1">{stat.value}</div>
-                  <div className="text-xs text-white/40 uppercase tracking-wider">{stat.label}</div>
+                <div key={index} className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-xl px-5 py-4 backdrop-blur-sm hover:bg-white/8 transition-all duration-300">
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-red-500/20 to-orange-500/20 flex items-center justify-center">
+                    <stat.icon className="w-5 h-5 text-red-400" />
+                  </div>
+                  <div className="text-left">
+                    <div className="text-xl lg:text-2xl font-bold text-white">{stat.value}</div>
+                    <div className="text-xs text-white/40 uppercase tracking-wider">{stat.label}</div>
+                  </div>
                 </div>
               ))}
             </div>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="group text-base px-8 py-6 bg-white text-black hover:bg-white/90 rounded-full transition-all duration-300 hover:scale-105 font-semibold" asChild>
+              <Button size="lg" className="group text-base px-10 py-7 bg-gradient-to-r from-red-500 to-orange-500 text-white hover:from-red-600 hover:to-orange-600 rounded-full transition-all duration-300 hover:scale-105 font-semibold shadow-lg shadow-red-500/25" asChild>
                 <Link to="/contact">
                   Start Your Project
                   <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>
               
-              <Button size="lg" variant="outline" className="text-base px-8 py-6 border border-white/20 text-white bg-white/5 hover:bg-white/10 rounded-full transition-all duration-300 backdrop-blur-sm" asChild>
+              <Button size="lg" variant="outline" className="text-base px-10 py-7 border border-white/20 text-white bg-white/5 hover:bg-white/10 rounded-full transition-all duration-300 backdrop-blur-sm" asChild>
                 <a href="#featured-projects">
                   View Featured Work
                 </a>
@@ -300,24 +314,31 @@ const Portfolio = () => {
         </div>
       </section>
 
-      {/* Modern Categories Filter */}
-      <section className="py-16 bg-[#0a0a0f] relative overflow-hidden" id="featured-projects">
-        <div className="container-wide section-padding">
-          <div className="text-center mb-12">
-            <h2 className="text-2xl lg:text-4xl font-bold text-white mb-2" style={{fontFamily: "'Playfair Display', serif"}}>
+      {/* Modern Categories Filter - Enhanced */}
+      <section className="py-20 bg-[#0a0a0f] relative overflow-hidden" id="featured-projects">
+        {/* Subtle gradient */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[200px] bg-gradient-to-r from-red-600/10 via-orange-500/10 to-red-600/10 rounded-full blur-[80px]"></div>
+        
+        <div className="container-wide section-padding relative z-10">
+          <div className="text-center mb-14">
+            <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 text-white/60 px-4 py-2 rounded-full text-xs font-medium mb-6">
+              <Layers className="w-3.5 h-3.5" />
+              Browse Categories
+            </div>
+            <h2 className="text-3xl lg:text-5xl font-bold text-white mb-3" style={{fontFamily: "'Playfair Display', serif"}}>
               Explore by Category
             </h2>
-            <p className="text-sm text-white/40">{dbProjects.length} published projects</p>
+            <p className="text-white/40">{allProjects.length} projects showcasing our expertise</p>
           </div>
           
           <div className="flex flex-wrap gap-3 justify-center">
             {categories.map((category) => (
               <button 
                 key={category} 
-                className={`px-6 py-3 rounded-full font-medium text-sm transition-all duration-300 ${
+                className={`px-8 py-4 rounded-full font-medium text-sm transition-all duration-300 ${
                   category === activeCategory 
-                    ? "bg-white text-black" 
-                    : "bg-white/5 text-white/70 border border-white/10 hover:bg-white/10 hover:text-white"
+                    ? "bg-gradient-to-r from-red-500 to-orange-500 text-white shadow-lg shadow-red-500/25" 
+                    : "bg-white/5 text-white/70 border border-white/10 hover:bg-white/10 hover:text-white hover:border-white/20"
                 }`}
                 onClick={() => setActiveCategory(category)}
               >
