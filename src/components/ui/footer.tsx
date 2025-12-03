@@ -1,5 +1,4 @@
 import SocialMedia from "./social-media";
-import { Link } from "react-router-dom";
 import { ArrowUpRight, Mail, MapPin, Phone } from "lucide-react";
 
 const Footer = () => {
@@ -89,13 +88,13 @@ const Footer = () => {
                 { to: "/portfolio", label: "Portfolio" },
               ].map((link) => (
                 <li key={link.to}>
-                  <Link 
-                    to={link.to} 
+                  <a 
+                    href={link.to} 
                     className="group flex items-center gap-1 text-sm text-white/60 hover:text-white transition-all duration-300"
                   >
                     <span>{link.label}</span>
                     <ArrowUpRight className="w-3 h-3 opacity-0 -translate-y-1 translate-x-1 group-hover:opacity-100 group-hover:translate-y-0 group-hover:translate-x-0 transition-all duration-300" />
-                  </Link>
+                  </a>
                 </li>
               ))}
             </ul>
@@ -112,13 +111,13 @@ const Footer = () => {
                 { to: "/reviews", label: "Reviews" },
               ].map((link) => (
                 <li key={link.to}>
-                  <Link 
-                    to={link.to} 
+                  <a 
+                    href={link.to} 
                     className="group flex items-center gap-1 text-sm text-white/60 hover:text-white transition-all duration-300"
                   >
                     <span>{link.label}</span>
                     <ArrowUpRight className="w-3 h-3 opacity-0 -translate-y-1 translate-x-1 group-hover:opacity-100 group-hover:translate-y-0 group-hover:translate-x-0 transition-all duration-300" />
-                  </Link>
+                  </a>
                 </li>
               ))}
             </ul>
@@ -134,13 +133,13 @@ const Footer = () => {
                 { to: "/pricing", label: "Pricing" },
               ].map((link) => (
                 <li key={link.to}>
-                  <Link 
-                    to={link.to} 
+                  <a 
+                    href={link.to} 
                     className="group flex items-center gap-1 text-sm text-white/60 hover:text-white transition-all duration-300"
                   >
                     <span>{link.label}</span>
                     <ArrowUpRight className="w-3 h-3 opacity-0 -translate-y-1 translate-x-1 group-hover:opacity-100 group-hover:translate-y-0 group-hover:translate-x-0 transition-all duration-300" />
-                  </Link>
+                  </a>
                 </li>
               ))}
             </ul>
@@ -156,13 +155,13 @@ const Footer = () => {
                 { to: "/sitemap", label: "Sitemap" },
               ].map((link) => (
                 <li key={link.to}>
-                  <Link 
-                    to={link.to} 
+                  <a 
+                    href={link.to} 
                     className="group flex items-center gap-1 text-sm text-white/60 hover:text-white transition-all duration-300"
                   >
                     <span>{link.label}</span>
                     <ArrowUpRight className="w-3 h-3 opacity-0 -translate-y-1 translate-x-1 group-hover:opacity-100 group-hover:translate-y-0 group-hover:translate-x-0 transition-all duration-300" />
-                  </Link>
+                  </a>
                 </li>
               ))}
             </ul>

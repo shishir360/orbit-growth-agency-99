@@ -5,7 +5,6 @@ import { Shield, Lock, Eye, FileText, Sparkles, Users, Database, Bell, Settings,
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import SocialMedia from "@/components/ui/social-media";
-import { Link } from "react-router-dom";
 
 const Privacy = () => {
   const sections = [

@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { YouTubeFacade } from '@/components/ui/youtube-facade';
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -292,16 +291,16 @@ const AdsManagement = () => {
               {/* Enhanced CTAs with New Colors and Better Copy */}
               <div className="flex flex-col sm:flex-row gap-6 pt-8">
                 <Button size="lg" className="group cta-primary text-xl font-semibold px-16 py-6 rounded-2xl hover:scale-105 transition-all duration-300" asChild>
-                  <Link to="/contact">
+                  <a href="/contact">
                     Get Your Free Consultation Today
                     <ArrowRight className="w-6 h-6 ml-3 group-hover:translate-x-2 transition-transform" />
-                  </Link>
+                  </a>
                 </Button>
                 
                 <Button size="lg" variant="outline" className="text-xl font-semibold px-16 py-6 rounded-2xl border-2 border-primary/30 hover:bg-primary hover:text-white hover:scale-105 transition-all duration-300" asChild>
-                  <Link to="/portfolio">
+                  <a href="/portfolio">
                     Explore Success Stories
-                  </Link>
+                  </a>
                 </Button>
               </div>
             </div>
@@ -671,16 +670,16 @@ const AdsManagement = () => {
                 
                 <div className="flex flex-col sm:flex-row gap-6 justify-center">
                   <Button size="lg" className="group bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-600 hover:to-purple-700 text-white text-xl px-12 py-6 rounded-2xl shadow-2xl hover:scale-105 transition-all duration-300" asChild>
-                    <Link to="/contact">
+                    <a href="/contact">
                       Schedule Advanced Demo
                       <ArrowRight className="w-6 h-6 ml-3 group-hover:translate-x-1 transition-transform" />
-                    </Link>
+                    </a>
                   </Button>
                   
                   <Button size="lg" variant="outline" className="text-xl px-12 py-6 rounded-2xl border-2 border-cyan-400/30 text-cyan-400 hover:bg-cyan-400 hover:text-slate-900 transition-all duration-300" asChild>
-                    <Link to="/portfolio">
+                    <a href="/portfolio">
                       View Success Cases
-                    </Link>
+                    </a>
                   </Button>
                 </div>
               </CardContent>
@@ -739,10 +738,10 @@ const AdsManagement = () => {
                       className="w-full group/btn hover:bg-primary hover:text-white transition-all duration-300"
                       asChild
                     >
-                      <Link to="/services/ads-management-learn-more">
+                      <a href="/services/ads-management-learn-more">
                         Platform Strategy
                         <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
-                      </Link>
+                      </a>
                     </Button>
                   </div>
                 </CardContent>
@@ -876,16 +875,16 @@ const AdsManagement = () => {
           
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <Button size="lg" className="group bg-gradient-to-r from-primary via-blue-500 to-cyan-400 hover:shadow-2xl hover:shadow-primary/25 text-white text-xl px-16 py-6 rounded-2xl transition-all duration-300" asChild>
-              <Link to="/contact">
+              <a href="/contact">
                 Book Strategic Consultation
                 <ArrowRight className="w-6 h-6 ml-3 group-hover:translate-x-1 transition-transform" />
-              </Link>
+              </a>
             </Button>
             
             <Button size="lg" variant="outline" className="text-xl px-16 py-6 rounded-2xl border-2 border-primary/30 hover:bg-primary hover:text-white transition-all duration-300" asChild>
-              <Link to="/portfolio">
+              <a href="/portfolio">
                 Explore Success Stories
-              </Link>
+              </a>
             </Button>
           </div>
         </div>
