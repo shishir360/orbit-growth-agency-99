@@ -21,6 +21,7 @@ import {
   Zap
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import founderImage from "@/assets/founder-farhan.jpg";
 
 const FounderFarhan = () => {
   const stats = [
@@ -91,57 +92,78 @@ const FounderFarhan = () => {
         </div>
         
         <div className="container-wide section-padding relative z-10">
-          <div className="max-w-5xl mx-auto text-center">
-            {/* Badge */}
-            <div className="inline-flex items-center gap-3 bg-gradient-to-r from-violet-500/15 to-fuchsia-500/15 border border-violet-500/30 text-violet-300 px-8 py-4 rounded-full text-sm font-medium backdrop-blur-xl mb-10 animate-fade-in">
-              <Star className="w-5 h-5 text-amber-400 fill-amber-400" />
-              Founder & Chief Executive Officer
-              <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+            {/* Content */}
+            <div className="text-center lg:text-left">
+              {/* Badge */}
+              <div className="inline-flex items-center gap-3 bg-gradient-to-r from-violet-500/15 to-fuchsia-500/15 border border-violet-500/30 text-violet-300 px-8 py-4 rounded-full text-sm font-medium backdrop-blur-xl mb-10 animate-fade-in">
+                <Star className="w-5 h-5 text-amber-400 fill-amber-400" />
+                Founder & Chief Executive Officer
+                <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+              </div>
+              
+              {/* Name */}
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-[1.05] tracking-tight text-white mb-8 animate-fade-in" style={{fontFamily: "'Playfair Display', serif", animationDelay: '0.2s'}}>
+                Farhan
+                <br />
+                <span className="bg-gradient-to-r from-violet-400 via-fuchsia-400 to-pink-400 bg-clip-text text-transparent">
+                  Tanvier
+                </span>
+              </h1>
+              
+              {/* Tagline */}
+              <p className="text-xl lg:text-2xl text-white/60 leading-relaxed max-w-xl mx-auto lg:mx-0 font-light mb-10 animate-fade-in" style={{animationDelay: '0.4s'}}>
+                Visionary digital strategist and entrepreneur dedicated to transforming businesses through innovative web design, marketing, and AI-powered solutions.
+              </p>
+              
+              {/* Social Links */}
+              <div className="flex items-center justify-center lg:justify-start gap-4 mb-12 animate-fade-in" style={{animationDelay: '0.6s'}}>
+                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="w-14 h-14 bg-gradient-to-br from-white/10 to-white/5 border border-white/15 rounded-2xl flex items-center justify-center hover:bg-white/15 hover:border-white/25 hover:scale-110 transition-all duration-300 group">
+                  <Linkedin className="w-6 h-6 text-white/70 group-hover:text-white" />
+                </a>
+                <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="w-14 h-14 bg-gradient-to-br from-white/10 to-white/5 border border-white/15 rounded-2xl flex items-center justify-center hover:bg-white/15 hover:border-white/25 hover:scale-110 transition-all duration-300 group">
+                  <Twitter className="w-6 h-6 text-white/70 group-hover:text-white" />
+                </a>
+                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="w-14 h-14 bg-gradient-to-br from-white/10 to-white/5 border border-white/15 rounded-2xl flex items-center justify-center hover:bg-white/15 hover:border-white/25 hover:scale-110 transition-all duration-300 group">
+                  <Facebook className="w-6 h-6 text-white/70 group-hover:text-white" />
+                </a>
+                <a href="mailto:farhan@lunexomedia.com" className="w-14 h-14 bg-gradient-to-br from-white/10 to-white/5 border border-white/15 rounded-2xl flex items-center justify-center hover:bg-white/15 hover:border-white/25 hover:scale-110 transition-all duration-300 group">
+                  <Mail className="w-6 h-6 text-white/70 group-hover:text-white" />
+                </a>
+              </div>
+              
+              {/* CTA Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-fade-in" style={{animationDelay: '0.8s'}}>
+                <Button asChild size="lg" className="group text-lg px-12 py-8 bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white hover:from-violet-600 hover:to-fuchsia-600 rounded-full transition-all duration-300 hover:scale-105 font-semibold shadow-2xl shadow-violet-500/30">
+                  <Link to="/contact" className="flex items-center gap-3">
+                    Let's Work Together
+                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  </Link>
+                </Button>
+                <Button asChild variant="outline" size="lg" className="text-lg px-12 py-8 border-2 border-white/20 text-white bg-white/5 hover:bg-white/10 hover:border-white/30 rounded-full transition-all duration-300 backdrop-blur-sm">
+                  <Link to="/portfolio">
+                    View My Work
+                  </Link>
+                </Button>
+              </div>
             </div>
             
-            {/* Name */}
-            <h1 className="text-5xl sm:text-6xl lg:text-8xl font-bold leading-[1.05] tracking-tight text-white mb-8 animate-fade-in" style={{fontFamily: "'Playfair Display', serif", animationDelay: '0.2s'}}>
-              Farhan
-              <br />
-              <span className="bg-gradient-to-r from-violet-400 via-fuchsia-400 to-pink-400 bg-clip-text text-transparent">
-                Tanvier
-              </span>
-            </h1>
-            
-            {/* Tagline */}
-            <p className="text-xl lg:text-2xl text-white/60 leading-relaxed max-w-3xl mx-auto font-light mb-10 animate-fade-in" style={{animationDelay: '0.4s'}}>
-              Visionary digital strategist and entrepreneur dedicated to transforming businesses through innovative web design, marketing, and AI-powered solutions.
-            </p>
-            
-            {/* Social Links */}
-            <div className="flex items-center justify-center gap-4 mb-12 animate-fade-in" style={{animationDelay: '0.6s'}}>
-              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="w-14 h-14 bg-gradient-to-br from-white/10 to-white/5 border border-white/15 rounded-2xl flex items-center justify-center hover:bg-white/15 hover:border-white/25 hover:scale-110 transition-all duration-300 group">
-                <Linkedin className="w-6 h-6 text-white/70 group-hover:text-white" />
-              </a>
-              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="w-14 h-14 bg-gradient-to-br from-white/10 to-white/5 border border-white/15 rounded-2xl flex items-center justify-center hover:bg-white/15 hover:border-white/25 hover:scale-110 transition-all duration-300 group">
-                <Twitter className="w-6 h-6 text-white/70 group-hover:text-white" />
-              </a>
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="w-14 h-14 bg-gradient-to-br from-white/10 to-white/5 border border-white/15 rounded-2xl flex items-center justify-center hover:bg-white/15 hover:border-white/25 hover:scale-110 transition-all duration-300 group">
-                <Facebook className="w-6 h-6 text-white/70 group-hover:text-white" />
-              </a>
-              <a href="mailto:farhan@lunexomedia.com" className="w-14 h-14 bg-gradient-to-br from-white/10 to-white/5 border border-white/15 rounded-2xl flex items-center justify-center hover:bg-white/15 hover:border-white/25 hover:scale-110 transition-all duration-300 group">
-                <Mail className="w-6 h-6 text-white/70 group-hover:text-white" />
-              </a>
-            </div>
-            
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in" style={{animationDelay: '0.8s'}}>
-              <Button asChild size="lg" className="group text-lg px-12 py-8 bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white hover:from-violet-600 hover:to-fuchsia-600 rounded-full transition-all duration-300 hover:scale-105 font-semibold shadow-2xl shadow-violet-500/30">
-                <Link to="/contact" className="flex items-center gap-3">
-                  Let's Work Together
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </Link>
-              </Button>
-              <Button asChild variant="outline" size="lg" className="text-lg px-12 py-8 border-2 border-white/20 text-white bg-white/5 hover:bg-white/10 hover:border-white/30 rounded-full transition-all duration-300 backdrop-blur-sm">
-                <Link to="/portfolio">
-                  View My Work
-                </Link>
-              </Button>
+            {/* Image */}
+            <div className="relative animate-scale-in" style={{animationDelay: '0.3s'}}>
+              <div className="absolute -inset-6 bg-gradient-to-r from-violet-500/30 via-fuchsia-500/25 to-pink-500/20 rounded-3xl blur-3xl opacity-60"></div>
+              <div className="relative bg-gradient-to-br from-white/10 to-white/5 p-2 rounded-3xl backdrop-blur-sm border border-white/15 shadow-2xl">
+                <img
+                  src={founderImage}
+                  alt="Farhan Tanvier - Founder & CEO of Lunexo Media"
+                  className="w-full h-auto rounded-2xl"
+                />
+                
+                {/* Floating badge */}
+                <div className="absolute bottom-6 left-6 bg-gradient-to-r from-green-500 to-emerald-500 text-white px-4 py-2 rounded-xl text-sm font-semibold shadow-lg shadow-green-500/30 flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4" />
+                  Available for Projects
+                </div>
+              </div>
             </div>
           </div>
         </div>
