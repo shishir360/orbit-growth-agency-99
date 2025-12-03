@@ -5,7 +5,6 @@ import { Scale, FileCheck, CreditCard, Shield, Users, AlertTriangle, Gavel, File
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import SocialMedia from "@/components/ui/social-media";
-import { Link } from "react-router-dom";
 
 const Terms = () => {
   const sections = [

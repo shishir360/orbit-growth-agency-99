@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Clock, User, ArrowRight, BookOpen, Sparkles, GraduationCap, Play, Search, Filter, Star, TrendingUp, Code, Palette, Bot } from "lucide-react";
-import { Link } from "react-router-dom";
+
 import { Input } from "@/components/ui/input";
 
 const Tutorials = () => {
@@ -434,9 +434,9 @@ const Tutorials = () => {
               
               <p className="text-sm text-muted-foreground mb-8">
                 Need help with implementation?{" "}
-                <Link to="/contact" className="text-primary hover:underline font-medium">
+                <a href="/contact" className="text-primary hover:underline font-medium">
                   Book a free consultation
-                </Link>
+                </a>
               </p>
 
               {/* CTA Cards */}
@@ -448,7 +448,7 @@ const Tutorials = () => {
                   <h3 className="font-bold mb-2">Free Consultation</h3>
                   <p className="text-muted-foreground text-sm mb-4">Get personalized advice for your project</p>
                   <Button variant="outline" size="sm" asChild>
-                    <Link to="/book-apartment">Book Call</Link>
+                    <a href="/book-apartment">Book Call</a>
                   </Button>
                 </div>
 
@@ -459,7 +459,7 @@ const Tutorials = () => {
                   <h3 className="font-bold mb-2">Custom Development</h3>
                   <p className="text-muted-foreground text-sm mb-4">We build it for you, done-for-you style</p>
                   <Button variant="outline" size="sm" asChild>
-                    <Link to="/contact">Get Quote</Link>
+                    <a href="/contact">Get Quote</a>
                   </Button>
                 </div>
 
@@ -470,7 +470,7 @@ const Tutorials = () => {
                   <h3 className="font-bold mb-2">Join Community</h3>
                   <p className="text-muted-foreground text-sm mb-4">Connect with fellow builders and creators</p>
                   <Button variant="outline" size="sm" asChild>
-                    <Link to="/contact">Join Discord</Link>
+                    <a href="/contact">Join Discord</a>
                   </Button>
                 </div>
               </div>

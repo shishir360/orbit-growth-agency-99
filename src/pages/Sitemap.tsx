@@ -3,7 +3,7 @@ import Footer from "@/components/ui/footer";
 import SEO from "@/components/ui/seo";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+
 
 const Sitemap = () => {
   const sitemapSections = [
@@ -136,14 +136,14 @@ const Sitemap = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" variant="secondary" asChild>
-                <Link to="/contact">
+                <a href="/contact">
                   Get Started Today
-                </Link>
+                </a>
               </Button>
               <Button size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10" asChild>
-                <Link to="/pricing">
+                <a href="/pricing">
                   View Pricing
-                </Link>
+                </a>
               </Button>
             </div>
           </div>
