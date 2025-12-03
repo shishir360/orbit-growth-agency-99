@@ -1,4 +1,4 @@
-// React Router Link removed for full page reloads
+import { Link } from "react-router-dom";
 import { YouTubeFacade } from '@/components/ui/youtube-facade';
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -289,16 +289,16 @@ const AIAutomation = () => {
               
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
                 <Button size="lg" className="group bg-gradient-to-r from-primary via-purple-500 to-pink-400 hover:shadow-2xl hover:shadow-primary/25 text-white text-lg px-12 py-4 rounded-2xl transition-all duration-300" asChild>
-                  <a href="/contact">
+                  <Link to="/contact">
                     Get Automation Audit
                     <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-                  </a>
+                  </Link>
                 </Button>
                 
                 <Button size="lg" variant="outline" className="text-lg px-12 py-4 rounded-2xl border-2 border-primary/20 hover:bg-primary hover:text-white transition-all duration-300" asChild>
-                  <a href="/portfolio">
+                  <Link to="/portfolio">
                     View AI Solutions
-                  </a>
+                  </Link>
                 </Button>
               </div>
             </div>
@@ -464,10 +464,10 @@ const AIAutomation = () => {
                       className="w-full group/btn hover:bg-primary hover:text-white transition-all duration-300"
                       asChild
                     >
-                      <a href="/contact">
+                      <Link to="/contact">
                         Learn More
                         <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
-                      </a>
+                      </Link>
                     </Button>
                   </div>
                 </CardContent>
@@ -601,16 +601,16 @@ const AIAutomation = () => {
           
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <Button size="lg" className="group bg-gradient-to-r from-primary via-purple-500 to-pink-400 hover:shadow-2xl hover:shadow-primary/25 text-white text-xl px-16 py-6 rounded-2xl transition-all duration-300" asChild>
-              <a href="/contact">
+              <Link to="/contact">
                 Get AI Automation Audit
                 <ArrowRight className="w-6 h-6 ml-3 group-hover:translate-x-1 transition-transform" />
-              </a>
+              </Link>
             </Button>
             
             <Button size="lg" variant="outline" className="text-xl px-16 py-6 rounded-2xl border-2 border-primary/30 hover:bg-primary hover:text-white transition-all duration-300" asChild>
-              <a href="/portfolio">
+              <Link to="/portfolio">
                 Explore AI Solutions
-              </a>
+              </Link>
             </Button>
           </div>
         </div>

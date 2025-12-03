@@ -5,6 +5,7 @@ import { Shield, Lock, Eye, FileText, Sparkles, Users, Database, Bell, Settings,
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import SocialMedia from "@/components/ui/social-media";
+import { Link } from "react-router-dom";
 
 const Privacy = () => {
   const sections = [
@@ -224,7 +225,7 @@ const Privacy = () => {
             
             <div className="mt-12">
               <Button size="lg" asChild className="text-xl font-bold px-12 py-6 rounded-2xl">
-                <a href="/contact">Contact Privacy Team</a>
+                <Link to="/contact">Contact Privacy Team</Link>
               </Button>
             </div>
           </div>

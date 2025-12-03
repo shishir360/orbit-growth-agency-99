@@ -5,6 +5,7 @@ import { Scale, FileCheck, CreditCard, Shield, Users, AlertTriangle, Gavel, File
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import SocialMedia from "@/components/ui/social-media";
+import { Link } from "react-router-dom";
 
 const Terms = () => {
   const sections = [
@@ -246,10 +247,10 @@ const Terms = () => {
             
             <div className="text-center">
               <Button size="lg" asChild className="text-xl font-bold px-12 py-6 rounded-2xl mr-4">
-                <a href="/contact">Contact Legal Team</a>
+                <Link to="/contact">Contact Legal Team</Link>
               </Button>
               <Button size="lg" variant="outline" asChild className="text-xl font-bold px-12 py-6 rounded-2xl border-2 border-primary/30">
-                <a href="/privacy">View Privacy Policy</a>
+                <Link to="/privacy">View Privacy Policy</Link>
               </Button>
             </div>
           </div>
