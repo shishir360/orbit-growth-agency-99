@@ -238,359 +238,288 @@ const Portfolio = () => {
         />
       </div>
       
-      {/* Premium Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Premium Background Effects */}
-        <div className="absolute inset-0 bg-gradient-to-br from-background via-primary/5 to-accent/10"></div>
-        <div className="absolute top-20 left-10 w-96 h-96 bg-gradient-to-r from-primary/20 to-accent/20 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-[500px] h-[500px] bg-gradient-to-r from-accent-cta/15 to-primary/15 rounded-full blur-3xl animate-pulse delay-1000"></div>
+      {/* Ultra Premium Hero Section */}
+      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-[#0a0a0f]">
+        {/* Animated gradient orbs */}
+        <div className="absolute top-0 right-1/4 w-[500px] h-[500px] bg-gradient-to-r from-red-600/20 to-orange-500/15 rounded-full blur-[100px] animate-pulse"></div>
+        <div className="absolute bottom-0 left-1/4 w-[400px] h-[400px] bg-gradient-to-r from-purple-600/15 to-blue-500/10 rounded-full blur-[80px] animate-pulse" style={{animationDelay: '1s'}}></div>
+        
+        {/* Grid pattern overlay */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-[size:60px_60px]"></div>
 
-        <div className="container-wide section-padding relative z-10">
-          <div className="text-center max-w-6xl mx-auto animate-fade-in">
-            <Badge variant="outline" className="inline-flex items-center gap-3 px-8 py-4 text-lg font-bold border-primary/30 bg-gradient-to-r from-primary/10 to-accent/10 backdrop-blur-xl rounded-full mb-8">
-              <Trophy className="w-6 h-6 text-primary" />
+        <div className="container-wide section-padding relative z-10 pt-20">
+          <div className="text-center max-w-5xl mx-auto animate-fade-in">
+            {/* Premium badge */}
+            <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 text-white/70 px-5 py-2.5 rounded-full text-sm font-medium backdrop-blur-xl mb-8">
+              <Trophy className="w-4 h-4 text-yellow-400" />
               Award-Winning Portfolio
-            </Badge>
+            </div>
             
-            <h1 className="text-5xl lg:text-8xl font-black leading-tight tracking-tight mb-8">
-              <span className="text-foreground">Our Work &</span>
+            <h1 className="text-4xl sm:text-5xl lg:text-7xl xl:text-8xl font-bold leading-[1.05] tracking-tight text-white mb-6" style={{fontFamily: "'Playfair Display', serif"}}>
+              Our Work &
               <br />
-              <span className="premium-gradient-text">Client</span>
-              <br />
-              <span className="bg-gradient-to-r from-accent-cta to-primary bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-red-500 via-orange-400 to-yellow-400 bg-clip-text text-transparent">
                 Success Stories
               </span>
             </h1>
             
-            <p className="text-lg lg:text-xl text-muted-foreground leading-relaxed mb-12 max-w-4xl mx-auto font-light">
-              Discover our collection of 
-              <span className="text-accent-cta font-bold"> transformative digital experiences</span> 
-              that have revolutionized businesses and generated millions in revenue.
+            <p className="text-lg lg:text-xl text-white/50 leading-relaxed mb-12 max-w-3xl mx-auto font-light">
+              Transformative digital experiences that have revolutionized businesses and generated millions in revenue.
             </p>
 
-            {/* Premium Stats */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+            {/* Premium Stats Row */}
+            <div className="flex flex-wrap justify-center gap-6 lg:gap-12 mb-12">
               {[
-                { value: "50+", label: "Projects Launched", icon: <Trophy className="w-6 h-6" /> },
-                { value: "$2M+", label: "Revenue Generated", icon: <TrendingUp className="w-6 h-6" /> },
-                { value: "95%", label: "Client Satisfaction", icon: <Award className="w-6 h-6" /> },
-                { value: "30 Days", label: "Average Delivery", icon: <Zap className="w-6 h-6" /> }
+                { value: "50+", label: "Projects" },
+                { value: "$2M+", label: "Revenue" },
+                { value: "95%", label: "Satisfaction" },
+                { value: "30 Days", label: "Avg. Delivery" }
               ].map((stat, index) => (
-                <div key={index} className="text-center group">
-                  <div className="text-primary mb-2 flex justify-center">{stat.icon}</div>
-                  <div className="text-2xl lg:text-4xl font-black text-primary mb-2">{stat.value}</div>
-                  <div className="text-sm text-muted-foreground font-semibold">{stat.label}</div>
+                <div key={index} className="text-center">
+                  <div className="text-2xl lg:text-4xl font-bold text-white mb-1">{stat.value}</div>
+                  <div className="text-xs text-white/40 uppercase tracking-wider">{stat.label}</div>
                 </div>
               ))}
             </div>
             
-            <div className="flex flex-col sm:flex-row gap-6 justify-center">
-              <Button size="lg" className="group text-base font-bold px-16 py-6 rounded-2xl hover:scale-105 transition-all duration-300 shadow-glow" asChild>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button size="lg" className="group text-base px-8 py-6 bg-white text-black hover:bg-white/90 rounded-full transition-all duration-300 hover:scale-105 font-semibold" asChild>
                 <Link to="/contact">
-                  Start Premium Project
-                  <ArrowRight className="w-6 h-6 ml-3 group-hover:translate-x-2 transition-transform" />
+                  Start Your Project
+                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>
               
-              <Button size="lg" variant="outline" className="text-base font-bold px-16 py-6 rounded-2xl border-2 border-primary/30 hover:bg-primary hover:text-white hover:scale-105 transition-all duration-300" asChild>
-                <Link to="#featured-projects">
+              <Button size="lg" variant="outline" className="text-base px-8 py-6 border border-white/20 text-white bg-white/5 hover:bg-white/10 rounded-full transition-all duration-300 backdrop-blur-sm" asChild>
+                <a href="#featured-projects">
                   View Featured Work
-                </Link>
+                </a>
               </Button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Premium Categories Filter */}
-      <section className="py-16 bg-gradient-to-b from-muted/10 to-background relative overflow-hidden" id="featured-projects">
+      {/* Modern Categories Filter */}
+      <section className="py-16 bg-[#0a0a0f] relative overflow-hidden" id="featured-projects">
         <div className="container-wide section-padding">
-          <div className="text-center mb-16">
-            <Badge variant="outline" className="mb-8 px-8 py-3 text-lg font-bold border-primary/30 bg-gradient-to-r from-primary/10 to-accent/10 backdrop-blur-xl">
-              <Sparkles className="w-6 h-6 mr-3" />
-              Premium Categories
-            </Badge>
-            <h2 className="text-3xl lg:text-5xl font-black mb-3 leading-tight">
-              <span className="text-foreground">Explore by</span>{" "}
-              <span className="premium-gradient-text">Service Type</span>
+          <div className="text-center mb-12">
+            <h2 className="text-2xl lg:text-4xl font-bold text-white mb-2" style={{fontFamily: "'Playfair Display', serif"}}>
+              Explore by Category
             </h2>
-            <p className="text-sm text-muted-foreground">Published projects: {dbProjects.length}</p>
+            <p className="text-sm text-white/40">{dbProjects.length} published projects</p>
           </div>
           
-          <div className="flex flex-wrap gap-4 justify-center mb-16">
+          <div className="flex flex-wrap gap-3 justify-center">
             {categories.map((category) => (
-              <Button 
+              <button 
                 key={category} 
-                variant={category === activeCategory ? "default" : "outline"} 
-                size="lg"
-                className={`px-8 py-4 rounded-2xl font-bold text-base transition-all duration-300 ${
+                className={`px-6 py-3 rounded-full font-medium text-sm transition-all duration-300 ${
                   category === activeCategory 
-                    ? "bg-gradient-to-r from-primary to-accent text-white shadow-glow scale-105" 
-                    : "border-2 border-primary/30 hover:bg-primary hover:text-white hover:scale-105"
+                    ? "bg-white text-black" 
+                    : "bg-white/5 text-white/70 border border-white/10 hover:bg-white/10 hover:text-white"
                 }`}
                 onClick={() => setActiveCategory(category)}
               >
                 {category}
-              </Button>
+              </button>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Premium Featured Projects */}
-      <section className="py-32 bg-gradient-to-b from-background to-muted/10 relative overflow-hidden">
+      {/* Featured Projects Section */}
+      <section className="py-20 bg-[#0a0a0f] relative overflow-hidden">
         <div className="container-wide section-padding relative z-10">
-          <div className="text-center mb-24">
-            <Badge variant="outline" className="mb-8 px-8 py-3 text-lg font-bold border-primary/30 bg-gradient-to-r from-primary/10 to-accent/10 backdrop-blur-xl">
-              <Trophy className="w-6 h-6 mr-3" />
-              Featured Excellence
-            </Badge>
-            <h2 className="text-3xl lg:text-5xl font-black mb-8 leading-tight">
-              <span className="text-foreground">SEO</span>
-              <br />
-              <span className="premium-gradient-text">Case Studies</span>
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-2 bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 px-4 py-2 rounded-full text-sm font-medium mb-6">
+              <Trophy className="w-4 h-4" />
+              Featured Projects
+            </div>
+            <h2 className="text-2xl lg:text-4xl font-bold text-white mb-4" style={{fontFamily: "'Playfair Display', serif"}}>
+              Case Studies
             </h2>
-            <p className="text-lg lg:text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed font-light">
-              Our most successful launches that demonstrate the power of 
-              <span className="text-accent-cta font-bold"> premium design excellence</span> and 
-              <span className="text-primary font-bold"> strategic innovation</span>
+            <p className="text-white/50 max-w-2xl mx-auto">
+              Our most successful projects showcasing premium design and strategic innovation
             </p>
           </div>
           
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {loadingDb ? (
               <>
-                <Skeleton className="h-[600px] rounded-3xl" />
-                <Skeleton className="h-[600px] rounded-3xl" />
+                <Skeleton className="h-[500px] rounded-2xl bg-white/5" />
+                <Skeleton className="h-[500px] rounded-2xl bg-white/5" />
               </>
             ) : featuredProjects.map((project, index) => (
-              <Card key={index} className="luxury-card overflow-hidden group hover:scale-[1.02] transition-all duration-700">
-                <div className="relative">
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent z-10"></div>
+              <div key={index} className="group relative bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:border-white/20 transition-all duration-500">
+                <div className="relative h-64 overflow-hidden">
                   <img 
                     src={project.image} 
                     alt={project.title}
-                    className="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-700"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0f] via-transparent to-transparent"></div>
                   
-                  <div className="absolute top-6 left-6 z-20">
-                    <Badge className="bg-gradient-to-r from-primary to-accent text-white px-4 py-2 text-sm font-bold backdrop-blur-md">
-                      <Trophy className="w-4 h-4 mr-2" />
+                  <div className="absolute top-4 left-4 flex gap-2">
+                    <span className="inline-flex items-center gap-1.5 bg-yellow-500/20 border border-yellow-500/30 text-yellow-400 px-3 py-1.5 rounded-full text-xs font-medium">
+                      <Trophy className="w-3 h-3" />
                       Featured
-                    </Badge>
+                    </span>
                   </div>
 
                   {project.liveUrl && (
-                    <div className="absolute top-6 right-6 z-20">
-                      <Button size="sm" asChild className="bg-white/10 backdrop-blur-md text-white border-white/20 hover:bg-white/20 hover:scale-110 transition-all duration-300">
-                        <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">
-                          <Globe className="w-4 h-4" />
-                        </a>
-                      </Button>
-                    </div>
-                  )}
-
-                  <div className="absolute bottom-6 left-6 z-20">
-                    <Badge className="bg-black/70 text-white px-4 py-2 text-sm font-bold backdrop-blur-md">
-                      {project.category}
-                    </Badge>
-                  </div>
-                </div>
-                
-                <CardContent className="p-10 relative">
-                  <h3 className="text-3xl font-black mb-4 group-hover:text-primary transition-colors duration-300">
-                    {project.title}
-                  </h3>
-                  
-                  <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-                    {project.description}
-                  </p>
-
-                  <div className="grid grid-cols-3 gap-6 mb-8">
-                    <div className="text-center p-4 bg-gradient-to-r from-primary/10 to-accent/10 rounded-2xl">
-                      <Calendar className="w-6 h-6 text-primary mx-auto mb-2" />
-                      <div className="text-sm text-muted-foreground mb-1">Timeline</div>
-                      <div className="font-bold text-lg text-primary">{project.timeline}</div>
-                    </div>
-                    <div className="text-center p-4 bg-gradient-to-r from-primary/10 to-accent/10 rounded-2xl">
-                      <Users className="w-6 h-6 text-primary mx-auto mb-2" />
-                      <div className="text-sm text-muted-foreground mb-1">Users</div>
-                      <div className="font-bold text-lg text-primary">{project.users}</div>
-                    </div>
-                    <div className="text-center p-4 bg-gradient-to-r from-accent-cta/10 to-primary/10 rounded-2xl">
-                      <Target className="w-6 h-6 text-accent-cta mx-auto mb-2" />
-                      <div className="text-sm text-muted-foreground mb-1">Results</div>
-                      <div className="font-bold text-lg text-accent-cta">{project.results}</div>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-wrap gap-3 mb-8">
-                    {project.technologies.map((tech, techIndex) => (
-                      <Badge key={techIndex} variant="outline" className="px-4 py-2 rounded-full border-primary/20 bg-gradient-to-r from-primary/5 to-accent/5 hover:border-primary/40 transition-all duration-300">
-                        {tech}
-                      </Badge>
-                    ))}
-                  </div>
-
-                  <Button variant="outline" className="w-full group/btn text-lg font-bold py-4 rounded-2xl border-2 border-primary/30 hover:bg-primary hover:text-white hover:scale-105 transition-all duration-300" asChild>
-                    <Link to={`/portfolio/${project.id}`}>
-                      View Premium Case Study
-                      <ExternalLink className="w-5 h-5 ml-2 group-hover/btn:translate-x-2 transition-transform" />
-                    </Link>
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Premium Projects Grid */}
-      <section className="py-32 bg-gradient-to-b from-muted/10 to-background relative overflow-hidden">
-        <div className="container-wide section-padding">
-          <div className="text-center mb-24">
-            <Badge variant="outline" className="mb-8 px-8 py-3 text-lg font-bold border-primary/30 bg-gradient-to-r from-primary/10 to-accent/10 backdrop-blur-xl">
-              <BarChart3 className="w-6 h-6 mr-3" />
-              Premium Collection
-            </Badge>
-            <h2 className="text-3xl lg:text-5xl font-black mb-3 leading-tight">
-              <span className="text-foreground">More</span>{" "}
-              <span className="premium-gradient-text">Masterpieces</span>
-            </h2>
-            <p className="text-sm text-muted-foreground mb-4">All projects: {regularProjects.length}</p>
-            <p className="text-lg lg:text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed font-light">
-              Explore our complete collection of 
-              <span className="text-accent-cta font-bold"> premium digital solutions</span> 
-              across all service categories
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-            {loadingDb ? (
-              <>
-                <Skeleton className="h-[450px] rounded-3xl" />
-                <Skeleton className="h-[450px] rounded-3xl" />
-                <Skeleton className="h-[450px] rounded-3xl" />
-              </>
-            ) : regularProjects.length === 0 ? (
-              <div className="col-span-full text-center py-12">
-                <p className="text-muted-foreground text-lg">No projects found in this category.</p>
-              </div>
-            ) : regularProjects.map((project, index) => (
-              <Card key={project.id || index} className="luxury-card overflow-hidden group hover:scale-105 transition-all duration-500">
-                <div className="relative">
-                  <img 
-                    src={project.image} 
-                    alt={project.title}
-                    className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
-                  
-                  <div className="absolute top-4 left-4">
-                    <Badge className="bg-gradient-to-r from-primary to-accent text-white px-3 py-1 text-sm font-bold backdrop-blur-md">
-                      {project.category}
-                    </Badge>
-                  </div>
-
-                  {project.liveUrl && (
-                    <div className="absolute top-4 right-4">
-                      <Button size="sm" asChild className="bg-white/10 backdrop-blur-md text-white border-white/20 hover:bg-white/20">
-                        <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">
-                          <Globe className="w-4 h-4" />
-                        </a>
-                      </Button>
-                    </div>
+                    <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="absolute top-4 right-4 w-9 h-9 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center transition-all">
+                      <Globe className="w-4 h-4 text-white" />
+                    </a>
                   )}
                 </div>
                 
-                <CardContent className="p-8">
-                  <h3 className="text-2xl font-black mb-4 group-hover:text-primary transition-colors duration-300">
+                <div className="p-6">
+                  <span className="text-xs text-white/40 uppercase tracking-wider">{project.category}</span>
+                  <h3 className="text-xl font-bold text-white mt-1 mb-3 group-hover:text-red-400 transition-colors">
                     {project.title}
                   </h3>
                   
-                  <p className="text-muted-foreground mb-6 leading-relaxed">
+                  <p className="text-white/50 text-sm mb-6 leading-relaxed line-clamp-2">
                     {project.description}
                   </p>
 
-                  <div className="flex items-center justify-between text-sm text-muted-foreground mb-6">
-                    <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-4 mb-6 text-sm">
+                    <div className="flex items-center gap-2 text-white/60">
                       <Calendar className="w-4 h-4" />
-                      <span>{project.timeline}</span>
+                      {project.timeline}
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Users className="w-4 h-4" />
-                      <span>{project.users}</span>
+                    <div className="flex items-center gap-2 text-green-400 font-medium">
+                      <TrendingUp className="w-4 h-4" />
+                      {project.results}
                     </div>
-                  </div>
-
-                  <div className="flex items-center gap-2 mb-6 p-3 bg-gradient-to-r from-primary/10 to-accent/10 rounded-xl">
-                    <Target className="w-5 h-5 text-accent-cta" />
-                    <span className="font-bold text-accent-cta">{project.results}</span>
                   </div>
 
                   <div className="flex flex-wrap gap-2 mb-6">
                     {project.technologies.slice(0, 3).map((tech, techIndex) => (
-                      <Badge key={techIndex} variant="secondary" className="text-xs px-3 py-1 rounded-full bg-gradient-to-r from-primary/5 to-accent/5">
+                      <span key={techIndex} className="text-xs px-3 py-1.5 bg-white/5 border border-white/10 rounded-full text-white/60">
                         {tech}
-                      </Badge>
+                      </span>
                     ))}
-                    {project.technologies.length > 3 && (
-                      <Badge variant="secondary" className="text-xs px-3 py-1 rounded-full">
-                        +{project.technologies.length - 3} more
-                      </Badge>
-                    )}
                   </div>
 
-                  <Button variant="outline" className="w-full group/btn font-bold py-3 rounded-xl border-2 border-primary/30 hover:bg-primary hover:text-white hover:scale-105 transition-all duration-300" asChild>
-                    <Link to={`/portfolio/${project.id}`}>
-                      View Project
-                      <ExternalLink className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
-                    </Link>
-                  </Button>
-                </CardContent>
-              </Card>
+                  <Link to={`/portfolio/${project.id}`} className="inline-flex items-center gap-2 text-white font-medium text-sm group/link">
+                    View Case Study
+                    <ArrowRight className="w-4 h-4 group-hover/link:translate-x-1 transition-transform" />
+                  </Link>
+                </div>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Premium CTA Section */}
-      <section className="py-32 bg-gradient-to-br from-primary/10 via-accent/5 to-accent-cta/10 relative overflow-hidden">
+      {/* All Projects Grid */}
+      <section className="py-20 bg-[#0a0a0f] relative overflow-hidden">
+        <div className="container-wide section-padding">
+          <div className="text-center mb-16">
+            <h2 className="text-2xl lg:text-4xl font-bold text-white mb-4" style={{fontFamily: "'Playfair Display', serif"}}>
+              More Projects
+            </h2>
+            <p className="text-white/50">{regularProjects.length} projects in collection</p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {loadingDb ? (
+              <>
+                <Skeleton className="h-[380px] rounded-2xl bg-white/5" />
+                <Skeleton className="h-[380px] rounded-2xl bg-white/5" />
+                <Skeleton className="h-[380px] rounded-2xl bg-white/5" />
+              </>
+            ) : regularProjects.length === 0 ? (
+              <div className="col-span-full text-center py-12">
+                <p className="text-white/50">No projects found in this category.</p>
+              </div>
+            ) : regularProjects.map((project, index) => (
+              <div key={project.id || index} className="group relative bg-white/5 border border-white/10 rounded-xl overflow-hidden hover:border-white/20 transition-all duration-300">
+                <div className="relative h-48 overflow-hidden">
+                  <img 
+                    src={project.image} 
+                    alt={project.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0f] via-transparent to-transparent"></div>
+                  
+                  <span className="absolute top-3 left-3 text-xs px-2.5 py-1 bg-red-500/20 border border-red-500/30 text-red-400 rounded-full font-medium">
+                    {project.category}
+                  </span>
+
+                  {project.liveUrl && (
+                    <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="absolute top-3 right-3 w-8 h-8 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center transition-all">
+                      <Globe className="w-3.5 h-3.5 text-white" />
+                    </a>
+                  )}
+                </div>
+                
+                <div className="p-5">
+                  <h3 className="text-lg font-bold text-white mb-2 group-hover:text-red-400 transition-colors">
+                    {project.title}
+                  </h3>
+                  
+                  <p className="text-white/40 text-sm mb-4 line-clamp-2">
+                    {project.description}
+                  </p>
+
+                  <div className="flex items-center justify-between text-xs text-white/40 mb-4">
+                    <span>{project.timeline}</span>
+                    <span className="text-green-400">{project.results}</span>
+                  </div>
+
+                  <div className="flex flex-wrap gap-1.5 mb-4">
+                    {project.technologies.slice(0, 2).map((tech, techIndex) => (
+                      <span key={techIndex} className="text-xs px-2 py-1 bg-white/5 border border-white/10 rounded text-white/50">
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+
+                  <Link to={`/portfolio/${project.id}`} className="inline-flex items-center gap-1.5 text-white/70 hover:text-white text-sm font-medium transition-colors">
+                    View Details
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-24 bg-[#0a0a0f] relative overflow-hidden">
         <div className="absolute inset-0">
-          <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_20%_50%,_var(--primary)_0%,_transparent_70%)] opacity-20"></div>
-          <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(circle_at_80%_80%,_var(--accent-cta)_0%,_transparent_70%)] opacity-20"></div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-red-600/10 to-orange-500/10 rounded-full blur-[100px]"></div>
         </div>
 
         <div className="container-wide section-padding relative z-10 text-center">
-          <div className="max-w-5xl mx-auto">
-            <Badge variant="outline" className="mb-8 px-8 py-3 text-lg font-bold border-primary/30 bg-gradient-to-r from-primary/10 to-accent/10 backdrop-blur-xl">
-              <Sparkles className="w-6 h-6 mr-3" />
-              Your Success Awaits
-            </Badge>
-            
-            <h2 className="text-3xl lg:text-6xl font-black mb-12 leading-tight">
-              <span className="text-foreground">Ready to Join Our</span>
+          <div className="max-w-3xl mx-auto">
+            <h2 className="text-3xl lg:text-5xl font-bold text-white mb-6" style={{fontFamily: "'Playfair Display', serif"}}>
+              Ready to Start Your
               <br />
-              <span className="premium-gradient-text">Success Gallery?</span>
+              <span className="bg-gradient-to-r from-red-500 to-orange-400 bg-clip-text text-transparent">
+                Success Story?
+              </span>
             </h2>
             
-            <p className="text-lg lg:text-xl text-muted-foreground mb-16 leading-relaxed font-light max-w-4xl mx-auto">
-              Let's create the next 
-              <span className="text-accent-cta font-bold"> award-winning digital experience</span> 
-              that transforms your business and generates exceptional results
+            <p className="text-lg text-white/50 mb-10 max-w-2xl mx-auto">
+              Let's create the next award-winning digital experience that transforms your business.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-8 justify-center">
-              <Button size="lg" className="group text-base font-bold px-20 py-8 rounded-2xl hover:scale-105 transition-all duration-300 shadow-glow-intense" asChild>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button size="lg" className="group text-base px-8 py-6 bg-white text-black hover:bg-white/90 rounded-full transition-all duration-300 hover:scale-105 font-semibold" asChild>
                 <Link to="/contact">
-                  Start Premium Project
-                  <Trophy className="w-6 h-6 ml-4 group-hover:rotate-12 transition-transform" />
+                  Start Your Project
+                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>
               
-              <Button size="lg" variant="outline" className="text-base font-bold px-20 py-8 rounded-2xl border-2 border-primary/40 hover:bg-primary hover:text-white hover:scale-105 transition-all duration-300" asChild>
+              <Button size="lg" variant="outline" className="text-base px-8 py-6 border border-white/20 text-white bg-white/5 hover:bg-white/10 rounded-full transition-all duration-300 backdrop-blur-sm" asChild>
                 <Link to="/pricing">
-                  View Premium Packages
+                  View Pricing
                 </Link>
               </Button>
             </div>
