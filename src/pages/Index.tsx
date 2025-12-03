@@ -131,46 +131,75 @@ const Index = () => {
       
       <Navigation />
       
-      {/* Modern Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-        <div className="container-wide section-padding relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      {/* Ultra Premium Hero Section */}
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#0a0a0f]">
+        {/* Animated gradient orbs */}
+        <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-gradient-to-r from-red-600/20 to-orange-500/10 rounded-full blur-[120px] animate-pulse"></div>
+        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-gradient-to-r from-purple-600/15 to-pink-500/10 rounded-full blur-[100px] animate-pulse" style={{animationDelay: '1s'}}></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-radial from-white/5 to-transparent rounded-full"></div>
+        
+        {/* Grid pattern overlay */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-[size:60px_60px]"></div>
+        
+        <div className="container-wide section-padding relative z-10 pt-20">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             {/* Content */}
-            <div className="space-y-10 animate-fade-in" style={{ animationDuration: '0.2s' }}>
-              <div className="space-y-8">
-                {/* Badge for credibility */}
-                <div className="inline-block bg-red-600/20 border border-red-500/30 text-red-400 px-6 py-3 rounded-full text-sm font-medium backdrop-blur-sm">
-                  ✨ Trusted partner of 50+ businesses
-                </div>
-                
-                <h1 className="text-5xl lg:text-7xl font-space font-bold leading-tight text-white">
-                  Digital Marketing Agency for{" "}
-                  <span className="text-red-500">
-                    Business Growth
-                  </span>
-                </h1>
-                <p className="text-xl text-gray-300 leading-relaxed max-w-2xl">
-                  Website design, ads management and AI automation - all under one roof.
-                </p>
+            <div className="space-y-8 animate-fade-in" style={{ animationDuration: '0.4s' }}>
+              {/* Premium badge */}
+              <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 text-white/80 px-5 py-2.5 rounded-full text-sm font-medium backdrop-blur-xl">
+                <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                Trusted by 50+ businesses worldwide
               </div>
               
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button asChild size="lg" className="text-lg px-8 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white border-0 rounded-full transition-all duration-300 hover:scale-105 shadow-lg shadow-red-600/25">
-                  <a href="/contact">
-                    🔥 Book Free Consultation
+              <h1 className="text-4xl sm:text-5xl lg:text-7xl xl:text-8xl font-bold leading-[1.05] tracking-tight text-white" style={{fontFamily: "'Playfair Display', serif"}}>
+                We Build
+                <br />
+                <span className="bg-gradient-to-r from-red-500 via-orange-400 to-red-500 bg-clip-text text-transparent">
+                  Digital Empires
+                </span>
+              </h1>
+              
+              <p className="text-lg lg:text-xl text-white/60 leading-relaxed max-w-xl font-light">
+                Premium website design, performance ads & AI automation — crafted for ambitious brands ready to dominate.
+              </p>
+              
+              <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                <Button asChild size="lg" className="group text-base px-8 py-6 bg-white text-black hover:bg-white/90 rounded-full transition-all duration-300 hover:scale-105 font-semibold">
+                  <a href="/contact" className="flex items-center gap-2">
+                    Start Your Project
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </a>
                 </Button>
-                <Button asChild variant="outline" size="lg" className="text-lg px-8 border-2 border-red-500 text-red-400 bg-red-600/10 hover:bg-red-600 hover:text-white rounded-full transition-all duration-300 hover:scale-105 backdrop-blur-sm">
+                <Button asChild variant="outline" size="lg" className="text-base px-8 py-6 border border-white/20 text-white bg-white/5 hover:bg-white/10 rounded-full transition-all duration-300 backdrop-blur-sm">
                   <a href="/portfolio">
-                    View Our Work
+                    View Portfolio
                   </a>
                 </Button>
+              </div>
+              
+              {/* Trust indicators */}
+              <div className="flex items-center gap-8 pt-8 border-t border-white/10">
+                <div>
+                  <div className="text-2xl font-bold text-white">200%</div>
+                  <div className="text-xs text-white/50 uppercase tracking-wider">Avg. Growth</div>
+                </div>
+                <div className="w-px h-10 bg-white/10"></div>
+                <div>
+                  <div className="text-2xl font-bold text-white">50+</div>
+                  <div className="text-xs text-white/50 uppercase tracking-wider">Projects</div>
+                </div>
+                <div className="w-px h-10 bg-white/10"></div>
+                <div>
+                  <div className="text-2xl font-bold text-white">10x</div>
+                  <div className="text-xs text-white/50 uppercase tracking-wider">ROI</div>
+                </div>
               </div>
             </div>
 
-            {/* Video */}
+            {/* Video with premium frame */}
             <div className="relative animate-scale-in" style={{animationDelay: '0.3s'}}>
-              <div className="relative group">
+              <div className="absolute -inset-4 bg-gradient-to-r from-red-500/20 via-orange-500/20 to-red-500/20 rounded-3xl blur-2xl opacity-60"></div>
+              <div className="relative bg-gradient-to-br from-white/10 to-white/5 p-1 rounded-2xl backdrop-blur-sm border border-white/10">
                 <YouTubeFacade
                   videoId="jQJqW8JAWWU"
                   title="YouTube video player"
@@ -180,60 +209,27 @@ const Index = () => {
                   loop={true}
                   mute={false}
                   loading="eager"
-                  className="relative w-full aspect-video rounded-2xl shadow-2xl transition-transform duration-500 group-hover:scale-105"
+                  className="relative w-full aspect-video rounded-xl shadow-2xl"
                 />
               </div>
             </div>
           </div>
 
-          {/* Service Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mt-12 sm:mt-16 lg:mt-20">
-            <div className="bg-gradient-to-br from-slate-800 to-slate-700 rounded-2xl p-4 sm:p-6 border border-slate-600 hover:border-red-500 transition-all duration-300 group">
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-red-600 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <Globe className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+          {/* Premium Service Pills */}
+          <div className="flex flex-wrap justify-center gap-3 sm:gap-4 mt-16 lg:mt-24">
+            {[
+              { icon: Globe, label: "Web Design", color: "from-red-500 to-orange-500" },
+              { icon: Target, label: "Paid Ads", color: "from-orange-500 to-yellow-500" },
+              { icon: Bot, label: "AI Automation", color: "from-purple-500 to-pink-500" },
+              { icon: Sparkles, label: "Strategy", color: "from-blue-500 to-cyan-500" },
+            ].map((service, i) => (
+              <div key={i} className="group flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 rounded-full px-5 py-3 transition-all duration-300 cursor-pointer">
+                <div className={`w-8 h-8 rounded-full bg-gradient-to-r ${service.color} flex items-center justify-center`}>
+                  <service.icon className="w-4 h-4 text-white" />
                 </div>
-                <div className="min-w-0">
-                  <h3 className="text-white font-bold text-base sm:text-lg leading-tight">Websites &</h3>
-                  <h3 className="text-white font-bold text-base sm:text-lg leading-tight">Marketing Tools</h3>
-                </div>
+                <span className="text-white/80 font-medium text-sm">{service.label}</span>
               </div>
-            </div>
-
-            <div className="bg-gradient-to-br from-slate-800 to-slate-700 rounded-2xl p-4 sm:p-6 border border-slate-600 hover:border-red-500 transition-all duration-300 group">
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-orange-600 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <Target className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-                </div>
-                <div className="min-w-0">
-                  <h3 className="text-white font-bold text-base sm:text-lg">Traffic</h3>
-                  <p className="text-gray-400 text-xs sm:text-sm">Google Ads, Meta Ads, SEO & more</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-gradient-to-br from-slate-800 to-slate-700 rounded-2xl p-4 sm:p-6 border border-slate-600 hover:border-red-500 transition-all duration-300 group">
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-pink-600 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <Bot className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-                </div>
-                <div className="min-w-0">
-                  <h3 className="text-white font-bold text-base sm:text-lg">AI Automation</h3>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-gradient-to-br from-slate-800 to-slate-700 rounded-2xl p-4 sm:p-6 border border-slate-600 hover:border-red-500 transition-all duration-300 group">
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-red-600 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <Sparkles className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-                </div>
-                <div className="min-w-0">
-                  <h3 className="text-white font-bold text-base sm:text-lg leading-tight">Strategy &</h3>
-                  <h3 className="text-white font-bold text-base sm:text-lg leading-tight">Consulting</h3>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
