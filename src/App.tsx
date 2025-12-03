@@ -54,6 +54,7 @@ import CatchAllPage from "./pages/CatchAllPage";
 import GuidePage from "./pages/GuidePage";
 import PDFLandingPage from "./pages/PDFLandingPage";
 import Founder from "./pages/Founder";
+import FounderFarhan from "./pages/FounderFarhan";
 
 const queryClient = new QueryClient();
 
@@ -88,6 +89,7 @@ const App = () => (
                   <Route path="/ai-automation" element={<AIAutomation />} />
                   <Route path="/about" element={<About />} />
                   <Route path="/founder" element={<Founder />} />
+                  <Route path="/farhan-tanvier" element={<FounderFarhan />} />
                   <Route path="/pricing" element={<Pricing />} />
                   <Route path="/contact" element={<Contact />} />
                   <Route path="/book-apartment" element={<BookApartment />} />
