@@ -19,19 +19,27 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 225 15% 20%;
 
-      /* Enhanced Design System for Ultra-Premium Look */
-      --primary: 240 100% 60%;
-      --primary-foreground: 0 0% 100%;
-      --primary-variant: 245 85% 65%;
-      --primary-dark: 235 95% 45%;
+    /* Enhanced Design System for Ultra-Premium Look */
+    --primary: 240 100% 60%;
+    --primary-foreground: 0 0% 100%;
+    --primary-variant: 245 85% 65%;
+    --primary-dark: 235 95% 45%;
 
-      /* Ultra-Premium Accent Colors */
-      --accent: 142 86% 28%;
-      --accent-foreground: 0 0% 100%;
-      --accent-cta: 15 90% 58%;
-      --accent-cta-foreground: 0 0% 100%;
-      --accent-luxury: 280 85% 65%;
-      --accent-luxury-foreground: 0 0% 100%;
+    /* Secondary Colors */
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 225 15% 20%;
+
+    /* Muted Colors */
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 10% 40%;
+
+    /* Ultra-Premium Accent Colors */
+    --accent: 142 86% 28%;
+    --accent-foreground: 0 0% 100%;
+    --accent-cta: 15 90% 58%;
+    --accent-cta-foreground: 0 0% 100%;
+    --accent-luxury: 280 85% 65%;
+    --accent-luxury-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;

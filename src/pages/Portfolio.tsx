@@ -130,7 +130,7 @@ const Portfolio = () => {
               </span>
             </h1>
             
-            <p className="text-lg lg:text-xl text-white/50 leading-relaxed mb-14 max-w-3xl mx-auto font-light">
+            <p className="text-lg lg:text-xl text-white/70 leading-relaxed mb-14 max-w-3xl mx-auto font-light">
               Transformative digital experiences that have revolutionized businesses and generated millions in revenue.
             </p>
 
@@ -148,7 +148,7 @@ const Portfolio = () => {
                   </div>
                   <div className="text-left">
                     <div className="text-xl lg:text-2xl font-bold text-white">{stat.value}</div>
-                    <div className="text-xs text-white/40 uppercase tracking-wider">{stat.label}</div>
+                    <div className="text-xs text-white/60 uppercase tracking-wider">{stat.label}</div>
                   </div>
                 </div>
               ))}
@@ -186,7 +186,7 @@ const Portfolio = () => {
             <h2 className="text-3xl lg:text-5xl font-bold text-white mb-3" style={{fontFamily: "'Playfair Display', serif"}}>
               Explore by Category
             </h2>
-            <p className="text-white/40">{allProjects.length} projects showcasing our expertise</p>
+            <p className="text-white/60">{allProjects.length} projects showcasing our expertise</p>
           </div>
           
           <div className="flex flex-wrap gap-3 justify-center">
@@ -218,7 +218,7 @@ const Portfolio = () => {
             <h2 className="text-2xl lg:text-4xl font-bold text-white mb-4" style={{fontFamily: "'Playfair Display', serif"}}>
               Case Studies
             </h2>
-            <p className="text-white/50 max-w-2xl mx-auto">
+            <p className="text-white/70 max-w-2xl mx-auto">
               Our most successful projects showcasing premium design and strategic innovation
             </p>
           </div>
@@ -254,17 +254,17 @@ const Portfolio = () => {
                 </div>
                 
                 <div className="p-6">
-                  <span className="text-xs text-white/40 uppercase tracking-wider">{project.category}</span>
+                  <span className="text-xs text-white/60 uppercase tracking-wider">{project.category}</span>
                   <h3 className="text-xl font-bold text-white mt-1 mb-3 group-hover:text-red-400 transition-colors">
                     {project.title}
                   </h3>
                   
-                  <p className="text-white/50 text-sm mb-6 leading-relaxed line-clamp-2">
+                  <p className="text-white/70 text-sm mb-6 leading-relaxed line-clamp-2">
                     {project.description}
                   </p>
 
                   <div className="flex items-center gap-4 mb-6 text-sm">
-                    <div className="flex items-center gap-2 text-white/60">
+                    <div className="flex items-center gap-2 text-white/70">
                       <Calendar className="w-4 h-4" />
                       {project.timeline}
                     </div>
@@ -276,7 +276,7 @@ const Portfolio = () => {
 
                   <div className="flex flex-wrap gap-2 mb-6">
                     {project.technologies.slice(0, 3).map((tech, techIndex) => (
-                      <span key={techIndex} className="text-xs px-3 py-1.5 bg-white/5 border border-white/10 rounded-full text-white/60">
+                      <span key={techIndex} className="text-xs px-3 py-1.5 bg-white/5 border border-white/10 rounded-full text-white/70">
                         {tech}
                       </span>
                     ))}
@@ -300,7 +300,7 @@ const Portfolio = () => {
             <h2 className="text-2xl lg:text-4xl font-bold text-white mb-4" style={{fontFamily: "'Playfair Display', serif"}}>
               More Projects
             </h2>
-            <p className="text-white/50">{regularProjects.length} projects in collection</p>
+            <p className="text-white/60">{regularProjects.length} projects in collection</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -312,7 +312,7 @@ const Portfolio = () => {
               </>
             ) : regularProjects.length === 0 ? (
               <div className="col-span-full text-center py-12">
-                <p className="text-white/50">No projects found in this category.</p>
+                <p className="text-white/70">No projects found in this category.</p>
               </div>
             ) : regularProjects.map((project, index) => (
               <div key={project.id || index} className="group relative bg-white/5 border border-white/10 rounded-xl overflow-hidden hover:border-white/20 transition-all duration-300">
@@ -340,18 +340,18 @@ const Portfolio = () => {
                     {project.title}
                   </h3>
                   
-                  <p className="text-white/40 text-sm mb-4 line-clamp-2">
+                  <p className="text-white/70 text-sm mb-4 line-clamp-2">
                     {project.description}
                   </p>
 
-                  <div className="flex items-center justify-between text-xs text-white/40 mb-4">
+                  <div className="flex items-center justify-between text-xs text-white/60 mb-4">
                     <span>{project.timeline}</span>
                     <span className="text-green-400">{project.results}</span>
                   </div>
 
                   <div className="flex flex-wrap gap-1.5 mb-4">
                     {project.technologies.slice(0, 2).map((tech, techIndex) => (
-                      <span key={techIndex} className="text-xs px-2 py-1 bg-white/5 border border-white/10 rounded text-white/50">
+                      <span key={techIndex} className="text-xs px-2 py-1 bg-white/5 border border-white/10 rounded text-white/70">
                         {tech}
                       </span>
                     ))}

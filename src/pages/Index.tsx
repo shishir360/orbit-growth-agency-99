@@ -61,7 +61,7 @@ const Index = () => {
                 </span>
               </h1>
               
-              <p className="text-lg lg:text-xl text-white/50 leading-relaxed max-w-xl font-light">
+              <p className="text-lg lg:text-xl text-white/70 leading-relaxed max-w-xl font-light">
                 Premium website design, performance ads & AI automation — crafted for ambitious brands ready to dominate their market.
               </p>
               
@@ -84,17 +84,17 @@ const Index = () => {
               <div className="flex items-center gap-6 lg:gap-10 pt-10 border-t border-white/10">
                 <div className="text-center">
                   <div className="text-3xl lg:text-4xl font-bold text-white">200%</div>
-                  <div className="text-xs text-white/40 uppercase tracking-wider mt-1">Avg. Growth</div>
+                  <div className="text-xs text-white/60 uppercase tracking-wider mt-1">Avg. Growth</div>
                 </div>
                 <div className="w-px h-14 bg-gradient-to-b from-transparent via-white/20 to-transparent"></div>
                 <div className="text-center">
                   <div className="text-3xl lg:text-4xl font-bold text-white">50+</div>
-                  <div className="text-xs text-white/40 uppercase tracking-wider mt-1">Projects</div>
+                  <div className="text-xs text-white/60 uppercase tracking-wider mt-1">Projects</div>
                 </div>
                 <div className="w-px h-14 bg-gradient-to-b from-transparent via-white/20 to-transparent"></div>
                 <div className="text-center">
                   <div className="text-3xl lg:text-4xl font-bold text-white">10x</div>
-                  <div className="text-xs text-white/40 uppercase tracking-wider mt-1">ROI</div>
+                  <div className="text-xs text-white/60 uppercase tracking-wider mt-1">ROI</div>
                 </div>
               </div>
             </div>
@@ -141,7 +141,7 @@ const Index = () => {
                   <service.icon className="w-5 h-5 text-white" />
                 </div>
                 <span className="text-white/80 font-medium">{service.label}</span>
-                <ChevronRight className="w-4 h-4 text-white/40 group-hover:text-white/70 group-hover:translate-x-1 transition-all" />
+                <ChevronRight className="w-4 h-4 text-white/60 group-hover:text-white/80 group-hover:translate-x-1 transition-all" />
               </Link>
             ))}
           </div>
@@ -168,7 +168,7 @@ const Index = () => {
             <h2 className="text-4xl lg:text-6xl font-bold mb-6 text-white" style={{fontFamily: "'Playfair Display', serif"}}>
               What We <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-teal-400 bg-clip-text text-transparent">Offer</span>
             </h2>
-            <p className="text-lg lg:text-xl text-white/50 max-w-3xl mx-auto font-light">
+            <p className="text-lg lg:text-xl text-white/70 max-w-3xl mx-auto font-light">
               Three core services designed to accelerate your digital growth
             </p>
           </div>
@@ -207,10 +207,10 @@ const Index = () => {
                     <service.icon className="w-8 h-8 text-white" />
                   </div>
                   <h3 className="text-2xl font-bold text-white mb-4">{service.title}</h3>
-                  <p className="text-white/50 mb-6 leading-relaxed">{service.description}</p>
+                  <p className="text-white/70 mb-6 leading-relaxed">{service.description}</p>
                   <ul className="space-y-3 mb-8">
                     {service.features.map((feature, j) => (
-                      <li key={j} className="flex items-center gap-3 text-white/60">
+                      <li key={j} className="flex items-center gap-3 text-white/70">
                         <Check className="w-4 h-4 text-green-400" />
                         {feature}
                       </li>
@@ -244,7 +244,7 @@ const Index = () => {
                   <stat.icon className="w-7 h-7 text-white" />
                 </div>
                 <div className="text-4xl font-bold text-white mb-2">{stat.value}</div>
-                <div className="text-white/50 text-sm">{stat.label}</div>
+                <div className="text-white/70 text-sm">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -268,7 +268,7 @@ const Index = () => {
                 Built for <span className="bg-gradient-to-r from-green-400 via-emerald-400 to-teal-400 bg-clip-text text-transparent">Success</span>
               </h2>
               
-              <p className="text-lg text-white/50 leading-relaxed">
+              <p className="text-lg text-white/70 leading-relaxed">
                 We don't just build websites or run ads. We create comprehensive digital strategies that drive real business growth.
               </p>
               
@@ -282,7 +282,7 @@ const Index = () => {
                     <Check className="w-6 h-6 text-green-400 flex-shrink-0 mt-0.5" />
                     <div>
                       <div className="font-semibold text-white">{item.title}</div>
-                      <div className="text-white/50 text-sm">{item.desc}</div>
+                      <div className="text-white/70 text-sm">{item.desc}</div>
                     </div>
                   </div>
                 ))}
