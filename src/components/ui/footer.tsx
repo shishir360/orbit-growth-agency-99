@@ -1,138 +1,137 @@
 import SocialMedia from "./social-media";
-// React Router Link removed for full page reloads
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
-    <footer className="bg-muted/30 border-t border-border relative z-10">
-      <div className="container-wide section-padding py-8 md:py-12">
-        {/* Mobile-first responsive grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+    <footer className="bg-[#0a0a0f] border-t border-white/10 relative z-10">
+      {/* Gradient line */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+      
+      <div className="container-wide section-padding py-12 md:py-16">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
           {/* Services */}
-          <div className="space-y-3">
-            <h3 className="font-semibold text-sm md:text-base text-foreground">Services</h3>
-            <ul className="space-y-2">
+          <div className="space-y-4">
+            <h3 className="font-semibold text-sm md:text-base text-white">Services</h3>
+            <ul className="space-y-3">
               <li>
-                <a href="/website-design" className="text-xs md:text-sm text-muted-foreground hover:text-primary transition-colors block py-1">
+                <Link to="/website-design" className="text-xs md:text-sm text-white/50 hover:text-white transition-colors block">
                   Website Design
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/ads-management" className="text-xs md:text-sm text-muted-foreground hover:text-primary transition-colors block py-1">
+                <Link to="/ads-management" className="text-xs md:text-sm text-white/50 hover:text-white transition-colors block">
                   Ads Management
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/ai-automation" className="text-xs md:text-sm text-muted-foreground hover:text-primary transition-colors block py-1">
+                <Link to="/ai-automation" className="text-xs md:text-sm text-white/50 hover:text-white transition-colors block">
                   AI Automation
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/portfolio" className="text-xs md:text-sm text-muted-foreground hover:text-primary transition-colors block py-1">
+                <Link to="/portfolio" className="text-xs md:text-sm text-white/50 hover:text-white transition-colors block">
                   Portfolio
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
 
           {/* Resources */}
-          <div className="space-y-3">
-            <h3 className="font-semibold text-sm md:text-base text-foreground">Resources</h3>
-            <ul className="space-y-2">
+          <div className="space-y-4">
+            <h3 className="font-semibold text-sm md:text-base text-white">Resources</h3>
+            <ul className="space-y-3">
               <li>
-                <a href="/blog" className="text-xs md:text-sm text-muted-foreground hover:text-primary transition-colors block py-1">
+                <Link to="/blog" className="text-xs md:text-sm text-white/50 hover:text-white transition-colors block">
                   Blog
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/tutorials" className="text-xs md:text-sm text-muted-foreground hover:text-primary transition-colors block py-1">
+                <Link to="/tutorials" className="text-xs md:text-sm text-white/50 hover:text-white transition-colors block">
                   Tutorials
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/contact" className="text-xs md:text-sm text-muted-foreground hover:text-primary transition-colors block py-1">
+                <Link to="/contact" className="text-xs md:text-sm text-white/50 hover:text-white transition-colors block">
                   Contact
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/reviews" className="text-xs md:text-sm text-muted-foreground hover:text-primary transition-colors block py-1">
+                <Link to="/reviews" className="text-xs md:text-sm text-white/50 hover:text-white transition-colors block">
                   Reviews
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
 
           {/* Company */}
-          <div className="space-y-3">
-            <h3 className="font-semibold text-sm md:text-base text-foreground">Company</h3>
-            <ul className="space-y-2">
+          <div className="space-y-4">
+            <h3 className="font-semibold text-sm md:text-base text-white">Company</h3>
+            <ul className="space-y-3">
               <li>
-                <a href="/about" className="text-xs md:text-sm text-muted-foreground hover:text-primary transition-colors block py-1">
+                <Link to="/about" className="text-xs md:text-sm text-white/50 hover:text-white transition-colors block">
                   About Us
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/pricing" className="text-xs md:text-sm text-muted-foreground hover:text-primary transition-colors block py-1">
+                <Link to="/founder" className="text-xs md:text-sm text-white/50 hover:text-white transition-colors block">
+                  Our Founder
+                </Link>
+              </li>
+              <li>
+                <Link to="/pricing" className="text-xs md:text-sm text-white/50 hover:text-white transition-colors block">
                   Pricing
-                </a>
-              </li>
-              <li>
-                <a href="/contact" className="text-xs md:text-sm text-muted-foreground hover:text-primary transition-colors block py-1">
-                  Join Our Team
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
 
           {/* Legal */}
-          <div className="space-y-3">
-            <h3 className="font-semibold text-sm md:text-base text-foreground">Legal</h3>
-            <ul className="space-y-2">
+          <div className="space-y-4">
+            <h3 className="font-semibold text-sm md:text-base text-white">Legal</h3>
+            <ul className="space-y-3">
               <li>
-                <a href="/privacy" className="text-xs md:text-sm text-muted-foreground hover:text-primary transition-colors block py-1">
+                <Link to="/privacy" className="text-xs md:text-sm text-white/50 hover:text-white transition-colors block">
                   Privacy Policy
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/terms" className="text-xs md:text-sm text-muted-foreground hover:text-primary transition-colors block py-1">
+                <Link to="/terms" className="text-xs md:text-sm text-white/50 hover:text-white transition-colors block">
                   Terms & Conditions
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/sitemap" className="text-xs md:text-sm text-muted-foreground hover:text-primary transition-colors block py-1">
+                <Link to="/sitemap" className="text-xs md:text-sm text-white/50 hover:text-white transition-colors block">
                   Sitemap
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
         </div>
 
         {/* Bottom section */}
-        <div className="border-t border-border mt-6 md:mt-8 pt-6 md:pt-8">
-          {/* Logo and tagline */}
+        <div className="border-t border-white/10 mt-10 pt-10">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-            <div className="flex flex-col md:flex-row md:items-center gap-3">
-              <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
-                  <img src="/user-logo-optimized.webp" alt="LUNEXO MEDIA" className="w-6 h-6 object-contain" loading="lazy" />
+            <div className="flex flex-col md:flex-row md:items-center gap-4">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center">
+                  <img src="/user-logo-optimized.webp" alt="LUNEXO MEDIA" className="w-7 h-7 object-contain" loading="lazy" />
                 </div>
-                <span className="text-lg md:text-xl font-bold text-foreground">LUNEXO MEDIA</span>
+                <span className="text-xl font-bold text-white">LUNEXO MEDIA</span>
               </div>
-              <span className="text-sm text-muted-foreground md:ml-4">Build Faster. Scale Better.</span>
+              <span className="text-sm text-white/40 md:ml-4">Build Faster. Scale Better.</span>
             </div>
             
-            {/* Social media for desktop */}
             <div className="hidden md:block">
               <SocialMedia variant="footer" />
             </div>
           </div>
           
-          {/* Mobile social media and copyright */}
           <div className="mt-6 md:hidden">
             <SocialMedia variant="footer" />
           </div>
           
-          <div className="mt-4 pt-4 border-t border-border md:border-0 md:pt-0 md:mt-6 text-center md:text-right">
-            <span className="text-xs md:text-sm text-muted-foreground">© 2024 LUNEXO MEDIA</span>
+          <div className="mt-6 pt-6 border-t border-white/10 text-center md:text-right">
+            <span className="text-xs md:text-sm text-white/40">© 2024 LUNEXO MEDIA. All rights reserved.</span>
           </div>
         </div>
       </div>
