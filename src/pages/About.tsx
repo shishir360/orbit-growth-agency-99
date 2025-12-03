@@ -32,7 +32,7 @@ const About = () => {
       included: ["Campaign strategy & setup", "Ad creative development", "Advanced targeting", "Performance optimization", "Detailed analytics & reporting"],
       cta: "Scale Your Ads",
       accent: "bg-gradient-to-r from-emerald-600 to-teal-600",
-      stats: "$2M+ ad spend managed"
+      stats: "$10K+ ad spend managed"
     },
     {
       icon: <Bot className="w-10 h-10" />,
@@ -135,7 +135,7 @@ const About = () => {
                 {[
                   { number: "50+", label: "Clients Served" },
                   { number: "300+", label: "Websites Built" },
-                  { number: "$2M+", label: "Ad Spend Managed" }
+                  { number: "$10K+", label: "Ad Spend Managed" }
                 ].map((stat, index) => (
                   <div key={index} className="text-center">
                     <div className="text-2xl font-bold premium-gradient-text">{stat.number}</div>
