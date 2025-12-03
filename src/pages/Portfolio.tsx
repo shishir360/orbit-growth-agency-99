@@ -280,7 +280,7 @@ const Portfolio = () => {
             <div className="flex flex-wrap justify-center gap-4 lg:gap-6 mb-14">
               {[
                 { value: "50+", label: "Projects", icon: Zap },
-                { value: "$2M+", label: "Revenue Generated", icon: TrendingUp },
+                { value: "$10K+", label: "Revenue Generated", icon: TrendingUp },
                 { value: "95%", label: "Client Satisfaction", icon: Award },
                 { value: "30 Days", label: "Avg. Delivery", icon: Calendar }
               ].map((stat, index) => (

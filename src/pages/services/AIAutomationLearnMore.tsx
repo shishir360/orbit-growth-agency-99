@@ -277,7 +277,7 @@ const AIAutomationLearnMore = () => {
         "300% increase in qualified leads",
         "70% time savings for sales team",
         "150% improvement in conversion rate",
-        "$2M additional revenue generated"
+        "$10K additional revenue generated"
       ],
       timeline: "10 weeks",
       image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=400&q=80"
