@@ -224,7 +224,7 @@ const Privacy = () => {
             
             <div className="mt-12">
               <Button size="lg" asChild className="text-xl font-bold px-12 py-6 rounded-2xl">
-                <a href="/contact">Contact Privacy Team</a>
+                <a href="/book-appointment">Book Appointment</a>
               </Button>
             </div>
           </div>
