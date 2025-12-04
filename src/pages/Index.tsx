@@ -88,7 +88,7 @@ const Index = () => {
                 </div>
                 <div className="w-px h-14 bg-gradient-to-b from-transparent via-white/20 to-transparent"></div>
                 <div className="text-center">
-                  <div className="text-3xl lg:text-4xl font-bold text-white">50+</div>
+                  <div className="text-3xl lg:text-4xl font-bold text-white">300+</div>
                   <div className="text-xs text-white/60 uppercase tracking-wider mt-1">Projects</div>
                 </div>
                 <div className="w-px h-14 bg-gradient-to-b from-transparent via-white/20 to-transparent"></div>
