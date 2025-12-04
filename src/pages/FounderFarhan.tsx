@@ -20,7 +20,7 @@ import {
   Star,
   Zap
 } from "lucide-react";
-import { Link } from "react-router-dom";
+
 import founderImage from "@/assets/founder-farhan.jpg";
 
 const FounderFarhan = () => {
@@ -135,15 +135,15 @@ const FounderFarhan = () => {
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-fade-in" style={{animationDelay: '0.8s'}}>
                 <Button asChild size="lg" className="group text-lg px-12 py-8 bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white hover:from-violet-600 hover:to-fuchsia-600 rounded-full transition-all duration-300 hover:scale-105 font-semibold shadow-2xl shadow-violet-500/30">
-                  <Link to="/contact" className="flex items-center gap-3">
+                  <a href="/book-appointment" className="flex items-center gap-3">
                     Let's Work Together
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                  </Link>
+                  </a>
                 </Button>
                 <Button asChild variant="outline" size="lg" className="text-lg px-12 py-8 border-2 border-white/20 text-white bg-white/5 hover:bg-white/10 hover:border-white/30 rounded-full transition-all duration-300 backdrop-blur-sm">
-                  <Link to="/portfolio">
+                  <a href="/portfolio">
                     View My Work
-                  </Link>
+                  </a>
                 </Button>
               </div>
             </div>
@@ -333,15 +333,15 @@ const FounderFarhan = () => {
             
             <div className="flex flex-col sm:flex-row gap-5 justify-center">
               <Button asChild size="lg" className="group text-lg px-14 py-8 bg-white text-black hover:bg-white/90 rounded-full transition-all duration-300 hover:scale-105 font-semibold shadow-2xl">
-                <Link to="/contact" className="flex items-center gap-3">
+                <a href="/book-appointment" className="flex items-center gap-3">
                   Get In Touch
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </Link>
+                </a>
               </Button>
               <Button asChild variant="outline" size="lg" className="text-lg px-14 py-8 border-2 border-white/25 text-white bg-white/5 hover:bg-white/10 hover:border-white/35 rounded-full transition-all duration-300 backdrop-blur-sm">
-                <Link to="/about">
+                <a href="/about">
                   About Lunexo Media
-                </Link>
+                </a>
               </Button>
             </div>
           </div>

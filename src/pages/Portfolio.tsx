@@ -21,7 +21,7 @@ import {
   Layers,
   Eye
 } from "lucide-react";
-import { Link } from "react-router-dom";
+
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -156,10 +156,10 @@ const Portfolio = () => {
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" className="group text-base px-10 py-7 bg-gradient-to-r from-red-500 to-orange-500 text-white hover:from-red-600 hover:to-orange-600 rounded-full transition-all duration-300 hover:scale-105 font-semibold shadow-lg shadow-red-500/25" asChild>
-                <Link to="/contact">
+                <a href="/book-appointment">
                   Start Your Project
                   <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                </Link>
+                </a>
               </Button>
               
               <Button size="lg" variant="outline" className="text-base px-10 py-7 border border-white/20 text-white bg-white/5 hover:bg-white/10 rounded-full transition-all duration-300 backdrop-blur-sm" asChild>
@@ -282,10 +282,10 @@ const Portfolio = () => {
                     ))}
                   </div>
 
-                  <Link to={`/portfolio/${project.id}`} className="inline-flex items-center gap-2 text-white font-medium text-sm group/link">
+                  <a href={`/portfolio/${project.id}`} className="inline-flex items-center gap-2 text-white font-medium text-sm group/link">
                     View Case Study
                     <ArrowRight className="w-4 h-4 group-hover/link:translate-x-1 transition-transform" />
-                  </Link>
+                  </a>
                 </div>
               </div>
             ))}
@@ -357,10 +357,10 @@ const Portfolio = () => {
                     ))}
                   </div>
 
-                  <Link to={`/portfolio/${project.id}`} className="inline-flex items-center gap-1.5 text-white/70 hover:text-white text-sm font-medium transition-colors">
+                  <a href={`/portfolio/${project.id}`} className="inline-flex items-center gap-1.5 text-white/70 hover:text-white text-sm font-medium transition-colors">
                     View Details
                     <ArrowRight className="w-3.5 h-3.5" />
-                  </Link>
+                  </a>
                 </div>
               </div>
             ))}
@@ -390,16 +390,16 @@ const Portfolio = () => {
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" className="group text-base px-8 py-6 bg-white text-black hover:bg-white/90 rounded-full transition-all duration-300 hover:scale-105 font-semibold" asChild>
-                <Link to="/contact">
+                <a href="/book-appointment">
                   Start Your Project
                   <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                </Link>
+                </a>
               </Button>
               
               <Button size="lg" variant="outline" className="text-base px-8 py-6 border border-white/20 text-white bg-white/5 hover:bg-white/10 rounded-full transition-all duration-300 backdrop-blur-sm" asChild>
-                <Link to="/pricing">
+                <a href="/pricing">
                   View Pricing
-                </Link>
+                </a>
               </Button>
             </div>
           </div>
