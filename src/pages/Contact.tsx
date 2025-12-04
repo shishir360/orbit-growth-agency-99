@@ -9,7 +9,7 @@ import { MessageSquare, Mail, Phone, Sparkles, Zap, Send, ArrowRight, Clock, Map
 import { useToast } from "@/hooks/use-toast";
 import SEO from "@/components/ui/seo";
 import { supabase } from "@/integrations/supabase/client";
-import { Link } from "react-router-dom";
+
 
 const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -302,9 +302,9 @@ const Contact = () => {
               Book a free 15-minute strategy call with our team.
             </p>
             <Button asChild size="lg" className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white hover:from-blue-600 hover:to-cyan-600 rounded-full px-10 py-7">
-              <Link to="/book-apartment">
+              <a href="/book-appointment">
                 Book a Call <ArrowRight className="w-4 h-4 ml-2" />
-              </Link>
+              </a>
             </Button>
           </div>
         </div>
