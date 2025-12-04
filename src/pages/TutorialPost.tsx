@@ -193,10 +193,10 @@ const TutorialPost = () => {
             Need Help Implementing This?
           </h2>
           <p className="text-xl mb-8 opacity-90">
-            Our team can help you build and launch your project in 30 days or less.
+          Our team can help you build and launch your project in 30 days or less.
           </p>
           <Button size="lg" variant="secondary" asChild>
-            <a href="/contact">Schedule a Meeting</a>
+            <a href="/book-appointment">Book Appointment</a>
           </Button>
         </div>
       </section>

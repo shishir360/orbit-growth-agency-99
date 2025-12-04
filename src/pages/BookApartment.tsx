@@ -559,8 +559,8 @@ const BookApartment = () => {
                 <CheckCircle2 className="w-4 h-4 text-primary" />
                 <p className="text-sm">
                   Need immediate assistance? 
-                  <a href="/contact" className="text-primary hover:underline ml-1 font-semibold">
-                    Contact our support team
+                  <a href="https://wa.me/17024830749" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline ml-1 font-semibold">
+                    WhatsApp আমাদের সাথে যোগাযোগ করুন
                   </a>
                 </p>
               </div>
