@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -115,10 +115,10 @@ const CaseStudy = () => {
       <section className="pt-32 pb-8">
         <div className="container-wide section-padding">
           <Button variant="outline" className="mb-8" asChild>
-            <Link to="/website-design">
+            <a href="/website-design">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Website Design
-            </Link>
+            </a>
           </Button>
         </div>
       </section>
@@ -278,16 +278,16 @@ const CaseStudy = () => {
             
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
               <Button size="lg" className="group text-base font-bold px-12 py-6 rounded-2xl hover:scale-105 transition-all duration-300 shadow-glow" asChild>
-                <Link to="/contact">
+                <a href="/book-appointment">
                   Start Your Project
                   <ArrowRight className="w-5 h-5 ml-3 group-hover:translate-x-2 transition-transform" />
-                </Link>
+                </a>
               </Button>
               
               <Button size="lg" variant="outline" className="text-base font-bold px-12 py-6 rounded-2xl border-2 border-primary/30 hover:bg-primary hover:text-white hover:scale-105 transition-all duration-300" asChild>
-                <Link to="/portfolio">
+                <a href="/portfolio">
                   View More Work
-                </Link>
+                </a>
               </Button>
             </div>
           </div>

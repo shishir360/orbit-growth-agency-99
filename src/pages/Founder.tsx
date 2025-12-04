@@ -18,7 +18,7 @@ import {
   CheckCircle2,
   Calendar
 } from "lucide-react";
-import { Link } from "react-router-dom";
+
 import founderImage from "@/assets/founder-farhan.jpg";
 
 const Founder = () => {
@@ -106,15 +106,15 @@ const Founder = () => {
               {/* CTA */}
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
                 <Button asChild size="lg" className="group text-base px-10 py-7 bg-gradient-to-r from-blue-500 to-cyan-500 text-white hover:from-blue-600 hover:to-cyan-600 rounded-full transition-all duration-300 hover:scale-105 font-semibold shadow-lg shadow-blue-500/25">
-                  <Link to="/contact" className="flex items-center gap-2">
+                  <a href="/book-appointment" className="flex items-center gap-2">
                     Work With Me
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </Link>
+                  </a>
                 </Button>
                 <Button asChild variant="outline" size="lg" className="text-base px-10 py-7 border border-white/20 text-white bg-white/5 hover:bg-white/10 rounded-full transition-all duration-300 backdrop-blur-sm">
-                  <Link to="/portfolio">
+                  <a href="/portfolio">
                     View My Work
-                  </Link>
+                  </a>
                 </Button>
               </div>
             </div>
@@ -263,15 +263,15 @@ const Founder = () => {
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button asChild size="lg" className="group text-base px-10 py-7 bg-white text-black hover:bg-white/90 rounded-full transition-all duration-300 hover:scale-105 font-semibold">
-                <Link to="/contact" className="flex items-center gap-2">
+                <a href="/book-appointment" className="flex items-center gap-2">
                   Get In Touch
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </Link>
+                </a>
               </Button>
               <Button asChild variant="outline" size="lg" className="text-base px-10 py-7 border border-white/20 text-white bg-white/5 hover:bg-white/10 rounded-full transition-all duration-300 backdrop-blur-sm">
-                <Link to="/about">
+                <a href="/about">
                   About Lunexo Media
-                </Link>
+                </a>
               </Button>
             </div>
           </div>
