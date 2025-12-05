@@ -114,10 +114,41 @@ const AdminBookings = () => {
         booking.id === id ? { ...booking, status: newStatus } : booking
       ));
 
-      toast({
-        title: "Success",
-        description: "Booking status updated"
-      });
+      // Send confirmation email when status changes to 'confirmed'
+      if (newStatus === 'confirmed') {
+        try {
+          const { error: emailError } = await supabase.functions.invoke('send-booking-confirmation', {
+            body: { bookingId: id }
+          });
+          
+          if (emailError) {
+            console.error('Failed to send confirmation email:', emailError);
+            toast({
+              title: "Warning",
+              description: "Status updated but confirmation email failed to send",
+              variant: "destructive"
+            });
+            return;
+          }
+
+          toast({
+            title: "Success",
+            description: "Booking confirmed and email sent to customer"
+          });
+        } catch (emailErr) {
+          console.error('Error sending confirmation email:', emailErr);
+          toast({
+            title: "Warning",
+            description: "Status updated but email notification failed",
+            variant: "destructive"
+          });
+        }
+      } else {
+        toast({
+          title: "Success",
+          description: "Booking status updated"
+        });
+      }
     } catch (error) {
       console.error('Error updating status:', error);
       toast({
