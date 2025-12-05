@@ -29,3 +29,6 @@ verify_jwt = false
 
 [functions.send-booking-confirmation]
 verify_jwt = false
+
+[functions.vapi-booking-webhook]
+verify_jwt = false
