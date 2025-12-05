@@ -3,12 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Phone, PhoneOff, MessageCircle, X, Mic, MicOff, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
-
-declare global {
-  interface Window {
-    Vapi: any;
-  }
-}
+import Vapi from '@vapi-ai/web';
 
 const VAPI_ASSISTANT_ID = '8dcb4c2f-b585-454c-aba5-e97165192629';
 const VAPI_PUBLIC_KEY = '3250cbd5-7851-455f-bd67-d3a6356b5cee';
@@ -25,111 +20,77 @@ const VapiVoiceWidget = () => {
   const [isMuted, setIsMuted] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [currentTranscript, setCurrentTranscript] = useState('');
-  const [vapiInstance, setVapiInstance] = useState<any>(null);
-  const [sdkLoading, setSdkLoading] = useState(true);
-  const [sdkError, setSdkError] = useState<string | null>(null);
+  const [vapiInstance, setVapiInstance] = useState<Vapi | null>(null);
+  const [sdkReady, setSdkReady] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Load VAPI SDK
+  // Initialize VAPI SDK
   useEffect(() => {
-    const loadVapiSDK = () => {
-      // Check if already loaded
-      if (window.Vapi) {
-        initializeVapi();
-        return;
-      }
-
-      const script = document.createElement('script');
-      script.src = 'https://cdn.jsdelivr.net/npm/@vapi-ai/web@2.2.5/dist/vapi.iife.js';
-      script.async = true;
+    try {
+      const vapi = new Vapi(VAPI_PUBLIC_KEY);
+      console.log('VAPI instance created');
       
-      script.onload = () => {
-        console.log('VAPI SDK loaded successfully');
-        setTimeout(() => {
-          initializeVapi();
-        }, 100);
-      };
-      
-      script.onerror = () => {
-        console.error('Failed to load VAPI SDK');
-        setSdkError('Failed to load voice SDK');
-        setSdkLoading(false);
-      };
-      
-      document.head.appendChild(script);
-    };
+      // Event listeners
+      vapi.on('call-start', () => {
+        console.log('Call started');
+        setIsCallActive(true);
+        setIsConnecting(false);
+        setMessages(prev => [...prev, {
+          role: 'assistant',
+          content: "Hi! This is Farhan AI from Lunexo Media. How can I help you today?"
+        }]);
+      });
 
-    const initializeVapi = () => {
-      try {
-        if (window.Vapi) {
-          const vapi = new window.Vapi(VAPI_PUBLIC_KEY);
-          console.log('VAPI instance created');
-          
-          // Event listeners
-          vapi.on('call-start', () => {
-            console.log('Call started');
-            setIsCallActive(true);
-            setIsConnecting(false);
-            setMessages(prev => [...prev, {
-              role: 'assistant',
-              content: "Hi! This is Farhan AI from Lunexo Media. How can I help you today?"
-            }]);
-          });
+      vapi.on('call-end', () => {
+        console.log('Call ended');
+        setIsCallActive(false);
+        setIsConnecting(false);
+        setIsMuted(false);
+      });
 
-          vapi.on('call-end', () => {
-            console.log('Call ended');
-            setIsCallActive(false);
-            setIsConnecting(false);
-            setIsMuted(false);
-          });
+      vapi.on('speech-start', () => {
+        setCurrentTranscript('');
+      });
 
-          vapi.on('speech-start', () => {
-            setCurrentTranscript('');
-          });
+      vapi.on('speech-end', () => {
+        setCurrentTranscript('');
+      });
 
-          vapi.on('speech-end', () => {
-            setCurrentTranscript('');
-          });
-
-          vapi.on('message', (message: any) => {
-            console.log('VAPI message:', message);
-            if (message.type === 'transcript') {
-              if (message.transcriptType === 'final') {
-                if (message.role === 'user') {
-                  setMessages(prev => [...prev, { role: 'user', content: message.transcript }]);
-                } else if (message.role === 'assistant') {
-                  setMessages(prev => [...prev, { role: 'assistant', content: message.transcript }]);
-                }
-                setCurrentTranscript('');
-              } else {
-                setCurrentTranscript(message.transcript);
-              }
+      vapi.on('message', (message: any) => {
+        console.log('VAPI message:', message);
+        if (message.type === 'transcript') {
+          if (message.transcriptType === 'final') {
+            if (message.role === 'user') {
+              setMessages(prev => [...prev, { role: 'user', content: message.transcript }]);
+            } else if (message.role === 'assistant') {
+              setMessages(prev => [...prev, { role: 'assistant', content: message.transcript }]);
             }
-          });
-
-          vapi.on('error', (error: any) => {
-            console.error('VAPI Error:', error);
-            toast.error('Voice call error: ' + (error?.message || 'Unknown error'));
-            setIsConnecting(false);
-            setIsCallActive(false);
-          });
-
-          setVapiInstance(vapi);
-          setSdkLoading(false);
-          setSdkError(null);
-        } else {
-          console.error('VAPI not found on window');
-          setSdkError('Voice SDK not initialized');
-          setSdkLoading(false);
+            setCurrentTranscript('');
+          } else {
+            setCurrentTranscript(message.transcript);
+          }
         }
-      } catch (err) {
-        console.error('Error initializing VAPI:', err);
-        setSdkError('Error initializing voice SDK');
-        setSdkLoading(false);
+      });
+
+      vapi.on('error', (error: any) => {
+        console.error('VAPI Error:', error);
+        toast.error('Voice call error: ' + (error?.message || 'Unknown error'));
+        setIsConnecting(false);
+        setIsCallActive(false);
+      });
+
+      setVapiInstance(vapi);
+      setSdkReady(true);
+    } catch (err) {
+      console.error('Error initializing VAPI:', err);
+      toast.error('Failed to initialize voice SDK');
+    }
+
+    return () => {
+      if (vapiInstance) {
+        vapiInstance.stop();
       }
     };
-
-    loadVapiSDK();
   }, []);
 
   // Auto scroll to bottom
@@ -203,7 +164,7 @@ const VapiVoiceWidget = () => {
               <div>
                 <h3 className="font-semibold text-primary-foreground">Farhan AI</h3>
                 <p className="text-xs text-primary-foreground/70">
-                  {isCallActive ? 'On call...' : isConnecting ? 'Connecting...' : sdkLoading ? 'Loading...' : 'Voice Assistant'}
+                  {isCallActive ? 'On call...' : isConnecting ? 'Connecting...' : 'Voice Assistant'}
                 </p>
               </div>
             </div>
@@ -222,36 +183,14 @@ const VapiVoiceWidget = () => {
 
           {/* Messages Area */}
           <div className="h-[300px] overflow-y-auto p-4 space-y-3 bg-background/50">
-            {sdkError && (
-              <div className="text-center py-4">
-                <p className="text-sm text-red-500">{sdkError}</p>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="mt-2"
-                  onClick={() => window.location.reload()}
-                >
-                  Reload Page
-                </Button>
-              </div>
-            )}
-
-            {!sdkError && messages.length === 0 && !isCallActive && (
+            {messages.length === 0 && !isCallActive && (
               <div className="text-center py-8">
                 <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
-                  {sdkLoading ? (
-                    <Loader2 className="h-8 w-8 text-primary animate-spin" />
-                  ) : (
-                    <Phone className="h-8 w-8 text-primary" />
-                  )}
+                  <Phone className="h-8 w-8 text-primary" />
                 </div>
-                <h4 className="font-medium text-foreground mb-2">
-                  {sdkLoading ? 'Loading Voice Assistant...' : 'Voice Assistant Ready'}
-                </h4>
+                <h4 className="font-medium text-foreground mb-2">Voice Assistant Ready</h4>
                 <p className="text-sm text-muted-foreground">
-                  {sdkLoading 
-                    ? 'Please wait while we initialize the voice system' 
-                    : 'Click the button below to start a voice conversation with Farhan AI'}
+                  Click the button below to start a voice conversation with Farhan AI
                 </p>
               </div>
             )}
@@ -284,15 +223,10 @@ const VapiVoiceWidget = () => {
             {!isCallActive ? (
               <Button
                 onClick={startCall}
-                disabled={isConnecting || sdkLoading || !!sdkError}
+                disabled={isConnecting || !sdkReady}
                 className="w-full h-12 bg-green-600 hover:bg-green-700 text-white font-medium gap-2 disabled:opacity-50"
               >
-                {sdkLoading ? (
-                  <>
-                    <Loader2 className="h-5 w-5 animate-spin" />
-                    Loading SDK...
-                  </>
-                ) : isConnecting ? (
+                {isConnecting ? (
                   <>
                     <Loader2 className="h-5 w-5 animate-spin" />
                     Connecting...
