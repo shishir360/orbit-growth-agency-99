@@ -55,6 +55,7 @@ import GuidePage from "./pages/GuidePage";
 import PDFLandingPage from "./pages/PDFLandingPage";
 import Founder from "./pages/Founder";
 import FounderFarhan from "./pages/FounderFarhan";
+import VapiVoiceWidget from "./components/ui/vapi-voice-widget";
 
 const queryClient = new QueryClient();
 
@@ -68,6 +69,7 @@ const App = () => (
               <Toaster />
               <Sonner />
               <NotificationService />
+              <VapiVoiceWidget />
               <BrowserRouter>
                 <Routes>
                   <Route path="/" element={<Index />} />
