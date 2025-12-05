@@ -38,6 +38,7 @@ import AdminPDFLandingPages from '@/components/admin/AdminPDFLandingPages';
 import AdminAccounting from '@/components/admin/AdminAccounting';
 import AdminClients from '@/components/admin/AdminClients';
 import AdminVisitorTracking from '@/components/admin/AdminVisitorTracking';
+import AdminKnowledge from '@/components/admin/AdminKnowledge';
 
 const AdminDashboard = () => {
   const { isAdmin, loading } = useAdminAuth();
@@ -109,6 +110,7 @@ const AdminDashboard = () => {
               <Route path="accounting" element={<AdminAccounting />} />
               <Route path="clients" element={<AdminClients />} />
               <Route path="visitor-tracking" element={<AdminVisitorTracking />} />
+              <Route path="knowledge" element={<AdminKnowledge />} />
             </Routes>
           </main>
         </SidebarInset>
