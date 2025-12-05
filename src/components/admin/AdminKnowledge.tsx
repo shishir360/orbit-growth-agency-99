@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
+import { supabase } from "@/integrations/supabase/client";
 import { 
   Download, 
   FileText, 
@@ -891,9 +892,65 @@ const websiteKnowledge: PageInfo[] = [
   }
 ];
 
+interface LiveData {
+  blogPosts: Array<{ title: string; slug: string; published: boolean; created_at: string }>;
+  portfolio: Array<{ title: string; slug: string; category: string; published: boolean }>;
+  pages: Array<{ title: string; slug: string; visible: boolean }>;
+  pdfDocuments: Array<{ title: string; slug: string | null; visible: boolean }>;
+  services: Array<{ title: string; page_url: string; visible: boolean }>;
+  clients: number;
+  contacts: number;
+  bookings: number;
+}
+
 const AdminKnowledge = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("pages");
+  const [liveData, setLiveData] = useState<LiveData>({
+    blogPosts: [],
+    portfolio: [],
+    pages: [],
+    pdfDocuments: [],
+    services: [],
+    clients: 0,
+    contacts: 0,
+    bookings: 0
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchLiveData = async () => {
+      try {
+        const [blogRes, portfolioRes, pagesRes, pdfRes, servicesRes, clientsRes, contactsRes, bookingsRes] = await Promise.all([
+          supabase.from('blog_posts').select('title, slug, published, created_at').order('created_at', { ascending: false }),
+          supabase.from('portfolio').select('title, slug, category, published').eq('published', true),
+          supabase.from('pages').select('title, slug, visible').eq('visible', true),
+          supabase.from('pdf_documents').select('title, slug, visible').eq('visible', true),
+          supabase.from('services').select('title, page_url, visible').eq('visible', true),
+          supabase.from('clients').select('id', { count: 'exact', head: true }),
+          supabase.from('contact_submissions').select('id', { count: 'exact', head: true }),
+          supabase.from('apartment_bookings').select('id', { count: 'exact', head: true })
+        ]);
+
+        setLiveData({
+          blogPosts: blogRes.data || [],
+          portfolio: portfolioRes.data || [],
+          pages: pagesRes.data || [],
+          pdfDocuments: pdfRes.data || [],
+          services: servicesRes.data || [],
+          clients: clientsRes.count || 0,
+          contacts: contactsRes.count || 0,
+          bookings: bookingsRes.count || 0
+        });
+      } catch (error) {
+        console.error('Error fetching live data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLiveData();
+  }, []);
 
   const categories = [...new Set(websiteKnowledge.map(page => page.category))];
 
@@ -1021,6 +1078,25 @@ const AdminKnowledge = () => {
     content += `9. **PWA:** Progressive Web App for admin (installable)\n`;
     content += `10. **Multi-language Ready:** Structure supports localization\n`;
 
+    // Live Data from Database
+    content += `\n---\n\n## Live Website Data\n\n`;
+    content += `### Blog Posts (${liveData.blogPosts.length})\n`;
+    liveData.blogPosts.forEach(post => {
+      content += `- **${post.title}** - /blog/${post.slug} (${post.published ? 'Published' : 'Draft'})\n`;
+    });
+    content += `\n### Portfolio Projects (${liveData.portfolio.length})\n`;
+    liveData.portfolio.forEach(item => {
+      content += `- **${item.title}** - /portfolio/${item.slug} [${item.category}]\n`;
+    });
+    content += `\n### CMS Pages (${liveData.pages.length})\n`;
+    liveData.pages.forEach(page => {
+      content += `- **${page.title}** - /${page.slug}\n`;
+    });
+    content += `\n### Statistics\n`;
+    content += `- Total Clients: ${liveData.clients}\n`;
+    content += `- Contact Submissions: ${liveData.contacts}\n`;
+    content += `- Total Bookings: ${liveData.bookings}\n`;
+
     return content;
   };
 
@@ -1031,11 +1107,45 @@ const AdminKnowledge = () => {
       statistics: {
         totalPages: websiteKnowledge.length,
         totalDatabaseTables: databaseTables.length,
-        totalEdgeFunctions: edgeFunctions.length
+        totalEdgeFunctions: edgeFunctions.length,
+        totalBlogPosts: liveData.blogPosts.length,
+        totalPortfolioItems: liveData.portfolio.length,
+        totalClients: liveData.clients,
+        totalContacts: liveData.contacts,
+        totalBookings: liveData.bookings
+      },
+      liveData: {
+        blogPosts: liveData.blogPosts,
+        portfolio: liveData.portfolio,
+        cmsPages: liveData.pages,
+        services: liveData.services
       },
       pages: websiteKnowledge,
       databaseTables,
       edgeFunctions,
+      sitemapUrls: [
+        "https://www.lunexomedia.com/",
+        "https://www.lunexomedia.com/about",
+        "https://www.lunexomedia.com/contact",
+        "https://www.lunexomedia.com/pricing",
+        "https://www.lunexomedia.com/website-design",
+        "https://www.lunexomedia.com/ads-management",
+        "https://www.lunexomedia.com/ai-automation",
+        "https://www.lunexomedia.com/portfolio",
+        "https://www.lunexomedia.com/blog",
+        "https://www.lunexomedia.com/reviews",
+        "https://www.lunexomedia.com/book-apartment",
+        "https://www.lunexomedia.com/farhan-tanvier",
+        "https://www.lunexomedia.com/privacy",
+        "https://www.lunexomedia.com/terms",
+        "https://lunexomedia.com/services/website-design-learn-more",
+        "https://lunexomedia.com/services/ads-management-learn-more",
+        "https://lunexomedia.com/services/ai-automation-learn-more",
+        "https://lunexomedia.com/services/ai-chatbots-learn-more",
+        "https://lunexomedia.com/services/voice-agents-learn-more",
+        "https://lunexomedia.com/services/email-automation-learn-more",
+        "https://lunexomedia.com/services/workflow-automation-learn-more"
+      ],
       technicalStack: {
         framework: "React 18 with Vite",
         language: "TypeScript",
@@ -1149,11 +1259,184 @@ const AdminKnowledge = () => {
 
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList>
+        <TabsList className="flex-wrap h-auto">
+          <TabsTrigger value="livedata">Live Data</TabsTrigger>
           <TabsTrigger value="pages">Pages ({websiteKnowledge.length})</TabsTrigger>
           <TabsTrigger value="database">Database ({databaseTables.length})</TabsTrigger>
           <TabsTrigger value="functions">Edge Functions ({edgeFunctions.length})</TabsTrigger>
         </TabsList>
+
+        <TabsContent value="livedata" className="space-y-4">
+          {loading ? (
+            <div className="flex items-center justify-center h-40">
+              <p className="text-muted-foreground">Loading live data...</p>
+            </div>
+          ) : (
+            <ScrollArea className="h-[600px]">
+              <div className="space-y-6">
+                {/* Stats */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <Card>
+                    <CardContent className="pt-4">
+                      <div className="text-xl font-bold">{liveData.blogPosts.length}</div>
+                      <p className="text-xs text-muted-foreground">Blog Posts</p>
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardContent className="pt-4">
+                      <div className="text-xl font-bold">{liveData.portfolio.length}</div>
+                      <p className="text-xs text-muted-foreground">Portfolio Items</p>
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardContent className="pt-4">
+                      <div className="text-xl font-bold">{liveData.clients}</div>
+                      <p className="text-xs text-muted-foreground">Total Clients</p>
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardContent className="pt-4">
+                      <div className="text-xl font-bold">{liveData.contacts}</div>
+                      <p className="text-xs text-muted-foreground">Contact Submissions</p>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                {/* Blog Posts */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <BookOpen className="h-5 w-5" />
+                      Blog Posts ({liveData.blogPosts.length})
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-2">
+                      {liveData.blogPosts.map((post, i) => (
+                        <div key={i} className="flex items-center justify-between p-2 bg-muted/50 rounded">
+                          <div>
+                            <p className="font-medium text-sm">{post.title}</p>
+                            <code className="text-xs text-muted-foreground">/blog/{post.slug}</code>
+                          </div>
+                          <Badge variant={post.published ? "default" : "secondary"}>
+                            {post.published ? "Published" : "Draft"}
+                          </Badge>
+                        </div>
+                      ))}
+                      {liveData.blogPosts.length === 0 && (
+                        <p className="text-sm text-muted-foreground">No blog posts found</p>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Portfolio */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Briefcase className="h-5 w-5" />
+                      Portfolio Projects ({liveData.portfolio.length})
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-2">
+                      {liveData.portfolio.map((item, i) => (
+                        <div key={i} className="flex items-center justify-between p-2 bg-muted/50 rounded">
+                          <div>
+                            <p className="font-medium text-sm">{item.title}</p>
+                            <code className="text-xs text-muted-foreground">/portfolio/{item.slug}</code>
+                          </div>
+                          <Badge variant="outline">{item.category}</Badge>
+                        </div>
+                      ))}
+                      {liveData.portfolio.length === 0 && (
+                        <p className="text-sm text-muted-foreground">No portfolio items found</p>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* CMS Pages */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Layout className="h-5 w-5" />
+                      CMS Pages ({liveData.pages.length})
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-2">
+                      {liveData.pages.map((page, i) => (
+                        <div key={i} className="flex items-center justify-between p-2 bg-muted/50 rounded">
+                          <div>
+                            <p className="font-medium text-sm">{page.title}</p>
+                            <code className="text-xs text-muted-foreground">/{page.slug}</code>
+                          </div>
+                          <Badge variant={page.visible ? "default" : "secondary"}>
+                            {page.visible ? "Visible" : "Hidden"}
+                          </Badge>
+                        </div>
+                      ))}
+                      {liveData.pages.length === 0 && (
+                        <p className="text-sm text-muted-foreground">No CMS pages found</p>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Services */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Settings className="h-5 w-5" />
+                      Active Services ({liveData.services.length})
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex flex-wrap gap-2">
+                      {liveData.services.map((service, i) => (
+                        <Badge key={i} variant="secondary">
+                          {service.title}
+                        </Badge>
+                      ))}
+                      {liveData.services.length === 0 && (
+                        <p className="text-sm text-muted-foreground">No services found</p>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Sitemap URLs */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Globe className="h-5 w-5" />
+                      Sitemap URLs (Static)
+                    </CardTitle>
+                    <CardDescription>URLs from public/sitemap.xml</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid gap-1 text-xs font-mono">
+                      <a href="https://www.lunexomedia.com/" target="_blank" className="text-primary hover:underline">https://www.lunexomedia.com/</a>
+                      <a href="https://www.lunexomedia.com/about" target="_blank" className="text-primary hover:underline">https://www.lunexomedia.com/about</a>
+                      <a href="https://www.lunexomedia.com/contact" target="_blank" className="text-primary hover:underline">https://www.lunexomedia.com/contact</a>
+                      <a href="https://www.lunexomedia.com/pricing" target="_blank" className="text-primary hover:underline">https://www.lunexomedia.com/pricing</a>
+                      <a href="https://www.lunexomedia.com/website-design" target="_blank" className="text-primary hover:underline">https://www.lunexomedia.com/website-design</a>
+                      <a href="https://www.lunexomedia.com/ads-management" target="_blank" className="text-primary hover:underline">https://www.lunexomedia.com/ads-management</a>
+                      <a href="https://www.lunexomedia.com/ai-automation" target="_blank" className="text-primary hover:underline">https://www.lunexomedia.com/ai-automation</a>
+                      <a href="https://www.lunexomedia.com/portfolio" target="_blank" className="text-primary hover:underline">https://www.lunexomedia.com/portfolio</a>
+                      <a href="https://www.lunexomedia.com/blog" target="_blank" className="text-primary hover:underline">https://www.lunexomedia.com/blog</a>
+                      <a href="https://www.lunexomedia.com/reviews" target="_blank" className="text-primary hover:underline">https://www.lunexomedia.com/reviews</a>
+                      <a href="https://www.lunexomedia.com/book-apartment" target="_blank" className="text-primary hover:underline">https://www.lunexomedia.com/book-apartment</a>
+                      <a href="https://www.lunexomedia.com/farhan-tanvier" target="_blank" className="text-primary hover:underline">https://www.lunexomedia.com/farhan-tanvier</a>
+                      <p className="text-muted-foreground mt-2">+ 20 more service sub-pages in sitemap.xml</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </ScrollArea>
+          )}
+        </TabsContent>
 
         <TabsContent value="pages" className="space-y-4">
           {/* Search */}
