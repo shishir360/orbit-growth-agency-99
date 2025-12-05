@@ -5,8 +5,8 @@ import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import Vapi from '@vapi-ai/web';
 
-const VAPI_ASSISTANT_ID = '8dcb4c2f-b585-454c-aba5-e97165192629';
-const VAPI_PUBLIC_KEY = '3250cbd5-7851-455f-bd67-d3a6356b5cee';
+const VAPI_ASSISTANT_ID = '9ec8940c-71aa-4b68-a750-c11a7a9f569c';
+const VAPI_PUBLIC_KEY = '3572c083-2548-4b2b-bb37-d88f0d5dcef4';
 
 interface Message {
   role: 'user' | 'assistant';
