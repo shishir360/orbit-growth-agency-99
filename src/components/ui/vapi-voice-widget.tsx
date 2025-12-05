@@ -107,10 +107,22 @@ const VapiVoiceWidget = () => {
     setIsConnecting(true);
     setMessages([]);
     
+    // Add connection timeout
+    const timeoutId = setTimeout(() => {
+      if (isConnecting && !isCallActive) {
+        console.log('Connection timeout - stopping call');
+        vapiInstance.stop();
+        setIsConnecting(false);
+        toast.error('Connection timeout. Please try again.');
+      }
+    }, 30000); // 30 second timeout
+    
     try {
       console.log('Starting call with assistant:', VAPI_ASSISTANT_ID);
       await vapiInstance.start(VAPI_ASSISTANT_ID);
+      clearTimeout(timeoutId);
     } catch (error: any) {
+      clearTimeout(timeoutId);
       console.error('Failed to start call:', error);
       toast.error('Failed to start call: ' + (error?.message || 'Please allow microphone access'));
       setIsConnecting(false);
