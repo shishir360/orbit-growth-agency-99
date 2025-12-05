@@ -14,10 +14,14 @@ interface VAPIBookingData {
   name: string;
   email: string;
   phone: string;
-  date: string;
-  time: string;
+  goals?: string;
+  meeting_date: string;
+  meeting_time: string;
+  lead_temperature?: string;
   meeting_platform?: string;
-  notes?: string;
+  service_interest?: string[];
+  meeting_requested?: boolean;
+  next_step_requested?: string;
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -47,17 +51,29 @@ const handler = async (req: Request): Promise<Response> => {
           : functionCall.parameters;
 
         const bookingData: VAPIBookingData = {
-          name: args.name || args.customer_name,
-          email: args.email || args.customer_email,
-          phone: args.phone || args.customer_phone || args.phone_number,
-          date: args.date || args.booking_date,
-          time: args.time || args.booking_time,
-          meeting_platform: args.meeting_platform || args.platform || "Google Meet",
-          notes: args.notes || args.additional_notes || "Booked via VAPI Voice Agent"
+          name: args.name,
+          email: args.email,
+          phone: args.phone,
+          goals: args.goals,
+          meeting_date: args.meeting_date,
+          meeting_time: args.meeting_time,
+          lead_temperature: args.lead_temperature,
+          meeting_platform: args.meeting_platform || "Google Meet",
+          service_interest: args.service_interest,
+          meeting_requested: args.meeting_requested,
+          next_step_requested: args.next_step_requested
         };
 
+        // Build notes from additional info
+        const notesArray: string[] = ["Booked via VAPI Voice Agent"];
+        if (bookingData.goals) notesArray.push(`Goals: ${bookingData.goals}`);
+        if (bookingData.lead_temperature) notesArray.push(`Lead Temperature: ${bookingData.lead_temperature}`);
+        if (bookingData.service_interest?.length) notesArray.push(`Services: ${bookingData.service_interest.join(", ")}`);
+        if (bookingData.next_step_requested) notesArray.push(`Next Step: ${bookingData.next_step_requested}`);
+        const notes = notesArray.join(" | ");
+
         // Validate required fields
-        if (!bookingData.name || !bookingData.email || !bookingData.phone || !bookingData.date || !bookingData.time) {
+        if (!bookingData.name || !bookingData.email || !bookingData.phone || !bookingData.meeting_date || !bookingData.meeting_time) {
           console.log("Missing required booking fields:", bookingData);
           return new Response(
             JSON.stringify({ 
@@ -74,10 +90,10 @@ const handler = async (req: Request): Promise<Response> => {
             name: bookingData.name,
             email: bookingData.email,
             phone: bookingData.phone,
-            date: bookingData.date,
-            time: bookingData.time,
+            date: bookingData.meeting_date,
+            time: bookingData.meeting_time,
             meeting_platform: bookingData.meeting_platform,
-            notes: bookingData.notes,
+            notes: notes,
             status: "pending",
             source: "vapi_voice_agent"
           })
@@ -113,6 +129,7 @@ const handler = async (req: Request): Promise<Response> => {
                 .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; }
                 .info-box { background: white; padding: 20px; margin: 20px 0; border-left: 4px solid #667eea; border-radius: 5px; }
                 .voice-badge { background: #10b981; color: white; padding: 5px 10px; border-radius: 20px; font-size: 12px; display: inline-block; margin-bottom: 15px; }
+                .services-badge { background: #6366f1; color: white; padding: 3px 8px; border-radius: 10px; font-size: 11px; margin-right: 5px; display: inline-block; margin-bottom: 5px; }
                 h1 { margin: 0; }
                 h2 { color: #667eea; }
               </style>
@@ -129,12 +146,13 @@ const handler = async (req: Request): Promise<Response> => {
                   
                   <div class="info-box">
                     <h2>Your Booking Details:</h2>
-                    <p><strong>📅 Date:</strong> ${bookingData.date}</p>
-                    <p><strong>🕐 Time:</strong> ${bookingData.time}</p>
+                    <p><strong>📅 Date:</strong> ${bookingData.meeting_date}</p>
+                    <p><strong>🕐 Time:</strong> ${bookingData.meeting_time}</p>
                     <p><strong>💻 Platform:</strong> ${bookingData.meeting_platform}</p>
                     <p><strong>📧 Email:</strong> ${bookingData.email}</p>
                     <p><strong>📱 Phone:</strong> ${bookingData.phone}</p>
-                    ${bookingData.notes ? `<p><strong>📝 Notes:</strong> ${bookingData.notes}</p>` : ""}
+                    ${bookingData.goals ? `<p><strong>🎯 Goals:</strong> ${bookingData.goals}</p>` : ""}
+                    ${bookingData.service_interest?.length ? `<p><strong>🛠️ Services:</strong><br/>${bookingData.service_interest.map(s => `<span class="services-badge">${s}</span>`).join(" ")}</p>` : ""}
                     <p><strong>Booking ID:</strong> ${booking.id}</p>
                   </div>
 
@@ -159,6 +177,8 @@ const handler = async (req: Request): Promise<Response> => {
                 .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; }
                 .info-box { background: white; padding: 20px; margin: 20px 0; border-left: 4px solid #f59e0b; border-radius: 5px; }
                 .voice-badge { background: #10b981; color: white; padding: 8px 15px; border-radius: 20px; font-size: 14px; display: inline-block; margin-bottom: 15px; }
+                .temp-badge { background: ${bookingData.lead_temperature === 'hot' ? '#ef4444' : bookingData.lead_temperature === 'warm' ? '#f59e0b' : '#3b82f6'}; color: white; padding: 5px 10px; border-radius: 10px; font-size: 12px; }
+                .services-badge { background: #6366f1; color: white; padding: 3px 8px; border-radius: 10px; font-size: 11px; margin-right: 5px; display: inline-block; margin-bottom: 5px; }
                 h1 { margin: 0; }
                 h2 { color: #f59e0b; }
               </style>
@@ -170,16 +190,19 @@ const handler = async (req: Request): Promise<Response> => {
                 </div>
                 <div class="content">
                   <span class="voice-badge">📞 Via Farhan AI Voice Agent</span>
+                  ${bookingData.lead_temperature ? `<span class="temp-badge">🔥 ${bookingData.lead_temperature.toUpperCase()} LEAD</span>` : ''}
                   
                   <div class="info-box">
                     <h2>Booking Details:</h2>
                     <p><strong>👤 Name:</strong> ${bookingData.name}</p>
                     <p><strong>📧 Email:</strong> ${bookingData.email}</p>
                     <p><strong>📱 Phone:</strong> ${bookingData.phone}</p>
-                    <p><strong>📅 Date:</strong> ${bookingData.date}</p>
-                    <p><strong>🕐 Time:</strong> ${bookingData.time}</p>
+                    <p><strong>📅 Date:</strong> ${bookingData.meeting_date}</p>
+                    <p><strong>🕐 Time:</strong> ${bookingData.meeting_time}</p>
                     <p><strong>💻 Platform:</strong> ${bookingData.meeting_platform}</p>
-                    ${bookingData.notes ? `<p><strong>📝 Notes:</strong> ${bookingData.notes}</p>` : ""}
+                    ${bookingData.goals ? `<p><strong>🎯 Goals:</strong> ${bookingData.goals}</p>` : ""}
+                    ${bookingData.service_interest?.length ? `<p><strong>🛠️ Services Interested:</strong><br/>${bookingData.service_interest.map(s => `<span class="services-badge">${s}</span>`).join(" ")}</p>` : ""}
+                    ${bookingData.lead_temperature ? `<p><strong>🌡️ Lead Temperature:</strong> ${bookingData.lead_temperature}</p>` : ""}
                     <p><strong>Booking ID:</strong> ${booking.id}</p>
                     <p><strong>Source:</strong> VAPI Voice Agent</p>
                   </div>
@@ -200,14 +223,14 @@ const handler = async (req: Request): Promise<Response> => {
           await resend.emails.send({
             from: companyInfo?.email ? `${companyInfo.company_name} <${companyInfo.email}>` : 'Lunexo Media <onboarding@resend.dev>',
             to: [bookingData.email],
-            subject: `🎤 Booking Confirmed - ${bookingData.date} at ${bookingData.time}`,
+            subject: `🎤 Booking Confirmed - ${bookingData.meeting_date} at ${bookingData.meeting_time}`,
             html: customerEmailHtml,
           });
 
           await resend.emails.send({
             from: companyInfo?.email ? `${companyInfo.company_name} <${companyInfo.email}>` : 'Lunexo Media <onboarding@resend.dev>',
             to: [ADMIN_EMAIL],
-            subject: `🎤 New Voice Booking: ${bookingData.name} - ${bookingData.date}`,
+            subject: `🎤 ${bookingData.lead_temperature === 'hot' ? '🔥 HOT LEAD' : 'New Voice Booking'}: ${bookingData.name} - ${bookingData.meeting_date}`,
             html: adminEmailHtml,
           });
 
@@ -219,7 +242,7 @@ const handler = async (req: Request): Promise<Response> => {
         // Return success response to VAPI
         return new Response(
           JSON.stringify({ 
-            result: `Perfect! I've booked your consultation for ${bookingData.date} at ${bookingData.time}. You'll receive a confirmation email at ${bookingData.email} shortly. Is there anything else I can help you with?`
+            result: `Perfect! I've booked your consultation for ${bookingData.meeting_date} at ${bookingData.meeting_time}. You'll receive a confirmation email at ${bookingData.email} shortly. Is there anything else I can help you with?`
           }),
           { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
         );
