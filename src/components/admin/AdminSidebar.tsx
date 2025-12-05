@@ -44,6 +44,7 @@ import {
   Image,
   Upload,
   MapPin,
+  BookMarked,
 } from 'lucide-react';
 
 export function AdminSidebar() {
@@ -117,7 +118,8 @@ const collapsed = state === 'collapsed';
     { to: '/admin-dashboard/visitor-tracking', icon: MapPin, label: 'Visitor Tracking', section: 'technical' },
     { to: '/admin-dashboard/reviews', icon: MessageSquare, label: 'Reviews & Feedback', section: 'technical' },
     { to: '/admin-dashboard/images', icon: Image, label: 'Media Library', section: 'technical' },
-    { to: '/admin-dashboard/users', icon: Users, label: 'User Management', section: 'technical' }
+    { to: '/admin-dashboard/users', icon: Users, label: 'User Management', section: 'technical' },
+    { to: '/admin-dashboard/knowledge', icon: BookMarked, label: 'Knowledge Base', section: 'technical' }
   ];
 
   const getNavCls = (path: string) => {
