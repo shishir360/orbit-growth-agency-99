@@ -248,44 +248,50 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log("Emails sent successfully");
 
-    // Send WhatsApp notification
+    // Send WhatsApp notification using TEMPLATE messages (required by WhatsApp 24-hour rule)
     try {
       const PHONE_ID = Deno.env.get("META_WHATSAPP_PHONE_ID");
       const ACCESS_TOKEN = Deno.env.get("META_WHATSAPP_ACCESS_TOKEN");
       const ADMIN_NUMBER = Deno.env.get("ADMIN_WHATSAPP_NUMBER");
 
       if (PHONE_ID && ACCESS_TOKEN && ADMIN_NUMBER) {
-        // Admin notification
-        const adminWhatsappMessage = `🗓️ *New Website Booking!*
+        // Admin notification using TEMPLATE (required when outside 24-hour window)
+        // Template name: admin_booking_alert
+        // Parameters: customer_name, date, time, platform, phone
+        const adminTemplatePayload = {
+          messaging_product: "whatsapp",
+          to: ADMIN_NUMBER,
+          type: "template",
+          template: {
+            name: "admin_booking_alert",
+            language: { code: "en" },
+            components: [
+              {
+                type: "body",
+                parameters: [
+                  { type: "text", text: name || "Customer" },
+                  { type: "text", text: date || "TBD" },
+                  { type: "text", text: time || "TBD" },
+                  { type: "text", text: meeting_platform || "Video Call" },
+                  { type: "text", text: phone || "Not provided" },
+                ],
+              },
+            ],
+          },
+        };
 
-👤 *Name:* ${name}
-📧 *Email:* ${email}
-📱 *Phone:* ${phone}
-📅 *Date:* ${date}
-⏰ *Time:* ${time}
-💻 *Platform:* ${meeting_platform}
-${notes ? `📝 *Notes:* ${notes}` : ""}
-
----
-_Via Lunexo Media Website_`;
-
-        // Send to Admin
-        await fetch(`https://graph.facebook.com/v18.0/${PHONE_ID}/messages`, {
+        const adminRes = await fetch(`https://graph.facebook.com/v18.0/${PHONE_ID}/messages`, {
           method: "POST",
           headers: {
             "Authorization": `Bearer ${ACCESS_TOKEN}`,
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            messaging_product: "whatsapp",
-            to: ADMIN_NUMBER,
-            type: "text",
-            text: { preview_url: false, body: adminWhatsappMessage },
-          }),
+          body: JSON.stringify(adminTemplatePayload),
         });
-        console.log("WhatsApp sent to Admin");
+        const adminResult = await adminRes.json();
+        console.log("WhatsApp Admin template result:", JSON.stringify(adminResult));
 
-        // Send to Customer
+        // Send to Customer using TEMPLATE
         if (phone && phone.length >= 10) {
           let customerPhone = phone.replace(/[\s\-\(\)]/g, "");
           if (!customerPhone.startsWith("+") && !customerPhone.startsWith("1")) {
@@ -293,37 +299,39 @@ _Via Lunexo Media Website_`;
           }
           customerPhone = customerPhone.replace("+", "");
 
-          const customerWhatsappMessage = `✅ *Booking Confirmed!*
+          // Template name: booking_confirmation
+          // Parameters: name, date, time, platform
+          const customerTemplatePayload = {
+            messaging_product: "whatsapp",
+            to: customerPhone,
+            type: "template",
+            template: {
+              name: "booking_confirmation",
+              language: { code: "en" },
+              components: [
+                {
+                  type: "body",
+                  parameters: [
+                    { type: "text", text: name || "Customer" },
+                    { type: "text", text: date || "To be confirmed" },
+                    { type: "text", text: time || "To be confirmed" },
+                    { type: "text", text: meeting_platform || "Video Call" },
+                  ],
+                },
+              ],
+            },
+          };
 
-Hi ${name}! 👋
-
-Your consultation with *Lunexo Media* is confirmed!
-
-📅 *Date:* ${date}
-⏰ *Time:* ${time}
-💻 *Platform:* ${meeting_platform}
-
-We'll send you the meeting link before your scheduled time.
-
-Questions? Reply to this message!
-
----
-_Lunexo Media Team_`;
-
-          await fetch(`https://graph.facebook.com/v18.0/${PHONE_ID}/messages`, {
+          const customerRes = await fetch(`https://graph.facebook.com/v18.0/${PHONE_ID}/messages`, {
             method: "POST",
             headers: {
               "Authorization": `Bearer ${ACCESS_TOKEN}`,
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({
-              messaging_product: "whatsapp",
-              to: customerPhone,
-              type: "text",
-              text: { preview_url: false, body: customerWhatsappMessage },
-            }),
+            body: JSON.stringify(customerTemplatePayload),
           });
-          console.log("WhatsApp sent to Customer:", customerPhone);
+          const customerResult = await customerRes.json();
+          console.log("WhatsApp Customer template result:", JSON.stringify(customerResult));
         }
       }
     } catch (waError) {
