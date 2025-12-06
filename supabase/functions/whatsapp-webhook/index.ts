@@ -15,177 +15,147 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-// Booking data tracker - stores partial booking info per phone number
-const bookingTracker: Record<string, {
+interface BookingState {
+  step: number;
   name?: string;
   email?: string;
   date?: string;
   time?: string;
   platform?: string;
   service?: string;
-  step: number;
-}> = {};
-
-// Get or create booking tracker for a phone
-function getBookingTracker(phone: string) {
-  if (!bookingTracker[phone]) {
-    bookingTracker[phone] = { step: 0 };
-  }
-  return bookingTracker[phone];
 }
 
-// Clear booking tracker
-function clearBookingTracker(phone: string) {
-  delete bookingTracker[phone];
+// Get booking state from database
+async function getBookingState(supabaseClient: any, phone: string): Promise<BookingState> {
+  try {
+    const { data, error } = await supabaseClient
+      .from("visitor_activities")
+      .select("metadata")
+      .eq("activity_type", "whatsapp_booking_state")
+      .eq("metadata->>phone", phone)
+      .order("created_at", { ascending: false })
+      .limit(1);
+
+    if (error || !data || data.length === 0) {
+      return { step: 0 };
+    }
+
+    return data[0].metadata?.booking_state || { step: 0 };
+  } catch (error) {
+    console.error("Error getting booking state:", error);
+    return { step: 0 };
+  }
+}
+
+// Save booking state to database
+async function saveBookingState(supabaseClient: any, phone: string, state: BookingState): Promise<void> {
+  try {
+    await supabaseClient.from("visitor_activities").insert({
+      activity_type: "whatsapp_booking_state",
+      metadata: {
+        phone: phone,
+        booking_state: state,
+        updated_at: new Date().toISOString(),
+      },
+    });
+  } catch (error) {
+    console.error("Error saving booking state:", error);
+  }
+}
+
+// Clear booking state
+async function clearBookingState(supabaseClient: any, phone: string): Promise<void> {
+  try {
+    await supabaseClient
+      .from("visitor_activities")
+      .delete()
+      .eq("activity_type", "whatsapp_booking_state")
+      .eq("metadata->>phone", phone);
+  } catch (error) {
+    console.error("Error clearing booking state:", error);
+  }
 }
 
 // Lunexo Media Knowledge Base for Farhan AI
-const FARHAN_AI_SYSTEM_PROMPT = `You are Farhan AI, the friendly and professional AI assistant for Lunexo Media, a premium digital marketing agency based in New York, NY.
+const FARHAN_AI_SYSTEM_PROMPT = `You are Farhan AI, the friendly AI assistant for Lunexo Media, a digital marketing agency in New York.
 
-## About Lunexo Media
-- Founded by Farhan Tanvier
+About Lunexo Media:
 - Location: New York, NY
 - Phone: +1 (702) 483-0749
 - Email: hello@lunexomedia.com
 - Website: lunexomedia.com
-- Completed 50+ successful projects
+- 50+ projects completed
 
-## Services Offered (with pricing)
-1. **Website Design & Development** - $500-$5000
-2. **SEO (Search Engine Optimization)** - $300-$1500/month
-3. **Google Ads Management** - $500-$2000/month
-4. **Facebook & Instagram Ads** - $400-$1500/month
-5. **AI Automation** - $500-$3000
-6. **AI Chatbots** - $300-$1000
-7. **Voice AI Agents** - $500-$2000
-8. **Email Automation** - $200-$800
-9. **Workflow Automation** - $400-$1500
+Services & Pricing:
+- Website Design: $500-$5000
+- SEO: $300-$1500/month
+- Google Ads: $500-$2000/month
+- Facebook/Instagram Ads: $400-$1500/month
+- AI Automation: $500-$3000
+- AI Chatbots: $300-$1000
+- Voice AI: $500-$2000
+- Email Automation: $200-$800
 
-## IMAGE ANALYSIS
-When a user sends an image, analyze it and describe what you see. Be helpful and insightful.
-
-## Your Personality
-- Friendly, professional, and helpful
-- Speak in a conversational tone
-- Keep responses concise for WhatsApp readability
-- Remember previous messages in the conversation
-- Use emojis sparingly
-
-Respond helpfully to any questions. Keep responses under 300 words.`;
+Keep responses short (under 200 words) for WhatsApp. Be friendly and helpful.`;
 
 // Simple email regex
 function isValidEmail(email: string): boolean {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
 }
 
-// Extract booking field from message
-function extractBookingField(message: string, step: number): string | null {
-  const msg = message.trim();
-  
-  switch(step) {
-    case 1: // Name - just accept any text
-      if (msg.length >= 2 && msg.length <= 100) {
-        return msg;
-      }
-      break;
-    case 2: // Email
-      if (isValidEmail(msg)) {
-        return msg.toLowerCase();
-      }
-      break;
-    case 3: // Date
-      // Accept various date formats
-      if (msg.length >= 3) {
-        return msg;
-      }
-      break;
-    case 4: // Time
-      if (msg.length >= 2) {
-        return msg;
-      }
-      break;
-    case 5: // Platform
-      const platforms = ["zoom", "google meet", "phone", "call", "whatsapp"];
-      const lowerMsg = msg.toLowerCase();
-      for (const p of platforms) {
-        if (lowerMsg.includes(p)) {
-          if (lowerMsg.includes("zoom")) return "Zoom";
-          if (lowerMsg.includes("google") || lowerMsg.includes("meet")) return "Google Meet";
-          if (lowerMsg.includes("phone") || lowerMsg.includes("call")) return "Phone Call";
-          if (lowerMsg.includes("whatsapp")) return "WhatsApp";
-        }
-      }
-      // Accept any response as platform
-      if (msg.length >= 2) return msg;
-      break;
-    case 6: // Service
-      if (msg.length >= 2) {
-        return msg;
-      }
-      break;
-  }
-  return null;
-}
-
-// Generate booking step question
-function getBookingQuestion(step: number, tracker: any): string {
+// Get booking step question
+function getBookingQuestion(step: number, state: BookingState): string {
   switch(step) {
     case 1:
       return `Great! Let's book your free discovery call! 🎉
 
-Please tell me your *full name*:`;
+What's your *full name*?`;
     case 2:
-      return `Thanks, ${tracker.name}! 
+      return `Thanks, ${state.name}! 📧
 
-Now, what's your *email address*? 📧`;
+What's your *email address*?`;
     case 3:
-      return `Perfect! 
+      return `Perfect! 📅
 
-What *date* would you prefer for the call?
-(Example: Tomorrow, Monday, December 15, etc.)`;
+What *date* would you like?
+(Example: Tomorrow, Monday, Dec 15)`;
     case 4:
-      return `Got it! 
+      return `Got it! ⏰
 
-What *time* works best for you?
-(Please include timezone - Example: 3pm EST, 10am Bangladesh time)`;
+What *time* works for you?
+(Include timezone - e.g., 3pm EST)`;
     case 5:
-      return `Almost done! 
+      return `Almost done! 💻
 
-Which *meeting platform* do you prefer?
+Which platform do you prefer?
 • Zoom
 • Google Meet
 • Phone Call`;
     case 6:
-      return `Last question! 
+      return `Last one! 🎯
 
-Which *service* are you interested in?
+Which service interests you?
 • Website Design
 • SEO
 • Google/Facebook Ads
 • AI Automation
-• Other (please specify)`;
+• Other`;
     default:
       return "";
   }
 }
 
-// Check if booking is complete
-function isBookingComplete(tracker: any): boolean {
-  return tracker.name && tracker.email && tracker.date && tracker.time && tracker.platform && tracker.service;
-}
-
 // Send booking confirmation email
-async function sendBookingConfirmationEmail(bookingData: any, phoneNumber: string): Promise<boolean> {
+async function sendBookingConfirmationEmail(bookingData: BookingState, phoneNumber: string): Promise<boolean> {
   try {
     if (!RESEND_API_KEY) {
       console.error("RESEND_API_KEY not configured");
       return false;
     }
 
-    // Send to customer
     await resend.emails.send({
       from: "Lunexo Media <hello@lunexomedia.com>",
-      to: [bookingData.email],
+      to: [bookingData.email!],
       subject: "🎉 Your Discovery Call is Confirmed - Lunexo Media",
       html: `
         <!DOCTYPE html>
@@ -195,43 +165,27 @@ async function sendBookingConfirmationEmail(bookingData: any, phoneNumber: strin
             body { font-family: 'Segoe UI', Arial, sans-serif; background: #0a0a0f; color: #ffffff; margin: 0; padding: 0; }
             .container { max-width: 600px; margin: 0 auto; padding: 40px 20px; }
             .header { text-align: center; margin-bottom: 30px; }
-            .logo { font-size: 28px; font-weight: bold; background: linear-gradient(135deg, #6366f1, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-            .card { background: linear-gradient(135deg, rgba(99,102,241,0.1), rgba(168,85,247,0.1)); border: 1px solid rgba(99,102,241,0.3); border-radius: 16px; padding: 30px; margin-bottom: 20px; }
-            .title { font-size: 24px; margin-bottom: 20px; color: #ffffff; }
-            .detail { margin: 12px 0; padding: 12px; background: rgba(255,255,255,0.05); border-radius: 8px; }
-            .label { color: #a1a1aa; font-size: 12px; text-transform: uppercase; margin-bottom: 4px; }
+            .logo { font-size: 28px; font-weight: bold; color: #6366f1; }
+            .card { background: #1a1a2e; border: 1px solid #6366f1; border-radius: 16px; padding: 30px; }
+            .title { font-size: 24px; margin-bottom: 20px; }
+            .detail { margin: 12px 0; padding: 12px; background: #0a0a0f; border-radius: 8px; }
+            .label { color: #a1a1aa; font-size: 12px; text-transform: uppercase; }
             .value { color: #ffffff; font-size: 16px; font-weight: 500; }
-            .footer { text-align: center; margin-top: 30px; color: #71717a; font-size: 14px; }
+            .footer { text-align: center; margin-top: 30px; color: #71717a; }
           </style>
         </head>
         <body>
           <div class="container">
-            <div class="header">
-              <div class="logo">Lunexo Media</div>
-            </div>
+            <div class="header"><div class="logo">Lunexo Media</div></div>
             <div class="card">
               <div class="title">🎉 Your Call is Confirmed!</div>
-              <p style="color: #d1d5db;">Hi ${bookingData.name},</p>
-              <p style="color: #d1d5db;">Thank you for booking a discovery call with us! We're excited to learn about your business.</p>
-              
-              <div class="detail">
-                <div class="label">📅 Date</div>
-                <div class="value">${bookingData.date}</div>
-              </div>
-              <div class="detail">
-                <div class="label">⏰ Time</div>
-                <div class="value">${bookingData.time}</div>
-              </div>
-              <div class="detail">
-                <div class="label">💻 Platform</div>
-                <div class="value">${bookingData.platform}</div>
-              </div>
-              <div class="detail">
-                <div class="label">🎯 Interest</div>
-                <div class="value">${bookingData.service}</div>
-              </div>
-              
-              <p style="color: #d1d5db; margin-top: 20px;">We'll send you the meeting link before the call!</p>
+              <p>Hi ${bookingData.name},</p>
+              <p>Thank you for booking a discovery call!</p>
+              <div class="detail"><div class="label">📅 Date</div><div class="value">${bookingData.date}</div></div>
+              <div class="detail"><div class="label">⏰ Time</div><div class="value">${bookingData.time}</div></div>
+              <div class="detail"><div class="label">💻 Platform</div><div class="value">${bookingData.platform}</div></div>
+              <div class="detail"><div class="label">🎯 Interest</div><div class="value">${bookingData.service}</div></div>
+              <p>We'll send you the meeting link before the call!</p>
             </div>
             <div class="footer">
               <p>Lunexo Media | New York, NY</p>
@@ -243,7 +197,6 @@ async function sendBookingConfirmationEmail(bookingData: any, phoneNumber: strin
       `,
     });
 
-    // Send to admin
     await resend.emails.send({
       from: "Lunexo Media <hello@lunexomedia.com>",
       to: ["hello@lunexomedia.com"],
@@ -256,32 +209,31 @@ async function sendBookingConfirmationEmail(bookingData: any, phoneNumber: strin
         <p><strong>Date:</strong> ${bookingData.date}</p>
         <p><strong>Time:</strong> ${bookingData.time}</p>
         <p><strong>Platform:</strong> ${bookingData.platform}</p>
-        <p><strong>Service Interest:</strong> ${bookingData.service}</p>
+        <p><strong>Service:</strong> ${bookingData.service}</p>
         <p><strong>Source:</strong> WhatsApp</p>
       `,
     });
 
-    console.log("Booking confirmation emails sent successfully");
     return true;
   } catch (error) {
-    console.error("Error sending booking email:", error);
+    console.error("Error sending email:", error);
     return false;
   }
 }
 
 // Create booking in database
-async function createBooking(supabaseClient: any, bookingData: any, phoneNumber: string): Promise<boolean> {
+async function createBooking(supabaseClient: any, state: BookingState, phoneNumber: string): Promise<boolean> {
   try {
-    console.log("Creating booking:", bookingData);
+    console.log("Creating booking:", state);
     
     const { error } = await supabaseClient.from("apartment_bookings").insert({
-      name: bookingData.name,
-      email: bookingData.email,
+      name: state.name,
+      email: state.email,
       phone: phoneNumber,
-      date: bookingData.date,
-      time: bookingData.time,
-      meeting_platform: bookingData.platform,
-      notes: `Service Interest: ${bookingData.service}. Booked via WhatsApp.`,
+      date: state.date,
+      time: state.time,
+      meeting_platform: state.platform,
+      notes: `Service Interest: ${state.service}. Booked via WhatsApp.`,
       source: "whatsapp",
       status: "pending",
     });
@@ -291,9 +243,7 @@ async function createBooking(supabaseClient: any, bookingData: any, phoneNumber:
       return false;
     }
     
-    // Send confirmation email
-    await sendBookingConfirmationEmail(bookingData, phoneNumber);
-    
+    await sendBookingConfirmationEmail(state, phoneNumber);
     console.log("Booking created successfully");
     return true;
   } catch (error) {
@@ -307,11 +257,11 @@ async function getConversationHistory(supabaseClient: any, phoneNumber: string):
   try {
     const { data, error } = await supabaseClient
       .from("visitor_activities")
-      .select("activity_type, metadata, created_at")
+      .select("activity_type, metadata")
       .in("activity_type", ["whatsapp_message_received", "whatsapp_message_sent"])
       .or(`metadata->>from.eq.${phoneNumber},metadata->>to.eq.${phoneNumber}`)
       .order("created_at", { ascending: true })
-      .limit(15);
+      .limit(10);
 
     if (error || !data) return [];
 
@@ -319,48 +269,37 @@ async function getConversationHistory(supabaseClient: any, phoneNumber: string):
     for (const msg of data) {
       if (msg.activity_type === "whatsapp_message_received") {
         const content = msg.metadata?.message || "";
-        if (content && content !== "[Voice message - transcription failed]") {
-          history.push({ role: "user", content });
-        }
+        if (content) history.push({ role: "user", content });
       } else if (msg.activity_type === "whatsapp_message_sent") {
         const content = msg.metadata?.ai_response || msg.metadata?.message || "";
-        if (content) {
-          history.push({ role: "assistant", content });
-        }
+        if (content) history.push({ role: "assistant", content });
       }
     }
     return history;
   } catch (error) {
-    console.error("Error getting conversation history:", error);
+    console.error("Error getting history:", error);
     return [];
   }
 }
 
-// Download and analyze image
+// Analyze image
 async function analyzeImage(mediaId: string): Promise<string> {
   try {
-    console.log("Downloading image for analysis:", mediaId);
-    
     const mediaResponse = await fetch(
       `https://graph.facebook.com/v18.0/${mediaId}`,
       { headers: { "Authorization": `Bearer ${META_ACCESS_TOKEN}` } }
     );
-
     if (!mediaResponse.ok) return "";
 
     const mediaData = await mediaResponse.json();
     const imageResponse = await fetch(mediaData.url, {
       headers: { "Authorization": `Bearer ${META_ACCESS_TOKEN}` },
     });
-
     if (!imageResponse.ok) return "";
 
     const imageBuffer = await imageResponse.arrayBuffer();
     const imageBase64 = btoa(String.fromCharCode(...new Uint8Array(imageBuffer)));
     
-    console.log("Image downloaded, size:", imageBuffer.byteLength, "bytes");
-    
-    // Analyze with AI
     const analyzeResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -370,29 +309,19 @@ async function analyzeImage(mediaId: string): Promise<string> {
       body: JSON.stringify({
         model: "google/gemini-2.5-flash",
         messages: [
-          { 
-            role: "system",
-            content: "You are Farhan AI from Lunexo Media. Analyze the image and provide helpful insights. Keep response under 200 words."
-          },
-          { 
-            role: "user", 
-            content: [
-              { type: "text", text: "Analyze this image:" },
-              { type: "image_url", image_url: { url: `data:image/jpeg;base64,${imageBase64}` } }
-            ]
-          }
+          { role: "system", content: "Analyze this image briefly. Keep response under 150 words." },
+          { role: "user", content: [
+            { type: "text", text: "Analyze this image:" },
+            { type: "image_url", image_url: { url: `data:image/jpeg;base64,${imageBase64}` } }
+          ]}
         ],
-        max_tokens: 500,
+        max_tokens: 400,
       }),
     });
 
-    if (!analyzeResponse.ok) {
-      console.error("Image analysis error:", await analyzeResponse.text());
-      return "";
-    }
-
-    const analyzeData = await analyzeResponse.json();
-    return analyzeData.choices?.[0]?.message?.content || "";
+    if (!analyzeResponse.ok) return "";
+    const data = await analyzeResponse.json();
+    return data.choices?.[0]?.message?.content || "";
   } catch (error) {
     console.error("Error analyzing image:", error);
     return "";
@@ -400,14 +329,8 @@ async function analyzeImage(mediaId: string): Promise<string> {
 }
 
 // Generate AI response
-async function generateAIResponse(userMessage: string, conversationHistory: Array<{ role: string; content: string }>): Promise<string> {
+async function generateAIResponse(userMessage: string, history: Array<{ role: string; content: string }>): Promise<string> {
   try {
-    const messages = [
-      { role: "system", content: FARHAN_AI_SYSTEM_PROMPT },
-      ...conversationHistory,
-      { role: "user", content: userMessage }
-    ];
-
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -416,78 +339,28 @@ async function generateAIResponse(userMessage: string, conversationHistory: Arra
       },
       body: JSON.stringify({
         model: "google/gemini-2.5-flash",
-        messages,
-        max_tokens: 600,
-      }),
-    });
-
-    if (!response.ok) {
-      return "I'm having trouble right now. Please call us at +1 (702) 483-0749. 📞";
-    }
-
-    const data = await response.json();
-    return data.choices?.[0]?.message?.content || "Please contact hello@lunexomedia.com.";
-  } catch (error) {
-    console.error("Error generating AI response:", error);
-    return "Sorry, technical issues. Call us at +1 (702) 483-0749. 🙏";
-  }
-}
-
-// Transcribe voice message
-async function transcribeVoiceMessage(mediaId: string): Promise<string> {
-  try {
-    const mediaResponse = await fetch(
-      `https://graph.facebook.com/v18.0/${mediaId}`,
-      { headers: { "Authorization": `Bearer ${META_ACCESS_TOKEN}` } }
-    );
-
-    if (!mediaResponse.ok) return "";
-
-    const mediaData = await mediaResponse.json();
-    const audioResponse = await fetch(mediaData.url, {
-      headers: { "Authorization": `Bearer ${META_ACCESS_TOKEN}` },
-    });
-
-    if (!audioResponse.ok) return "";
-
-    const audioBuffer = await audioResponse.arrayBuffer();
-    const audioBase64 = btoa(String.fromCharCode(...new Uint8Array(audioBuffer)));
-    
-    const transcribeResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${LOVABLE_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
         messages: [
-          { 
-            role: "user", 
-            content: [
-              { type: "text", text: "Transcribe this audio. Only provide the transcription." },
-              { type: "input_audio", input_audio: { data: audioBase64, format: "ogg" } }
-            ]
-          }
+          { role: "system", content: FARHAN_AI_SYSTEM_PROMPT },
+          ...history,
+          { role: "user", content: userMessage }
         ],
         max_tokens: 500,
       }),
     });
 
-    if (!transcribeResponse.ok) return "";
-
-    const transcribeData = await transcribeResponse.json();
-    return transcribeData.choices?.[0]?.message?.content || "";
+    if (!response.ok) return "Sorry, I'm having issues. Call +1 (702) 483-0749 📞";
+    const data = await response.json();
+    return data.choices?.[0]?.message?.content || "Please contact hello@lunexomedia.com";
   } catch (error) {
-    console.error("Error transcribing voice:", error);
-    return "";
+    console.error("Error generating response:", error);
+    return "Sorry, technical issues. Call +1 (702) 483-0749 🙏";
   }
 }
 
 // Send WhatsApp message
 async function sendWhatsAppMessage(to: string, message: string): Promise<boolean> {
   try {
-    console.log(`Sending WhatsApp to ${to}: ${message.substring(0, 50)}...`);
+    console.log(`Sending to ${to}: ${message.substring(0, 50)}...`);
     
     const response = await fetch(
       `https://graph.facebook.com/v18.0/${META_PHONE_ID}/messages`,
@@ -508,21 +381,15 @@ async function sendWhatsAppMessage(to: string, message: string): Promise<boolean
     );
 
     const result = await response.json();
-    console.log("WhatsApp API response:", result);
-    
-    if (!response.ok) {
-      console.error("WhatsApp send failed:", result);
-      return false;
-    }
-    
-    return true;
+    console.log("WhatsApp response:", result);
+    return response.ok;
   } catch (error) {
     console.error("Error sending WhatsApp:", error);
     return false;
   }
 }
 
-// Send WhatsApp with buttons
+// Send with buttons
 async function sendWhatsAppWithButtons(to: string, message: string, buttons: Array<{ id: string; title: string }>): Promise<boolean> {
   try {
     const response = await fetch(
@@ -542,7 +409,7 @@ async function sendWhatsAppWithButtons(to: string, message: string, buttons: Arr
             type: "button",
             body: { text: message },
             action: {
-              buttons: buttons.map((btn) => ({
+              buttons: buttons.map(btn => ({
                 type: "reply",
                 reply: { id: btn.id, title: btn.title.substring(0, 20) },
               })),
@@ -551,34 +418,16 @@ async function sendWhatsAppWithButtons(to: string, message: string, buttons: Arr
         }),
       }
     );
-
     return response.ok;
   } catch (error) {
-    console.error("Error sending WhatsApp with buttons:", error);
+    console.error("Error sending with buttons:", error);
     return false;
   }
 }
 
-function shouldSendQuickReplies(message: string, conversationLength: number): boolean {
-  const triggerKeywords = ["hello", "hi", "hey", "help", "start", "info", "services", "pricing"];
-  const lowerMessage = message.toLowerCase();
-  
-  if (conversationLength === 0) {
-    return triggerKeywords.some(keyword => lowerMessage.includes(keyword));
-  }
-  
-  return ["services", "pricing", "help", "what can you do", "options"].some(
-    keyword => lowerMessage.includes(keyword)
-  );
-}
-
 function isBookingRequest(message: string): boolean {
-  const bookingTriggers = [
-    "book_call", "book a call", "schedule call", 
-    "i want to book", "let's book", "booking", "schedule", 
-    "appointment", "book call", "meet", "meeting"
-  ];
-  return bookingTriggers.some(trigger => message.toLowerCase().includes(trigger));
+  const triggers = ["book", "schedule", "appointment", "call", "meet", "book_call"];
+  return triggers.some(t => message.toLowerCase().includes(t));
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -588,23 +437,20 @@ const handler = async (req: Request): Promise<Response> => {
     return new Response(null, { headers: corsHeaders });
   }
 
-  // GET - Webhook verification
   if (req.method === "GET") {
     const mode = url.searchParams.get("hub.mode");
     const token = url.searchParams.get("hub.verify_token");
     const challenge = url.searchParams.get("hub.challenge");
-
     if (mode === "subscribe" && token === VERIFY_TOKEN) {
-      return new Response(challenge, { status: 200, headers: { "Content-Type": "text/plain", ...corsHeaders } });
+      return new Response(challenge, { status: 200, headers: corsHeaders });
     }
     return new Response("Forbidden", { status: 403, headers: corsHeaders });
   }
 
-  // POST - Incoming messages
   if (req.method === "POST") {
     try {
       const body = await req.json();
-      console.log("=== Incoming WhatsApp Webhook ===");
+      console.log("=== WhatsApp Webhook ===");
 
       const supabaseClient = createClient(
         Deno.env.get("SUPABASE_URL") ?? "",
@@ -619,183 +465,199 @@ const handler = async (req: Request): Promise<Response> => {
         for (const message of value.messages) {
           const from = message.from;
           const messageType = message.type;
-          const timestamp = message.timestamp;
           const contact = value.contacts?.[0];
           const customerName = contact?.profile?.name || "Unknown";
 
           let messageText = "";
-          let isVoiceMessage = false;
           let isImageMessage = false;
           let imageAnalysis = "";
 
-          // Handle different message types
           if (messageType === "text") {
             messageText = message.text?.body || "";
-          } else if (messageType === "audio") {
-            isVoiceMessage = true;
-            const mediaId = message.audio?.id;
-            if (mediaId) {
-              messageText = await transcribeVoiceMessage(mediaId);
-              if (!messageText) messageText = "[Voice message - transcription failed]";
-            }
           } else if (messageType === "image") {
             isImageMessage = true;
             const mediaId = message.image?.id;
             const caption = message.image?.caption || "";
             if (mediaId) {
-              console.log("Processing image from:", customerName);
               imageAnalysis = await analyzeImage(mediaId);
-              messageText = caption ? `[Image with caption: ${caption}]` : "[Image received]";
+              messageText = caption || "[Image]";
             }
           } else if (messageType === "interactive") {
             messageText = message.interactive?.button_reply?.title || 
                          message.interactive?.button_reply?.id || "";
           }
 
-          console.log(`Message from ${customerName} (${from}): ${messageText}`);
+          console.log(`From ${customerName} (${from}): ${messageText}`);
 
-          // Log incoming message
+          // Log incoming
           await supabaseClient.from("visitor_activities").insert({
             activity_type: "whatsapp_message_received",
             metadata: {
-              from: from,
-              name: customerName,
-              message: messageText,
-              type: messageType,
-              is_voice: isVoiceMessage,
-              is_image: isImageMessage,
-              image_analysis: imageAnalysis,
-              timestamp: timestamp,
+              from, name: customerName, message: messageText, type: messageType,
+              is_image: isImageMessage, image_analysis: imageAnalysis,
             },
           });
 
-          // Process message
-          if (messageText && messageText !== "[Voice message - transcription failed]") {
-            const tracker = getBookingTracker(from);
-            let aiResponse: string = "";
-            let bookingCreated = false;
+          if (!messageText) continue;
+
+          // Get current booking state from database
+          let state = await getBookingState(supabaseClient, from);
+          let aiResponse = "";
+          let bookingCreated = false;
+
+          console.log(`Current booking state for ${from}:`, state);
+
+          // Process based on state
+          if (state.step > 0) {
+            // We're in booking flow - process the answer
+            const answer = messageText.trim();
             
-            // Check if we're in booking flow (step > 0)
-            if (tracker.step > 0) {
-              // Try to extract the field for current step
-              const extractedValue = extractBookingField(messageText, tracker.step);
-              
-              if (extractedValue) {
-                // Save the extracted value
-                switch(tracker.step) {
-                  case 1: tracker.name = extractedValue; break;
-                  case 2: tracker.email = extractedValue; break;
-                  case 3: tracker.date = extractedValue; break;
-                  case 4: tracker.time = extractedValue; break;
-                  case 5: tracker.platform = extractedValue; break;
-                  case 6: tracker.service = extractedValue; break;
+            switch(state.step) {
+              case 1: // Waiting for name
+                if (answer.length >= 2) {
+                  state.name = answer;
+                  state.step = 2;
+                  aiResponse = getBookingQuestion(2, state);
+                } else {
+                  aiResponse = "Please enter your full name:";
                 }
+                break;
                 
-                // Check if booking is complete
-                if (isBookingComplete(tracker)) {
-                  // Create the booking
-                  const created = await createBooking(supabaseClient, tracker, from);
-                  if (created) {
-                    bookingCreated = true;
-                    aiResponse = `✅ *Booking Confirmed!*
+              case 2: // Waiting for email
+                if (isValidEmail(answer)) {
+                  state.email = answer.toLowerCase();
+                  state.step = 3;
+                  aiResponse = getBookingQuestion(3, state);
+                } else {
+                  aiResponse = "Please enter a valid email address (example: yourname@email.com):";
+                }
+                break;
+                
+              case 3: // Waiting for date
+                if (answer.length >= 2) {
+                  state.date = answer;
+                  state.step = 4;
+                  aiResponse = getBookingQuestion(4, state);
+                } else {
+                  aiResponse = "Please enter a date for your call:";
+                }
+                break;
+                
+              case 4: // Waiting for time
+                if (answer.length >= 2) {
+                  state.time = answer;
+                  state.step = 5;
+                  aiResponse = getBookingQuestion(5, state);
+                } else {
+                  aiResponse = "Please enter a time for your call:";
+                }
+                break;
+                
+              case 5: // Waiting for platform
+                let platform = answer;
+                if (answer.toLowerCase().includes("zoom")) platform = "Zoom";
+                else if (answer.toLowerCase().includes("meet") || answer.toLowerCase().includes("google")) platform = "Google Meet";
+                else if (answer.toLowerCase().includes("phone") || answer.toLowerCase().includes("call")) platform = "Phone Call";
+                
+                state.platform = platform;
+                state.step = 6;
+                aiResponse = getBookingQuestion(6, state);
+                break;
+                
+              case 6: // Waiting for service
+                state.service = answer;
+                
+                // Create booking!
+                const created = await createBooking(supabaseClient, state, from);
+                if (created) {
+                  bookingCreated = true;
+                  aiResponse = `✅ *Booking Confirmed!*
 
-Thank you, ${tracker.name}! Your discovery call is booked.
+Thank you, ${state.name}! 🎉
 
-📅 *Date:* ${tracker.date}
-⏰ *Time:* ${tracker.time}
-💻 *Platform:* ${tracker.platform}
-🎯 *Service:* ${tracker.service}
+📅 *Date:* ${state.date}
+⏰ *Time:* ${state.time}
+💻 *Platform:* ${state.platform}
+🎯 *Service:* ${state.service}
 
-📧 Confirmation email sent to ${tracker.email}
+📧 Confirmation sent to ${state.email}
 
 We look forward to speaking with you! 🚀`;
-                    clearBookingTracker(from);
-                  } else {
-                    aiResponse = "Sorry, there was an error creating your booking. Please try again or call us at +1 (702) 483-0749.";
-                  }
                 } else {
-                  // Move to next step
-                  tracker.step++;
-                  aiResponse = getBookingQuestion(tracker.step, tracker);
+                  aiResponse = "Sorry, there was an error. Please call +1 (702) 483-0749";
                 }
-              } else {
-                // Invalid input, ask again
-                if (tracker.step === 2) {
-                  aiResponse = "Please enter a valid email address (example: yourname@email.com):";
-                } else {
-                  aiResponse = getBookingQuestion(tracker.step, tracker);
-                }
-              }
-            }
-            // Check if user wants to start booking
-            else if (isBookingRequest(messageText)) {
-              tracker.step = 1;
-              aiResponse = getBookingQuestion(1, tracker);
-            }
-            // Handle image analysis
-            else if (isImageMessage && imageAnalysis) {
-              aiResponse = `📸 *Image Analysis*\n\n${imageAnalysis}\n\nWant to discuss how we can help with your project? Just let me know! 🚀`;
-            }
-            // Regular AI response
-            else {
-              const conversationHistory = await getConversationHistory(supabaseClient, from);
-              aiResponse = await generateAIResponse(messageText, conversationHistory);
+                
+                // Clear state after booking
+                await clearBookingState(supabaseClient, from);
+                state.step = 0;
+                break;
             }
             
-            // Send response
-            let sent = false;
-            const conversationHistory = await getConversationHistory(supabaseClient, from);
-            
-            if (tracker.step === 0 && shouldSendQuickReplies(messageText, conversationHistory.length)) {
+            // Save updated state if still in flow
+            if (state.step > 0) {
+              await saveBookingState(supabaseClient, from, state);
+            }
+          }
+          // Check if user wants to start booking
+          else if (isBookingRequest(messageText)) {
+            state = { step: 1 };
+            await saveBookingState(supabaseClient, from, state);
+            aiResponse = getBookingQuestion(1, state);
+          }
+          // Handle image
+          else if (isImageMessage && imageAnalysis) {
+            aiResponse = `📸 *Image Analysis*\n\n${imageAnalysis}\n\nNeed help with your project? Let me know! 🚀`;
+          }
+          // Regular AI chat
+          else {
+            const history = await getConversationHistory(supabaseClient, from);
+            aiResponse = await generateAIResponse(messageText, history);
+          }
+
+          // Send response
+          let sent = false;
+          if (state.step === 0 && !bookingCreated) {
+            // Try buttons for general messages
+            const isGreeting = ["hi", "hello", "hey", "help"].some(w => messageText.toLowerCase().includes(w));
+            if (isGreeting) {
               sent = await sendWhatsAppWithButtons(from, aiResponse, [
                 { id: "book_call", title: "📞 Book a Call" },
-                { id: "view_services", title: "🚀 View Services" },
-                { id: "get_pricing", title: "💰 Get Pricing" },
+                { id: "services", title: "🚀 Services" },
+                { id: "pricing", title: "💰 Pricing" },
               ]);
-              if (!sent) sent = await sendWhatsAppMessage(from, aiResponse);
-            } else {
-              sent = await sendWhatsAppMessage(from, aiResponse);
             }
-            
-            // Log outgoing message
-            await supabaseClient.from("visitor_activities").insert({
-              activity_type: "whatsapp_message_sent",
-              metadata: {
-                to: from,
-                name: customerName,
-                original_message: messageText,
-                was_voice_message: isVoiceMessage,
-                was_image_message: isImageMessage,
-                ai_response: aiResponse,
-                sent_successfully: sent,
-                is_ai_response: true,
-                booking_created: bookingCreated,
-                booking_step: tracker.step,
-              },
-            });
-          } else if (isVoiceMessage && messageText === "[Voice message - transcription failed]") {
-            const fallbackMessage = "I couldn't process your voice message. Please type your message or try again. 🎤\n\nOr call: +1 (702) 483-0749";
-            await sendWhatsAppMessage(from, fallbackMessage);
           }
+          
+          if (!sent) {
+            sent = await sendWhatsAppMessage(from, aiResponse);
+          }
+
+          // Log outgoing
+          await supabaseClient.from("visitor_activities").insert({
+            activity_type: "whatsapp_message_sent",
+            metadata: {
+              to: from, name: customerName, original_message: messageText,
+              ai_response: aiResponse, sent_successfully: sent,
+              is_ai_response: true, booking_created: bookingCreated, booking_step: state.step,
+            },
+          });
         }
       }
 
       if (value?.statuses) {
         for (const status of value.statuses) {
-          console.log(`Message ${status.id} status: ${status.status}`);
+          console.log(`Status: ${status.id} - ${status.status}`);
         }
       }
 
-      return new Response(
-        JSON.stringify({ success: true }),
-        { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
-      );
+      return new Response(JSON.stringify({ success: true }), {
+        status: 200, headers: { "Content-Type": "application/json", ...corsHeaders }
+      });
     } catch (error: any) {
-      console.error("WhatsApp webhook error:", error);
-      return new Response(
-        JSON.stringify({ error: error.message }),
-        { status: 500, headers: { "Content-Type": "application/json", ...corsHeaders } }
-      );
+      console.error("Webhook error:", error);
+      return new Response(JSON.stringify({ error: error.message }), {
+        status: 500, headers: { "Content-Type": "application/json", ...corsHeaders }
+      });
     }
   }
 
