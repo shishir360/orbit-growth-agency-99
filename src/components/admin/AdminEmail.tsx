@@ -52,16 +52,16 @@ const AdminEmail = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      // Fetch received emails
-      const { data: emails, error: emailError } = await supabase
-        .from("received_emails")
+      // Fetch received emails using type assertion for new table
+      const { data: emails, error: emailError } = await (supabase
+        .from("received_emails" as any)
         .select("*")
-        .order("received_at", { ascending: false });
+        .order("received_at", { ascending: false }) as any);
 
       if (emailError) {
         console.error("Error fetching received emails:", emailError);
       } else {
-        setReceivedEmails(emails || []);
+        setReceivedEmails((emails as ReceivedEmail[]) || []);
       }
 
       // Fetch contact submissions
@@ -161,10 +161,10 @@ const AdminEmail = () => {
 
   const markAsRead = async (emailId: string) => {
     try {
-      await supabase
-        .from("received_emails")
+      await (supabase
+        .from("received_emails" as any)
         .update({ is_read: true })
-        .eq("id", emailId);
+        .eq("id", emailId) as any);
     } catch (error) {
       console.error("Error marking as read:", error);
     }
@@ -172,9 +172,10 @@ const AdminEmail = () => {
 
   const deleteEmail = async (emailId: string) => {
     try {
-      await supabase.from("received_emails").delete().eq("id", emailId);
+      await (supabase.from("received_emails" as any).delete().eq("id", emailId) as any);
       toast({ title: "Email deleted" });
       setSelectedEmail(null);
+      fetchData();
     } catch (error) {
       console.error("Error deleting email:", error);
     }
