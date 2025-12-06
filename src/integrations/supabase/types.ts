@@ -975,6 +975,48 @@ export type Database = {
         }
         Relationships: []
       }
+      received_emails: {
+        Row: {
+          created_at: string
+          from_email: string
+          from_name: string | null
+          html_body: string | null
+          id: string
+          is_read: boolean
+          is_replied: boolean
+          received_at: string
+          subject: string
+          text_body: string | null
+          to_email: string
+        }
+        Insert: {
+          created_at?: string
+          from_email: string
+          from_name?: string | null
+          html_body?: string | null
+          id?: string
+          is_read?: boolean
+          is_replied?: boolean
+          received_at?: string
+          subject: string
+          text_body?: string | null
+          to_email?: string
+        }
+        Update: {
+          created_at?: string
+          from_email?: string
+          from_name?: string | null
+          html_body?: string | null
+          id?: string
+          is_read?: boolean
+          is_replied?: boolean
+          received_at?: string
+          subject?: string
+          text_body?: string | null
+          to_email?: string
+        }
+        Relationships: []
+      }
       reviews: {
         Row: {
           comment: string
