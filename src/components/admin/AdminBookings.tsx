@@ -101,6 +101,32 @@ const AdminBookings = () => {
     return variants[status] || 'default';
   };
 
+  const sendWhatsAppNotification = async (booking: Booking, newStatus: string) => {
+    try {
+      const statusText = newStatus === 'confirmed' ? 'কনফার্ম' : 'কমপ্লিট';
+      const message = `📅 *বুকিং ${statusText} হয়েছে!*
+
+👤 *নাম:* ${booking.name}
+📧 *ইমেইল:* ${booking.email}
+📞 *ফোন:* ${booking.phone}
+📅 *তারিখ:* ${booking.date}
+⏰ *সময়:* ${booking.time}
+💻 *প্ল্যাটফর্ম:* ${booking.meeting_platform}
+
+✅ স্ট্যাটাস: ${newStatus.toUpperCase()}`;
+
+      await supabase.functions.invoke('send-whatsapp-message', {
+        body: { 
+          to: '8801743988856', // Admin WhatsApp number
+          message 
+        }
+      });
+      console.log('WhatsApp notification sent for status:', newStatus);
+    } catch (error) {
+      console.error('Error sending WhatsApp notification:', error);
+    }
+  };
+
   const updateStatus = async (id: string, newStatus: string) => {
     try {
       const { error } = await supabase
@@ -110,37 +136,52 @@ const AdminBookings = () => {
 
       if (error) throw error;
 
+      const updatedBooking = bookings.find(b => b.id === id);
+      
       setBookings(bookings.map(booking =>
         booking.id === id ? { ...booking, status: newStatus } : booking
       ));
 
-      // Send confirmation email when status changes to 'confirmed'
-      if (newStatus === 'confirmed') {
-        try {
-          const { error: emailError } = await supabase.functions.invoke('send-booking-confirmation', {
-            body: { bookingId: id }
-          });
-          
-          if (emailError) {
-            console.error('Failed to send confirmation email:', emailError);
+      // Send notifications when status changes to 'confirmed' or 'completed'
+      if (newStatus === 'confirmed' || newStatus === 'completed') {
+        // Send WhatsApp notification to admin
+        if (updatedBooking) {
+          sendWhatsAppNotification(updatedBooking, newStatus);
+        }
+
+        // Send confirmation email when status changes to 'confirmed'
+        if (newStatus === 'confirmed') {
+          try {
+            const { error: emailError } = await supabase.functions.invoke('send-booking-confirmation', {
+              body: { bookingId: id }
+            });
+            
+            if (emailError) {
+              console.error('Failed to send confirmation email:', emailError);
+              toast({
+                title: "Warning",
+                description: "Status updated but confirmation email failed to send",
+                variant: "destructive"
+              });
+              return;
+            }
+
+            toast({
+              title: "Success",
+              description: "Booking confirmed, email & WhatsApp sent"
+            });
+          } catch (emailErr) {
+            console.error('Error sending confirmation email:', emailErr);
             toast({
               title: "Warning",
-              description: "Status updated but confirmation email failed to send",
+              description: "Status updated but email notification failed",
               variant: "destructive"
             });
-            return;
           }
-
+        } else {
           toast({
             title: "Success",
-            description: "Booking confirmed and email sent to customer"
-          });
-        } catch (emailErr) {
-          console.error('Error sending confirmation email:', emailErr);
-          toast({
-            title: "Warning",
-            description: "Status updated but email notification failed",
-            variant: "destructive"
+            description: "Booking completed & WhatsApp notification sent"
           });
         }
       } else {
