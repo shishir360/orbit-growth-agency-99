@@ -78,17 +78,25 @@ const handler = async (req: Request): Promise<Response> => {
 
   try {
     if (!META_ACCESS_TOKEN || !META_PHONE_ID) {
+      console.error("Missing WhatsApp credentials - ACCESS_TOKEN:", !!META_ACCESS_TOKEN, "PHONE_ID:", !!META_PHONE_ID);
       throw new Error("WhatsApp API credentials not configured");
     }
 
     const { to, message, buttons, isAdminReply } = await req.json();
+    
+    console.log("Received request:", { to, messageLength: message?.length, hasButtons: !!buttons, isAdminReply });
 
     if (!to || !message) {
       throw new Error("Phone number and message are required");
     }
 
-    // Clean phone number - remove any non-digit characters
+    // Clean phone number - remove any non-digit characters and ensure no leading zeros issues
     let cleanPhone = to.replace(/[^\d]/g, "");
+    
+    // Ensure phone has country code (if starts with 0, assume Bangladesh and add 88)
+    if (cleanPhone.startsWith("0")) {
+      cleanPhone = "88" + cleanPhone;
+    }
     
     console.log(`Sending WhatsApp message to ${cleanPhone}, isAdminReply: ${isAdminReply}`);
 
