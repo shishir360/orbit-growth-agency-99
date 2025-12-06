@@ -85,22 +85,60 @@ const handler = async (req: Request): Promise<Response> => {
       }
     }
     
-    // Format 3: Data inside analysis or endedReason (end-of-call report)
-    else if (requestBody.analysis?.structuredData || requestBody.artifact?.messages) {
-      console.log("Format 3: End-of-call report format");
-      const structuredData = requestBody.analysis?.structuredData;
+    // Format 3: Data inside message.analysis.structuredData (end-of-call report from VAPI)
+    else if (requestBody.message?.analysis?.structuredData) {
+      console.log("Format 3: VAPI end-of-call report with message.analysis.structuredData");
+      const structuredData = requestBody.message.analysis.structuredData;
       if (structuredData && structuredData.name) {
+        // Clean up email if it contains spoken format
+        let cleanEmail = structuredData.email || "";
+        if (cleanEmail.includes(" at ") || cleanEmail.includes(" dot ")) {
+          cleanEmail = cleanEmail
+            .replace(/ at /gi, "@")
+            .replace(/ dot /gi, ".")
+            .replace(/\s+/g, "");
+        }
+        
         bookingData = {
           name: structuredData.name,
-          email: structuredData.email || "",
+          email: cleanEmail,
           phone: structuredData.phone || "",
           meeting_date: structuredData.meeting_date || structuredData.date || "",
           meeting_time: structuredData.meeting_time || structuredData.time || "",
-          business_type: structuredData.business_type,
+          business_type: structuredData.business_type || structuredData.business_name,
           lead_temperature: structuredData.lead_temperature,
           meeting_platform: structuredData.meeting_platform || "Google Meet",
           service_interest: structuredData.service_interest,
-          meeting_requested: structuredData.meeting_requested,
+          meeting_requested: String(structuredData.meeting_requested || ""),
+          next_step_requested: structuredData.next_step_requested
+        };
+      }
+    }
+    
+    // Format 4: Data inside requestBody.analysis.structuredData (alternative format)
+    else if (requestBody.analysis?.structuredData) {
+      console.log("Format 4: Direct analysis.structuredData format");
+      const structuredData = requestBody.analysis.structuredData;
+      if (structuredData && structuredData.name) {
+        let cleanEmail = structuredData.email || "";
+        if (cleanEmail.includes(" at ") || cleanEmail.includes(" dot ")) {
+          cleanEmail = cleanEmail
+            .replace(/ at /gi, "@")
+            .replace(/ dot /gi, ".")
+            .replace(/\s+/g, "");
+        }
+        
+        bookingData = {
+          name: structuredData.name,
+          email: cleanEmail,
+          phone: structuredData.phone || "",
+          meeting_date: structuredData.meeting_date || structuredData.date || "",
+          meeting_time: structuredData.meeting_time || structuredData.time || "",
+          business_type: structuredData.business_type || structuredData.business_name,
+          lead_temperature: structuredData.lead_temperature,
+          meeting_platform: structuredData.meeting_platform || "Google Meet",
+          service_interest: structuredData.service_interest,
+          meeting_requested: String(structuredData.meeting_requested || ""),
           next_step_requested: structuredData.next_step_requested
         };
       }
