@@ -44,3 +44,6 @@ verify_jwt = true
 
 [functions.send-admin-email]
 verify_jwt = true
+
+[functions.receive-email-webhook]
+verify_jwt = false
