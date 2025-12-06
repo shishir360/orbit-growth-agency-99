@@ -248,6 +248,45 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log("Emails sent successfully");
 
+    // Send WhatsApp notification
+    try {
+      const PHONE_ID = Deno.env.get("META_WHATSAPP_PHONE_ID");
+      const ACCESS_TOKEN = Deno.env.get("META_WHATSAPP_ACCESS_TOKEN");
+      const ADMIN_NUMBER = Deno.env.get("ADMIN_WHATSAPP_NUMBER");
+
+      if (PHONE_ID && ACCESS_TOKEN && ADMIN_NUMBER) {
+        const whatsappMessage = `🗓️ *New Website Booking!*
+
+👤 *Name:* ${name}
+📧 *Email:* ${email}
+📱 *Phone:* ${phone}
+📅 *Date:* ${date}
+⏰ *Time:* ${time}
+💻 *Platform:* ${meeting_platform}
+${notes ? `📝 *Notes:* ${notes}` : ""}
+
+---
+_Via Lunexo Media Website_`;
+
+        await fetch(`https://graph.facebook.com/v18.0/${PHONE_ID}/messages`, {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${ACCESS_TOKEN}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            messaging_product: "whatsapp",
+            to: ADMIN_NUMBER,
+            type: "text",
+            text: { preview_url: false, body: whatsappMessage },
+          }),
+        });
+        console.log("WhatsApp notification sent");
+      }
+    } catch (waError) {
+      console.error("WhatsApp error:", waError);
+    }
+
     return new Response(
       JSON.stringify({
         success: true,
