@@ -255,7 +255,8 @@ const handler = async (req: Request): Promise<Response> => {
       const ADMIN_NUMBER = Deno.env.get("ADMIN_WHATSAPP_NUMBER");
 
       if (PHONE_ID && ACCESS_TOKEN && ADMIN_NUMBER) {
-        const whatsappMessage = `🗓️ *New Website Booking!*
+        // Admin notification
+        const adminWhatsappMessage = `🗓️ *New Website Booking!*
 
 👤 *Name:* ${name}
 📧 *Email:* ${email}
@@ -268,6 +269,7 @@ ${notes ? `📝 *Notes:* ${notes}` : ""}
 ---
 _Via Lunexo Media Website_`;
 
+        // Send to Admin
         await fetch(`https://graph.facebook.com/v18.0/${PHONE_ID}/messages`, {
           method: "POST",
           headers: {
@@ -278,10 +280,51 @@ _Via Lunexo Media Website_`;
             messaging_product: "whatsapp",
             to: ADMIN_NUMBER,
             type: "text",
-            text: { preview_url: false, body: whatsappMessage },
+            text: { preview_url: false, body: adminWhatsappMessage },
           }),
         });
-        console.log("WhatsApp notification sent");
+        console.log("WhatsApp sent to Admin");
+
+        // Send to Customer
+        if (phone && phone.length >= 10) {
+          let customerPhone = phone.replace(/[\s\-\(\)]/g, "");
+          if (!customerPhone.startsWith("+") && !customerPhone.startsWith("1")) {
+            customerPhone = "1" + customerPhone;
+          }
+          customerPhone = customerPhone.replace("+", "");
+
+          const customerWhatsappMessage = `✅ *Booking Confirmed!*
+
+Hi ${name}! 👋
+
+Your consultation with *Lunexo Media* is confirmed!
+
+📅 *Date:* ${date}
+⏰ *Time:* ${time}
+💻 *Platform:* ${meeting_platform}
+
+We'll send you the meeting link before your scheduled time.
+
+Questions? Reply to this message!
+
+---
+_Lunexo Media Team_`;
+
+          await fetch(`https://graph.facebook.com/v18.0/${PHONE_ID}/messages`, {
+            method: "POST",
+            headers: {
+              "Authorization": `Bearer ${ACCESS_TOKEN}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              messaging_product: "whatsapp",
+              to: customerPhone,
+              type: "text",
+              text: { preview_url: false, body: customerWhatsappMessage },
+            }),
+          });
+          console.log("WhatsApp sent to Customer:", customerPhone);
+        }
       }
     } catch (waError) {
       console.error("WhatsApp error:", waError);
