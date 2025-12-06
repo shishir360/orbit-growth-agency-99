@@ -22,52 +22,120 @@ const FARHAN_AI_SYSTEM_PROMPT = `You are Farhan AI, the friendly and professiona
 - Website: lunexomedia.com
 - Completed 50+ successful projects
 
-## Services Offered
-1. **Website Design & Development** - Custom, responsive websites optimized for conversions ($500-$5000)
-2. **SEO (Search Engine Optimization)** - Local & national SEO to rank higher on Google ($300-$1500/month)
-3. **Google Ads Management** - PPC campaigns with high ROI ($500-$2000/month)
-4. **Facebook & Instagram Ads** - Social media advertising ($400-$1500/month)
-5. **AI Automation** - Chatbots, voice agents, workflow automation ($500-$3000)
-6. **AI Chatbots** - 24/7 customer support bots ($300-$1000)
-7. **Voice AI Agents** - Automated phone calls for leads ($500-$2000)
-8. **Email Automation** - Automated email marketing sequences ($200-$800)
-9. **Workflow Automation** - Business process automation ($400-$1500)
+## Services Offered (with pricing)
+1. **Website Design & Development** - $500-$5000
+2. **SEO (Search Engine Optimization)** - $300-$1500/month
+3. **Google Ads Management** - $500-$2000/month
+4. **Facebook & Instagram Ads** - $400-$1500/month
+5. **AI Automation** - $500-$3000
+6. **AI Chatbots** - $300-$1000
+7. **Voice AI Agents** - $500-$2000
+8. **Email Automation** - $200-$800
+9. **Workflow Automation** - $400-$1500
 
-## Key Differentiators
-- Premium, modern designs with dark theme aesthetics
-- Results-driven approach focused on ROI
-- Personal attention from founder Farhan Tanvier
-- Cutting-edge AI integration
-- Fast turnaround times
+## IMPORTANT BOOKING INSTRUCTIONS
+When someone wants to book a call or schedule a meeting:
+- DO NOT give any website links for booking
+- Collect the booking information DIRECTLY through this chat
+- Ask for these details ONE BY ONE in a conversational way:
+  1. Full name
+  2. Email address
+  3. Preferred date (like "tomorrow", "Monday", or specific date)
+  4. Preferred time (with timezone, like "3pm EST" or "10am Bangladesh time")
+  5. Meeting platform preference (Zoom, Google Meet, or Phone call)
+  6. What service are they interested in?
 
-## Booking a Call
-When someone wants to book a call, collect these details:
-1. Their full name
-2. Their email address
-3. Preferred date (e.g., tomorrow, next Monday, specific date)
-4. Preferred time (with their timezone)
-5. Meeting platform preference (Zoom, Google Meet, or Phone call)
-6. Brief description of what they need help with
+When you have ALL the required information (name, email, date, time, platform, service interest), respond with this EXACT format at the END of your message:
 
-Once you have all details, confirm the booking and let them know the team will send a confirmation email.
+[BOOKING_DATA]
+name: [Full Name]
+email: [Email Address]
+date: [Date]
+time: [Time with timezone]
+platform: [Zoom/Google Meet/Phone]
+service: [Service Interest]
+[/BOOKING_DATA]
+
+This will automatically create the booking. Then confirm to the user that their booking is confirmed.
 
 ## Your Personality
 - Friendly, professional, and helpful
 - Speak in a conversational tone
-- Keep responses concise but informative
+- Keep responses concise for WhatsApp readability
 - Remember previous messages in the conversation
-- If someone wants to book, guide them through the booking process step by step
-- Use emojis sparingly to be friendly
-- If you don't know something specific, direct them to contact the team
+- Use emojis sparingly
+- NEVER give website links for booking - always collect info directly
+- If someone says "book" or clicks "Book a Call", start collecting their details immediately
 
-IMPORTANT: You have conversation memory. Reference previous messages when relevant. If someone greeted you before, acknowledge the ongoing conversation.
+Respond helpfully to any questions. Keep responses under 300 words.`;
 
-Respond helpfully to any questions about Lunexo Media, digital marketing, or services. Keep responses under 300 words for WhatsApp readability.`;
+// Parse booking data from AI response
+function parseBookingData(response: string): { hasBooking: boolean; data: any } {
+  const bookingMatch = response.match(/\[BOOKING_DATA\]([\s\S]*?)\[\/BOOKING_DATA\]/);
+  
+  if (!bookingMatch) {
+    return { hasBooking: false, data: null };
+  }
+  
+  const bookingText = bookingMatch[1];
+  const data: any = {};
+  
+  const lines = bookingText.split('\n').filter(line => line.trim());
+  for (const line of lines) {
+    const colonIndex = line.indexOf(':');
+    if (colonIndex > 0) {
+      const key = line.substring(0, colonIndex).trim().toLowerCase();
+      const value = line.substring(colonIndex + 1).trim();
+      if (value && value !== '[Full Name]' && !value.startsWith('[')) {
+        data[key] = value;
+      }
+    }
+  }
+  
+  // Check if we have all required fields
+  const hasAllFields = data.name && data.email && data.date && data.time && data.platform;
+  
+  return { hasBooking: hasAllFields, data };
+}
+
+// Remove booking data tags from response for display
+function cleanResponseForDisplay(response: string): string {
+  return response.replace(/\[BOOKING_DATA\][\s\S]*?\[\/BOOKING_DATA\]/g, '').trim();
+}
+
+// Create booking in database
+async function createBooking(supabaseClient: any, bookingData: any, phoneNumber: string, customerName: string): Promise<boolean> {
+  try {
+    console.log("Creating booking:", bookingData);
+    
+    const { error } = await supabaseClient.from("apartment_bookings").insert({
+      name: bookingData.name || customerName,
+      email: bookingData.email,
+      phone: phoneNumber,
+      date: bookingData.date,
+      time: bookingData.time,
+      meeting_platform: bookingData.platform || "Zoom",
+      notes: `Service Interest: ${bookingData.service || 'Not specified'}. Booked via WhatsApp.`,
+      source: "whatsapp",
+      status: "pending",
+    });
+    
+    if (error) {
+      console.error("Error creating booking:", error);
+      return false;
+    }
+    
+    console.log("Booking created successfully");
+    return true;
+  } catch (error) {
+    console.error("Error in createBooking:", error);
+    return false;
+  }
+}
 
 // Get conversation history from database
 async function getConversationHistory(supabaseClient: any, phoneNumber: string): Promise<Array<{ role: string; content: string }>> {
   try {
-    // Get last 20 messages for this phone number
     const { data, error } = await supabaseClient
       .from("visitor_activities")
       .select("activity_type, metadata, created_at")
@@ -85,7 +153,6 @@ async function getConversationHistory(supabaseClient: any, phoneNumber: string):
       return [];
     }
 
-    // Convert to chat format
     const history: Array<{ role: string; content: string }> = [];
     for (const msg of data) {
       if (msg.activity_type === "whatsapp_message_received") {
@@ -96,7 +163,7 @@ async function getConversationHistory(supabaseClient: any, phoneNumber: string):
       } else if (msg.activity_type === "whatsapp_message_sent") {
         const content = msg.metadata?.ai_response || msg.metadata?.message || "";
         if (content) {
-          history.push({ role: "assistant", content });
+          history.push({ role: "assistant", content: cleanResponseForDisplay(content) });
         }
       }
     }
@@ -109,22 +176,11 @@ async function getConversationHistory(supabaseClient: any, phoneNumber: string):
   }
 }
 
-// Check if user wants to book and extract booking info
-function detectBookingIntent(message: string, conversationHistory: Array<{ role: string; content: string }>): boolean {
-  const bookingKeywords = [
-    "book", "schedule", "appointment", "call", "meeting", "consultation",
-    "book a call", "schedule a call", "set up a meeting", "📞 book a call"
-  ];
-  const lowerMessage = message.toLowerCase();
-  return bookingKeywords.some(keyword => lowerMessage.includes(keyword));
-}
-
-// Generate AI response using Lovable AI with conversation history
+// Generate AI response with conversation history
 async function generateAIResponse(userMessage: string, conversationHistory: Array<{ role: string; content: string }>): Promise<string> {
   try {
     console.log("Generating AI response with", conversationHistory.length, "previous messages");
     
-    // Build messages array with history
     const messages = [
       { role: "system", content: FARHAN_AI_SYSTEM_PROMPT },
       ...conversationHistory,
@@ -140,69 +196,57 @@ async function generateAIResponse(userMessage: string, conversationHistory: Arra
       body: JSON.stringify({
         model: "google/gemini-2.5-flash",
         messages,
-        max_tokens: 500,
+        max_tokens: 600,
       }),
     });
 
     if (!response.ok) {
       const errorText = await response.text();
       console.error("Lovable AI error:", response.status, errorText);
-      return "I'm having trouble processing your request right now. Please try again or contact us directly at +1 (702) 483-0749. 📞";
+      return "I'm having trouble right now. Please try again or call us at +1 (702) 483-0749. 📞";
     }
 
     const data = await response.json();
-    const aiResponse = data.choices?.[0]?.message?.content || "I couldn't generate a response. Please contact us at hello@lunexomedia.com for assistance.";
+    const aiResponse = data.choices?.[0]?.message?.content || "I couldn't generate a response. Please contact hello@lunexomedia.com.";
     
     console.log("AI Response generated:", aiResponse.substring(0, 100) + "...");
     return aiResponse;
   } catch (error) {
     console.error("Error generating AI response:", error);
-    return "Sorry, I'm experiencing technical difficulties. Please reach out to us at +1 (702) 483-0749 or hello@lunexomedia.com. We'd love to help! 🙏";
+    return "Sorry, I'm having technical issues. Call us at +1 (702) 483-0749. 🙏";
   }
 }
 
-// Download and transcribe voice message using Lovable AI
+// Transcribe voice message
 async function transcribeVoiceMessage(mediaId: string): Promise<string> {
   try {
     console.log("Downloading voice message:", mediaId);
     
-    // Get media URL from Meta
     const mediaResponse = await fetch(
       `https://graph.facebook.com/v18.0/${mediaId}`,
       {
-        headers: {
-          "Authorization": `Bearer ${META_ACCESS_TOKEN}`,
-        },
+        headers: { "Authorization": `Bearer ${META_ACCESS_TOKEN}` },
       }
     );
 
     if (!mediaResponse.ok) {
-      console.error("Failed to get media URL:", await mediaResponse.text());
+      console.error("Failed to get media URL");
       return "";
     }
 
     const mediaData = await mediaResponse.json();
-    const mediaUrl = mediaData.url;
-    console.log("Media URL obtained:", mediaUrl);
-
-    // Download the audio file
-    const audioResponse = await fetch(mediaUrl, {
-      headers: {
-        "Authorization": `Bearer ${META_ACCESS_TOKEN}`,
-      },
+    const audioResponse = await fetch(mediaData.url, {
+      headers: { "Authorization": `Bearer ${META_ACCESS_TOKEN}` },
     });
 
     if (!audioResponse.ok) {
-      console.error("Failed to download audio:", await audioResponse.text());
+      console.error("Failed to download audio");
       return "";
     }
 
     const audioBuffer = await audioResponse.arrayBuffer();
     const audioBase64 = btoa(String.fromCharCode(...new Uint8Array(audioBuffer)));
     
-    console.log("Audio downloaded, size:", audioBuffer.byteLength, "bytes");
-
-    // Use Lovable AI to transcribe (Gemini can handle audio)
     const transcribeResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -215,17 +259,8 @@ async function transcribeVoiceMessage(mediaId: string): Promise<string> {
           { 
             role: "user", 
             content: [
-              {
-                type: "text",
-                text: "Please transcribe this audio message. Only provide the transcription, nothing else."
-              },
-              {
-                type: "input_audio",
-                input_audio: {
-                  data: audioBase64,
-                  format: "ogg"
-                }
-              }
+              { type: "text", text: "Please transcribe this audio message. Only provide the transcription, nothing else." },
+              { type: "input_audio", input_audio: { data: audioBase64, format: "ogg" } }
             ]
           }
         ],
@@ -234,15 +269,11 @@ async function transcribeVoiceMessage(mediaId: string): Promise<string> {
     });
 
     if (!transcribeResponse.ok) {
-      const errorText = await transcribeResponse.text();
-      console.error("Transcription error:", transcribeResponse.status, errorText);
       return "";
     }
 
     const transcribeData = await transcribeResponse.json();
-    const transcription = transcribeData.choices?.[0]?.message?.content || "";
-    console.log("Transcription result:", transcription);
-    return transcription;
+    return transcribeData.choices?.[0]?.message?.content || "";
   } catch (error) {
     console.error("Error transcribing voice message:", error);
     return "";
@@ -252,8 +283,6 @@ async function transcribeVoiceMessage(mediaId: string): Promise<string> {
 // Send WhatsApp text message
 async function sendWhatsAppMessage(to: string, message: string): Promise<boolean> {
   try {
-    console.log(`Sending WhatsApp message to ${to}`);
-    
     const response = await fetch(
       `https://graph.facebook.com/v18.0/${META_PHONE_ID}/messages`,
       {
@@ -273,12 +302,9 @@ async function sendWhatsAppMessage(to: string, message: string): Promise<boolean
     );
 
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error("WhatsApp send error:", response.status, errorText);
+      console.error("WhatsApp send error:", await response.text());
       return false;
     }
-
-    console.log("WhatsApp message sent successfully");
     return true;
   } catch (error) {
     console.error("Error sending WhatsApp message:", error);
@@ -286,11 +312,9 @@ async function sendWhatsAppMessage(to: string, message: string): Promise<boolean
   }
 }
 
-// Send WhatsApp message with quick reply buttons
+// Send WhatsApp message with buttons
 async function sendWhatsAppWithButtons(to: string, message: string, buttons: Array<{ id: string; title: string }>): Promise<boolean> {
   try {
-    console.log(`Sending WhatsApp message with buttons to ${to}`);
-    
     const response = await fetch(
       `https://graph.facebook.com/v18.0/${META_PHONE_ID}/messages`,
       {
@@ -306,16 +330,11 @@ async function sendWhatsAppWithButtons(to: string, message: string, buttons: Arr
           type: "interactive",
           interactive: {
             type: "button",
-            body: {
-              text: message,
-            },
+            body: { text: message },
             action: {
               buttons: buttons.map((btn) => ({
                 type: "reply",
-                reply: {
-                  id: btn.id,
-                  title: btn.title,
-                },
+                reply: { id: btn.id, title: btn.title },
               })),
             },
           },
@@ -324,44 +343,36 @@ async function sendWhatsAppWithButtons(to: string, message: string, buttons: Arr
     );
 
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error("WhatsApp button send error:", response.status, errorText);
+      console.error("WhatsApp button send error:", await response.text());
       return false;
     }
-
-    console.log("WhatsApp message with buttons sent successfully");
     return true;
   } catch (error) {
-    console.error("Error sending WhatsApp message with buttons:", error);
+    console.error("Error sending WhatsApp with buttons:", error);
     return false;
   }
 }
 
-// Determine if we should send quick reply buttons
+// Check if should send quick replies
 function shouldSendQuickReplies(message: string, conversationLength: number): boolean {
-  // Send buttons on first interaction or when asking about services
-  const triggerKeywords = [
-    "hello", "hi", "hey", "help", "start", "info", "services", 
-    "pricing", "cost", "website", "seo", "ads", "marketing"
-  ];
+  const triggerKeywords = ["hello", "hi", "hey", "help", "start", "info", "services", "pricing"];
   const lowerMessage = message.toLowerCase();
   
-  // First message gets buttons
   if (conversationLength === 0) {
     return triggerKeywords.some(keyword => lowerMessage.includes(keyword));
   }
   
-  // Subsequent messages - only on specific triggers
   return ["services", "pricing", "help", "what can you do", "options"].some(
     keyword => lowerMessage.includes(keyword)
   );
 }
 
-// Check if this is a booking button click
+// Check if booking request
 function isBookingRequest(message: string): boolean {
   const bookingTriggers = [
     "book_call", "📞 book a call", "book a call", "schedule call", 
-    "i want to book", "let's book", "booking"
+    "i want to book", "let's book", "booking", "schedule", "appointment",
+    "set up a call", "meet", "meeting"
   ];
   return bookingTriggers.some(trigger => message.toLowerCase().includes(trigger));
 }
@@ -369,51 +380,40 @@ function isBookingRequest(message: string): boolean {
 const handler = async (req: Request): Promise<Response> => {
   const url = new URL(req.url);
   
-  // Handle CORS preflight
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
-  // GET request - Meta webhook verification
+  // GET - Webhook verification
   if (req.method === "GET") {
     const mode = url.searchParams.get("hub.mode");
     const token = url.searchParams.get("hub.verify_token");
     const challenge = url.searchParams.get("hub.challenge");
 
-    console.log("Webhook verification request:", { mode, token, challenge });
-
     if (mode === "subscribe" && token === VERIFY_TOKEN) {
-      console.log("Webhook verified successfully!");
-      return new Response(challenge, {
-        status: 200,
-        headers: { "Content-Type": "text/plain", ...corsHeaders },
-      });
-    } else {
-      console.log("Webhook verification failed!");
-      return new Response("Forbidden", { status: 403, headers: corsHeaders });
+      return new Response(challenge, { status: 200, headers: { "Content-Type": "text/plain", ...corsHeaders } });
     }
+    return new Response("Forbidden", { status: 403, headers: corsHeaders });
   }
 
-  // POST request - Incoming WhatsApp messages/events
+  // POST - Incoming messages
   if (req.method === "POST") {
     try {
       const body = await req.json();
       console.log("=== Incoming WhatsApp Webhook ===");
-      console.log(JSON.stringify(body, null, 2));
 
       const supabaseClient = createClient(
         Deno.env.get("SUPABASE_URL") ?? "",
         Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
       );
 
-      // Extract message data from Meta webhook payload
       const entry = body.entry?.[0];
       const changes = entry?.changes?.[0];
       const value = changes?.value;
       
       if (value?.messages) {
         for (const message of value.messages) {
-          const from = message.from; // Customer's phone number
+          const from = message.from;
           const messageType = message.type;
           const timestamp = message.timestamp;
           const contact = value.contacts?.[0];
@@ -422,29 +422,23 @@ const handler = async (req: Request): Promise<Response> => {
           let messageText = "";
           let isVoiceMessage = false;
 
-          // Handle different message types
           if (messageType === "text") {
             messageText = message.text?.body || "";
           } else if (messageType === "audio") {
-            // Voice message - transcribe it
             isVoiceMessage = true;
             const mediaId = message.audio?.id;
             if (mediaId) {
-              console.log("Processing voice message from:", customerName);
               messageText = await transcribeVoiceMessage(mediaId);
-              if (!messageText) {
-                messageText = "[Voice message - transcription failed]";
-              }
+              if (!messageText) messageText = "[Voice message - transcription failed]";
             }
           } else if (messageType === "interactive") {
-            // Button reply
             messageText = message.interactive?.button_reply?.title || 
                          message.interactive?.button_reply?.id || "";
           }
 
-          console.log(`Message from ${customerName} (${from}): ${messageText} [Type: ${messageType}]`);
+          console.log(`Message from ${customerName} (${from}): ${messageText}`);
 
-          // Log incoming message to visitor_activities
+          // Log incoming message
           await supabaseClient.from("visitor_activities").insert({
             activity_type: "whatsapp_message_received",
             metadata: {
@@ -457,49 +451,53 @@ const handler = async (req: Request): Promise<Response> => {
             },
           });
 
-          // Process message if we have text content
           if (messageText && messageText !== "[Voice message - transcription failed]") {
-            // Get conversation history for context
             const conversationHistory = await getConversationHistory(supabaseClient, from);
             
-            // Check if booking request
             let aiResponse: string;
-            if (isBookingRequest(messageText)) {
-              aiResponse = `Great! I'd love to help you book a discovery call with our team! 📞
+            
+            // Check if it's a booking request
+            if (isBookingRequest(messageText) && conversationHistory.length < 3) {
+              // Start booking flow
+              aiResponse = `Great! I'd love to help you book a free discovery call! 🎉
 
-To schedule your free consultation, I'll need a few details:
+Let me collect a few details to get you scheduled.
 
-1️⃣ Your full name
-2️⃣ Your email address
-3️⃣ Preferred date (e.g., tomorrow, next Monday, or a specific date)
-4️⃣ Preferred time (with your timezone)
-5️⃣ Brief description of what you need help with
-
-Just send me these details and I'll get you booked right away! 
-
-Or if you prefer, you can book directly at lunexomedia.com/contact ✨`;
+First, what's your full name?`;
             } else {
-              // Generate AI response with conversation history
+              // Generate AI response with history
               aiResponse = await generateAIResponse(messageText, conversationHistory);
             }
             
-            // Check if we should send quick reply buttons
+            // Check if AI response contains booking data
+            const bookingResult = parseBookingData(aiResponse);
+            if (bookingResult.hasBooking) {
+              const bookingCreated = await createBooking(
+                supabaseClient, 
+                bookingResult.data, 
+                from, 
+                customerName
+              );
+              
+              if (bookingCreated) {
+                console.log("Booking created successfully from WhatsApp");
+              }
+            }
+            
+            // Clean response for display
+            const displayResponse = cleanResponseForDisplay(aiResponse);
+            
+            // Send response
             let sent = false;
             if (shouldSendQuickReplies(messageText, conversationHistory.length)) {
-              // Send with quick reply buttons
-              sent = await sendWhatsAppWithButtons(from, aiResponse, [
+              sent = await sendWhatsAppWithButtons(from, displayResponse, [
                 { id: "book_call", title: "📞 Book a Call" },
                 { id: "view_services", title: "🚀 View Services" },
                 { id: "get_pricing", title: "💰 Get Pricing" },
               ]);
-              
-              // Fallback to regular message if buttons fail
-              if (!sent) {
-                sent = await sendWhatsAppMessage(from, aiResponse);
-              }
+              if (!sent) sent = await sendWhatsAppMessage(from, displayResponse);
             } else {
-              // Send regular text message
-              sent = await sendWhatsAppMessage(from, aiResponse);
+              sent = await sendWhatsAppMessage(from, displayResponse);
             }
             
             // Log outgoing message
@@ -510,21 +508,20 @@ Or if you prefer, you can book directly at lunexomedia.com/contact ✨`;
                 name: customerName,
                 original_message: messageText,
                 was_voice_message: isVoiceMessage,
-                ai_response: aiResponse,
+                ai_response: displayResponse,
                 sent_successfully: sent,
                 had_buttons: shouldSendQuickReplies(messageText, conversationHistory.length),
                 is_ai_response: true,
+                booking_created: bookingResult.hasBooking,
               },
             });
           } else if (isVoiceMessage && messageText === "[Voice message - transcription failed]") {
-            // Send a friendly message for failed transcription
-            const fallbackMessage = "I received your voice message but couldn't process it clearly. Could you please type your question or try sending another voice note? 🎤\n\nOr you can:\n📞 Call us: +1 (702) 483-0749\n📧 Email: hello@lunexomedia.com";
+            const fallbackMessage = "I couldn't process your voice message clearly. Could you please type your message or try again? 🎤\n\nOr call us: +1 (702) 483-0749";
             await sendWhatsAppMessage(from, fallbackMessage);
           }
         }
       }
 
-      // Handle message status updates (sent, delivered, read)
       if (value?.statuses) {
         for (const status of value.statuses) {
           console.log(`Message ${status.id} status: ${status.status}`);
@@ -532,7 +529,7 @@ Or if you prefer, you can book directly at lunexomedia.com/contact ✨`;
       }
 
       return new Response(
-        JSON.stringify({ success: true, message: "Webhook processed" }),
+        JSON.stringify({ success: true }),
         { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
       );
     } catch (error: any) {
