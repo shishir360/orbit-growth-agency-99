@@ -15,6 +15,30 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// Booking data tracker - stores partial booking info per phone number
+const bookingTracker: Record<string, {
+  name?: string;
+  email?: string;
+  date?: string;
+  time?: string;
+  platform?: string;
+  service?: string;
+  step: number;
+}> = {};
+
+// Get or create booking tracker for a phone
+function getBookingTracker(phone: string) {
+  if (!bookingTracker[phone]) {
+    bookingTracker[phone] = { step: 0 };
+  }
+  return bookingTracker[phone];
+}
+
+// Clear booking tracker
+function clearBookingTracker(phone: string) {
+  delete bookingTracker[phone];
+}
+
 // Lunexo Media Knowledge Base for Farhan AI
 const FARHAN_AI_SYSTEM_PROMPT = `You are Farhan AI, the friendly and professional AI assistant for Lunexo Media, a premium digital marketing agency based in New York, NY.
 
@@ -37,33 +61,8 @@ const FARHAN_AI_SYSTEM_PROMPT = `You are Farhan AI, the friendly and professiona
 8. **Email Automation** - $200-$800
 9. **Workflow Automation** - $400-$1500
 
-## IMPORTANT BOOKING INSTRUCTIONS
-When someone wants to book a call or schedule a meeting:
-- DO NOT give any website links for booking
-- Collect the booking information DIRECTLY through this chat
-- Ask for these details ONE BY ONE in a conversational way:
-  1. Full name
-  2. Email address
-  3. Preferred date (like "tomorrow", "Monday", or specific date)
-  4. Preferred time (with timezone, like "3pm EST" or "10am Bangladesh time")
-  5. Meeting platform preference (Zoom, Google Meet, or Phone call)
-  6. What service are they interested in?
-
-When you have ALL the required information (name, email, date, time, platform, service interest), respond with this EXACT format at the END of your message:
-
-[BOOKING_DATA]
-name: [Full Name]
-email: [Email Address]
-date: [Date]
-time: [Time with timezone]
-platform: [Zoom/Google Meet/Phone]
-service: [Service Interest]
-[/BOOKING_DATA]
-
-This will automatically create the booking. Then confirm to the user that their booking is confirmed and they'll receive an email confirmation.
-
 ## IMAGE ANALYSIS
-When a user sends an image, you can analyze it. Describe what you see and how it might relate to digital marketing or their business needs. Be helpful and insightful.
+When a user sends an image, analyze it and describe what you see. Be helpful and insightful.
 
 ## Your Personality
 - Friendly, professional, and helpful
@@ -71,41 +70,108 @@ When a user sends an image, you can analyze it. Describe what you see and how it
 - Keep responses concise for WhatsApp readability
 - Remember previous messages in the conversation
 - Use emojis sparingly
-- NEVER give website links for booking - always collect info directly
 
 Respond helpfully to any questions. Keep responses under 300 words.`;
 
-// Parse booking data from AI response
-function parseBookingData(response: string): { hasBooking: boolean; data: any } {
-  const bookingMatch = response.match(/\[BOOKING_DATA\]([\s\S]*?)\[\/BOOKING_DATA\]/);
-  
-  if (!bookingMatch) {
-    return { hasBooking: false, data: null };
-  }
-  
-  const bookingText = bookingMatch[1];
-  const data: any = {};
-  
-  const lines = bookingText.split('\n').filter(line => line.trim());
-  for (const line of lines) {
-    const colonIndex = line.indexOf(':');
-    if (colonIndex > 0) {
-      const key = line.substring(0, colonIndex).trim().toLowerCase();
-      const value = line.substring(colonIndex + 1).trim();
-      if (value && value !== '[Full Name]' && !value.startsWith('[')) {
-        data[key] = value;
-      }
-    }
-  }
-  
-  const hasAllFields = data.name && data.email && data.date && data.time && data.platform;
-  
-  return { hasBooking: hasAllFields, data };
+// Simple email regex
+function isValidEmail(email: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
-// Clean response for display
-function cleanResponseForDisplay(response: string): string {
-  return response.replace(/\[BOOKING_DATA\][\s\S]*?\[\/BOOKING_DATA\]/g, '').trim();
+// Extract booking field from message
+function extractBookingField(message: string, step: number): string | null {
+  const msg = message.trim();
+  
+  switch(step) {
+    case 1: // Name - just accept any text
+      if (msg.length >= 2 && msg.length <= 100) {
+        return msg;
+      }
+      break;
+    case 2: // Email
+      if (isValidEmail(msg)) {
+        return msg.toLowerCase();
+      }
+      break;
+    case 3: // Date
+      // Accept various date formats
+      if (msg.length >= 3) {
+        return msg;
+      }
+      break;
+    case 4: // Time
+      if (msg.length >= 2) {
+        return msg;
+      }
+      break;
+    case 5: // Platform
+      const platforms = ["zoom", "google meet", "phone", "call", "whatsapp"];
+      const lowerMsg = msg.toLowerCase();
+      for (const p of platforms) {
+        if (lowerMsg.includes(p)) {
+          if (lowerMsg.includes("zoom")) return "Zoom";
+          if (lowerMsg.includes("google") || lowerMsg.includes("meet")) return "Google Meet";
+          if (lowerMsg.includes("phone") || lowerMsg.includes("call")) return "Phone Call";
+          if (lowerMsg.includes("whatsapp")) return "WhatsApp";
+        }
+      }
+      // Accept any response as platform
+      if (msg.length >= 2) return msg;
+      break;
+    case 6: // Service
+      if (msg.length >= 2) {
+        return msg;
+      }
+      break;
+  }
+  return null;
+}
+
+// Generate booking step question
+function getBookingQuestion(step: number, tracker: any): string {
+  switch(step) {
+    case 1:
+      return `Great! Let's book your free discovery call! 🎉
+
+Please tell me your *full name*:`;
+    case 2:
+      return `Thanks, ${tracker.name}! 
+
+Now, what's your *email address*? 📧`;
+    case 3:
+      return `Perfect! 
+
+What *date* would you prefer for the call?
+(Example: Tomorrow, Monday, December 15, etc.)`;
+    case 4:
+      return `Got it! 
+
+What *time* works best for you?
+(Please include timezone - Example: 3pm EST, 10am Bangladesh time)`;
+    case 5:
+      return `Almost done! 
+
+Which *meeting platform* do you prefer?
+• Zoom
+• Google Meet
+• Phone Call`;
+    case 6:
+      return `Last question! 
+
+Which *service* are you interested in?
+• Website Design
+• SEO
+• Google/Facebook Ads
+• AI Automation
+• Other (please specify)`;
+    default:
+      return "";
+  }
+}
+
+// Check if booking is complete
+function isBookingComplete(tracker: any): boolean {
+  return tracker.name && tracker.email && tracker.date && tracker.time && tracker.platform && tracker.service;
 }
 
 // Send booking confirmation email
@@ -135,7 +201,6 @@ async function sendBookingConfirmationEmail(bookingData: any, phoneNumber: strin
             .detail { margin: 12px 0; padding: 12px; background: rgba(255,255,255,0.05); border-radius: 8px; }
             .label { color: #a1a1aa; font-size: 12px; text-transform: uppercase; margin-bottom: 4px; }
             .value { color: #ffffff; font-size: 16px; font-weight: 500; }
-            .cta { display: inline-block; background: linear-gradient(135deg, #6366f1, #a855f7); color: white; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: 600; margin-top: 20px; }
             .footer { text-align: center; margin-top: 30px; color: #71717a; font-size: 14px; }
           </style>
         </head>
@@ -147,7 +212,7 @@ async function sendBookingConfirmationEmail(bookingData: any, phoneNumber: strin
             <div class="card">
               <div class="title">🎉 Your Call is Confirmed!</div>
               <p style="color: #d1d5db;">Hi ${bookingData.name},</p>
-              <p style="color: #d1d5db;">Thank you for booking a discovery call with us! We're excited to learn about your business and discuss how we can help you grow.</p>
+              <p style="color: #d1d5db;">Thank you for booking a discovery call with us! We're excited to learn about your business.</p>
               
               <div class="detail">
                 <div class="label">📅 Date</div>
@@ -163,10 +228,10 @@ async function sendBookingConfirmationEmail(bookingData: any, phoneNumber: strin
               </div>
               <div class="detail">
                 <div class="label">🎯 Interest</div>
-                <div class="value">${bookingData.service || 'General Consultation'}</div>
+                <div class="value">${bookingData.service}</div>
               </div>
               
-              <p style="color: #d1d5db; margin-top: 20px;">We'll send you the meeting link before the call. If you need to reschedule, just reply to this email or WhatsApp us!</p>
+              <p style="color: #d1d5db; margin-top: 20px;">We'll send you the meeting link before the call!</p>
             </div>
             <div class="footer">
               <p>Lunexo Media | New York, NY</p>
@@ -191,7 +256,7 @@ async function sendBookingConfirmationEmail(bookingData: any, phoneNumber: strin
         <p><strong>Date:</strong> ${bookingData.date}</p>
         <p><strong>Time:</strong> ${bookingData.time}</p>
         <p><strong>Platform:</strong> ${bookingData.platform}</p>
-        <p><strong>Service Interest:</strong> ${bookingData.service || 'Not specified'}</p>
+        <p><strong>Service Interest:</strong> ${bookingData.service}</p>
         <p><strong>Source:</strong> WhatsApp</p>
       `,
     });
@@ -205,18 +270,18 @@ async function sendBookingConfirmationEmail(bookingData: any, phoneNumber: strin
 }
 
 // Create booking in database
-async function createBooking(supabaseClient: any, bookingData: any, phoneNumber: string, customerName: string): Promise<boolean> {
+async function createBooking(supabaseClient: any, bookingData: any, phoneNumber: string): Promise<boolean> {
   try {
     console.log("Creating booking:", bookingData);
     
     const { error } = await supabaseClient.from("apartment_bookings").insert({
-      name: bookingData.name || customerName,
+      name: bookingData.name,
       email: bookingData.email,
       phone: phoneNumber,
       date: bookingData.date,
       time: bookingData.time,
-      meeting_platform: bookingData.platform || "Zoom",
-      notes: `Service Interest: ${bookingData.service || 'Not specified'}. Booked via WhatsApp.`,
+      meeting_platform: bookingData.platform,
+      notes: `Service Interest: ${bookingData.service}. Booked via WhatsApp.`,
       source: "whatsapp",
       status: "pending",
     });
@@ -246,7 +311,7 @@ async function getConversationHistory(supabaseClient: any, phoneNumber: string):
       .in("activity_type", ["whatsapp_message_received", "whatsapp_message_sent"])
       .or(`metadata->>from.eq.${phoneNumber},metadata->>to.eq.${phoneNumber}`)
       .order("created_at", { ascending: true })
-      .limit(20);
+      .limit(15);
 
     if (error || !data) return [];
 
@@ -260,7 +325,7 @@ async function getConversationHistory(supabaseClient: any, phoneNumber: string):
       } else if (msg.activity_type === "whatsapp_message_sent") {
         const content = msg.metadata?.ai_response || msg.metadata?.message || "";
         if (content) {
-          history.push({ role: "assistant", content: cleanResponseForDisplay(content) });
+          history.push({ role: "assistant", content });
         }
       }
     }
@@ -307,12 +372,12 @@ async function analyzeImage(mediaId: string): Promise<string> {
         messages: [
           { 
             role: "system",
-            content: "You are Farhan AI from Lunexo Media. Analyze the image and provide helpful insights about it. If it's related to business, marketing, or design, give specific recommendations. Keep response under 200 words."
+            content: "You are Farhan AI from Lunexo Media. Analyze the image and provide helpful insights. Keep response under 200 words."
           },
           { 
             role: "user", 
             content: [
-              { type: "text", text: "Please analyze this image and provide insights:" },
+              { type: "text", text: "Analyze this image:" },
               { type: "image_url", image_url: { url: `data:image/jpeg;base64,${imageBase64}` } }
             ]
           }
@@ -422,6 +487,8 @@ async function transcribeVoiceMessage(mediaId: string): Promise<string> {
 // Send WhatsApp message
 async function sendWhatsAppMessage(to: string, message: string): Promise<boolean> {
   try {
+    console.log(`Sending WhatsApp to ${to}: ${message.substring(0, 50)}...`);
+    
     const response = await fetch(
       `https://graph.facebook.com/v18.0/${META_PHONE_ID}/messages`,
       {
@@ -440,7 +507,15 @@ async function sendWhatsAppMessage(to: string, message: string): Promise<boolean
       }
     );
 
-    return response.ok;
+    const result = await response.json();
+    console.log("WhatsApp API response:", result);
+    
+    if (!response.ok) {
+      console.error("WhatsApp send failed:", result);
+      return false;
+    }
+    
+    return true;
   } catch (error) {
     console.error("Error sending WhatsApp:", error);
     return false;
@@ -469,7 +544,7 @@ async function sendWhatsAppWithButtons(to: string, message: string, buttons: Arr
             action: {
               buttons: buttons.map((btn) => ({
                 type: "reply",
-                reply: { id: btn.id, title: btn.title },
+                reply: { id: btn.id, title: btn.title.substring(0, 20) },
               })),
             },
           },
@@ -499,8 +574,9 @@ function shouldSendQuickReplies(message: string, conversationLength: number): bo
 
 function isBookingRequest(message: string): boolean {
   const bookingTriggers = [
-    "book_call", "📞 book a call", "book a call", "schedule call", 
-    "i want to book", "let's book", "booking", "schedule", "appointment"
+    "book_call", "book a call", "schedule call", 
+    "i want to book", "let's book", "booking", "schedule", 
+    "appointment", "book call", "meet", "meeting"
   ];
   return bookingTriggers.some(trigger => message.toLowerCase().includes(trigger));
 }
@@ -595,51 +671,90 @@ const handler = async (req: Request): Promise<Response> => {
 
           // Process message
           if (messageText && messageText !== "[Voice message - transcription failed]") {
-            const conversationHistory = await getConversationHistory(supabaseClient, from);
+            const tracker = getBookingTracker(from);
+            let aiResponse: string = "";
+            let bookingCreated = false;
             
-            let aiResponse: string;
-            
+            // Check if we're in booking flow (step > 0)
+            if (tracker.step > 0) {
+              // Try to extract the field for current step
+              const extractedValue = extractBookingField(messageText, tracker.step);
+              
+              if (extractedValue) {
+                // Save the extracted value
+                switch(tracker.step) {
+                  case 1: tracker.name = extractedValue; break;
+                  case 2: tracker.email = extractedValue; break;
+                  case 3: tracker.date = extractedValue; break;
+                  case 4: tracker.time = extractedValue; break;
+                  case 5: tracker.platform = extractedValue; break;
+                  case 6: tracker.service = extractedValue; break;
+                }
+                
+                // Check if booking is complete
+                if (isBookingComplete(tracker)) {
+                  // Create the booking
+                  const created = await createBooking(supabaseClient, tracker, from);
+                  if (created) {
+                    bookingCreated = true;
+                    aiResponse = `✅ *Booking Confirmed!*
+
+Thank you, ${tracker.name}! Your discovery call is booked.
+
+📅 *Date:* ${tracker.date}
+⏰ *Time:* ${tracker.time}
+💻 *Platform:* ${tracker.platform}
+🎯 *Service:* ${tracker.service}
+
+📧 Confirmation email sent to ${tracker.email}
+
+We look forward to speaking with you! 🚀`;
+                    clearBookingTracker(from);
+                  } else {
+                    aiResponse = "Sorry, there was an error creating your booking. Please try again or call us at +1 (702) 483-0749.";
+                  }
+                } else {
+                  // Move to next step
+                  tracker.step++;
+                  aiResponse = getBookingQuestion(tracker.step, tracker);
+                }
+              } else {
+                // Invalid input, ask again
+                if (tracker.step === 2) {
+                  aiResponse = "Please enter a valid email address (example: yourname@email.com):";
+                } else {
+                  aiResponse = getBookingQuestion(tracker.step, tracker);
+                }
+              }
+            }
+            // Check if user wants to start booking
+            else if (isBookingRequest(messageText)) {
+              tracker.step = 1;
+              aiResponse = getBookingQuestion(1, tracker);
+            }
             // Handle image analysis
-            if (isImageMessage && imageAnalysis) {
+            else if (isImageMessage && imageAnalysis) {
               aiResponse = `📸 *Image Analysis*\n\n${imageAnalysis}\n\nWant to discuss how we can help with your project? Just let me know! 🚀`;
-            } else if (isBookingRequest(messageText) && conversationHistory.length < 3) {
-              aiResponse = `Great! I'd love to help you book a free discovery call! 🎉
-
-Let me collect a few details to get you scheduled.
-
-First, what's your full name?`;
-            } else {
+            }
+            // Regular AI response
+            else {
+              const conversationHistory = await getConversationHistory(supabaseClient, from);
               aiResponse = await generateAIResponse(messageText, conversationHistory);
             }
             
-            // Check for booking data
-            const bookingResult = parseBookingData(aiResponse);
-            if (bookingResult.hasBooking) {
-              const bookingCreated = await createBooking(
-                supabaseClient, 
-                bookingResult.data, 
-                from, 
-                customerName
-              );
-              
-              if (bookingCreated) {
-                console.log("Booking created and email sent from WhatsApp");
-              }
-            }
-            
-            const displayResponse = cleanResponseForDisplay(aiResponse);
-            
             // Send response
             let sent = false;
-            if (shouldSendQuickReplies(messageText, conversationHistory.length)) {
-              sent = await sendWhatsAppWithButtons(from, displayResponse, [
+            const conversationHistory = await getConversationHistory(supabaseClient, from);
+            
+            if (tracker.step === 0 && shouldSendQuickReplies(messageText, conversationHistory.length)) {
+              sent = await sendWhatsAppWithButtons(from, aiResponse, [
                 { id: "book_call", title: "📞 Book a Call" },
                 { id: "view_services", title: "🚀 View Services" },
                 { id: "get_pricing", title: "💰 Get Pricing" },
               ]);
-              if (!sent) sent = await sendWhatsAppMessage(from, displayResponse);
+              if (!sent) sent = await sendWhatsAppMessage(from, aiResponse);
             } else {
-              sent = await sendWhatsAppMessage(from, displayResponse);
+              sent = await sendWhatsAppMessage(from, aiResponse);
             }
             
             // Log outgoing message
@@ -651,11 +766,11 @@ First, what's your full name?`;
                 original_message: messageText,
                 was_voice_message: isVoiceMessage,
                 was_image_message: isImageMessage,
-                ai_response: displayResponse,
+                ai_response: aiResponse,
                 sent_successfully: sent,
-                had_buttons: shouldSendQuickReplies(messageText, conversationHistory.length),
                 is_ai_response: true,
-                booking_created: bookingResult.hasBooking,
+                booking_created: bookingCreated,
+                booking_step: tracker.step,
               },
             });
           } else if (isVoiceMessage && messageText === "[Voice message - transcription failed]") {
