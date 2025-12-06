@@ -1,10 +1,14 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { Resend } from "npm:resend@2.0.0";
 
 const VERIFY_TOKEN = Deno.env.get("WHATSAPP_VERIFY_TOKEN") || "lunexo_whatsapp_verify_2024";
 const META_ACCESS_TOKEN = Deno.env.get("META_WHATSAPP_ACCESS_TOKEN");
 const META_PHONE_ID = Deno.env.get("META_WHATSAPP_PHONE_ID");
 const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
+const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+
+const resend = new Resend(RESEND_API_KEY);
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -56,7 +60,10 @@ platform: [Zoom/Google Meet/Phone]
 service: [Service Interest]
 [/BOOKING_DATA]
 
-This will automatically create the booking. Then confirm to the user that their booking is confirmed.
+This will automatically create the booking. Then confirm to the user that their booking is confirmed and they'll receive an email confirmation.
+
+## IMAGE ANALYSIS
+When a user sends an image, you can analyze it. Describe what you see and how it might relate to digital marketing or their business needs. Be helpful and insightful.
 
 ## Your Personality
 - Friendly, professional, and helpful
@@ -65,7 +72,6 @@ This will automatically create the booking. Then confirm to the user that their 
 - Remember previous messages in the conversation
 - Use emojis sparingly
 - NEVER give website links for booking - always collect info directly
-- If someone says "book" or clicks "Book a Call", start collecting their details immediately
 
 Respond helpfully to any questions. Keep responses under 300 words.`;
 
@@ -92,15 +98,110 @@ function parseBookingData(response: string): { hasBooking: boolean; data: any } 
     }
   }
   
-  // Check if we have all required fields
   const hasAllFields = data.name && data.email && data.date && data.time && data.platform;
   
   return { hasBooking: hasAllFields, data };
 }
 
-// Remove booking data tags from response for display
+// Clean response for display
 function cleanResponseForDisplay(response: string): string {
   return response.replace(/\[BOOKING_DATA\][\s\S]*?\[\/BOOKING_DATA\]/g, '').trim();
+}
+
+// Send booking confirmation email
+async function sendBookingConfirmationEmail(bookingData: any, phoneNumber: string): Promise<boolean> {
+  try {
+    if (!RESEND_API_KEY) {
+      console.error("RESEND_API_KEY not configured");
+      return false;
+    }
+
+    // Send to customer
+    await resend.emails.send({
+      from: "Lunexo Media <hello@lunexomedia.com>",
+      to: [bookingData.email],
+      subject: "🎉 Your Discovery Call is Confirmed - Lunexo Media",
+      html: `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <style>
+            body { font-family: 'Segoe UI', Arial, sans-serif; background: #0a0a0f; color: #ffffff; margin: 0; padding: 0; }
+            .container { max-width: 600px; margin: 0 auto; padding: 40px 20px; }
+            .header { text-align: center; margin-bottom: 30px; }
+            .logo { font-size: 28px; font-weight: bold; background: linear-gradient(135deg, #6366f1, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+            .card { background: linear-gradient(135deg, rgba(99,102,241,0.1), rgba(168,85,247,0.1)); border: 1px solid rgba(99,102,241,0.3); border-radius: 16px; padding: 30px; margin-bottom: 20px; }
+            .title { font-size: 24px; margin-bottom: 20px; color: #ffffff; }
+            .detail { margin: 12px 0; padding: 12px; background: rgba(255,255,255,0.05); border-radius: 8px; }
+            .label { color: #a1a1aa; font-size: 12px; text-transform: uppercase; margin-bottom: 4px; }
+            .value { color: #ffffff; font-size: 16px; font-weight: 500; }
+            .cta { display: inline-block; background: linear-gradient(135deg, #6366f1, #a855f7); color: white; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: 600; margin-top: 20px; }
+            .footer { text-align: center; margin-top: 30px; color: #71717a; font-size: 14px; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <div class="logo">Lunexo Media</div>
+            </div>
+            <div class="card">
+              <div class="title">🎉 Your Call is Confirmed!</div>
+              <p style="color: #d1d5db;">Hi ${bookingData.name},</p>
+              <p style="color: #d1d5db;">Thank you for booking a discovery call with us! We're excited to learn about your business and discuss how we can help you grow.</p>
+              
+              <div class="detail">
+                <div class="label">📅 Date</div>
+                <div class="value">${bookingData.date}</div>
+              </div>
+              <div class="detail">
+                <div class="label">⏰ Time</div>
+                <div class="value">${bookingData.time}</div>
+              </div>
+              <div class="detail">
+                <div class="label">💻 Platform</div>
+                <div class="value">${bookingData.platform}</div>
+              </div>
+              <div class="detail">
+                <div class="label">🎯 Interest</div>
+                <div class="value">${bookingData.service || 'General Consultation'}</div>
+              </div>
+              
+              <p style="color: #d1d5db; margin-top: 20px;">We'll send you the meeting link before the call. If you need to reschedule, just reply to this email or WhatsApp us!</p>
+            </div>
+            <div class="footer">
+              <p>Lunexo Media | New York, NY</p>
+              <p>📞 +1 (702) 483-0749 | ✉️ hello@lunexomedia.com</p>
+            </div>
+          </div>
+        </body>
+        </html>
+      `,
+    });
+
+    // Send to admin
+    await resend.emails.send({
+      from: "Lunexo Media <hello@lunexomedia.com>",
+      to: ["hello@lunexomedia.com"],
+      subject: `📅 New WhatsApp Booking: ${bookingData.name}`,
+      html: `
+        <h2>New Booking from WhatsApp</h2>
+        <p><strong>Name:</strong> ${bookingData.name}</p>
+        <p><strong>Email:</strong> ${bookingData.email}</p>
+        <p><strong>Phone:</strong> ${phoneNumber}</p>
+        <p><strong>Date:</strong> ${bookingData.date}</p>
+        <p><strong>Time:</strong> ${bookingData.time}</p>
+        <p><strong>Platform:</strong> ${bookingData.platform}</p>
+        <p><strong>Service Interest:</strong> ${bookingData.service || 'Not specified'}</p>
+        <p><strong>Source:</strong> WhatsApp</p>
+      `,
+    });
+
+    console.log("Booking confirmation emails sent successfully");
+    return true;
+  } catch (error) {
+    console.error("Error sending booking email:", error);
+    return false;
+  }
 }
 
 // Create booking in database
@@ -125,6 +226,9 @@ async function createBooking(supabaseClient: any, bookingData: any, phoneNumber:
       return false;
     }
     
+    // Send confirmation email
+    await sendBookingConfirmationEmail(bookingData, phoneNumber);
+    
     console.log("Booking created successfully");
     return true;
   } catch (error) {
@@ -133,7 +237,7 @@ async function createBooking(supabaseClient: any, bookingData: any, phoneNumber:
   }
 }
 
-// Get conversation history from database
+// Get conversation history
 async function getConversationHistory(supabaseClient: any, phoneNumber: string): Promise<Array<{ role: string; content: string }>> {
   try {
     const { data, error } = await supabaseClient
@@ -144,14 +248,7 @@ async function getConversationHistory(supabaseClient: any, phoneNumber: string):
       .order("created_at", { ascending: true })
       .limit(20);
 
-    if (error) {
-      console.error("Error fetching conversation history:", error);
-      return [];
-    }
-
-    if (!data || data.length === 0) {
-      return [];
-    }
+    if (error || !data) return [];
 
     const history: Array<{ role: string; content: string }> = [];
     for (const msg of data) {
@@ -167,8 +264,6 @@ async function getConversationHistory(supabaseClient: any, phoneNumber: string):
         }
       }
     }
-
-    console.log(`Found ${history.length} previous messages for ${phoneNumber}`);
     return history;
   } catch (error) {
     console.error("Error getting conversation history:", error);
@@ -176,11 +271,72 @@ async function getConversationHistory(supabaseClient: any, phoneNumber: string):
   }
 }
 
-// Generate AI response with conversation history
+// Download and analyze image
+async function analyzeImage(mediaId: string): Promise<string> {
+  try {
+    console.log("Downloading image for analysis:", mediaId);
+    
+    const mediaResponse = await fetch(
+      `https://graph.facebook.com/v18.0/${mediaId}`,
+      { headers: { "Authorization": `Bearer ${META_ACCESS_TOKEN}` } }
+    );
+
+    if (!mediaResponse.ok) return "";
+
+    const mediaData = await mediaResponse.json();
+    const imageResponse = await fetch(mediaData.url, {
+      headers: { "Authorization": `Bearer ${META_ACCESS_TOKEN}` },
+    });
+
+    if (!imageResponse.ok) return "";
+
+    const imageBuffer = await imageResponse.arrayBuffer();
+    const imageBase64 = btoa(String.fromCharCode(...new Uint8Array(imageBuffer)));
+    
+    console.log("Image downloaded, size:", imageBuffer.byteLength, "bytes");
+    
+    // Analyze with AI
+    const analyzeResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${LOVABLE_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "google/gemini-2.5-flash",
+        messages: [
+          { 
+            role: "system",
+            content: "You are Farhan AI from Lunexo Media. Analyze the image and provide helpful insights about it. If it's related to business, marketing, or design, give specific recommendations. Keep response under 200 words."
+          },
+          { 
+            role: "user", 
+            content: [
+              { type: "text", text: "Please analyze this image and provide insights:" },
+              { type: "image_url", image_url: { url: `data:image/jpeg;base64,${imageBase64}` } }
+            ]
+          }
+        ],
+        max_tokens: 500,
+      }),
+    });
+
+    if (!analyzeResponse.ok) {
+      console.error("Image analysis error:", await analyzeResponse.text());
+      return "";
+    }
+
+    const analyzeData = await analyzeResponse.json();
+    return analyzeData.choices?.[0]?.message?.content || "";
+  } catch (error) {
+    console.error("Error analyzing image:", error);
+    return "";
+  }
+}
+
+// Generate AI response
 async function generateAIResponse(userMessage: string, conversationHistory: Array<{ role: string; content: string }>): Promise<string> {
   try {
-    console.log("Generating AI response with", conversationHistory.length, "previous messages");
-    
     const messages = [
       { role: "system", content: FARHAN_AI_SYSTEM_PROMPT },
       ...conversationHistory,
@@ -201,48 +357,33 @@ async function generateAIResponse(userMessage: string, conversationHistory: Arra
     });
 
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error("Lovable AI error:", response.status, errorText);
-      return "I'm having trouble right now. Please try again or call us at +1 (702) 483-0749. 📞";
+      return "I'm having trouble right now. Please call us at +1 (702) 483-0749. 📞";
     }
 
     const data = await response.json();
-    const aiResponse = data.choices?.[0]?.message?.content || "I couldn't generate a response. Please contact hello@lunexomedia.com.";
-    
-    console.log("AI Response generated:", aiResponse.substring(0, 100) + "...");
-    return aiResponse;
+    return data.choices?.[0]?.message?.content || "Please contact hello@lunexomedia.com.";
   } catch (error) {
     console.error("Error generating AI response:", error);
-    return "Sorry, I'm having technical issues. Call us at +1 (702) 483-0749. 🙏";
+    return "Sorry, technical issues. Call us at +1 (702) 483-0749. 🙏";
   }
 }
 
 // Transcribe voice message
 async function transcribeVoiceMessage(mediaId: string): Promise<string> {
   try {
-    console.log("Downloading voice message:", mediaId);
-    
     const mediaResponse = await fetch(
       `https://graph.facebook.com/v18.0/${mediaId}`,
-      {
-        headers: { "Authorization": `Bearer ${META_ACCESS_TOKEN}` },
-      }
+      { headers: { "Authorization": `Bearer ${META_ACCESS_TOKEN}` } }
     );
 
-    if (!mediaResponse.ok) {
-      console.error("Failed to get media URL");
-      return "";
-    }
+    if (!mediaResponse.ok) return "";
 
     const mediaData = await mediaResponse.json();
     const audioResponse = await fetch(mediaData.url, {
       headers: { "Authorization": `Bearer ${META_ACCESS_TOKEN}` },
     });
 
-    if (!audioResponse.ok) {
-      console.error("Failed to download audio");
-      return "";
-    }
+    if (!audioResponse.ok) return "";
 
     const audioBuffer = await audioResponse.arrayBuffer();
     const audioBase64 = btoa(String.fromCharCode(...new Uint8Array(audioBuffer)));
@@ -259,7 +400,7 @@ async function transcribeVoiceMessage(mediaId: string): Promise<string> {
           { 
             role: "user", 
             content: [
-              { type: "text", text: "Please transcribe this audio message. Only provide the transcription, nothing else." },
+              { type: "text", text: "Transcribe this audio. Only provide the transcription." },
               { type: "input_audio", input_audio: { data: audioBase64, format: "ogg" } }
             ]
           }
@@ -268,19 +409,17 @@ async function transcribeVoiceMessage(mediaId: string): Promise<string> {
       }),
     });
 
-    if (!transcribeResponse.ok) {
-      return "";
-    }
+    if (!transcribeResponse.ok) return "";
 
     const transcribeData = await transcribeResponse.json();
     return transcribeData.choices?.[0]?.message?.content || "";
   } catch (error) {
-    console.error("Error transcribing voice message:", error);
+    console.error("Error transcribing voice:", error);
     return "";
   }
 }
 
-// Send WhatsApp text message
+// Send WhatsApp message
 async function sendWhatsAppMessage(to: string, message: string): Promise<boolean> {
   try {
     const response = await fetch(
@@ -301,18 +440,14 @@ async function sendWhatsAppMessage(to: string, message: string): Promise<boolean
       }
     );
 
-    if (!response.ok) {
-      console.error("WhatsApp send error:", await response.text());
-      return false;
-    }
-    return true;
+    return response.ok;
   } catch (error) {
-    console.error("Error sending WhatsApp message:", error);
+    console.error("Error sending WhatsApp:", error);
     return false;
   }
 }
 
-// Send WhatsApp message with buttons
+// Send WhatsApp with buttons
 async function sendWhatsAppWithButtons(to: string, message: string, buttons: Array<{ id: string; title: string }>): Promise<boolean> {
   try {
     const response = await fetch(
@@ -342,18 +477,13 @@ async function sendWhatsAppWithButtons(to: string, message: string, buttons: Arr
       }
     );
 
-    if (!response.ok) {
-      console.error("WhatsApp button send error:", await response.text());
-      return false;
-    }
-    return true;
+    return response.ok;
   } catch (error) {
     console.error("Error sending WhatsApp with buttons:", error);
     return false;
   }
 }
 
-// Check if should send quick replies
 function shouldSendQuickReplies(message: string, conversationLength: number): boolean {
   const triggerKeywords = ["hello", "hi", "hey", "help", "start", "info", "services", "pricing"];
   const lowerMessage = message.toLowerCase();
@@ -367,12 +497,10 @@ function shouldSendQuickReplies(message: string, conversationLength: number): bo
   );
 }
 
-// Check if booking request
 function isBookingRequest(message: string): boolean {
   const bookingTriggers = [
     "book_call", "📞 book a call", "book a call", "schedule call", 
-    "i want to book", "let's book", "booking", "schedule", "appointment",
-    "set up a call", "meet", "meeting"
+    "i want to book", "let's book", "booking", "schedule", "appointment"
   ];
   return bookingTriggers.some(trigger => message.toLowerCase().includes(trigger));
 }
@@ -421,7 +549,10 @@ const handler = async (req: Request): Promise<Response> => {
 
           let messageText = "";
           let isVoiceMessage = false;
+          let isImageMessage = false;
+          let imageAnalysis = "";
 
+          // Handle different message types
           if (messageType === "text") {
             messageText = message.text?.body || "";
           } else if (messageType === "audio") {
@@ -430,6 +561,15 @@ const handler = async (req: Request): Promise<Response> => {
             if (mediaId) {
               messageText = await transcribeVoiceMessage(mediaId);
               if (!messageText) messageText = "[Voice message - transcription failed]";
+            }
+          } else if (messageType === "image") {
+            isImageMessage = true;
+            const mediaId = message.image?.id;
+            const caption = message.image?.caption || "";
+            if (mediaId) {
+              console.log("Processing image from:", customerName);
+              imageAnalysis = await analyzeImage(mediaId);
+              messageText = caption ? `[Image with caption: ${caption}]` : "[Image received]";
             }
           } else if (messageType === "interactive") {
             messageText = message.interactive?.button_reply?.title || 
@@ -447,29 +587,32 @@ const handler = async (req: Request): Promise<Response> => {
               message: messageText,
               type: messageType,
               is_voice: isVoiceMessage,
+              is_image: isImageMessage,
+              image_analysis: imageAnalysis,
               timestamp: timestamp,
             },
           });
 
+          // Process message
           if (messageText && messageText !== "[Voice message - transcription failed]") {
             const conversationHistory = await getConversationHistory(supabaseClient, from);
             
             let aiResponse: string;
             
-            // Check if it's a booking request
-            if (isBookingRequest(messageText) && conversationHistory.length < 3) {
-              // Start booking flow
+            // Handle image analysis
+            if (isImageMessage && imageAnalysis) {
+              aiResponse = `📸 *Image Analysis*\n\n${imageAnalysis}\n\nWant to discuss how we can help with your project? Just let me know! 🚀`;
+            } else if (isBookingRequest(messageText) && conversationHistory.length < 3) {
               aiResponse = `Great! I'd love to help you book a free discovery call! 🎉
 
 Let me collect a few details to get you scheduled.
 
 First, what's your full name?`;
             } else {
-              // Generate AI response with history
               aiResponse = await generateAIResponse(messageText, conversationHistory);
             }
             
-            // Check if AI response contains booking data
+            // Check for booking data
             const bookingResult = parseBookingData(aiResponse);
             if (bookingResult.hasBooking) {
               const bookingCreated = await createBooking(
@@ -480,11 +623,10 @@ First, what's your full name?`;
               );
               
               if (bookingCreated) {
-                console.log("Booking created successfully from WhatsApp");
+                console.log("Booking created and email sent from WhatsApp");
               }
             }
             
-            // Clean response for display
             const displayResponse = cleanResponseForDisplay(aiResponse);
             
             // Send response
@@ -508,6 +650,7 @@ First, what's your full name?`;
                 name: customerName,
                 original_message: messageText,
                 was_voice_message: isVoiceMessage,
+                was_image_message: isImageMessage,
                 ai_response: displayResponse,
                 sent_successfully: sent,
                 had_buttons: shouldSendQuickReplies(messageText, conversationHistory.length),
@@ -516,7 +659,7 @@ First, what's your full name?`;
               },
             });
           } else if (isVoiceMessage && messageText === "[Voice message - transcription failed]") {
-            const fallbackMessage = "I couldn't process your voice message clearly. Could you please type your message or try again? 🎤\n\nOr call us: +1 (702) 483-0749";
+            const fallbackMessage = "I couldn't process your voice message. Please type your message or try again. 🎤\n\nOr call: +1 (702) 483-0749";
             await sendWhatsAppMessage(from, fallbackMessage);
           }
         }
