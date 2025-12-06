@@ -89,7 +89,9 @@ const handler = async (req: Request): Promise<Response> => {
     else if (requestBody.message?.analysis?.structuredData) {
       console.log("Format 3: VAPI end-of-call report with message.analysis.structuredData");
       const structuredData = requestBody.message.analysis.structuredData;
-      if (structuredData && structuredData.name) {
+      // Use name OR business_name as fallback (VAPI sometimes puts name in business_name)
+      const callerName = structuredData.name || structuredData.business_name;
+      if (structuredData && callerName) {
         // Clean up email if it contains spoken format
         let cleanEmail = structuredData.email || "";
         if (cleanEmail.includes(" at ") || cleanEmail.includes(" dot ")) {
@@ -100,7 +102,7 @@ const handler = async (req: Request): Promise<Response> => {
         }
         
         bookingData = {
-          name: structuredData.name,
+          name: callerName,
           email: cleanEmail,
           phone: structuredData.phone || "",
           meeting_date: structuredData.meeting_date || structuredData.date || "",
@@ -119,7 +121,9 @@ const handler = async (req: Request): Promise<Response> => {
     else if (requestBody.analysis?.structuredData) {
       console.log("Format 4: Direct analysis.structuredData format");
       const structuredData = requestBody.analysis.structuredData;
-      if (structuredData && structuredData.name) {
+      // Use name OR business_name as fallback
+      const callerName = structuredData.name || structuredData.business_name;
+      if (structuredData && callerName) {
         let cleanEmail = structuredData.email || "";
         if (cleanEmail.includes(" at ") || cleanEmail.includes(" dot ")) {
           cleanEmail = cleanEmail
@@ -129,7 +133,7 @@ const handler = async (req: Request): Promise<Response> => {
         }
         
         bookingData = {
-          name: structuredData.name,
+          name: callerName,
           email: cleanEmail,
           phone: structuredData.phone || "",
           meeting_date: structuredData.meeting_date || structuredData.date || "",
