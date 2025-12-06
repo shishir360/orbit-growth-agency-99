@@ -14,13 +14,13 @@ interface VAPIBookingData {
   name: string;
   email: string;
   phone: string;
-  goals?: string;
   meeting_date: string;
   meeting_time: string;
+  business_type?: string;
   lead_temperature?: string;
-  meeting_platform?: string;
-  service_interest?: string[];
-  meeting_requested?: boolean;
+  meeting_platform: string;
+  service_interest?: string;
+  meeting_requested?: string;
   next_step_requested?: string;
 }
 
@@ -54,9 +54,9 @@ const handler = async (req: Request): Promise<Response> => {
           name: args.name,
           email: args.email,
           phone: args.phone,
-          goals: args.goals,
           meeting_date: args.meeting_date,
           meeting_time: args.meeting_time,
+          business_type: args.business_type,
           lead_temperature: args.lead_temperature,
           meeting_platform: args.meeting_platform || "Google Meet",
           service_interest: args.service_interest,
@@ -66,9 +66,10 @@ const handler = async (req: Request): Promise<Response> => {
 
         // Build notes from additional info
         const notesArray: string[] = ["Booked via VAPI Voice Agent"];
-        if (bookingData.goals) notesArray.push(`Goals: ${bookingData.goals}`);
+        if (bookingData.business_type) notesArray.push(`Business Type: ${bookingData.business_type}`);
         if (bookingData.lead_temperature) notesArray.push(`Lead Temperature: ${bookingData.lead_temperature}`);
-        if (bookingData.service_interest?.length) notesArray.push(`Services: ${bookingData.service_interest.join(", ")}`);
+        if (bookingData.service_interest) notesArray.push(`Services: ${bookingData.service_interest}`);
+        if (bookingData.meeting_requested) notesArray.push(`Meeting Requested: ${bookingData.meeting_requested}`);
         if (bookingData.next_step_requested) notesArray.push(`Next Step: ${bookingData.next_step_requested}`);
         const notes = notesArray.join(" | ");
 
@@ -151,8 +152,8 @@ const handler = async (req: Request): Promise<Response> => {
                     <p><strong>💻 Platform:</strong> ${bookingData.meeting_platform}</p>
                     <p><strong>📧 Email:</strong> ${bookingData.email}</p>
                     <p><strong>📱 Phone:</strong> ${bookingData.phone}</p>
-                    ${bookingData.goals ? `<p><strong>🎯 Goals:</strong> ${bookingData.goals}</p>` : ""}
-                    ${bookingData.service_interest?.length ? `<p><strong>🛠️ Services:</strong><br/>${bookingData.service_interest.map(s => `<span class="services-badge">${s}</span>`).join(" ")}</p>` : ""}
+                    ${bookingData.business_type ? `<p><strong>🏢 Business Type:</strong> ${bookingData.business_type}</p>` : ""}
+                    ${bookingData.service_interest ? `<p><strong>🛠️ Services:</strong> ${bookingData.service_interest}</p>` : ""}
                     <p><strong>Booking ID:</strong> ${booking.id}</p>
                   </div>
 
@@ -200,9 +201,11 @@ const handler = async (req: Request): Promise<Response> => {
                     <p><strong>📅 Date:</strong> ${bookingData.meeting_date}</p>
                     <p><strong>🕐 Time:</strong> ${bookingData.meeting_time}</p>
                     <p><strong>💻 Platform:</strong> ${bookingData.meeting_platform}</p>
-                    ${bookingData.goals ? `<p><strong>🎯 Goals:</strong> ${bookingData.goals}</p>` : ""}
-                    ${bookingData.service_interest?.length ? `<p><strong>🛠️ Services Interested:</strong><br/>${bookingData.service_interest.map(s => `<span class="services-badge">${s}</span>`).join(" ")}</p>` : ""}
+                    ${bookingData.business_type ? `<p><strong>🏢 Business Type:</strong> ${bookingData.business_type}</p>` : ""}
+                    ${bookingData.service_interest ? `<p><strong>🛠️ Services Interested:</strong> ${bookingData.service_interest}</p>` : ""}
                     ${bookingData.lead_temperature ? `<p><strong>🌡️ Lead Temperature:</strong> ${bookingData.lead_temperature}</p>` : ""}
+                    ${bookingData.meeting_requested ? `<p><strong>📋 Meeting Requested:</strong> ${bookingData.meeting_requested}</p>` : ""}
+                    ${bookingData.next_step_requested ? `<p><strong>➡️ Next Step:</strong> ${bookingData.next_step_requested}</p>` : ""}
                     <p><strong>Booking ID:</strong> ${booking.id}</p>
                     <p><strong>Source:</strong> VAPI Voice Agent</p>
                   </div>
