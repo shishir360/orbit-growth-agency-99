@@ -9,6 +9,68 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// Send plain text message
+async function sendTextMessage(to: string, message: string): Promise<any> {
+  const response = await fetch(
+    `https://graph.facebook.com/v18.0/${META_PHONE_ID}/messages`,
+    {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${META_ACCESS_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        messaging_product: "whatsapp",
+        recipient_type: "individual",
+        to: to,
+        type: "text",
+        text: { body: message },
+      }),
+    }
+  );
+  return response;
+}
+
+// Send message with quick reply buttons
+async function sendButtonMessage(
+  to: string, 
+  message: string, 
+  buttons: Array<{ id: string; title: string }>
+): Promise<any> {
+  const response = await fetch(
+    `https://graph.facebook.com/v18.0/${META_PHONE_ID}/messages`,
+    {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${META_ACCESS_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        messaging_product: "whatsapp",
+        recipient_type: "individual",
+        to: to,
+        type: "interactive",
+        interactive: {
+          type: "button",
+          body: {
+            text: message,
+          },
+          action: {
+            buttons: buttons.slice(0, 3).map((btn) => ({
+              type: "reply",
+              reply: {
+                id: btn.id,
+                title: btn.title.substring(0, 20), // Max 20 chars
+              },
+            })),
+          },
+        },
+      }),
+    }
+  );
+  return response;
+}
+
 const handler = async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -19,35 +81,35 @@ const handler = async (req: Request): Promise<Response> => {
       throw new Error("WhatsApp API credentials not configured");
     }
 
-    const { to, message } = await req.json();
+    const { to, message, buttons } = await req.json();
 
     if (!to || !message) {
       throw new Error("Phone number and message are required");
     }
 
-    // Clean phone number - remove any non-digit characters except leading +
+    // Clean phone number - remove any non-digit characters
     let cleanPhone = to.replace(/[^\d]/g, "");
     
     console.log(`Sending WhatsApp message to ${cleanPhone}`);
 
-    // Send message via WhatsApp API
-    const response = await fetch(
-      `https://graph.facebook.com/v18.0/${META_PHONE_ID}/messages`,
-      {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${META_ACCESS_TOKEN}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          messaging_product: "whatsapp",
-          recipient_type: "individual",
-          to: cleanPhone,
-          type: "text",
-          text: { body: message },
-        }),
+    let response;
+    let hasButtons = false;
+
+    // Send with buttons if provided
+    if (buttons && Array.isArray(buttons) && buttons.length > 0) {
+      console.log("Sending with quick reply buttons:", buttons);
+      response = await sendButtonMessage(cleanPhone, message, buttons);
+      hasButtons = true;
+      
+      // Fallback to text if buttons fail
+      if (!response.ok) {
+        console.log("Button message failed, falling back to text");
+        response = await sendTextMessage(cleanPhone, message);
+        hasButtons = false;
       }
-    );
+    } else {
+      response = await sendTextMessage(cleanPhone, message);
+    }
 
     const result = await response.json();
     console.log("WhatsApp API response:", result);
@@ -70,6 +132,8 @@ const handler = async (req: Request): Promise<Response> => {
         message: message,
         sent_by: "admin",
         sent_successfully: true,
+        had_buttons: hasButtons,
+        buttons: hasButtons ? buttons : null,
         message_id: result.messages?.[0]?.id,
       },
     });
@@ -78,6 +142,7 @@ const handler = async (req: Request): Promise<Response> => {
       JSON.stringify({
         success: true,
         messageId: result.messages?.[0]?.id,
+        hadButtons: hasButtons,
       }),
       {
         status: 200,

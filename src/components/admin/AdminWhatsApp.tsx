@@ -5,8 +5,9 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
-import { Send, MessageCircle, Phone, RefreshCw, Bot, User } from "lucide-react";
+import { Send, MessageCircle, Phone, RefreshCw, Bot, User, Mic, MousePointer } from "lucide-react";
 import { format } from "date-fns";
 
 interface WhatsAppMessage {
@@ -22,6 +23,9 @@ interface WhatsAppMessage {
     sent_successfully?: boolean;
     type?: string;
     timestamp?: string;
+    is_voice?: boolean;
+    was_voice_message?: boolean;
+    had_buttons?: boolean;
   };
   created_at: string;
 }
@@ -32,6 +36,7 @@ const AdminWhatsApp = () => {
   const [sending, setSending] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [messageText, setMessageText] = useState("");
+  const [includeButtons, setIncludeButtons] = useState(false);
   const { toast } = useToast();
 
   const fetchMessages = async () => {
@@ -95,18 +100,31 @@ const AdminWhatsApp = () => {
 
     setSending(true);
     try {
+      const body: any = {
+        to: phoneNumber,
+        message: messageText,
+      };
+
+      // Add quick reply buttons if enabled
+      if (includeButtons) {
+        body.buttons = [
+          { id: "book_call", title: "📞 Book a Call" },
+          { id: "view_services", title: "🚀 View Services" },
+          { id: "get_pricing", title: "💰 Get Pricing" },
+        ];
+      }
+
       const response = await supabase.functions.invoke("send-whatsapp-message", {
-        body: {
-          to: phoneNumber,
-          message: messageText,
-        },
+        body,
       });
 
       if (response.error) throw response.error;
 
       toast({
         title: "Message Sent",
-        description: "WhatsApp message sent successfully",
+        description: includeButtons 
+          ? "WhatsApp message sent with quick reply buttons" 
+          : "WhatsApp message sent successfully",
       });
 
       setMessageText("");
@@ -187,6 +205,20 @@ const AdminWhatsApp = () => {
               rows={3}
             />
           </div>
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              id="include-buttons"
+              checked={includeButtons}
+              onCheckedChange={(checked) => setIncludeButtons(checked === true)}
+            />
+            <label
+              htmlFor="include-buttons"
+              className="text-sm text-muted-foreground cursor-pointer flex items-center gap-2"
+            >
+              <MousePointer className="h-4 w-4" />
+              Include Quick Reply Buttons (Book a Call, View Services, Get Pricing)
+            </label>
+          </div>
           <Button
             onClick={sendMessage}
             disabled={sending || !phoneNumber || !messageText}
@@ -261,21 +293,40 @@ const AdminWhatsApp = () => {
                         >
                           <div className="flex items-center gap-2 mb-1">
                             {msg.activity_type === "whatsapp_message_received" ? (
-                              <User className="h-3 w-3" />
+                              <>
+                                <User className="h-3 w-3" />
+                                {msg.metadata?.is_voice && (
+                                  <Mic className="h-3 w-3 text-blue-400" />
+                                )}
+                              </>
                             ) : (
-                              <Bot className="h-3 w-3" />
+                              <>
+                                <Bot className="h-3 w-3" />
+                                {msg.metadata?.had_buttons && (
+                                  <MousePointer className="h-3 w-3 opacity-70" />
+                                )}
+                              </>
                             )}
                             <span className="text-xs opacity-70">
                               {msg.activity_type === "whatsapp_message_received"
-                                ? "Customer"
+                                ? msg.metadata?.is_voice 
+                                  ? "Customer (Voice)" 
+                                  : "Customer"
                                 : "Farhan AI"}
                             </span>
                           </div>
                           <p className="text-sm whitespace-pre-wrap">
                             {msg.activity_type === "whatsapp_message_received"
                               ? msg.metadata?.message
-                              : msg.metadata?.ai_response}
+                              : msg.metadata?.ai_response || msg.metadata?.message}
                           </p>
+                          {msg.metadata?.had_buttons && (
+                            <div className="flex flex-wrap gap-1 mt-2">
+                              <Badge variant="secondary" className="text-xs">📞 Book a Call</Badge>
+                              <Badge variant="secondary" className="text-xs">🚀 Services</Badge>
+                              <Badge variant="secondary" className="text-xs">💰 Pricing</Badge>
+                            </div>
+                          )}
                           <p className="text-xs opacity-50 mt-1">
                             {format(new Date(msg.created_at), "MMM d, h:mm a")}
                           </p>
