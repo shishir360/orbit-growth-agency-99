@@ -7,6 +7,7 @@ const META_ACCESS_TOKEN = Deno.env.get("META_WHATSAPP_ACCESS_TOKEN");
 const META_PHONE_ID = Deno.env.get("META_WHATSAPP_PHONE_ID");
 const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+const ADMIN_WHATSAPP_NUMBER = Deno.env.get("ADMIN_WHATSAPP_NUMBER") || "8801743988856";
 
 const resend = new Resend(RESEND_API_KEY);
 
@@ -221,6 +222,48 @@ async function sendBookingConfirmationEmail(bookingData: BookingState, phoneNumb
   }
 }
 
+// Send WhatsApp notification to admin
+async function sendAdminWhatsAppNotification(bookingData: BookingState, customerPhone: string): Promise<boolean> {
+  try {
+    const adminMessage = `📅 *নতুন বুকিং - WhatsApp থেকে!*
+
+👤 *নাম:* ${bookingData.name}
+📧 *ইমেইল:* ${bookingData.email}
+📞 *ফোন:* ${customerPhone}
+📅 *তারিখ:* ${bookingData.date}
+⏰ *সময়:* ${bookingData.time}
+💻 *প্ল্যাটফর্ম:* ${bookingData.platform}
+🎯 *সার্ভিস:* ${bookingData.service}
+
+✅ বুকিং কনফার্ম হয়েছে!`;
+
+    const response = await fetch(
+      `https://graph.facebook.com/v18.0/${META_PHONE_ID}/messages`,
+      {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${META_ACCESS_TOKEN}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          messaging_product: "whatsapp",
+          recipient_type: "individual",
+          to: ADMIN_WHATSAPP_NUMBER,
+          type: "text",
+          text: { body: adminMessage },
+        }),
+      }
+    );
+
+    const result = await response.json();
+    console.log("Admin WhatsApp notification sent:", result);
+    return response.ok;
+  } catch (error) {
+    console.error("Error sending admin WhatsApp:", error);
+    return false;
+  }
+}
+
 // Create booking in database
 async function createBooking(supabaseClient: any, state: BookingState, phoneNumber: string): Promise<boolean> {
   try {
@@ -243,8 +286,13 @@ async function createBooking(supabaseClient: any, state: BookingState, phoneNumb
       return false;
     }
     
+    // Send email confirmations
     await sendBookingConfirmationEmail(state, phoneNumber);
-    console.log("Booking created successfully");
+    
+    // Send WhatsApp notification to admin
+    await sendAdminWhatsAppNotification(state, phoneNumber);
+    
+    console.log("Booking created with all notifications sent!");
     return true;
   } catch (error) {
     console.error("Error in createBooking:", error);
