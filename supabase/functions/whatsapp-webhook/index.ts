@@ -1,8 +1,8 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-// Verify token for Meta webhook verification (you can customize this)
-const VERIFY_TOKEN = "lunexo_whatsapp_verify_2024";
+// Verify token from environment (set in secrets)
+const VERIFY_TOKEN = Deno.env.get("WHATSAPP_VERIFY_TOKEN") || "lunexo_whatsapp_verify_2024";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
