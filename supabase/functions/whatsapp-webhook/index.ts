@@ -23,15 +23,15 @@ const FARHAN_AI_SYSTEM_PROMPT = `You are Farhan AI, the friendly and professiona
 - Completed 50+ successful projects
 
 ## Services Offered
-1. **Website Design & Development** - Custom, responsive websites optimized for conversions
-2. **SEO (Search Engine Optimization)** - Local & national SEO to rank higher on Google
-3. **Google Ads Management** - PPC campaigns with high ROI
-4. **Facebook & Instagram Ads** - Social media advertising
-5. **AI Automation** - Chatbots, voice agents, workflow automation
-6. **AI Chatbots** - 24/7 customer support bots
-7. **Voice AI Agents** - Automated phone calls for leads
-8. **Email Automation** - Automated email marketing sequences
-9. **Workflow Automation** - Business process automation
+1. **Website Design & Development** - Custom, responsive websites optimized for conversions ($500-$5000)
+2. **SEO (Search Engine Optimization)** - Local & national SEO to rank higher on Google ($300-$1500/month)
+3. **Google Ads Management** - PPC campaigns with high ROI ($500-$2000/month)
+4. **Facebook & Instagram Ads** - Social media advertising ($400-$1500/month)
+5. **AI Automation** - Chatbots, voice agents, workflow automation ($500-$3000)
+6. **AI Chatbots** - 24/7 customer support bots ($300-$1000)
+7. **Voice AI Agents** - Automated phone calls for leads ($500-$2000)
+8. **Email Automation** - Automated email marketing sequences ($200-$800)
+9. **Workflow Automation** - Business process automation ($400-$1500)
 
 ## Key Differentiators
 - Premium, modern designs with dark theme aesthetics
@@ -41,24 +41,96 @@ const FARHAN_AI_SYSTEM_PROMPT = `You are Farhan AI, the friendly and professiona
 - Fast turnaround times
 
 ## Booking a Call
-- Users can book a free discovery call at lunexomedia.com/contact
-- Or call directly: +1 (702) 483-0749
+When someone wants to book a call, collect these details:
+1. Their full name
+2. Their email address
+3. Preferred date (e.g., tomorrow, next Monday, specific date)
+4. Preferred time (with their timezone)
+5. Meeting platform preference (Zoom, Google Meet, or Phone call)
+6. Brief description of what they need help with
+
+Once you have all details, confirm the booking and let them know the team will send a confirmation email.
 
 ## Your Personality
 - Friendly, professional, and helpful
 - Speak in a conversational tone
 - Keep responses concise but informative
-- Always encourage booking a free discovery call for detailed discussions
+- Remember previous messages in the conversation
+- If someone wants to book, guide them through the booking process step by step
 - Use emojis sparingly to be friendly
 - If you don't know something specific, direct them to contact the team
 
+IMPORTANT: You have conversation memory. Reference previous messages when relevant. If someone greeted you before, acknowledge the ongoing conversation.
+
 Respond helpfully to any questions about Lunexo Media, digital marketing, or services. Keep responses under 300 words for WhatsApp readability.`;
 
-// Generate AI response using Lovable AI
-async function generateAIResponse(userMessage: string): Promise<string> {
+// Get conversation history from database
+async function getConversationHistory(supabaseClient: any, phoneNumber: string): Promise<Array<{ role: string; content: string }>> {
   try {
-    console.log("Generating AI response for:", userMessage);
+    // Get last 20 messages for this phone number
+    const { data, error } = await supabaseClient
+      .from("visitor_activities")
+      .select("activity_type, metadata, created_at")
+      .in("activity_type", ["whatsapp_message_received", "whatsapp_message_sent"])
+      .or(`metadata->>from.eq.${phoneNumber},metadata->>to.eq.${phoneNumber}`)
+      .order("created_at", { ascending: true })
+      .limit(20);
+
+    if (error) {
+      console.error("Error fetching conversation history:", error);
+      return [];
+    }
+
+    if (!data || data.length === 0) {
+      return [];
+    }
+
+    // Convert to chat format
+    const history: Array<{ role: string; content: string }> = [];
+    for (const msg of data) {
+      if (msg.activity_type === "whatsapp_message_received") {
+        const content = msg.metadata?.message || "";
+        if (content && content !== "[Voice message - transcription failed]") {
+          history.push({ role: "user", content });
+        }
+      } else if (msg.activity_type === "whatsapp_message_sent") {
+        const content = msg.metadata?.ai_response || msg.metadata?.message || "";
+        if (content) {
+          history.push({ role: "assistant", content });
+        }
+      }
+    }
+
+    console.log(`Found ${history.length} previous messages for ${phoneNumber}`);
+    return history;
+  } catch (error) {
+    console.error("Error getting conversation history:", error);
+    return [];
+  }
+}
+
+// Check if user wants to book and extract booking info
+function detectBookingIntent(message: string, conversationHistory: Array<{ role: string; content: string }>): boolean {
+  const bookingKeywords = [
+    "book", "schedule", "appointment", "call", "meeting", "consultation",
+    "book a call", "schedule a call", "set up a meeting", "📞 book a call"
+  ];
+  const lowerMessage = message.toLowerCase();
+  return bookingKeywords.some(keyword => lowerMessage.includes(keyword));
+}
+
+// Generate AI response using Lovable AI with conversation history
+async function generateAIResponse(userMessage: string, conversationHistory: Array<{ role: string; content: string }>): Promise<string> {
+  try {
+    console.log("Generating AI response with", conversationHistory.length, "previous messages");
     
+    // Build messages array with history
+    const messages = [
+      { role: "system", content: FARHAN_AI_SYSTEM_PROMPT },
+      ...conversationHistory,
+      { role: "user", content: userMessage }
+    ];
+
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -67,10 +139,7 @@ async function generateAIResponse(userMessage: string): Promise<string> {
       },
       body: JSON.stringify({
         model: "google/gemini-2.5-flash",
-        messages: [
-          { role: "system", content: FARHAN_AI_SYSTEM_PROMPT },
-          { role: "user", content: userMessage }
-        ],
+        messages,
         max_tokens: 500,
       }),
     });
@@ -269,13 +338,32 @@ async function sendWhatsAppWithButtons(to: string, message: string, buttons: Arr
 }
 
 // Determine if we should send quick reply buttons
-function shouldSendQuickReplies(message: string, aiResponse: string): boolean {
+function shouldSendQuickReplies(message: string, conversationLength: number): boolean {
+  // Send buttons on first interaction or when asking about services
   const triggerKeywords = [
     "hello", "hi", "hey", "help", "start", "info", "services", 
     "pricing", "cost", "website", "seo", "ads", "marketing"
   ];
   const lowerMessage = message.toLowerCase();
-  return triggerKeywords.some(keyword => lowerMessage.includes(keyword));
+  
+  // First message gets buttons
+  if (conversationLength === 0) {
+    return triggerKeywords.some(keyword => lowerMessage.includes(keyword));
+  }
+  
+  // Subsequent messages - only on specific triggers
+  return ["services", "pricing", "help", "what can you do", "options"].some(
+    keyword => lowerMessage.includes(keyword)
+  );
+}
+
+// Check if this is a booking button click
+function isBookingRequest(message: string): boolean {
+  const bookingTriggers = [
+    "book_call", "📞 book a call", "book a call", "schedule call", 
+    "i want to book", "let's book", "booking"
+  ];
+  return bookingTriggers.some(trigger => message.toLowerCase().includes(trigger));
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -371,12 +459,33 @@ const handler = async (req: Request): Promise<Response> => {
 
           // Process message if we have text content
           if (messageText && messageText !== "[Voice message - transcription failed]") {
-            // Generate AI response
-            const aiResponse = await generateAIResponse(messageText);
+            // Get conversation history for context
+            const conversationHistory = await getConversationHistory(supabaseClient, from);
+            
+            // Check if booking request
+            let aiResponse: string;
+            if (isBookingRequest(messageText)) {
+              aiResponse = `Great! I'd love to help you book a discovery call with our team! 📞
+
+To schedule your free consultation, I'll need a few details:
+
+1️⃣ Your full name
+2️⃣ Your email address
+3️⃣ Preferred date (e.g., tomorrow, next Monday, or a specific date)
+4️⃣ Preferred time (with your timezone)
+5️⃣ Brief description of what you need help with
+
+Just send me these details and I'll get you booked right away! 
+
+Or if you prefer, you can book directly at lunexomedia.com/contact ✨`;
+            } else {
+              // Generate AI response with conversation history
+              aiResponse = await generateAIResponse(messageText, conversationHistory);
+            }
             
             // Check if we should send quick reply buttons
             let sent = false;
-            if (shouldSendQuickReplies(messageText, aiResponse)) {
+            if (shouldSendQuickReplies(messageText, conversationHistory.length)) {
               // Send with quick reply buttons
               sent = await sendWhatsAppWithButtons(from, aiResponse, [
                 { id: "book_call", title: "📞 Book a Call" },
@@ -403,7 +512,8 @@ const handler = async (req: Request): Promise<Response> => {
                 was_voice_message: isVoiceMessage,
                 ai_response: aiResponse,
                 sent_successfully: sent,
-                had_buttons: shouldSendQuickReplies(messageText, aiResponse),
+                had_buttons: shouldSendQuickReplies(messageText, conversationHistory.length),
+                is_ai_response: true,
               },
             });
           } else if (isVoiceMessage && messageText === "[Voice message - transcription failed]") {

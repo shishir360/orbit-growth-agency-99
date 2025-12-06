@@ -81,7 +81,7 @@ const handler = async (req: Request): Promise<Response> => {
       throw new Error("WhatsApp API credentials not configured");
     }
 
-    const { to, message, buttons } = await req.json();
+    const { to, message, buttons, isAdminReply } = await req.json();
 
     if (!to || !message) {
       throw new Error("Phone number and message are required");
@@ -90,7 +90,7 @@ const handler = async (req: Request): Promise<Response> => {
     // Clean phone number - remove any non-digit characters
     let cleanPhone = to.replace(/[^\d]/g, "");
     
-    console.log(`Sending WhatsApp message to ${cleanPhone}`);
+    console.log(`Sending WhatsApp message to ${cleanPhone}, isAdminReply: ${isAdminReply}`);
 
     let response;
     let hasButtons = false;
@@ -130,7 +130,10 @@ const handler = async (req: Request): Promise<Response> => {
       metadata: {
         to: cleanPhone,
         message: message,
-        sent_by: "admin",
+        ai_response: message, // Store in ai_response for consistent display
+        sent_by: isAdminReply ? "admin" : "system",
+        is_admin_reply: isAdminReply === true,
+        is_ai_response: isAdminReply !== true,
         sent_successfully: true,
         had_buttons: hasButtons,
         buttons: hasButtons ? buttons : null,
