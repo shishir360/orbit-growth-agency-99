@@ -26,6 +26,7 @@ import {
   Target,
   Bot,
   MessageSquare,
+  MessageCircle,
   Users,
   BookOpen,
   Briefcase,
@@ -119,7 +120,8 @@ const collapsed = state === 'collapsed';
     { to: '/admin-dashboard/reviews', icon: MessageSquare, label: 'Reviews & Feedback', section: 'technical' },
     { to: '/admin-dashboard/images', icon: Image, label: 'Media Library', section: 'technical' },
     { to: '/admin-dashboard/users', icon: Users, label: 'User Management', section: 'technical' },
-    { to: '/admin-dashboard/knowledge', icon: BookMarked, label: 'Knowledge Base', section: 'technical' }
+    { to: '/admin-dashboard/knowledge', icon: BookMarked, label: 'Knowledge Base', section: 'technical' },
+    { to: '/admin-dashboard/whatsapp', icon: MessageCircle, label: 'WhatsApp AI', section: 'technical' }
   ];
 
   const getNavCls = (path: string) => {
