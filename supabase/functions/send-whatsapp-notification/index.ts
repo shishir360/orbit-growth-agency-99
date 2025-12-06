@@ -7,6 +7,7 @@ const corsHeaders = {
 
 interface WhatsAppRequest {
   type: "booking" | "contact";
+  sendToCustomer?: boolean;
   data: {
     name: string;
     email?: string;
@@ -19,6 +20,14 @@ interface WhatsAppRequest {
     message?: string;
     company?: string;
   };
+}
+
+// Helper to clean phone number for WhatsApp
+function cleanPhoneNumber(phone: string): string {
+  let cleaned = phone.replace(/[\s\-\(\)\+]/g, "");
+  // If it doesn't start with a country code, assume it needs one
+  // The number should be just digits, WhatsApp API handles the rest
+  return cleaned;
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -35,13 +44,14 @@ const handler = async (req: Request): Promise<Response> => {
       throw new Error("WhatsApp API credentials not configured");
     }
 
-    const { type, data }: WhatsAppRequest = await req.json();
+    const { type, data, sendToCustomer = true }: WhatsAppRequest = await req.json();
+    const results: any[] = [];
 
-    // Format the message based on type
-    let message = "";
+    // === SEND TO ADMIN (always uses text message - admin has messaged first) ===
+    let adminMessage = "";
     
     if (type === "booking") {
-      message = `🗓️ *New Booking Received!*
+      adminMessage = `🗓️ *New Booking Received!*
 
 👤 *Name:* ${data.name}
 📧 *Email:* ${data.email || "Not provided"}
@@ -55,7 +65,7 @@ const handler = async (req: Request): Promise<Response> => {
 ---
 _Lunexo Media Booking System_`;
     } else if (type === "contact") {
-      message = `📩 *New Contact Form Submission!*
+      adminMessage = `📩 *New Contact Form Submission!*
 
 👤 *Name:* ${data.name}
 📧 *Email:* ${data.email || "Not provided"}
@@ -67,8 +77,8 @@ _Lunexo Media Booking System_`;
 _Lunexo Media Contact System_`;
     }
 
-    // Send WhatsApp message via Meta Graph API
-    const whatsappResponse = await fetch(
+    // Send to Admin
+    const adminResponse = await fetch(
       `https://graph.facebook.com/v18.0/${PHONE_ID}/messages`,
       {
         method: "POST",
@@ -80,25 +90,71 @@ _Lunexo Media Contact System_`;
           messaging_product: "whatsapp",
           to: ADMIN_NUMBER,
           type: "text",
-          text: {
-            preview_url: false,
-            body: message,
-          },
+          text: { preview_url: false, body: adminMessage },
         }),
       }
     );
 
-    const result = await whatsappResponse.json();
-    
-    if (!whatsappResponse.ok) {
-      console.error("WhatsApp API error:", result);
-      throw new Error(result.error?.message || "Failed to send WhatsApp message");
+    const adminResult = await adminResponse.json();
+    console.log("Admin WhatsApp result:", adminResult);
+    results.push({ recipient: "admin", result: adminResult });
+
+    // === SEND TO CUSTOMER (uses template message for first-time contact) ===
+    if (sendToCustomer && data.phone && data.phone.length >= 10 && type === "booking") {
+      const customerPhone = cleanPhoneNumber(data.phone);
+      
+      // Use template message for customers who haven't messaged first
+      // Template: booking_confirmation with parameters: name, date, time, platform
+      const templatePayload = {
+        messaging_product: "whatsapp",
+        to: customerPhone,
+        type: "template",
+        template: {
+          name: "booking_confirmation", // Create this template in Meta Business Manager
+          language: { code: "en" },
+          components: [
+            {
+              type: "body",
+              parameters: [
+                { type: "text", text: data.name || "Customer" },
+                { type: "text", text: data.date || "To be confirmed" },
+                { type: "text", text: data.time || "To be confirmed" },
+                { type: "text", text: data.meeting_platform || "Video Call" },
+              ],
+            },
+          ],
+        },
+      };
+
+      const customerResponse = await fetch(
+        `https://graph.facebook.com/v18.0/${PHONE_ID}/messages`,
+        {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${ACCESS_TOKEN}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(templatePayload),
+        }
+      );
+
+      const customerResult = await customerResponse.json();
+      console.log("Customer WhatsApp template result:", customerResult);
+      results.push({ recipient: "customer", phone: customerPhone, result: customerResult });
+
+      // If template fails, log the error but don't fail the whole request
+      if (!customerResponse.ok) {
+        console.error("Customer template message failed:", customerResult);
+        // Template might not be approved yet - this is expected initially
+      }
     }
 
-    console.log("WhatsApp notification sent successfully:", result);
-
     return new Response(
-      JSON.stringify({ success: true, messageId: result.messages?.[0]?.id }),
+      JSON.stringify({ 
+        success: true, 
+        messageId: adminResult.messages?.[0]?.id,
+        results 
+      }),
       {
         status: 200,
         headers: { "Content-Type": "application/json", ...corsHeaders },
