@@ -92,7 +92,95 @@ async function generateAIResponse(userMessage: string): Promise<string> {
   }
 }
 
-// Send WhatsApp message
+// Download and transcribe voice message using Lovable AI
+async function transcribeVoiceMessage(mediaId: string): Promise<string> {
+  try {
+    console.log("Downloading voice message:", mediaId);
+    
+    // Get media URL from Meta
+    const mediaResponse = await fetch(
+      `https://graph.facebook.com/v18.0/${mediaId}`,
+      {
+        headers: {
+          "Authorization": `Bearer ${META_ACCESS_TOKEN}`,
+        },
+      }
+    );
+
+    if (!mediaResponse.ok) {
+      console.error("Failed to get media URL:", await mediaResponse.text());
+      return "";
+    }
+
+    const mediaData = await mediaResponse.json();
+    const mediaUrl = mediaData.url;
+    console.log("Media URL obtained:", mediaUrl);
+
+    // Download the audio file
+    const audioResponse = await fetch(mediaUrl, {
+      headers: {
+        "Authorization": `Bearer ${META_ACCESS_TOKEN}`,
+      },
+    });
+
+    if (!audioResponse.ok) {
+      console.error("Failed to download audio:", await audioResponse.text());
+      return "";
+    }
+
+    const audioBuffer = await audioResponse.arrayBuffer();
+    const audioBase64 = btoa(String.fromCharCode(...new Uint8Array(audioBuffer)));
+    
+    console.log("Audio downloaded, size:", audioBuffer.byteLength, "bytes");
+
+    // Use Lovable AI to transcribe (Gemini can handle audio)
+    const transcribeResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${LOVABLE_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "google/gemini-2.5-flash",
+        messages: [
+          { 
+            role: "user", 
+            content: [
+              {
+                type: "text",
+                text: "Please transcribe this audio message. Only provide the transcription, nothing else."
+              },
+              {
+                type: "input_audio",
+                input_audio: {
+                  data: audioBase64,
+                  format: "ogg"
+                }
+              }
+            ]
+          }
+        ],
+        max_tokens: 500,
+      }),
+    });
+
+    if (!transcribeResponse.ok) {
+      const errorText = await transcribeResponse.text();
+      console.error("Transcription error:", transcribeResponse.status, errorText);
+      return "";
+    }
+
+    const transcribeData = await transcribeResponse.json();
+    const transcription = transcribeData.choices?.[0]?.message?.content || "";
+    console.log("Transcription result:", transcription);
+    return transcription;
+  } catch (error) {
+    console.error("Error transcribing voice message:", error);
+    return "";
+  }
+}
+
+// Send WhatsApp text message
 async function sendWhatsAppMessage(to: string, message: string): Promise<boolean> {
   try {
     console.log(`Sending WhatsApp message to ${to}`);
@@ -127,6 +215,67 @@ async function sendWhatsAppMessage(to: string, message: string): Promise<boolean
     console.error("Error sending WhatsApp message:", error);
     return false;
   }
+}
+
+// Send WhatsApp message with quick reply buttons
+async function sendWhatsAppWithButtons(to: string, message: string, buttons: Array<{ id: string; title: string }>): Promise<boolean> {
+  try {
+    console.log(`Sending WhatsApp message with buttons to ${to}`);
+    
+    const response = await fetch(
+      `https://graph.facebook.com/v18.0/${META_PHONE_ID}/messages`,
+      {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${META_ACCESS_TOKEN}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          messaging_product: "whatsapp",
+          recipient_type: "individual",
+          to: to,
+          type: "interactive",
+          interactive: {
+            type: "button",
+            body: {
+              text: message,
+            },
+            action: {
+              buttons: buttons.map((btn) => ({
+                type: "reply",
+                reply: {
+                  id: btn.id,
+                  title: btn.title,
+                },
+              })),
+            },
+          },
+        }),
+      }
+    );
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("WhatsApp button send error:", response.status, errorText);
+      return false;
+    }
+
+    console.log("WhatsApp message with buttons sent successfully");
+    return true;
+  } catch (error) {
+    console.error("Error sending WhatsApp message with buttons:", error);
+    return false;
+  }
+}
+
+// Determine if we should send quick reply buttons
+function shouldSendQuickReplies(message: string, aiResponse: string): boolean {
+  const triggerKeywords = [
+    "hello", "hi", "hey", "help", "start", "info", "services", 
+    "pricing", "cost", "website", "seo", "ads", "marketing"
+  ];
+  const lowerMessage = message.toLowerCase();
+  return triggerKeywords.some(keyword => lowerMessage.includes(keyword));
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -177,13 +326,35 @@ const handler = async (req: Request): Promise<Response> => {
       if (value?.messages) {
         for (const message of value.messages) {
           const from = message.from; // Customer's phone number
-          const messageText = message.text?.body || "";
           const messageType = message.type;
           const timestamp = message.timestamp;
           const contact = value.contacts?.[0];
           const customerName = contact?.profile?.name || "Unknown";
 
-          console.log(`Message from ${customerName} (${from}): ${messageText}`);
+          let messageText = "";
+          let isVoiceMessage = false;
+
+          // Handle different message types
+          if (messageType === "text") {
+            messageText = message.text?.body || "";
+          } else if (messageType === "audio") {
+            // Voice message - transcribe it
+            isVoiceMessage = true;
+            const mediaId = message.audio?.id;
+            if (mediaId) {
+              console.log("Processing voice message from:", customerName);
+              messageText = await transcribeVoiceMessage(mediaId);
+              if (!messageText) {
+                messageText = "[Voice message - transcription failed]";
+              }
+            }
+          } else if (messageType === "interactive") {
+            // Button reply
+            messageText = message.interactive?.button_reply?.title || 
+                         message.interactive?.button_reply?.id || "";
+          }
+
+          console.log(`Message from ${customerName} (${from}): ${messageText} [Type: ${messageType}]`);
 
           // Log incoming message to visitor_activities
           await supabaseClient.from("visitor_activities").insert({
@@ -193,17 +364,34 @@ const handler = async (req: Request): Promise<Response> => {
               name: customerName,
               message: messageText,
               type: messageType,
+              is_voice: isVoiceMessage,
               timestamp: timestamp,
             },
           });
 
-          // Only respond to text messages
-          if (messageType === "text" && messageText) {
+          // Process message if we have text content
+          if (messageText && messageText !== "[Voice message - transcription failed]") {
             // Generate AI response
             const aiResponse = await generateAIResponse(messageText);
             
-            // Send response back via WhatsApp
-            const sent = await sendWhatsAppMessage(from, aiResponse);
+            // Check if we should send quick reply buttons
+            let sent = false;
+            if (shouldSendQuickReplies(messageText, aiResponse)) {
+              // Send with quick reply buttons
+              sent = await sendWhatsAppWithButtons(from, aiResponse, [
+                { id: "book_call", title: "📞 Book a Call" },
+                { id: "view_services", title: "🚀 View Services" },
+                { id: "get_pricing", title: "💰 Get Pricing" },
+              ]);
+              
+              // Fallback to regular message if buttons fail
+              if (!sent) {
+                sent = await sendWhatsAppMessage(from, aiResponse);
+              }
+            } else {
+              // Send regular text message
+              sent = await sendWhatsAppMessage(from, aiResponse);
+            }
             
             // Log outgoing message
             await supabaseClient.from("visitor_activities").insert({
@@ -212,10 +400,16 @@ const handler = async (req: Request): Promise<Response> => {
                 to: from,
                 name: customerName,
                 original_message: messageText,
+                was_voice_message: isVoiceMessage,
                 ai_response: aiResponse,
                 sent_successfully: sent,
+                had_buttons: shouldSendQuickReplies(messageText, aiResponse),
               },
             });
+          } else if (isVoiceMessage && messageText === "[Voice message - transcription failed]") {
+            // Send a friendly message for failed transcription
+            const fallbackMessage = "I received your voice message but couldn't process it clearly. Could you please type your question or try sending another voice note? 🎤\n\nOr you can:\n📞 Call us: +1 (702) 483-0749\n📧 Email: hello@lunexomedia.com";
+            await sendWhatsAppMessage(from, fallbackMessage);
           }
         }
       }
