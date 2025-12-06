@@ -84,7 +84,8 @@ About Lunexo Media:
 - Location: New York, NY
 - Phone: +1 (702) 483-0749
 - Email: hello@lunexomedia.com
-- Website: lunexomedia.com
+- Website: www.lunexomedia.com
+- Contact Page: www.lunexomedia.com/contact
 - 50+ projects completed
 
 Services & Pricing:
@@ -97,7 +98,14 @@ Services & Pricing:
 - Voice AI: $500-$2000
 - Email Automation: $200-$800
 
-Keep responses short (under 200 words) for WhatsApp. Be friendly and helpful.`;
+IMPORTANT FORMATTING RULES:
+- Keep responses short (under 200 words) for WhatsApp
+- Be friendly and helpful
+- When sharing links, write them as plain text WITHOUT markdown formatting
+- CORRECT: Visit www.lunexomedia.com/contact
+- WRONG: [lunexomedia.com/contact](https://www.lunexomedia.com/contact)
+- Never use markdown link syntax like [text](url)
+- Just write the URL directly`;
 
 // Simple email regex
 function isValidEmail(email: string): boolean {
