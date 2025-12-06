@@ -6,10 +6,10 @@ const corsHeaders = {
 };
 
 interface WhatsAppRequest {
-  type: "booking" | "contact";
+  type: "booking" | "contact" | "test";
   sendToCustomer?: boolean;
   data: {
-    name: string;
+    name?: string;
     email?: string;
     phone?: string;
     date?: string;
@@ -50,7 +50,16 @@ const handler = async (req: Request): Promise<Response> => {
     // === SEND TO ADMIN (always uses text message - admin has messaged first) ===
     let adminMessage = "";
     
-    if (type === "booking") {
+    if (type === "test") {
+      adminMessage = data.message || `👋 *Hello Admin!*
+
+This is Farhan AI - your WhatsApp AI Agent is now active! 🚀
+
+Users can now message your WhatsApp Business number and I'll respond with helpful information about Lunexo Media services.
+
+---
+_Lunexo Media AI System_`;
+    } else if (type === "booking") {
       adminMessage = `🗓️ *New Booking Received!*
 
 👤 *Name:* ${data.name}
