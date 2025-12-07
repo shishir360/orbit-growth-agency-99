@@ -121,7 +121,7 @@ const collapsed = state === 'collapsed';
     { to: '/admin-dashboard/images', icon: Image, label: 'Media Library', section: 'technical' },
     { to: '/admin-dashboard/users', icon: Users, label: 'User Management', section: 'technical' },
     { to: '/admin-dashboard/knowledge', icon: BookMarked, label: 'Knowledge Base', section: 'technical' },
-    { to: '/admin-dashboard/whatsapp', icon: MessageCircle, label: 'WhatsApp AI', section: 'technical' },
+    { to: '/admin-dashboard/messaging', icon: MessageCircle, label: 'Messaging Hub', section: 'technical' },
     { to: '/admin-dashboard/email', icon: Mail, label: 'Email Management', section: 'technical' }
   ];
 
