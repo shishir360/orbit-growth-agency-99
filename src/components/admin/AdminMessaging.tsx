@@ -22,6 +22,8 @@ interface Message {
   metadata: {
     from?: string;
     to?: string;
+    sender_id?: string;
+    recipient_id?: string;
     name?: string;
     message?: string;
     original_message?: string;
@@ -217,9 +219,11 @@ const AdminMessaging = () => {
   // Filter messages by platform
   const platformMessages = messages.filter(m => m.platform === activeTab);
 
-  // Group messages by sender/receiver
+  // Group messages by sender/receiver (handle both WhatsApp and Messenger/Instagram formats)
   const groupedMessages = platformMessages.reduce((acc, msg) => {
-    const id = msg.metadata?.from || msg.metadata?.to || "unknown";
+    // WhatsApp uses 'from'/'to', Messenger/Instagram use 'sender_id'/'recipient_id'
+    const id = msg.metadata?.from || msg.metadata?.to || 
+               msg.metadata?.sender_id || msg.metadata?.recipient_id || "unknown";
     if (!acc[id]) {
       acc[id] = [];
     }
@@ -417,7 +421,7 @@ const AdminMessaging = () => {
                 <p className="text-[#8696A0] mt-4">No conversations yet</p>
                 {activeTab !== 'whatsapp' && (
                   <p className="text-[#8696A0] text-sm mt-2">
-                    {activeTab === 'messenger' ? 'Messenger' : 'Instagram'} integration coming soon
+                    Send a message to your {activeTab === 'messenger' ? 'Facebook Page' : 'Instagram'} to start
                   </p>
                 )}
               </div>
