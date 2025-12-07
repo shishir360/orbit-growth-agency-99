@@ -39,7 +39,7 @@ import AdminAccounting from '@/components/admin/AdminAccounting';
 import AdminClients from '@/components/admin/AdminClients';
 import AdminVisitorTracking from '@/components/admin/AdminVisitorTracking';
 import AdminKnowledge from '@/components/admin/AdminKnowledge';
-import AdminWhatsApp from '@/components/admin/AdminWhatsApp';
+import AdminMessaging from '@/components/admin/AdminMessaging';
 import AdminEmail from '@/components/admin/AdminEmail';
 
 const AdminDashboard = () => {
@@ -113,7 +113,8 @@ const AdminDashboard = () => {
               <Route path="clients" element={<AdminClients />} />
               <Route path="visitor-tracking" element={<AdminVisitorTracking />} />
               <Route path="knowledge" element={<AdminKnowledge />} />
-              <Route path="whatsapp" element={<AdminWhatsApp />} />
+              <Route path="messaging" element={<AdminMessaging />} />
+              <Route path="whatsapp" element={<AdminMessaging />} />
               <Route path="email" element={<AdminEmail />} />
             </Routes>
           </main>
