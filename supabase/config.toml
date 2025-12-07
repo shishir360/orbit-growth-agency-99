@@ -47,3 +47,9 @@ verify_jwt = true
 
 [functions.receive-email-webhook]
 verify_jwt = false
+
+[functions.messenger-webhook]
+verify_jwt = false
+
+[functions.instagram-webhook]
+verify_jwt = false

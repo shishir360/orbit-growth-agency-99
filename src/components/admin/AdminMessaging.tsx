@@ -297,7 +297,6 @@ const AdminMessaging = () => {
               >
                 <Facebook className="h-4 w-4 mr-2" />
                 Messenger
-                <Badge variant="outline" className="ml-2 text-xs">Soon</Badge>
               </TabsTrigger>
               <TabsTrigger 
                 value="instagram" 
@@ -305,7 +304,6 @@ const AdminMessaging = () => {
               >
                 <Instagram className="h-4 w-4 mr-2" />
                 Instagram
-                <Badge variant="outline" className="ml-2 text-xs">Soon</Badge>
               </TabsTrigger>
             </TabsList>
 
