@@ -2,7 +2,7 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const META_PAGE_ACCESS_TOKEN = Deno.env.get("META_PAGE_ACCESS_TOKEN");
-const META_INSTAGRAM_ACCOUNT_ID = Deno.env.get("META_INSTAGRAM_ACCOUNT_ID");
+const META_FACEBOOK_PAGE_ID = Deno.env.get("META_FACEBOOK_PAGE_ID");
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -24,26 +24,27 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    if (!META_INSTAGRAM_ACCOUNT_ID) {
-      console.error("META_INSTAGRAM_ACCOUNT_ID is not configured");
+    if (!META_FACEBOOK_PAGE_ID) {
+      console.error("META_FACEBOOK_PAGE_ID is not configured");
       return new Response(
-        JSON.stringify({ error: "Instagram Account ID not configured. Please add META_INSTAGRAM_ACCOUNT_ID secret." }),
+        JSON.stringify({ error: "Facebook Page ID not configured." }),
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
     console.log(`Sending Instagram message to ${to}: ${message.substring(0, 50)}...`);
-    console.log("Using Instagram Account ID:", META_INSTAGRAM_ACCOUNT_ID);
+    console.log("Using Facebook Page ID for Instagram:", META_FACEBOOK_PAGE_ID);
 
-    // For Instagram DMs, use the Instagram Account ID
+    // Instagram DMs are sent through the Facebook Page endpoint (same as Messenger)
     const response = await fetch(
-      `https://graph.facebook.com/v18.0/${META_INSTAGRAM_ACCOUNT_ID}/messages?access_token=${META_PAGE_ACCESS_TOKEN}`,
+      `https://graph.facebook.com/v18.0/${META_FACEBOOK_PAGE_ID}/messages?access_token=${META_PAGE_ACCESS_TOKEN}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           recipient: { id: to },
           message: { text: message },
+          messaging_type: "RESPONSE",
         }),
       }
     );
