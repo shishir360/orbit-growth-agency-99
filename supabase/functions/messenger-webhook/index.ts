@@ -94,20 +94,19 @@ async function sendMessengerMessage(recipientId: string, message: string): Promi
   try {
     console.log(`Sending Messenger to ${recipientId}: ${message.substring(0, 50)}...`);
     
-    // Use Page ID if available, otherwise fall back to 'me'
-    const endpoint = META_FACEBOOK_PAGE_ID 
-      ? `https://graph.facebook.com/v18.0/${META_FACEBOOK_PAGE_ID}/messages?access_token=${META_PAGE_ACCESS_TOKEN}`
-      : `https://graph.facebook.com/v18.0/me/messages?access_token=${META_PAGE_ACCESS_TOKEN}`;
-    
-    const response = await fetch(endpoint, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        recipient: { id: recipientId },
-        message: { text: message },
-        messaging_type: "RESPONSE",
-      }),
-    });
+    // Use /me/messages endpoint - it automatically uses the page associated with the token
+    const response = await fetch(
+      `https://graph.facebook.com/v18.0/me/messages?access_token=${META_PAGE_ACCESS_TOKEN}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          recipient: { id: recipientId },
+          message: { text: message },
+          messaging_type: "RESPONSE",
+        }),
+      }
+    );
 
     const result = await response.json();
     console.log("Messenger response:", result);
