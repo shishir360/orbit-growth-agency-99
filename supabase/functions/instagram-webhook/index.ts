@@ -3,7 +3,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const VERIFY_TOKEN = "lunexo_instagram_verify_2024";
 const META_PAGE_ACCESS_TOKEN = Deno.env.get("META_PAGE_ACCESS_TOKEN");
-const META_INSTAGRAM_ACCOUNT_ID = Deno.env.get("META_INSTAGRAM_ACCOUNT_ID");
+const META_FACEBOOK_PAGE_ID = Deno.env.get("META_FACEBOOK_PAGE_ID");
 const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
 
 const corsHeaders = {
@@ -94,15 +94,16 @@ async function sendInstagramMessage(recipientId: string, message: string): Promi
   try {
     console.log(`Sending Instagram to ${recipientId}: ${message.substring(0, 50)}...`);
     
-    // Use Instagram Account ID for sending Instagram DMs
+    // Instagram DMs sent through Facebook Page endpoint
     const response = await fetch(
-      `https://graph.facebook.com/v18.0/${META_INSTAGRAM_ACCOUNT_ID}/messages?access_token=${META_PAGE_ACCESS_TOKEN}`,
+      `https://graph.facebook.com/v18.0/${META_FACEBOOK_PAGE_ID}/messages?access_token=${META_PAGE_ACCESS_TOKEN}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           recipient: { id: recipientId },
           message: { text: message },
+          messaging_type: "RESPONSE",
         }),
       }
     );
