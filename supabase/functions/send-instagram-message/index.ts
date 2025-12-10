@@ -2,33 +2,12 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const META_PAGE_ACCESS_TOKEN = Deno.env.get("META_PAGE_ACCESS_TOKEN");
+const META_FACEBOOK_PAGE_ID = Deno.env.get("META_FACEBOOK_PAGE_ID");
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
-
-// Get Instagram Business Account ID from Page
-async function getInstagramAccountId(): Promise<string | null> {
-  try {
-    // First get the page ID
-    const pageResponse = await fetch(
-      `https://graph.facebook.com/v18.0/me?access_token=${META_PAGE_ACCESS_TOKEN}&fields=id,instagram_business_account`
-    );
-    const pageData = await pageResponse.json();
-    console.log("Page data:", pageData);
-    
-    // Return Instagram Business Account ID if available
-    if (pageData.instagram_business_account?.id) {
-      return pageData.instagram_business_account.id;
-    }
-    
-    return pageData.id || null;
-  } catch (error) {
-    console.error("Error getting Instagram account ID:", error);
-    return null;
-  }
-}
 
 const handler = async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
@@ -45,25 +24,29 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
+    if (!META_FACEBOOK_PAGE_ID) {
+      console.error("META_FACEBOOK_PAGE_ID is not configured");
+      return new Response(
+        JSON.stringify({ error: "Facebook Page ID not configured. Please add META_FACEBOOK_PAGE_ID secret." }),
+        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     console.log(`Sending Instagram message to ${to}: ${message.substring(0, 50)}...`);
+    console.log("Using Page ID:", META_FACEBOOK_PAGE_ID);
 
-    // Get the Instagram Account ID
-    const accountId = await getInstagramAccountId();
-    console.log("Using Account ID:", accountId);
-
-    // For Instagram DMs, we use the messages endpoint with the Instagram Business Account ID
-    const endpoint = accountId
-      ? `https://graph.facebook.com/v18.0/${accountId}/messages?access_token=${META_PAGE_ACCESS_TOKEN}`
-      : `https://graph.facebook.com/v18.0/me/messages?access_token=${META_PAGE_ACCESS_TOKEN}`;
-
-    const response = await fetch(endpoint, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        recipient: { id: to },
-        message: { text: message },
-      }),
-    });
+    // For Instagram, use the Page ID (Instagram is linked to Facebook Page)
+    const response = await fetch(
+      `https://graph.facebook.com/v18.0/${META_FACEBOOK_PAGE_ID}/messages?access_token=${META_PAGE_ACCESS_TOKEN}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          recipient: { id: to },
+          message: { text: message },
+        }),
+      }
+    );
 
     const result = await response.json();
     console.log("Instagram API response:", result);
