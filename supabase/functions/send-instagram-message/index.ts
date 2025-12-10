@@ -53,9 +53,15 @@ const handler = async (req: Request): Promise<Response> => {
 
     if (!response.ok || result.error) {
       console.error("Instagram API error:", result);
+      // Return 200 with error details instead of 500 to prevent edge function errors
       return new Response(
-        JSON.stringify({ error: result.error?.message || "Failed to send message" }),
-        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        JSON.stringify({ 
+          success: false, 
+          error: result.error?.message || "Failed to send message",
+          error_code: result.error?.code,
+          note: "Meta API error - check if 24-hour window expired or permissions are correct"
+        }),
+        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
