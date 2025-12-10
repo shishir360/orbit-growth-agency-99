@@ -35,9 +35,9 @@ const handler = async (req: Request): Promise<Response> => {
     console.log(`Sending Messenger message to ${to}: ${message.substring(0, 50)}...`);
     console.log("Using Page ID:", META_FACEBOOK_PAGE_ID);
 
-    // Send message via Meta Graph API using /me/messages endpoint
+    // Send message via Meta Graph API using Page ID
     const response = await fetch(
-      `https://graph.facebook.com/v18.0/me/messages?access_token=${META_PAGE_ACCESS_TOKEN}`,
+      `https://graph.facebook.com/v18.0/${META_FACEBOOK_PAGE_ID}/messages?access_token=${META_PAGE_ACCESS_TOKEN}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
