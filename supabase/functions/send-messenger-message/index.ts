@@ -2,26 +2,12 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const META_PAGE_ACCESS_TOKEN = Deno.env.get("META_PAGE_ACCESS_TOKEN");
+const META_FACEBOOK_PAGE_ID = Deno.env.get("META_FACEBOOK_PAGE_ID");
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
-
-// Get Page ID from access token
-async function getPageId(): Promise<string | null> {
-  try {
-    const response = await fetch(
-      `https://graph.facebook.com/v18.0/me?access_token=${META_PAGE_ACCESS_TOKEN}&fields=id`
-    );
-    const data = await response.json();
-    console.log("Page ID response:", data);
-    return data.id || null;
-  } catch (error) {
-    console.error("Error getting page ID:", error);
-    return null;
-  }
-}
 
 const handler = async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
@@ -38,26 +24,30 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    console.log(`Sending Messenger message to ${to}: ${message.substring(0, 50)}...`);
+    if (!META_FACEBOOK_PAGE_ID) {
+      console.error("META_FACEBOOK_PAGE_ID is not configured");
+      return new Response(
+        JSON.stringify({ error: "Facebook Page ID not configured. Please add META_FACEBOOK_PAGE_ID secret." }),
+        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
 
-    // Get the Page ID first
-    const pageId = await getPageId();
-    console.log("Using Page ID:", pageId);
+    console.log(`Sending Messenger message to ${to}: ${message.substring(0, 50)}...`);
+    console.log("Using Page ID:", META_FACEBOOK_PAGE_ID);
 
     // Send message via Meta Graph API using Page ID
-    const endpoint = pageId 
-      ? `https://graph.facebook.com/v18.0/${pageId}/messages?access_token=${META_PAGE_ACCESS_TOKEN}`
-      : `https://graph.facebook.com/v18.0/me/messages?access_token=${META_PAGE_ACCESS_TOKEN}`;
-
-    const response = await fetch(endpoint, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        recipient: { id: to },
-        message: { text: message },
-        messaging_type: "RESPONSE",
-      }),
-    });
+    const response = await fetch(
+      `https://graph.facebook.com/v18.0/${META_FACEBOOK_PAGE_ID}/messages?access_token=${META_PAGE_ACCESS_TOKEN}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          recipient: { id: to },
+          message: { text: message },
+          messaging_type: "RESPONSE",
+        }),
+      }
+    );
 
     const result = await response.json();
     console.log("Messenger API response:", result);
