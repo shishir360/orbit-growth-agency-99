@@ -8,6 +8,28 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// Get Instagram Business Account ID from Page
+async function getInstagramAccountId(): Promise<string | null> {
+  try {
+    // First get the page ID
+    const pageResponse = await fetch(
+      `https://graph.facebook.com/v18.0/me?access_token=${META_PAGE_ACCESS_TOKEN}&fields=id,instagram_business_account`
+    );
+    const pageData = await pageResponse.json();
+    console.log("Page data:", pageData);
+    
+    // Return Instagram Business Account ID if available
+    if (pageData.instagram_business_account?.id) {
+      return pageData.instagram_business_account.id;
+    }
+    
+    return pageData.id || null;
+  } catch (error) {
+    console.error("Error getting Instagram account ID:", error);
+    return null;
+  }
+}
+
 const handler = async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -25,23 +47,28 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log(`Sending Instagram message to ${to}: ${message.substring(0, 50)}...`);
 
-    // Send message via Meta Graph API (Instagram uses same endpoint)
-    const response = await fetch(
-      `https://graph.facebook.com/v18.0/me/messages?access_token=${META_PAGE_ACCESS_TOKEN}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          recipient: { id: to },
-          message: { text: message },
-        }),
-      }
-    );
+    // Get the Instagram Account ID
+    const accountId = await getInstagramAccountId();
+    console.log("Using Account ID:", accountId);
+
+    // For Instagram DMs, we use the messages endpoint with the Instagram Business Account ID
+    const endpoint = accountId
+      ? `https://graph.facebook.com/v18.0/${accountId}/messages?access_token=${META_PAGE_ACCESS_TOKEN}`
+      : `https://graph.facebook.com/v18.0/me/messages?access_token=${META_PAGE_ACCESS_TOKEN}`;
+
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        recipient: { id: to },
+        message: { text: message },
+      }),
+    });
 
     const result = await response.json();
     console.log("Instagram API response:", result);
 
-    if (!response.ok) {
+    if (!response.ok || result.error) {
       console.error("Instagram API error:", result);
       return new Response(
         JSON.stringify({ error: result.error?.message || "Failed to send message" }),

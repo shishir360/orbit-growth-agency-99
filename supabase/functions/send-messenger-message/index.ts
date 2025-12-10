@@ -8,6 +8,21 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// Get Page ID from access token
+async function getPageId(): Promise<string | null> {
+  try {
+    const response = await fetch(
+      `https://graph.facebook.com/v18.0/me?access_token=${META_PAGE_ACCESS_TOKEN}&fields=id`
+    );
+    const data = await response.json();
+    console.log("Page ID response:", data);
+    return data.id || null;
+  } catch (error) {
+    console.error("Error getting page ID:", error);
+    return null;
+  }
+}
+
 const handler = async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -25,23 +40,29 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log(`Sending Messenger message to ${to}: ${message.substring(0, 50)}...`);
 
-    // Send message via Meta Graph API
-    const response = await fetch(
-      `https://graph.facebook.com/v18.0/me/messages?access_token=${META_PAGE_ACCESS_TOKEN}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          recipient: { id: to },
-          message: { text: message },
-        }),
-      }
-    );
+    // Get the Page ID first
+    const pageId = await getPageId();
+    console.log("Using Page ID:", pageId);
+
+    // Send message via Meta Graph API using Page ID
+    const endpoint = pageId 
+      ? `https://graph.facebook.com/v18.0/${pageId}/messages?access_token=${META_PAGE_ACCESS_TOKEN}`
+      : `https://graph.facebook.com/v18.0/me/messages?access_token=${META_PAGE_ACCESS_TOKEN}`;
+
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        recipient: { id: to },
+        message: { text: message },
+        messaging_type: "RESPONSE",
+      }),
+    });
 
     const result = await response.json();
     console.log("Messenger API response:", result);
 
-    if (!response.ok) {
+    if (!response.ok || result.error) {
       console.error("Messenger API error:", result);
       return new Response(
         JSON.stringify({ error: result.error?.message || "Failed to send message" }),
