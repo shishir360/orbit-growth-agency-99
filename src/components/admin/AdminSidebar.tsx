@@ -46,6 +46,7 @@ import {
   Upload,
   MapPin,
   BookMarked,
+  Share2,
 } from 'lucide-react';
 
 export function AdminSidebar() {
@@ -122,7 +123,8 @@ const collapsed = state === 'collapsed';
     { to: '/admin-dashboard/users', icon: Users, label: 'User Management', section: 'technical' },
     { to: '/admin-dashboard/knowledge', icon: BookMarked, label: 'Knowledge Base', section: 'technical' },
     { to: '/admin-dashboard/messaging', icon: MessageCircle, label: 'Messaging Hub', section: 'technical' },
-    { to: '/admin-dashboard/email', icon: Mail, label: 'Email Management', section: 'technical' }
+    { to: '/admin-dashboard/email', icon: Mail, label: 'Email Management', section: 'technical' },
+    { to: '/admin-dashboard/social-automation', icon: Share2, label: 'Social Automation', section: 'technical' },
   ];
 
   const getNavCls = (path: string) => {

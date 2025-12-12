@@ -41,6 +41,7 @@ import AdminVisitorTracking from '@/components/admin/AdminVisitorTracking';
 import AdminKnowledge from '@/components/admin/AdminKnowledge';
 import AdminMessaging from '@/components/admin/AdminMessaging';
 import AdminEmail from '@/components/admin/AdminEmail';
+import AdminSocialAutomation from '@/components/admin/AdminSocialAutomation';
 
 const AdminDashboard = () => {
   const { isAdmin, loading } = useAdminAuth();
@@ -116,6 +117,7 @@ const AdminDashboard = () => {
               <Route path="messaging" element={<AdminMessaging />} />
               <Route path="whatsapp" element={<AdminMessaging />} />
               <Route path="email" element={<AdminEmail />} />
+              <Route path="social-automation" element={<AdminSocialAutomation />} />
             </Routes>
           </main>
         </SidebarInset>
