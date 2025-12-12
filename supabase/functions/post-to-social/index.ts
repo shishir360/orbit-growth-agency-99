@@ -19,11 +19,11 @@ async function postToFacebook(message: string, imageUrl?: string): Promise<{ suc
   try {
     console.log("Posting to Facebook Page...");
     
-    let endpoint = `https://graph.facebook.com/v18.0/${META_FACEBOOK_PAGE_ID}/feed`;
+    let endpoint = `https://graph.facebook.com/v21.0/${META_FACEBOOK_PAGE_ID}/feed`;
     const body: Record<string, string> = { message, access_token: META_PAGE_ACCESS_TOKEN! };
     
     if (imageUrl) {
-      endpoint = `https://graph.facebook.com/v18.0/${META_FACEBOOK_PAGE_ID}/photos`;
+      endpoint = `https://graph.facebook.com/v21.0/${META_FACEBOOK_PAGE_ID}/photos`;
       body.url = imageUrl;
       body.caption = message;
       delete body.message;
@@ -63,7 +63,7 @@ async function postToInstagram(message: string, imageUrl?: string): Promise<{ su
     
     // Step 1: Create media container
     const containerResponse = await fetch(
-      `https://graph.facebook.com/v18.0/${META_INSTAGRAM_ACCOUNT_ID}/media`,
+      `https://graph.facebook.com/v21.0/${META_INSTAGRAM_ACCOUNT_ID}/media`,
       {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -86,7 +86,7 @@ async function postToInstagram(message: string, imageUrl?: string): Promise<{ su
     
     // Step 2: Publish the media
     const publishResponse = await fetch(
-      `https://graph.facebook.com/v18.0/${META_INSTAGRAM_ACCOUNT_ID}/media_publish`,
+      `https://graph.facebook.com/v21.0/${META_INSTAGRAM_ACCOUNT_ID}/media_publish`,
       {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
