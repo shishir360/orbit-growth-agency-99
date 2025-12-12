@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -10,7 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Dialog
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Plus, Pencil, Trash2, Zap, MessageCircle, Share2, Send, Facebook, Instagram, Loader2, Image } from 'lucide-react';
+import { Plus, Pencil, Trash2, Zap, MessageCircle, Share2, Send, Facebook, Instagram, Loader2, Image, Upload, X } from 'lucide-react';
 import { toast } from 'sonner';
 import { formatDistanceToNow } from 'date-fns';
 
@@ -41,9 +41,20 @@ const AdminSocialAutomation = () => {
 
   // Post Composer State
   const [postMessage, setPostMessage] = useState('');
-  const [postImageUrl, setPostImageUrl] = useState('');
   const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>(['facebook', 'instagram']);
   const [posting, setPosting] = useState(false);
+  
+  // Image Upload State
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Post Automation Rule State
+  const [enablePostRule, setEnablePostRule] = useState(false);
+  const [postRuleName, setPostRuleName] = useState('');
+  const [postRuleKeywords, setPostRuleKeywords] = useState('');
+  const [postRuleResponse, setPostRuleResponse] = useState('');
 
   useEffect(() => {
     fetchRules();
@@ -63,6 +74,61 @@ const AdminSocialAutomation = () => {
       toast.error('Failed to load automation rules');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 10 * 1024 * 1024) { // 10MB limit
+        toast.error('Image size must be less than 10MB');
+        return;
+      }
+      setImageFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const removeImage = () => {
+    setImageFile(null);
+    setImagePreview(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  const uploadImage = async (): Promise<string | null> => {
+    if (!imageFile) return null;
+    
+    setUploading(true);
+    try {
+      const fileExt = imageFile.name.split('.').pop();
+      const fileName = `social-posts/${Date.now()}.${fileExt}`;
+      
+      const { data, error } = await supabase.storage
+        .from('blog-images')
+        .upload(fileName, imageFile, {
+          cacheControl: '3600',
+          upsert: false,
+        });
+
+      if (error) throw error;
+
+      const { data: urlData } = supabase.storage
+        .from('blog-images')
+        .getPublicUrl(fileName);
+
+      return urlData.publicUrl;
+    } catch (error: any) {
+      console.error('Error uploading image:', error);
+      toast.error('Failed to upload image');
+      return null;
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -188,30 +254,68 @@ const AdminSocialAutomation = () => {
       return;
     }
 
-    if (selectedPlatforms.includes('instagram') && !postImageUrl) {
-      toast.error('Instagram requires an image URL to post');
+    if (selectedPlatforms.includes('instagram') && !imageFile) {
+      toast.error('Instagram requires an image to post');
       return;
     }
 
     setPosting(true);
     
     try {
+      // Upload image if selected
+      let imageUrl: string | undefined;
+      if (imageFile) {
+        const uploadedUrl = await uploadImage();
+        if (!uploadedUrl) {
+          setPosting(false);
+          return;
+        }
+        imageUrl = uploadedUrl;
+      }
+
+      // Post to social platforms
       const { data, error } = await supabase.functions.invoke('post-to-social', {
         body: {
           message: postMessage,
           platforms: selectedPlatforms,
-          imageUrl: postImageUrl || undefined,
+          imageUrl,
         },
       });
 
       if (error) throw error;
 
+      // Create automation rule if enabled
+      if (enablePostRule && postRuleName && postRuleKeywords && postRuleResponse) {
+        const keywords = postRuleKeywords.split(',').map(k => k.trim()).filter(k => k);
+        const { error: ruleError } = await supabase
+          .from('automation_rules')
+          .insert({
+            name: postRuleName,
+            trigger_keywords: keywords,
+            response_message: postRuleResponse,
+            send_dm: true,
+            is_active: true,
+          });
+
+        if (ruleError) {
+          console.error('Error creating rule:', ruleError);
+          toast.error('Post sent but failed to create automation rule');
+        } else {
+          toast.success('Automation rule created!');
+          fetchRules();
+        }
+      }
+
       if (data.success) {
         toast.success(data.message || 'Posted successfully!');
+        // Reset form
         setPostMessage('');
-        setPostImageUrl('');
+        removeImage();
+        setEnablePostRule(false);
+        setPostRuleName('');
+        setPostRuleKeywords('');
+        setPostRuleResponse('');
       } else {
-        // Show individual platform results
         Object.entries(data.results || {}).forEach(([platform, result]: [string, any]) => {
           if (result.success) {
             toast.success(`Posted to ${platform}`);
@@ -270,7 +374,7 @@ const AdminSocialAutomation = () => {
                 Create New Post
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-5">
               {/* Platform Selection */}
               <div className="space-y-3">
                 <Label>Select Platforms</Label>
@@ -325,57 +429,123 @@ const AdminSocialAutomation = () => {
                 </p>
               </div>
 
-              {/* Image URL */}
-              <div className="space-y-2">
-                <Label htmlFor="image-url" className="flex items-center gap-2">
+              {/* Image Upload */}
+              <div className="space-y-3">
+                <Label className="flex items-center gap-2">
                   <Image className="h-4 w-4" />
-                  Image URL {selectedPlatforms.includes('instagram') && <Badge variant="destructive" className="text-xs">Required for Instagram</Badge>}
+                  Upload Image {selectedPlatforms.includes('instagram') && <Badge variant="destructive" className="text-xs">Required for Instagram</Badge>}
                 </Label>
-                <Input
-                  id="image-url"
-                  type="url"
-                  placeholder="https://example.com/image.jpg"
-                  value={postImageUrl}
-                  onChange={(e) => setPostImageUrl(e.target.value)}
+                
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageSelect}
+                  className="hidden"
                 />
-                <p className="text-xs text-muted-foreground">
-                  Instagram requires an image. Facebook can post with or without image.
-                </p>
+                
+                {!imagePreview ? (
+                  <div 
+                    onClick={() => fileInputRef.current?.click()}
+                    className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-8 text-center cursor-pointer hover:border-primary/50 transition-colors"
+                  >
+                    <Upload className="h-10 w-10 mx-auto text-muted-foreground/50 mb-3" />
+                    <p className="text-sm font-medium">Click to upload image</p>
+                    <p className="text-xs text-muted-foreground mt-1">PNG, JPG, GIF up to 10MB</p>
+                  </div>
+                ) : (
+                  <div className="relative inline-block">
+                    <img 
+                      src={imagePreview} 
+                      alt="Preview" 
+                      className="max-w-sm rounded-lg border"
+                    />
+                    <Button
+                      variant="destructive"
+                      size="icon"
+                      className="absolute top-2 right-2 h-8 w-8"
+                      onClick={removeImage}
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+                )}
               </div>
 
-              {/* Image Preview */}
-              {postImageUrl && (
-                <div className="space-y-2">
-                  <Label>Image Preview</Label>
-                  <div className="border rounded-lg overflow-hidden max-w-sm">
-                    <img 
-                      src={postImageUrl} 
-                      alt="Post preview" 
-                      className="w-full h-48 object-cover"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = 'https://placehold.co/400x300?text=Invalid+Image+URL';
-                      }}
-                    />
+              {/* Automation Rule for this Post */}
+              <div className="border rounded-lg p-4 bg-muted/30 space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <Label className="flex items-center gap-2 text-base">
+                      <Zap className="h-4 w-4 text-yellow-500" />
+                      Add Automation Rule
+                    </Label>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Auto-reply when someone comments with specific keywords
+                    </p>
                   </div>
+                  <Switch
+                    checked={enablePostRule}
+                    onCheckedChange={setEnablePostRule}
+                  />
                 </div>
-              )}
+
+                {enablePostRule && (
+                  <div className="space-y-4 pt-2 border-t">
+                    <div className="space-y-2">
+                      <Label htmlFor="rule-name">Rule Name</Label>
+                      <Input
+                        id="rule-name"
+                        placeholder="e.g., Free PDF Giveaway"
+                        value={postRuleName}
+                        onChange={(e) => setPostRuleName(e.target.value)}
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="rule-keywords">Trigger Keywords (comma separated)</Label>
+                      <Input
+                        id="rule-keywords"
+                        placeholder="e.g., FREE, PDF, LINK, DOWNLOAD"
+                        value={postRuleKeywords}
+                        onChange={(e) => setPostRuleKeywords(e.target.value)}
+                      />
+                      <p className="text-xs text-muted-foreground">
+                        When someone comments with these keywords, they'll get the auto-response
+                      </p>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="rule-response">Auto-Response Message (DM)</Label>
+                      <Textarea
+                        id="rule-response"
+                        placeholder="Thanks for your interest! Here's your free PDF link: https://..."
+                        value={postRuleResponse}
+                        onChange={(e) => setPostRuleResponse(e.target.value)}
+                        rows={3}
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
 
               {/* Post Button */}
               <Button 
                 onClick={handlePost} 
-                disabled={posting || !postMessage.trim() || selectedPlatforms.length === 0}
+                disabled={posting || uploading || !postMessage.trim() || selectedPlatforms.length === 0}
                 className="w-full gap-2"
                 size="lg"
               >
-                {posting ? (
+                {posting || uploading ? (
                   <>
                     <Loader2 className="h-4 w-4 animate-spin" />
-                    Posting...
+                    {uploading ? 'Uploading Image...' : 'Posting...'}
                   </>
                 ) : (
                   <>
                     <Send className="h-4 w-4" />
                     Post to {selectedPlatforms.length} Platform{selectedPlatforms.length !== 1 ? 's' : ''}
+                    {enablePostRule && ' + Create Rule'}
                   </>
                 )}
               </Button>
