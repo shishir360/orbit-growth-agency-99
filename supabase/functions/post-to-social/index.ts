@@ -156,19 +156,22 @@ serve(async (req) => {
     
     const allSuccess = Object.values(results).every(r => r.success);
     const anySuccess = Object.values(results).some(r => r.success);
-    
-    return new Response(
-      JSON.stringify({ 
-        success: anySuccess,
-        results,
-        message: allSuccess ? "Posted to all platforms successfully" : 
-                 anySuccess ? "Posted to some platforms" : "Failed to post"
-      }),
-      {
-        status: anySuccess ? 200 : 500,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      }
-    );
+
+    const responseBody = {
+      success: anySuccess,
+      results,
+      message: allSuccess
+        ? "Posted to all platforms successfully"
+        : anySuccess
+        ? "Posted to some platforms"
+        : "Failed to post",
+    };
+
+    // Always return 200 so the client can handle per-platform errors gracefully
+    return new Response(JSON.stringify(responseBody), {
+      status: 200,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
   } catch (error) {
     console.error("Error in post-to-social:", error);
     return new Response(
