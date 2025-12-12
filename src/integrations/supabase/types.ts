@@ -74,6 +74,45 @@ export type Database = {
         }
         Relationships: []
       }
+      automation_rules: {
+        Row: {
+          created_at: string | null
+          dm_count: number | null
+          id: string
+          is_active: boolean | null
+          last_triggered_at: string | null
+          name: string
+          response_message: string
+          send_dm: boolean | null
+          trigger_keywords: string[]
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          dm_count?: number | null
+          id?: string
+          is_active?: boolean | null
+          last_triggered_at?: string | null
+          name: string
+          response_message: string
+          send_dm?: boolean | null
+          trigger_keywords?: string[]
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          dm_count?: number | null
+          id?: string
+          is_active?: boolean | null
+          last_triggered_at?: string | null
+          name?: string
+          response_message?: string
+          send_dm?: boolean | null
+          trigger_keywords?: string[]
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       blog_posts: {
         Row: {
           author: string
