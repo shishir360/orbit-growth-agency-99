@@ -1,18 +1,28 @@
 import { useEffect, useState } from "react";
 import { Carousel, CarouselContent, CarouselItem } from "./carousel";
 
+// Import logo images
+import nexusLogo from "@/assets/logos/nexus-logo.png";
+import apexLogo from "@/assets/logos/apex-logo.png";
+import stellarLogo from "@/assets/logos/stellar-logo.png";
+import quantumLogo from "@/assets/logos/quantum-logo.png";
+import forgeLogo from "@/assets/logos/forge-logo.png";
+import vertexLogo from "@/assets/logos/vertex-logo.png";
+import prismLogo from "@/assets/logos/prism-logo.png";
+import onyxLogo from "@/assets/logos/onyx-logo.png";
+
 const TrustedBy = () => {
   const [api, setApi] = useState<any>();
 
   const logos = [
-    { name: "NEXUS", subtitle: "DYNAMICS" },
-    { name: "APEX", subtitle: "SYSTEMS" },
-    { name: "STELLAR", subtitle: "CORP" },
-    { name: "QUANTUM", subtitle: "LABS" },
-    { name: "FORGE", subtitle: "DIGITAL" },
-    { name: "VERTEX", subtitle: "GROUP" },
-    { name: "PRISM", subtitle: "MEDIA" },
-    { name: "ONYX", subtitle: "TECH" },
+    { name: "NEXUS", logo: nexusLogo },
+    { name: "APEX", logo: apexLogo },
+    { name: "STELLAR", logo: stellarLogo },
+    { name: "QUANTUM", logo: quantumLogo },
+    { name: "FORGE", logo: forgeLogo },
+    { name: "VERTEX", logo: vertexLogo },
+    { name: "PRISM", logo: prismLogo },
+    { name: "ONYX", logo: onyxLogo },
   ];
 
   useEffect(() => {
@@ -56,13 +66,12 @@ const TrustedBy = () => {
               <CarouselItem key={logo.name} className="pl-4 basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5">
                 <div className="group relative">
                   <div className="absolute inset-0 bg-gradient-to-r from-blue-500/15 to-cyan-500/15 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-2xl"></div>
-                  <div className="relative flex flex-col items-center justify-center h-32 bg-white/[0.03] border border-white/10 rounded-2xl backdrop-blur-sm group-hover:border-white/20 group-hover:bg-white/[0.06] transition-all duration-500">
-                    <span className="text-2xl md:text-3xl font-black tracking-tight text-white/60 group-hover:text-white transition-colors duration-300" style={{fontFamily: "'Inter', sans-serif", letterSpacing: '-0.02em'}}>
-                      {logo.name}
-                    </span>
-                    <span className="text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase text-white/30 group-hover:text-white/50 transition-colors duration-300 mt-1">
-                      {logo.subtitle}
-                    </span>
+                  <div className="relative flex items-center justify-center h-28 bg-white/[0.03] border border-white/10 rounded-2xl backdrop-blur-sm group-hover:border-white/20 group-hover:bg-white/[0.06] transition-all duration-500 p-4">
+                    <img 
+                      src={logo.logo} 
+                      alt={`${logo.name} logo`}
+                      className="w-full h-full object-contain opacity-70 group-hover:opacity-100 transition-opacity duration-300"
+                    />
                   </div>
                 </div>
               </CarouselItem>
