@@ -154,28 +154,28 @@ const Index = () => {
       <TrustedBy />
 
       {/* Services Section */}
-      <section className="py-32 bg-[#0a0a0f] relative overflow-hidden">
-        <div className="absolute top-20 left-10 w-[500px] h-[500px] bg-gradient-to-r from-blue-600/15 to-cyan-500/10 rounded-full blur-[150px]"></div>
-        <div className="absolute bottom-20 right-10 w-[400px] h-[400px] bg-gradient-to-r from-purple-600/10 to-pink-500/10 rounded-full blur-[120px]"></div>
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.01)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.01)_1px,transparent_1px)] bg-[size:60px_60px]"></div>
+      <section className="py-36 bg-[#0a0a0f] relative overflow-hidden">
+        <div className="absolute top-20 left-10 w-[600px] h-[600px] bg-gradient-to-r from-blue-600/20 to-cyan-500/15 rounded-full blur-[180px]"></div>
+        <div className="absolute bottom-20 right-10 w-[500px] h-[500px] bg-gradient-to-r from-purple-600/15 to-pink-500/15 rounded-full blur-[150px]"></div>
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-[size:80px_80px]"></div>
         
         <div className="container-wide section-padding relative z-10">
-          <div className="text-center mb-20">
-            <div className="inline-flex items-center gap-3 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border border-blue-500/20 text-blue-400 px-6 py-3 rounded-full text-sm font-medium backdrop-blur-xl mb-8">
-              <Zap className="w-4 h-4" />
+          <div className="text-center mb-24">
+            <div className="inline-flex items-center gap-3 bg-gradient-to-r from-blue-500/15 to-cyan-500/15 border border-blue-500/30 text-blue-300 px-8 py-4 rounded-full text-sm font-semibold backdrop-blur-xl mb-10 shadow-lg shadow-blue-500/10">
+              <Zap className="w-5 h-5" />
               Our Services
-              <span className="w-1.5 h-1.5 bg-blue-400 rounded-full animate-pulse"></span>
+              <span className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></span>
             </div>
             
-            <h2 className="text-4xl lg:text-6xl font-bold mb-6 text-white" style={{fontFamily: "'Playfair Display', serif"}}>
+            <h2 className="text-5xl lg:text-7xl font-bold mb-8 text-white" style={{fontFamily: "'Playfair Display', serif"}}>
               What We <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-teal-400 bg-clip-text text-transparent">Offer</span>
             </h2>
-            <p className="text-lg lg:text-xl text-white/70 max-w-3xl mx-auto font-light">
+            <p className="text-xl lg:text-2xl text-white/60 max-w-3xl mx-auto font-light leading-relaxed">
               Three core services designed to accelerate your digital growth
             </p>
           </div>
           
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
             {[
               {
                 icon: Globe,
@@ -183,6 +183,7 @@ const Index = () => {
                 description: "Stunning, SEO-optimized websites that convert visitors into customers.",
                 features: ["Custom Design", "SEO Optimization", "Mobile Responsive", "Fast Loading"],
                 color: "from-red-500 to-orange-500",
+                glow: "shadow-red-500/30",
                 href: "/website-design"
               },
               {
@@ -191,6 +192,7 @@ const Index = () => {
                 description: "Data-driven campaigns on Google, Facebook & TikTok that maximize ROI.",
                 features: ["Multi-Platform", "ROI Focused", "Advanced Targeting", "Analytics"],
                 color: "from-orange-500 to-yellow-500",
+                glow: "shadow-orange-500/30",
                 href: "/ads-management"
               },
               {
@@ -199,28 +201,34 @@ const Index = () => {
                 description: "Intelligent automation and chatbots that streamline your operations.",
                 features: ["Custom AI Solutions", "Workflow Automation", "Chatbots", "Integration"],
                 color: "from-purple-500 to-pink-500",
+                glow: "shadow-purple-500/30",
                 href: "/ai-automation"
               }
             ].map((service, i) => (
               <div key={i} className="group relative">
-                <div className={`absolute inset-0 bg-gradient-to-r ${service.color} rounded-2xl blur-xl opacity-0 group-hover:opacity-20 transition-opacity duration-500`}></div>
-                <div className="relative bg-white/5 border border-white/10 rounded-2xl p-8 backdrop-blur-sm hover:bg-white/8 hover:border-white/20 transition-all duration-300 h-full">
-                  <div className={`w-16 h-16 rounded-xl bg-gradient-to-r ${service.color} flex items-center justify-center mb-6 shadow-lg`}>
-                    <service.icon className="w-8 h-8 text-white" />
+                <div className={`absolute inset-0 bg-gradient-to-r ${service.color} rounded-3xl blur-2xl opacity-0 group-hover:opacity-25 transition-opacity duration-700`}></div>
+                <div className="relative bg-white/[0.04] border border-white/10 rounded-3xl p-10 backdrop-blur-xl hover:bg-white/[0.08] hover:border-white/25 transition-all duration-500 h-full group-hover:translate-y-[-8px]">
+                  {/* Premium corner accent */}
+                  <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${service.color} opacity-10 rounded-tr-3xl rounded-bl-[100px]`}></div>
+                  
+                  <div className={`w-20 h-20 rounded-2xl bg-gradient-to-br ${service.color} flex items-center justify-center mb-8 shadow-2xl ${service.glow}`}>
+                    <service.icon className="w-10 h-10 text-white" />
                   </div>
-                  <h3 className="text-2xl font-bold text-white mb-4">{service.title}</h3>
-                  <p className="text-white/70 mb-6 leading-relaxed">{service.description}</p>
-                  <ul className="space-y-3 mb-8">
+                  <h3 className="text-3xl font-bold text-white mb-5" style={{fontFamily: "'Playfair Display', serif"}}>{service.title}</h3>
+                  <p className="text-white/60 mb-8 leading-relaxed text-lg">{service.description}</p>
+                  <ul className="space-y-4 mb-10">
                     {service.features.map((feature, j) => (
-                      <li key={j} className="flex items-center gap-3 text-white/70">
-                        <Check className="w-4 h-4 text-green-400" />
-                        {feature}
+                      <li key={j} className="flex items-center gap-4 text-white/70">
+                        <div className={`w-6 h-6 rounded-full bg-gradient-to-r ${service.color} flex items-center justify-center`}>
+                          <Check className="w-3.5 h-3.5 text-white" />
+                        </div>
+                        <span className="font-medium">{feature}</span>
                       </li>
                     ))}
                   </ul>
-                  <Button asChild className={`w-full bg-gradient-to-r ${service.color} text-white hover:opacity-90 rounded-xl`}>
+                  <Button asChild className={`w-full bg-gradient-to-r ${service.color} text-white hover:opacity-90 rounded-xl py-6 text-lg font-semibold shadow-xl ${service.glow} transition-all duration-300 hover:shadow-2xl`}>
                     <Link to={service.href}>
-                      Learn More <ArrowRight className="w-4 h-4 ml-2" />
+                      Learn More <ArrowRight className="w-5 h-5 ml-2" />
                     </Link>
                   </Button>
                 </div>
