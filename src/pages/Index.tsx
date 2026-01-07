@@ -125,23 +125,25 @@ const Index = () => {
           </div>
 
           {/* Service Pills */}
-          <div className="flex flex-wrap justify-center gap-4 mt-20 lg:mt-28">
+          <div className="flex flex-wrap justify-center gap-5 mt-20 lg:mt-28">
             {[
-              { icon: Globe, label: "Web Design", color: "from-red-500 to-orange-500", href: "/website-design" },
-              { icon: Target, label: "Paid Ads", color: "from-orange-500 to-yellow-500", href: "/ads-management" },
-              { icon: Bot, label: "AI Automation", color: "from-purple-500 to-pink-500", href: "/ai-automation" },
-              { icon: Sparkles, label: "Strategy", color: "from-blue-500 to-cyan-500", href: "/contact" },
+              { icon: Globe, label: "Web Design", color: "from-red-500 to-orange-500", glow: "shadow-red-500/40", href: "/website-design" },
+              { icon: Target, label: "Paid Ads", color: "from-orange-500 to-yellow-500", glow: "shadow-orange-500/40", href: "/ads-management" },
+              { icon: Bot, label: "AI Automation", color: "from-purple-500 to-pink-500", glow: "shadow-purple-500/40", href: "/ai-automation" },
+              { icon: Sparkles, label: "Strategy", color: "from-blue-500 to-cyan-500", glow: "shadow-cyan-500/40", href: "/contact" },
             ].map((service, i) => (
               <Link 
                 key={i} 
                 to={service.href}
-                className="group flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/25 rounded-full px-6 py-4 transition-all duration-300 cursor-pointer hover:scale-105"
+                className="group relative flex items-center gap-4 bg-white/[0.06] hover:bg-white/[0.12] border border-white/15 hover:border-white/30 rounded-2xl px-7 py-5 transition-all duration-500 cursor-pointer hover:scale-105"
               >
-                <div className={`w-10 h-10 rounded-full bg-gradient-to-r ${service.color} flex items-center justify-center shadow-lg`}>
-                  <service.icon className="w-5 h-5 text-white" />
+                {/* Glow effect */}
+                <div className={`absolute inset-0 bg-gradient-to-r ${service.color} opacity-0 group-hover:opacity-20 rounded-2xl blur-xl transition-opacity duration-500`}></div>
+                <div className={`relative w-12 h-12 rounded-xl bg-gradient-to-br ${service.color} flex items-center justify-center shadow-xl ${service.glow}`}>
+                  <service.icon className="w-6 h-6 text-white" />
                 </div>
-                <span className="text-white/80 font-medium">{service.label}</span>
-                <ChevronRight className="w-4 h-4 text-white/60 group-hover:text-white/80 group-hover:translate-x-1 transition-all" />
+                <span className="relative text-lg text-white/90 font-semibold tracking-tight">{service.label}</span>
+                <ChevronRight className="relative w-5 h-5 text-white/50 group-hover:text-white group-hover:translate-x-1 transition-all duration-300" />
               </Link>
             ))}
           </div>
