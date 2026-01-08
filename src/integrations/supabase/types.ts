@@ -1170,6 +1170,36 @@ export type Database = {
         }
         Relationships: []
       }
+      trusted_logos: {
+        Row: {
+          created_at: string
+          display_order: number
+          id: string
+          logo_url: string
+          name: string
+          updated_at: string
+          visible: boolean
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          logo_url: string
+          name: string
+          updated_at?: string
+          visible?: boolean
+        }
+        Update: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          logo_url?: string
+          name?: string
+          updated_at?: string
+          visible?: boolean
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
