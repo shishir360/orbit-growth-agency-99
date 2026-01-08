@@ -797,79 +797,168 @@ const Index = () => {
         </section>
       )}
 
-      {/* CTA Section */}
-      <section className="py-32 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-violet-900/50 via-indigo-900/50 to-violet-900/50" />
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-[size:60px_60px]" />
+      {/* CTA Section - Premium Full Screen */}
+      <section className="min-h-screen flex items-center justify-center relative overflow-hidden">
+        {/* Premium gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#0a0a15] via-[#1a1a35] to-[#0a0a15]" />
         
-        {/* Animated orbs */}
+        {/* Animated mesh gradient */}
+        <div className="absolute inset-0">
+          <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top_left,rgba(124,58,237,0.15),transparent_50%)]" />
+          <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,rgba(59,130,246,0.15),transparent_50%)]" />
+          <div className="absolute bottom-0 left-1/2 w-full h-full bg-[radial-gradient(ellipse_at_bottom,rgba(168,85,247,0.1),transparent_50%)]" />
+        </div>
+        
+        {/* Premium grid pattern */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.015)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.015)_1px,transparent_1px)] bg-[size:100px_100px]" />
+        
+        {/* Floating orbs with glow */}
         <motion.div 
-          className="absolute top-0 left-1/4 w-96 h-96 bg-violet-600/20 rounded-full blur-3xl"
-          animate={{ x: [0, 50, 0], y: [0, 30, 0] }}
-          transition={{ duration: 10, repeat: Infinity }}
+          className="absolute top-1/4 left-1/6 w-[500px] h-[500px] bg-violet-600/10 rounded-full blur-[120px]"
+          animate={{ 
+            x: [0, 80, 0], 
+            y: [0, 50, 0],
+            scale: [1, 1.2, 1]
+          }}
+          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div 
-          className="absolute bottom-0 right-1/4 w-80 h-80 bg-indigo-600/20 rounded-full blur-3xl"
-          animate={{ x: [0, -40, 0], y: [0, -50, 0] }}
-          transition={{ duration: 12, repeat: Infinity }}
+          className="absolute bottom-1/4 right-1/6 w-[400px] h-[400px] bg-cyan-500/10 rounded-full blur-[100px]"
+          animate={{ 
+            x: [0, -60, 0], 
+            y: [0, -40, 0],
+            scale: [1, 1.15, 1]
+          }}
+          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
         />
+        <motion.div 
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-500/5 rounded-full blur-[150px]"
+          animate={{ 
+            scale: [1, 1.3, 1],
+            opacity: [0.3, 0.6, 0.3]
+          }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+        />
+        
+        {/* Sparkle particles */}
+        {[...Array(20)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1 h-1 bg-white/40 rounded-full"
+            style={{
+              left: `${10 + Math.random() * 80}%`,
+              top: `${10 + Math.random() * 80}%`,
+            }}
+            animate={{
+              opacity: [0, 1, 0],
+              scale: [0, 1, 0],
+            }}
+            transition={{
+              duration: 2 + Math.random() * 2,
+              repeat: Infinity,
+              delay: Math.random() * 3,
+            }}
+          />
+        ))}
         
         <div className="container-wide section-padding relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
+          <div className="max-w-5xl mx-auto text-center">
+            {/* Premium badge */}
             <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 30, scale: 0.9 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
               viewport={{ once: true }}
-              className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-xl border border-white/20 text-white px-5 py-2.5 rounded-full text-sm font-medium mb-8"
+              transition={{ duration: 0.6 }}
+              className="inline-flex items-center gap-3 bg-gradient-to-r from-amber-500/20 to-orange-500/20 backdrop-blur-2xl border border-amber-500/30 text-amber-300 px-7 py-3.5 rounded-full text-sm font-semibold mb-12 shadow-[0_0_40px_rgba(251,191,36,0.15)]"
             >
-              <Zap className="w-4 h-4 text-amber-400" />
-              Ready to Grow?
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+              >
+                <Sparkles className="w-5 h-5" />
+              </motion.div>
+              Ready to Transform?
+              <span className="w-2 h-2 bg-amber-400 rounded-full animate-pulse"></span>
             </motion.div>
             
+            {/* Main heading with TypeWriter */}
             <motion.h2 
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-4xl lg:text-7xl font-bold text-white mb-6" 
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="text-5xl md:text-7xl lg:text-8xl font-bold mb-10" 
               style={{fontFamily: "'Playfair Display', serif"}}
             >
-              <TypeWriter text="Let's Build Your" delay={60} />
-              <br />
-              <span className="bg-gradient-to-r from-violet-400 via-indigo-400 to-cyan-400 bg-clip-text text-transparent">
-                <TypeWriter text="Digital Empire" delay={60} />
+              <span className="text-white block mb-4">
+                <TypeWriter text="Let's Build Your" delay={50} />
+              </span>
+              <span className="bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-400 bg-clip-text text-transparent">
+                <TypeWriter text="Digital Empire" delay={50} />
               </span>
             </motion.h2>
             
+            {/* Subtitle */}
             <motion.p 
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-lg text-white/60 mb-10 max-w-2xl mx-auto font-light"
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="text-xl lg:text-2xl text-white/50 mb-14 max-w-3xl mx-auto font-light leading-relaxed"
             >
               Ready to transform your business? Let's discuss your project and create a strategy for success.
             </motion.p>
             
+            {/* Premium buttons */}
             <motion.div 
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="flex flex-col sm:flex-row gap-4 justify-center"
+              transition={{ duration: 0.6, delay: 0.6 }}
+              className="flex flex-col sm:flex-row gap-5 justify-center"
             >
-              <Button asChild size="lg" className="group text-base px-10 py-7 bg-white text-gray-900 hover:bg-white/90 rounded-full transition-all duration-300 hover:scale-105 font-semibold shadow-[0_0_40px_rgba(255,255,255,0.3)]">
-                <Link to="/contact" className="flex items-center gap-2">
-                  <Rocket className="w-5 h-5" />
+              <Button asChild size="lg" className="group relative text-lg px-12 py-8 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white rounded-full transition-all duration-500 hover:scale-105 font-semibold shadow-[0_0_50px_rgba(139,92,246,0.4)] hover:shadow-[0_0_80px_rgba(139,92,246,0.6)] overflow-hidden">
+                <Link to="/contact" className="flex items-center gap-3">
+                  <span className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></span>
+                  <Rocket className="w-6 h-6" />
                   Start Your Project
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform duration-300" />
                 </Link>
               </Button>
-              <Button asChild variant="outline" size="lg" className="text-base px-10 py-7 border-2 border-white/30 text-white bg-white/5 hover:bg-white/10 rounded-full transition-all duration-300 backdrop-blur-xl">
-                <Link to="/book-apartment">
+              <Button asChild variant="outline" size="lg" className="group text-lg px-12 py-8 border-2 border-white/20 text-white bg-white/5 hover:bg-white/10 hover:border-white/40 rounded-full transition-all duration-500 backdrop-blur-2xl">
+                <Link to="/book-apartment" className="flex items-center gap-3">
+                  <Play className="w-5 h-5" />
                   Book a Call
                 </Link>
               </Button>
             </motion.div>
+            
+            {/* Trust indicators */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.8 }}
+              className="mt-16 flex flex-wrap justify-center gap-8 text-white/40"
+            >
+              <div className="flex items-center gap-2">
+                <Shield className="w-5 h-5 text-emerald-400" />
+                <span className="text-sm">100% Satisfaction</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Clock className="w-5 h-5 text-blue-400" />
+                <span className="text-sm">Fast Delivery</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Star className="w-5 h-5 text-amber-400" />
+                <span className="text-sm">5-Star Rated</span>
+              </div>
+            </motion.div>
           </div>
         </div>
+        
+        {/* Bottom gradient fade */}
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#0a0a0f] to-transparent" />
       </section>
 
       <Footer />
