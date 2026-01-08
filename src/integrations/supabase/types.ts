@@ -269,6 +269,39 @@ export type Database = {
         }
         Relationships: []
       }
+      completed_clients: {
+        Row: {
+          created_at: string
+          display_order: number
+          id: string
+          logo_url: string
+          name: string
+          updated_at: string
+          visible: boolean
+          website_url: string | null
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          logo_url: string
+          name: string
+          updated_at?: string
+          visible?: boolean
+          website_url?: string | null
+        }
+        Update: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          logo_url?: string
+          name?: string
+          updated_at?: string
+          visible?: boolean
+          website_url?: string | null
+        }
+        Relationships: []
+      }
       contact_submissions: {
         Row: {
           company: string | null
