@@ -166,6 +166,7 @@ const aiSolutions = [
       title: "Intelligent Process Automation",
       description: "End-to-end business process automation using AI to learn and optimize workflows.",
       features: ["Process Learning", "Adaptive Optimization", "Real-time Analytics", "Scalable"],
+      metrics: { efficiency: "850%", satisfaction: "98%", resolution: "92%" },
       gradient: "from-violet-600 via-pink-500 to-rose-400",
       logo: <ZapierLogo />,
       logoName: "Zapier + Make",
