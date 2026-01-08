@@ -17,6 +17,7 @@ const Index = () => {
   const { content } = useContent();
   const [portfolioProjects, setPortfolioProjects] = useState<any[]>([]);
   const [currentProjectIndex, setCurrentProjectIndex] = useState(0);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
 
   useEffect(() => {
     const fetchPortfolio = async () => {
@@ -27,18 +28,31 @@ const Index = () => {
         .eq('blocked', false)
         .order('created_at', { ascending: false })
         .limit(6);
-      if (data) setPortfolioProjects(data);
+      if (data) {
+        setPortfolioProjects(data);
+        // Preload all images
+        const imagePromises = data
+          .filter(p => p.image_url)
+          .map(p => new Promise<void>((resolve) => {
+            const img = new Image();
+            img.onload = () => resolve();
+            img.onerror = () => resolve();
+            img.src = p.image_url;
+          }));
+        await Promise.all(imagePromises);
+        setImagesLoaded(true);
+      }
     };
     fetchPortfolio();
   }, []);
 
   useEffect(() => {
-    if (portfolioProjects.length === 0) return;
+    if (portfolioProjects.length === 0 || !imagesLoaded) return;
     const interval = setInterval(() => {
       setCurrentProjectIndex(prev => (prev + 1) % portfolioProjects.length);
     }, 4000);
     return () => clearInterval(interval);
-  }, [portfolioProjects.length]);
+  }, [portfolioProjects.length, imagesLoaded]);
 
   const visibleTestimonials = useMemo(() => 
     content.testimonials
@@ -289,7 +303,7 @@ const Index = () => {
       </section>
 
       {/* Portfolio Showcase Section */}
-      {portfolioProjects.length > 0 && (
+      {portfolioProjects.length > 0 && imagesLoaded && (
         <section className="py-32 bg-[#0a0a0f] relative overflow-hidden">
           {/* Background Effects */}
           <div className="absolute top-20 left-10 w-[600px] h-[600px] bg-gradient-to-r from-cyan-600/20 to-blue-500/15 rounded-full blur-[180px]"></div>
