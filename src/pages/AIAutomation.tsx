@@ -175,12 +175,12 @@ const aiSolutions = [
   ];
 
   const automationTypes = [
-    { name: "Customer Service AI", icon: <Bot className="w-8 h-8" />, savings: "85%", volume: "50K+" },
-    { name: "Sales Automation", icon: <Target className="w-8 h-8" />, savings: "70%", volume: "25K+" },
-    { name: "Content Generation", icon: <Sparkles className="w-8 h-8" />, savings: "90%", volume: "100K+" },
-    { name: "Data Intelligence", icon: <BarChart3 className="w-8 h-8" />, savings: "80%", volume: "1M+" },
-    { name: "Workflow Optimization", icon: <Workflow className="w-8 h-8" />, savings: "75%", volume: "15K+" },
-    { name: "Voice Intelligence", icon: <Phone className="w-8 h-8" />, savings: "95%", volume: "30K+" }
+    { name: "Customer Service AI", icon: <Bot className="w-8 h-8" />, savings: "85%", volume: "50K+", gradient: "from-violet-600 to-purple-600", logo: <OpenAILogo />, description: "24/7 intelligent support" },
+    { name: "Sales Automation", icon: <Target className="w-8 h-8" />, savings: "70%", volume: "25K+", gradient: "from-emerald-500 to-teal-500", logo: <GoogleAILogo />, description: "Lead scoring & nurturing" },
+    { name: "Content Generation", icon: <Sparkles className="w-8 h-8" />, savings: "90%", volume: "100K+", gradient: "from-pink-500 to-rose-500", logo: <AnthropicLogo />, description: "AI-powered creativity" },
+    { name: "Data Intelligence", icon: <BarChart3 className="w-8 h-8" />, savings: "80%", volume: "1M+", gradient: "from-blue-500 to-cyan-500", logo: <MicrosoftLogo />, description: "Advanced analytics" },
+    { name: "Workflow Optimization", icon: <Workflow className="w-8 h-8" />, savings: "75%", volume: "15K+", gradient: "from-amber-500 to-orange-500", logo: <ZapierLogo />, description: "Seamless integrations" },
+    { name: "Voice Intelligence", icon: <Phone className="w-8 h-8" />, savings: "95%", volume: "30K+", gradient: "from-fuchsia-500 to-purple-500", logo: <MakeLogo />, description: "Natural conversations" }
   ];
 
   const results = [
@@ -751,30 +751,93 @@ const aiSolutions = [
             </h2>
           </motion.div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {automationTypes.map((type, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: 30, rotateX: 10 }}
+                whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                whileHover={{ scale: 1.03, y: -5 }}
+                transition={{ delay: index * 0.1, duration: 0.5 }}
+                whileHover={{ scale: 1.02, y: -8 }}
+                className="group perspective-1000"
               >
-                <Card className="bg-gradient-to-br from-white/[0.08] to-white/[0.02] border border-white/10 hover:border-purple-500/50 transition-all duration-300 backdrop-blur-sm p-6 text-center group">
-                  <div className="w-16 h-16 bg-gradient-to-br from-purple-600 to-pink-600 rounded-2xl flex items-center justify-center text-white mx-auto mb-4 group-hover:scale-110 transition-transform">
-                    {type.icon}
-                  </div>
-                  <h3 className="text-lg font-bold text-white mb-4">{type.name}</h3>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="bg-white/5 rounded-xl p-3">
-                      <div className="text-xl font-bold text-purple-400">{type.savings}</div>
-                      <div className="text-xs text-gray-500">Cost Saved</div>
+                <Card className="relative bg-gradient-to-br from-white/[0.08] to-white/[0.02] border border-white/10 hover:border-white/30 transition-all duration-500 backdrop-blur-xl overflow-hidden">
+                  {/* Animated gradient background */}
+                  <div className={`absolute inset-0 bg-gradient-to-br ${type.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500`} />
+                  
+                  {/* Glowing orb effect */}
+                  <div className={`absolute -top-20 -right-20 w-40 h-40 bg-gradient-to-br ${type.gradient} rounded-full blur-[80px] opacity-0 group-hover:opacity-30 transition-opacity duration-700`} />
+                  
+                  <div className="relative z-10 p-8">
+                    {/* Header with logo */}
+                    <div className="flex items-center justify-between mb-6">
+                      <div className="flex items-center gap-3">
+                        <motion.div 
+                          className={`w-14 h-14 bg-gradient-to-br ${type.gradient} rounded-2xl flex items-center justify-center text-white shadow-lg`}
+                          whileHover={{ rotate: 10, scale: 1.1 }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          {type.icon}
+                        </motion.div>
+                        <div className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center backdrop-blur-sm">
+                          {type.logo}
+                        </div>
+                      </div>
+                      <motion.div 
+                        className={`w-2 h-2 rounded-full bg-gradient-to-r ${type.gradient}`}
+                        animate={{ scale: [1, 1.5, 1], opacity: [0.5, 1, 0.5] }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                      />
                     </div>
-                    <div className="bg-white/5 rounded-xl p-3">
-                      <div className="text-xl font-bold text-pink-400">{type.volume}</div>
-                      <div className="text-xs text-gray-500">Processes</div>
+                    
+                    {/* Title & Description */}
+                    <h3 className="text-xl font-bold text-white mb-2 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-gray-300 group-hover:bg-clip-text transition-all">
+                      {type.name}
+                    </h3>
+                    <p className="text-sm text-gray-500 mb-6">{type.description}</p>
+                    
+                    {/* Stats */}
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="bg-gradient-to-br from-white/[0.08] to-white/[0.03] rounded-xl p-4 border border-white/5 group-hover:border-white/10 transition-all">
+                        <div className={`text-2xl font-black bg-gradient-to-r ${type.gradient} bg-clip-text text-transparent`}>
+                          {type.savings}
+                        </div>
+                        <div className="text-[10px] text-gray-500 uppercase tracking-wider mt-1">Cost Saved</div>
+                        <motion.div 
+                          className={`w-full h-1 bg-gradient-to-r ${type.gradient} rounded-full mt-2 origin-left`}
+                          initial={{ scaleX: 0 }}
+                          whileInView={{ scaleX: parseFloat(type.savings) / 100 }}
+                          transition={{ delay: 0.5 + index * 0.1, duration: 0.8 }}
+                        />
+                      </div>
+                      <div className="bg-gradient-to-br from-white/[0.08] to-white/[0.03] rounded-xl p-4 border border-white/5 group-hover:border-white/10 transition-all">
+                        <div className="text-2xl font-black text-white">
+                          {type.volume}
+                        </div>
+                        <div className="text-[10px] text-gray-500 uppercase tracking-wider mt-1">Processes</div>
+                        <div className="flex gap-1 mt-2">
+                          {[...Array(5)].map((_, i) => (
+                            <motion.div
+                              key={i}
+                              className={`w-full h-1 bg-gradient-to-r ${type.gradient} rounded-full`}
+                              initial={{ opacity: 0.2 }}
+                              whileInView={{ opacity: 1 }}
+                              transition={{ delay: 0.6 + i * 0.1 }}
+                            />
+                          ))}
+                        </div>
+                      </div>
                     </div>
+                    
+                    {/* Hover arrow */}
+                    <motion.div 
+                      className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity"
+                      initial={{ x: -10 }}
+                      whileHover={{ x: 0 }}
+                    >
+                      <ArrowRight className={`w-5 h-5 text-gray-400`} />
+                    </motion.div>
                   </div>
                 </Card>
               </motion.div>
