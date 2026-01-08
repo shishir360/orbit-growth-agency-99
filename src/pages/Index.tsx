@@ -10,9 +10,35 @@ import { Globe, Target, Bot, Sparkles, ArrowRight, Zap, Check, Star, Calendar, U
 import { useEffect, useState, useMemo } from "react";
 import heroDashboard from "@/assets/hero-dashboard-optimized.webp";
 import { Link } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { AnimatePresence } from "framer-motion";
 
 const Index = () => {
   const { content } = useContent();
+  const [portfolioProjects, setPortfolioProjects] = useState<any[]>([]);
+  const [currentProjectIndex, setCurrentProjectIndex] = useState(0);
+
+  useEffect(() => {
+    const fetchPortfolio = async () => {
+      const { data } = await supabase
+        .from('portfolio')
+        .select('id, title, description, category, image_url, slug')
+        .eq('published', true)
+        .eq('blocked', false)
+        .order('created_at', { ascending: false })
+        .limit(6);
+      if (data) setPortfolioProjects(data);
+    };
+    fetchPortfolio();
+  }, []);
+
+  useEffect(() => {
+    if (portfolioProjects.length === 0) return;
+    const interval = setInterval(() => {
+      setCurrentProjectIndex(prev => (prev + 1) % portfolioProjects.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [portfolioProjects.length]);
 
   const visibleTestimonials = useMemo(() => 
     content.testimonials
@@ -261,6 +287,164 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      {/* Portfolio Showcase Section */}
+      {portfolioProjects.length > 0 && (
+        <section className="py-32 bg-[#0a0a0f] relative overflow-hidden">
+          {/* Background Effects */}
+          <div className="absolute top-20 left-10 w-[600px] h-[600px] bg-gradient-to-r from-cyan-600/20 to-blue-500/15 rounded-full blur-[180px]"></div>
+          <div className="absolute bottom-20 right-10 w-[500px] h-[500px] bg-gradient-to-r from-violet-600/15 to-purple-500/15 rounded-full blur-[150px]"></div>
+          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-[size:80px_80px]"></div>
+          
+          <div className="container-wide section-padding relative z-10">
+            <div className="text-center mb-16">
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+                className="inline-flex items-center gap-3 bg-gradient-to-r from-cyan-500/15 to-blue-500/15 border border-cyan-500/30 text-cyan-300 px-8 py-4 rounded-full text-sm font-semibold backdrop-blur-xl mb-10 shadow-lg shadow-cyan-500/10"
+              >
+                <Award className="w-5 h-5" />
+                Our Portfolio
+                <span className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></span>
+              </motion.div>
+              
+              <motion.h2 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                className="text-5xl lg:text-7xl font-bold mb-8 text-white" 
+                style={{fontFamily: "'Playfair Display', serif"}}
+              >
+                Success <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-violet-400 bg-clip-text text-transparent">Stories</span>
+              </motion.h2>
+              
+              <motion.p 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="text-xl lg:text-2xl text-white/60 max-w-3xl mx-auto font-light leading-relaxed"
+              >
+                Discover how we've transformed businesses with stunning digital solutions
+              </motion.p>
+            </div>
+
+            {/* Main Showcase */}
+            <div className="relative max-w-5xl mx-auto">
+              {/* Project Display */}
+              <div className="relative h-[500px] lg:h-[600px] rounded-3xl overflow-hidden">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={currentProjectIndex}
+                    initial={{ opacity: 0, scale: 1.1, filter: "blur(10px)" }}
+                    animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+                    exit={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
+                    transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                    className="absolute inset-0"
+                  >
+                    {/* Image */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900">
+                      {portfolioProjects[currentProjectIndex]?.image_url && (
+                        <img 
+                          src={portfolioProjects[currentProjectIndex].image_url} 
+                          alt={portfolioProjects[currentProjectIndex].title}
+                          className="w-full h-full object-cover opacity-80"
+                        />
+                      )}
+                    </div>
+                    
+                    {/* Gradient Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
+                    
+                    {/* Content */}
+                    <div className="absolute bottom-0 left-0 right-0 p-8 lg:p-12">
+                      <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, delay: 0.3 }}
+                      >
+                        <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 rounded-full text-sm text-white/80 mb-4">
+                          {portfolioProjects[currentProjectIndex]?.category}
+                        </div>
+                        
+                        <h3 className="text-3xl lg:text-5xl font-bold text-white mb-4" style={{fontFamily: "'Playfair Display', serif"}}>
+                          {portfolioProjects[currentProjectIndex]?.title?.split('—')[0]}
+                        </h3>
+                        
+                        <p className="text-lg text-white/70 max-w-2xl mb-6 line-clamp-2">
+                          {portfolioProjects[currentProjectIndex]?.description}
+                        </p>
+                        
+                        <Button asChild className="bg-white text-black hover:bg-white/90 rounded-xl px-8 py-6 text-lg font-semibold shadow-2xl">
+                          <Link to={`/portfolio/${portfolioProjects[currentProjectIndex]?.slug}`}>
+                            View Project <ArrowRight className="w-5 h-5 ml-2" />
+                          </Link>
+                        </Button>
+                      </motion.div>
+                    </div>
+                  </motion.div>
+                </AnimatePresence>
+                
+                {/* Decorative Border */}
+                <div className="absolute inset-0 border-2 border-white/10 rounded-3xl pointer-events-none"></div>
+              </div>
+
+              {/* Project Indicators */}
+              <div className="flex justify-center gap-3 mt-8">
+                {portfolioProjects.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setCurrentProjectIndex(i)}
+                    className={`h-2 rounded-full transition-all duration-500 ${
+                      i === currentProjectIndex 
+                        ? 'w-12 bg-gradient-to-r from-cyan-400 to-blue-500' 
+                        : 'w-2 bg-white/30 hover:bg-white/50'
+                    }`}
+                  />
+                ))}
+              </div>
+
+              {/* Project Titles List */}
+              <div className="mt-12 flex flex-wrap justify-center gap-4">
+                {portfolioProjects.map((project, i) => (
+                  <motion.button
+                    key={project.id}
+                    onClick={() => setCurrentProjectIndex(i)}
+                    className={`relative px-6 py-3 rounded-xl text-sm font-medium transition-all duration-500 ${
+                      i === currentProjectIndex 
+                        ? 'bg-white/10 text-white border border-white/20' 
+                        : 'text-white/50 hover:text-white/80'
+                    }`}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    {i === currentProjectIndex && (
+                      <motion.div
+                        layoutId="activeProject"
+                        className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-xl border border-cyan-500/30"
+                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                      />
+                    )}
+                    <span className="relative z-10">{project.title?.split('—')[0]?.trim()}</span>
+                  </motion.button>
+                ))}
+              </div>
+
+              {/* View All Button */}
+              <div className="text-center mt-12">
+                <Button asChild variant="outline" className="border-white/20 text-white hover:bg-white/10 rounded-xl px-8 py-6 text-lg">
+                  <Link to="/portfolio">
+                    View All Projects <ArrowRight className="w-5 h-5 ml-2" />
+                  </Link>
+                </Button>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Stats Section */}
       <section className="py-24 bg-[#0a0a0f] relative overflow-hidden">
