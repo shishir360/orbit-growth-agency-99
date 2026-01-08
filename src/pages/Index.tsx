@@ -117,99 +117,143 @@ const Index = () => {
         />
         
         <div className="container-wide section-padding relative z-10 pt-24">
-          <div className="text-center max-w-5xl mx-auto">
-            {/* Premium badge with glow */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+            {/* Content */}
+            <div className="text-center lg:text-left">
+              {/* Premium badge with glow */}
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="inline-flex items-center gap-3 bg-white/5 backdrop-blur-xl border border-white/10 text-white/90 px-6 py-3 rounded-full text-sm font-medium mb-8 shadow-[0_0_30px_rgba(99,102,241,0.3)]"
+              >
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                </span>
+                <span className="bg-gradient-to-r from-white to-white/70 bg-clip-text">Trusted by 50+ businesses worldwide</span>
+                <Sparkles className="w-4 h-4 text-amber-400" />
+              </motion.div>
+              
+              {/* Main headline with gradient */}
+              <motion.h1 
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="text-4xl sm:text-5xl lg:text-7xl xl:text-[5.5rem] font-bold leading-[0.95] tracking-tight mb-8"
+                style={{fontFamily: "'Playfair Display', serif"}}
+              >
+                <span className="bg-gradient-to-r from-white via-white to-white/60 bg-clip-text text-transparent">
+                  <TypeWriter text="We Build" delay={80} />
+                </span>
+                <br />
+                <span className="bg-gradient-to-r from-violet-400 via-indigo-400 to-cyan-400 bg-clip-text text-transparent">
+                  <TypeWriter text="Digital Empires" delay={80} />
+                </span>
+              </motion.h1>
+              
+              <motion.p 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+                className="text-lg lg:text-xl text-white/60 leading-relaxed max-w-xl mx-auto lg:mx-0 mb-10 font-light"
+              >
+                Premium website design, performance ads & AI automation — 
+                <span className="text-white/90"> crafted for brands that demand excellence.</span>
+              </motion.p>
+              
+              {/* CTAs with glassmorphism */}
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.5 }}
+                className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-10"
+              >
+                <Button asChild size="lg" className="group relative text-base px-10 py-7 bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:from-violet-500 hover:to-indigo-500 rounded-full transition-all duration-500 hover:scale-105 font-semibold shadow-[0_0_40px_rgba(99,102,241,0.4)] hover:shadow-[0_0_60px_rgba(99,102,241,0.6)]">
+                  <Link to="/contact" className="flex items-center gap-2">
+                    <Rocket className="w-5 h-5" />
+                    Start Your Project
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </Link>
+                </Button>
+                <Button asChild variant="outline" size="lg" className="group text-base px-10 py-7 border border-white/20 text-white bg-white/5 hover:bg-white/10 backdrop-blur-xl rounded-full transition-all duration-300">
+                  <Link to="/portfolio" className="flex items-center gap-2">
+                    <Play className="w-4 h-4" />
+                    View Our Work
+                  </Link>
+                </Button>
+              </motion.div>
+              
+              {/* Stats with glow effects */}
+              <motion.div 
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.6 }}
+                className="flex items-center justify-center lg:justify-start gap-8 lg:gap-12 pt-8 border-t border-white/10"
+              >
+                {[
+                  { value: "200%", label: "Avg. Growth", icon: TrendingUp, color: "from-emerald-400 to-green-500" },
+                  { value: "50+", label: "Happy Clients", icon: Users, color: "from-violet-400 to-indigo-500" },
+                  { value: "10x", label: "ROI Achieved", icon: BarChart3, color: "from-amber-400 to-orange-500" }
+                ].map((stat, i) => (
+                  <motion.div 
+                    key={i}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5, delay: 0.7 + i * 0.1 }}
+                    className="text-center group"
+                  >
+                    <div className={`text-3xl lg:text-4xl font-bold bg-gradient-to-r ${stat.color} bg-clip-text text-transparent mb-1`}>
+                      {stat.value}
+                    </div>
+                    <div className="text-xs text-white/40 uppercase tracking-wider flex items-center justify-center gap-2">
+                      <stat.icon className="w-3 h-3" />
+                      {stat.label}
+                    </div>
+                  </motion.div>
+                ))}
+              </motion.div>
+            </div>
+
+            {/* Video Section */}
             <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="inline-flex items-center gap-3 bg-white/5 backdrop-blur-xl border border-white/10 text-white/90 px-6 py-3 rounded-full text-sm font-medium mb-8 shadow-[0_0_30px_rgba(99,102,241,0.3)]"
+              initial={{ opacity: 0, x: 50, scale: 0.95 }}
+              animate={{ opacity: 1, x: 0, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              className="relative"
             >
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-              </span>
-              <span className="bg-gradient-to-r from-white to-white/70 bg-clip-text">Trusted by 50+ businesses worldwide</span>
-              <Sparkles className="w-4 h-4 text-amber-400" />
-            </motion.div>
-            
-            {/* Main headline with gradient */}
-            <motion.h1 
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-5xl sm:text-6xl lg:text-8xl xl:text-[7rem] font-bold leading-[0.95] tracking-tight mb-8"
-              style={{fontFamily: "'Playfair Display', serif"}}
-            >
-              <span className="bg-gradient-to-r from-white via-white to-white/60 bg-clip-text text-transparent">
-                <TypeWriter text="We Build" delay={80} />
-              </span>
-              <br />
-              <span className="bg-gradient-to-r from-violet-400 via-indigo-400 to-cyan-400 bg-clip-text text-transparent">
-                <TypeWriter text="Digital Empires" delay={80} />
-              </span>
-            </motion.h1>
-            
-            <motion.p 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="text-lg lg:text-xl text-white/60 leading-relaxed max-w-2xl mx-auto mb-10 font-light"
-            >
-              Premium website design, performance ads & AI automation — 
-              <span className="text-white/90"> crafted for brands that demand excellence.</span>
-            </motion.p>
-            
-            {/* CTAs with glassmorphism */}
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.5 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center mb-12"
-            >
-              <Button asChild size="lg" className="group relative text-base px-10 py-7 bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:from-violet-500 hover:to-indigo-500 rounded-full transition-all duration-500 hover:scale-105 font-semibold shadow-[0_0_40px_rgba(99,102,241,0.4)] hover:shadow-[0_0_60px_rgba(99,102,241,0.6)]">
-                <Link to="/contact" className="flex items-center gap-2">
-                  <Rocket className="w-5 h-5" />
-                  Start Your Project
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </Link>
-              </Button>
-              <Button asChild variant="outline" size="lg" className="group text-base px-10 py-7 border border-white/20 text-white bg-white/5 hover:bg-white/10 backdrop-blur-xl rounded-full transition-all duration-300">
-                <Link to="/portfolio" className="flex items-center gap-2">
-                  <Play className="w-4 h-4" />
-                  View Our Work
-                </Link>
-              </Button>
-            </motion.div>
-            
-            {/* Stats with glow effects */}
-            <motion.div 
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
-              className="flex items-center justify-center gap-8 lg:gap-16 pt-8"
-            >
-              {[
-                { value: "200%", label: "Avg. Growth", icon: TrendingUp, color: "from-emerald-400 to-green-500" },
-                { value: "50+", label: "Happy Clients", icon: Users, color: "from-violet-400 to-indigo-500" },
-                { value: "10x", label: "ROI Achieved", icon: BarChart3, color: "from-amber-400 to-orange-500" }
-              ].map((stat, i) => (
-                <motion.div 
-                  key={i}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5, delay: 0.7 + i * 0.1 }}
-                  className="text-center group"
-                >
-                  <div className={`text-4xl lg:text-5xl font-bold bg-gradient-to-r ${stat.color} bg-clip-text text-transparent mb-1`}>
-                    {stat.value}
-                  </div>
-                  <div className="text-xs text-white/40 uppercase tracking-wider flex items-center justify-center gap-2">
-                    <stat.icon className="w-3 h-3" />
-                    {stat.label}
-                  </div>
-                </motion.div>
-              ))}
+              <div className="relative bg-white/5 backdrop-blur-xl p-3 rounded-3xl border border-white/10 shadow-2xl shadow-violet-500/10">
+                <YouTubeFacade
+                  videoId="jQJqW8JAWWU"
+                  title="YouTube video player"
+                  width="100%"
+                  height="315"
+                  autoplay={true}
+                  loop={true}
+                  mute={false}
+                  loading="eager"
+                  className="relative w-full aspect-video rounded-2xl shadow-lg"
+                />
+              </div>
+              
+              {/* Floating badges */}
+              <motion.div 
+                animate={{ y: [0, -8, 0] }}
+                transition={{ duration: 3, repeat: Infinity }}
+                className="absolute -bottom-4 -left-4 bg-gradient-to-r from-emerald-600 to-green-600 text-white px-4 py-2 rounded-xl text-sm font-semibold shadow-lg flex items-center gap-2"
+              >
+                <TrendingUp className="w-4 h-4" />
+                Live Results
+              </motion.div>
+              
+              <motion.div 
+                animate={{ y: [0, -6, 0] }}
+                transition={{ duration: 4, repeat: Infinity, delay: 1 }}
+                className="absolute -top-4 -right-4 bg-gradient-to-r from-violet-600 to-indigo-600 text-white px-4 py-2 rounded-xl text-sm font-semibold shadow-lg flex items-center gap-2"
+              >
+                <Award className="w-4 h-4" />
+                Premium Quality
+              </motion.div>
             </motion.div>
           </div>
 
@@ -629,10 +673,13 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Testimonials */}
+      {/* Testimonials - Infinite Scroll Animation */}
       {visibleTestimonials.length > 0 && (
         <section className="py-32 relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-b from-[#0f0f1a] via-[#0a0a0f] to-[#0f0f1a]" />
+          
+          {/* Gradient line top */}
+          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-500/30 to-transparent"></div>
           
           <div className="container-wide section-padding relative z-10">
             <div className="text-center mb-16">
@@ -662,35 +709,91 @@ const Index = () => {
               </motion.h2>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-              {visibleTestimonials.slice(0, 3).map((testimonial, i) => (
+            {/* Infinite Scroll Testimonials */}
+            <div className="relative overflow-hidden">
+              {/* Gradient masks for smooth fade */}
+              <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#0a0a0f] to-transparent z-10"></div>
+              <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#0a0a0f] to-transparent z-10"></div>
+              
+              <motion.div 
+                className="flex gap-8"
+                animate={{
+                  x: [0, -400 * visibleTestimonials.length],
+                }}
+                transition={{
+                  x: {
+                    duration: visibleTestimonials.length * 8,
+                    repeat: Infinity,
+                    ease: "linear",
+                  },
+                }}
+              >
+                {/* Duplicate testimonials for infinite effect */}
+                {[...visibleTestimonials, ...visibleTestimonials, ...visibleTestimonials].map((testimonial, i) => (
+                  <motion.div
+                    key={`${testimonial.author}-${i}`}
+                    className="group relative flex-shrink-0 w-[380px]"
+                    whileHover={{ scale: 1.02, y: -5 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    {/* Floating animation */}
+                    <motion.div
+                      animate={{
+                        y: [0, -6, 0],
+                      }}
+                      transition={{
+                        duration: 4,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                        delay: i * 0.3,
+                      }}
+                    >
+                      {/* Glow effect on hover */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-amber-500/20 to-yellow-500/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-2xl"></div>
+                      
+                      <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 group-hover:border-amber-500/30 group-hover:bg-white/[0.08] transition-all duration-500 h-full">
+                        <div className="flex gap-1 mb-4">
+                          {[...Array(5)].map((_, j) => (
+                            <Star key={j} className="w-5 h-5 text-amber-400 fill-amber-400" />
+                          ))}
+                        </div>
+                        <p className="text-white/60 leading-relaxed mb-6 line-clamp-4">"{testimonial.quote}"</p>
+                        <div className="flex items-center gap-4">
+                          {testimonial.image && (
+                            <img src={testimonial.image} alt={testimonial.author} className="w-12 h-12 rounded-full object-cover border-2 border-amber-500/30" />
+                          )}
+                          <div>
+                            <div className="font-semibold text-white">{testimonial.author}</div>
+                            <div className="text-white/40 text-sm">{testimonial.role}, {testimonial.company}</div>
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+                  </motion.div>
+                ))}
+              </motion.div>
+            </div>
+            
+            {/* Animated dots indicator */}
+            <div className="flex justify-center items-center gap-2 mt-12">
+              {[...Array(4)].map((_, i) => (
                 <motion.div 
                   key={i} 
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
-                  className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 hover:border-amber-500/30 transition-all duration-300"
-                >
-                  <div className="flex gap-1 mb-4">
-                    {[...Array(5)].map((_, j) => (
-                      <Star key={j} className="w-5 h-5 text-amber-400 fill-amber-400" />
-                    ))}
-                  </div>
-                  <p className="text-white/60 leading-relaxed mb-6">"{testimonial.quote}"</p>
-                  <div className="flex items-center gap-4">
-                    {testimonial.image && (
-                      <img src={testimonial.image} alt={testimonial.author} className="w-12 h-12 rounded-full object-cover border-2 border-amber-500/30" />
-                    )}
-                    <div>
-                      <div className="font-semibold text-white">{testimonial.author}</div>
-                      <div className="text-white/40 text-sm">{testimonial.role}, {testimonial.company}</div>
-                    </div>
-                  </div>
-                </motion.div>
+                  className={`rounded-full ${i === 0 ? 'w-8 h-1.5 bg-gradient-to-r from-amber-400 to-yellow-500' : 'w-1.5 h-1.5 bg-white/20'}`}
+                  animate={{
+                    scale: i === 0 ? [1, 1.1, 1] : 1,
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                  }}
+                />
               ))}
             </div>
           </div>
+          
+          {/* Gradient line bottom */}
+          <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-500/30 to-transparent"></div>
         </section>
       )}
 
