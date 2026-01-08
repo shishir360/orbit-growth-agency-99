@@ -212,20 +212,20 @@ const Index = () => {
 
       {/* Services Section */}
       <section className="py-36 bg-[#0a0a0f] relative overflow-hidden">
-        <div className="absolute top-20 left-10 w-[600px] h-[600px] bg-gradient-to-r from-orange-600/20 to-orange-500/15 rounded-full blur-[180px]"></div>
-        <div className="absolute bottom-20 right-10 w-[500px] h-[500px] bg-gradient-to-r from-orange-500/15 to-red-500/10 rounded-full blur-[150px]"></div>
+        <div className="absolute top-20 left-10 w-[600px] h-[600px] bg-gradient-to-r from-orange-400/10 to-amber-400/5 rounded-full blur-[180px]"></div>
+        <div className="absolute bottom-20 right-10 w-[500px] h-[500px] bg-gradient-to-r from-amber-400/8 to-orange-400/5 rounded-full blur-[150px]"></div>
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-[size:80px_80px]"></div>
         
         <div className="container-wide section-padding relative z-10">
           <div className="text-center mb-24">
-            <div className="inline-flex items-center gap-3 bg-orange-500/15 border border-orange-500/30 text-orange-300 px-8 py-4 rounded-full text-sm font-semibold backdrop-blur-xl mb-10 shadow-lg shadow-orange-500/10">
+            <div className="inline-flex items-center gap-3 bg-orange-400/10 border border-orange-400/20 text-orange-300 px-8 py-4 rounded-full text-sm font-semibold backdrop-blur-xl mb-10">
               <Zap className="w-5 h-5" />
               Our Services
               <span className="w-2 h-2 bg-orange-400 rounded-full animate-pulse"></span>
             </div>
             
             <h2 className="text-5xl lg:text-7xl font-bold mb-8 text-white" style={{fontFamily: "'Playfair Display', serif"}}>
-              What We <span className="bg-gradient-to-r from-orange-400 to-orange-500 bg-clip-text text-transparent">Offer</span>
+              What We <span className="bg-gradient-to-r from-orange-300 to-amber-400 bg-clip-text text-transparent">Offer</span>
             </h2>
             <p className="text-xl lg:text-2xl text-white/60 max-w-3xl mx-auto font-light leading-relaxed">
               Three core services designed to accelerate your digital growth
@@ -239,8 +239,8 @@ const Index = () => {
                 title: "Website Design",
                 description: "Stunning, SEO-optimized websites that convert visitors into customers.",
                 features: ["Custom Design", "SEO Optimization", "Mobile Responsive", "Fast Loading"],
-                color: "from-orange-500 to-orange-600",
-                glow: "shadow-orange-500/30",
+                color: "from-orange-400 to-amber-500",
+                glow: "shadow-orange-400/20",
                 href: "/website-design"
               },
               {
@@ -248,8 +248,8 @@ const Index = () => {
                 title: "Ads Management",
                 description: "Data-driven campaigns on Google, Facebook & TikTok that maximize ROI.",
                 features: ["Multi-Platform", "ROI Focused", "Advanced Targeting", "Analytics"],
-                color: "from-orange-500 to-orange-600",
-                glow: "shadow-orange-500/30",
+                color: "from-orange-400 to-amber-500",
+                glow: "shadow-orange-400/20",
                 href: "/ads-management"
               },
               {
@@ -257,8 +257,8 @@ const Index = () => {
                 title: "AI Automation",
                 description: "Intelligent automation and chatbots that streamline your operations.",
                 features: ["Custom AI Solutions", "Workflow Automation", "Chatbots", "Integration"],
-                color: "from-orange-500 to-orange-600",
-                glow: "shadow-orange-500/30",
+                color: "from-orange-400 to-amber-500",
+                glow: "shadow-orange-400/20",
                 href: "/ai-automation"
               }
             ].map((service, i) => (
@@ -270,10 +270,10 @@ const Index = () => {
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.6, delay: i * 0.15, ease: [0.22, 1, 0.36, 1] }}
               >
-                <div className={`absolute inset-0 bg-gradient-to-r ${service.color} rounded-3xl blur-2xl opacity-0 group-hover:opacity-25 transition-opacity duration-700`}></div>
-                <div className="relative bg-white/[0.04] border border-white/10 rounded-3xl p-10 backdrop-blur-xl hover:bg-white/[0.08] hover:border-white/25 transition-all duration-500 h-full group-hover:translate-y-[-8px]">
+                <div className={`absolute inset-0 bg-gradient-to-r ${service.color} rounded-3xl blur-2xl opacity-0 group-hover:opacity-15 transition-opacity duration-700`}></div>
+                <div className="relative bg-white/[0.03] border border-white/10 rounded-3xl p-10 backdrop-blur-xl hover:bg-white/[0.06] hover:border-white/20 transition-all duration-500 h-full group-hover:translate-y-[-8px]">
                   {/* Premium corner accent */}
-                  <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${service.color} opacity-10 rounded-tr-3xl rounded-bl-[100px]`}></div>
+                  <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${service.color} opacity-5 rounded-tr-3xl rounded-bl-[100px]`}></div>
                   
                   <div className={`w-20 h-20 rounded-2xl bg-gradient-to-br ${service.color} flex items-center justify-center mb-8 shadow-2xl ${service.glow}`}>
                     <service.icon className="w-10 h-10 text-white" />
@@ -290,7 +290,7 @@ const Index = () => {
                       </li>
                     ))}
                   </ul>
-                  <Button asChild className={`w-full bg-gradient-to-r ${service.color} text-white hover:opacity-90 rounded-xl py-6 text-lg font-semibold shadow-xl ${service.glow} transition-all duration-300 hover:shadow-2xl`}>
+                  <Button asChild className={`w-full bg-gradient-to-r ${service.color} text-white hover:opacity-90 rounded-xl py-6 text-lg font-semibold shadow-lg ${service.glow} transition-all duration-300`}>
                     <Link to={service.href}>
                       Learn More <ArrowRight className="w-5 h-5 ml-2" />
                     </Link>
