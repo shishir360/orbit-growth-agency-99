@@ -1,5 +1,6 @@
 import { YouTubeFacade } from '@/components/ui/youtube-facade';
 import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
 import Navigation from "@/components/ui/navigation";
 import Footer from "@/components/ui/footer";
 import TrustedBy from "@/components/ui/trusted-by";
@@ -205,7 +206,14 @@ const Index = () => {
                 href: "/ai-automation"
               }
             ].map((service, i) => (
-              <div key={i} className="group relative">
+              <motion.div 
+                key={i} 
+                className="group relative"
+                initial={{ opacity: 0, y: 60 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.6, delay: i * 0.15, ease: [0.22, 1, 0.36, 1] }}
+              >
                 <div className={`absolute inset-0 bg-gradient-to-r ${service.color} rounded-3xl blur-2xl opacity-0 group-hover:opacity-25 transition-opacity duration-700`}></div>
                 <div className="relative bg-white/[0.04] border border-white/10 rounded-3xl p-10 backdrop-blur-xl hover:bg-white/[0.08] hover:border-white/25 transition-all duration-500 h-full group-hover:translate-y-[-8px]">
                   {/* Premium corner accent */}
@@ -232,7 +240,7 @@ const Index = () => {
                     </Link>
                   </Button>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
