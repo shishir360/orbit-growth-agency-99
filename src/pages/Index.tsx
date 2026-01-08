@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import Navigation from "@/components/ui/navigation";
 import Footer from "@/components/ui/footer";
 import TrustedBy from "@/components/ui/trusted-by";
+import CompletedClients from "@/components/ui/completed-clients";
+import ChatVoiceWidget from "@/components/ui/chat-voice-widget";
 import SEO from "@/components/ui/seo";
 import { useContent } from "@/contexts/ContentContext";
 import { Globe, Target, Bot, Sparkles, ArrowRight, Zap, Check, Star, Users, Award, TrendingUp, Play, ChevronRight, Clock, Shield, Rocket, MousePointer, BarChart3, Layers, Heart } from "lucide-react";
@@ -961,7 +963,13 @@ const Index = () => {
         <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#0a0a0f] to-transparent" />
       </section>
 
+      {/* Completed Clients Section */}
+      <CompletedClients />
+
       <Footer />
+      
+      {/* Chat & Voice Widget */}
+      <ChatVoiceWidget />
     </div>
   );
 };
