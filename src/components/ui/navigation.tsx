@@ -13,6 +13,7 @@ import {
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [servicesOpen, setServicesOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
   const { content } = useContent();
@@ -287,34 +288,58 @@ const Navigation = () => {
                     Home
                   </motion.a>
                   
-                  {/* Services Section */}
-                  <div className="space-y-2 pt-2">
-                    <motion.div 
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
+                  {/* Services Collapsible Category */}
+                  <div className="space-y-1">
+                    <motion.button
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.15 }}
-                      className="px-5 py-2 text-xs font-bold text-violet-400/80 uppercase tracking-widest flex items-center gap-2"
+                      onClick={() => setServicesOpen(!servicesOpen)}
+                      className="w-full px-5 py-4 text-base font-medium transition-all rounded-xl flex items-center justify-between text-white/60 hover:text-white hover:bg-white/5"
                     >
-                      <Zap className="w-3 h-3" />
-                      Services
-                    </motion.div>
-                    {serviceItems.map((item, index) => (
-                      <motion.a
-                        key={item.id}
-                        href={item.href}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.2 + index * 0.05 }}
-                        className={`px-5 py-4 text-base font-medium transition-all rounded-xl ml-3 flex items-center gap-3 ${
-                          isActive(item.href)
-                            ? "text-white bg-gradient-to-r from-violet-500/20 to-indigo-500/20 border border-violet-500/30"
-                            : "text-white/60 hover:text-white hover:bg-white/5"
-                        }`}
+                      <span className="flex items-center gap-3">
+                        <Zap className="w-4 h-4 text-violet-400" />
+                        Services
+                      </span>
+                      <motion.div
+                        animate={{ rotate: servicesOpen ? 180 : 0 }}
+                        transition={{ duration: 0.3 }}
                       >
-                        <span className="w-1.5 h-1.5 rounded-full bg-violet-500" />
-                        {item.name}
-                      </motion.a>
-                    ))}
+                        <ChevronDown className="w-5 h-5" />
+                      </motion.div>
+                    </motion.button>
+                    
+                    <AnimatePresence>
+                      {servicesOpen && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: "auto" }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.3 }}
+                          className="overflow-hidden"
+                        >
+                          <div className="ml-4 space-y-1 py-2 border-l-2 border-violet-500/30">
+                            {serviceItems.map((item, index) => (
+                              <motion.a
+                                key={item.id}
+                                href={item.href}
+                                initial={{ opacity: 0, x: -10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: index * 0.05 }}
+                                className={`px-5 py-3 text-base font-medium transition-all rounded-xl ml-2 flex items-center gap-3 ${
+                                  isActive(item.href)
+                                    ? "text-white bg-gradient-to-r from-violet-500/20 to-indigo-500/20 border border-violet-500/30"
+                                    : "text-white/60 hover:text-white hover:bg-white/5"
+                                }`}
+                              >
+                                <span className="w-1.5 h-1.5 rounded-full bg-violet-500" />
+                                {item.name}
+                              </motion.a>
+                            ))}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </div>
                   
                   {/* Portfolio Link */}
