@@ -1,4 +1,4 @@
-import { YouTubeFacade } from '@/components/ui/youtube-facade';
+import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -7,7 +7,6 @@ import Navigation from "@/components/ui/navigation";
 import Footer from "@/components/ui/footer";
 import SEO from "@/components/ui/seo";
 import ServiceSchema from "@/components/ui/service-schema";
-import FAQSchema from "@/components/ui/faq-schema";
 import BreadcrumbSEO from "@/components/ui/breadcrumb-seo";
 import { 
   Target, 
@@ -20,19 +19,13 @@ import {
   ArrowRight,
   Star,
   ChevronRight,
-  Play,
-  Pause,
-  Settings,
-  Eye,
-  Calculator,
   Rocket,
   Trophy,
   Globe,
   Shield,
-  Lightbulb,
-  Sparkles
+  Sparkles,
+  Play
 } from "lucide-react";
-import ThreeDBackground from "@/components/ui/3d-background";
 
 const AdsManagement = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -42,117 +35,118 @@ const AdsManagement = () => {
     setIsVisible(true);
   }, []);
 
+  // Platform logos with actual brand colors
+  const platformLogos = [
+    {
+      name: "Google Ads",
+      logo: (
+        <svg viewBox="0 0 24 24" className="w-8 h-8">
+          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+        </svg>
+      ),
+      color: "from-blue-500 to-green-500",
+      description: "Search, Display & YouTube",
+      roas: "5.2x"
+    },
+    {
+      name: "Meta Ads",
+      logo: (
+        <svg viewBox="0 0 24 24" className="w-8 h-8">
+          <path fill="#1877F2" d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+        </svg>
+      ),
+      color: "from-blue-600 to-purple-600",
+      description: "Facebook & Instagram",
+      roas: "4.8x"
+    },
+    {
+      name: "TikTok Ads",
+      logo: (
+        <svg viewBox="0 0 24 24" className="w-8 h-8">
+          <path fill="#FF0050" d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/>
+        </svg>
+      ),
+      color: "from-pink-500 to-cyan-400",
+      description: "Viral Marketing",
+      roas: "6.4x"
+    },
+    {
+      name: "LinkedIn Ads",
+      logo: (
+        <svg viewBox="0 0 24 24" className="w-8 h-8">
+          <path fill="#0A66C2" d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+        </svg>
+      ),
+      color: "from-blue-700 to-blue-500",
+      description: "B2B Excellence",
+      roas: "7.1x"
+    },
+    {
+      name: "YouTube Ads",
+      logo: (
+        <svg viewBox="0 0 24 24" className="w-8 h-8">
+          <path fill="#FF0000" d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+        </svg>
+      ),
+      color: "from-red-600 to-red-500",
+      description: "Video Authority",
+      roas: "4.2x"
+    },
+    {
+      name: "Microsoft Ads",
+      logo: (
+        <svg viewBox="0 0 24 24" className="w-8 h-8">
+          <path fill="#F25022" d="M0 0h11.377v11.377H0z"/>
+          <path fill="#00A4EF" d="M0 12.623h11.377V24H0z"/>
+          <path fill="#7FBA00" d="M12.623 0H24v11.377H12.623z"/>
+          <path fill="#FFB900" d="M12.623 12.623H24V24H12.623z"/>
+        </svg>
+      ),
+      color: "from-blue-500 to-green-500",
+      description: "Bing & Partner Networks",
+      roas: "5.8x"
+    }
+  ];
+
   const premiumServices = [
     {
       icon: <Target className="w-8 h-8" />,
       title: "Strategic Campaign Architecture",
-      description: "Enterprise-level advertising strategy with advanced targeting methodologies and cross-platform optimization for maximum market penetration.",
+      description: "Enterprise-level advertising strategy with advanced targeting methodologies and cross-platform optimization.",
       features: ["Advanced Audience Intelligence", "Competitive Market Analysis", "Multi-Channel Attribution", "Performance Forecasting"],
-      metrics: { roas: "540%", ctr: "4.8%", conv: "24%" },
-      gradient: "from-blue-600 via-blue-500 to-cyan-400"
+      metrics: { roas: "540%", ctr: "4.8%", conv: "24%" }
     },
     {
       icon: <BarChart3 className="w-8 h-8" />,
       title: "Data Science & Analytics",
-      description: "AI-powered performance optimization using machine learning algorithms and predictive analytics for continuous campaign enhancement.",
+      description: "AI-powered performance optimization using machine learning algorithms and predictive analytics.",
       features: ["Predictive Analytics", "Real-Time Optimization", "Custom Attribution Models", "Advanced Segmentation"],
-      metrics: { roas: "480%", ctr: "5.2%", conv: "28%" },
-      gradient: "from-purple-600 via-purple-500 to-pink-400"
+      metrics: { roas: "480%", ctr: "5.2%", conv: "28%" }
     },
     {
       icon: <Globe className="w-8 h-8" />,
       title: "Omnichannel Dominance",
-      description: "Comprehensive advertising across all major platforms with unified messaging and sophisticated budget allocation strategies.",
+      description: "Comprehensive advertising across all major platforms with unified messaging and budget allocation.",
       features: ["Platform Optimization", "Creative Automation", "Budget Intelligence", "Cross-Platform Tracking"],
-      metrics: { roas: "620%", ctr: "4.2%", conv: "31%" },
-      gradient: "from-green-600 via-emerald-500 to-teal-400"
+      metrics: { roas: "620%", ctr: "4.2%", conv: "31%" }
     },
     {
       icon: <Rocket className="w-8 h-8" />,
       title: "Growth Acceleration Engine",
-      description: "Rapid scaling solutions for ambitious businesses ready to dominate their market with aggressive growth strategies.",
+      description: "Rapid scaling solutions for ambitious businesses ready to dominate their market.",
       features: ["Rapid Scaling", "Market Expansion", "Competitive Advantage", "ROI Maximization"],
-      metrics: { roas: "720%", ctr: "6.1%", conv: "34%" },
-      gradient: "from-orange-600 via-red-500 to-pink-400"
-    }
-  ];
-
-  const platformsData = [
-    {
-      name: "Google Ecosystem",
-      icon: "🔍",
-      description: "Dominate search intent with precision targeting across Google's entire advertising network",
-      avgRoas: "5.2x",
-      volume: "$2.4M+",
-      gradient: "from-blue-500 to-indigo-600"
-    },
-    {
-      name: "Meta Universe",
-      icon: "📘",
-      description: "Leverage Facebook & Instagram's advanced targeting for maximum social engagement",
-      avgRoas: "4.8x",
-      volume: "$1.8M+",
-      gradient: "from-blue-600 to-purple-600"
-    },
-    {
-      name: "TikTok Engine",
-      icon: "🎵",
-      description: "Viral marketing campaigns that capture Gen Z and millennial audiences",
-      avgRoas: "6.4x",
-      volume: "$1.2M+",
-      gradient: "from-pink-500 to-red-500"
-    },
-    {
-      name: "LinkedIn Professional",
-      icon: "💼",
-      description: "B2B excellence with executive-level targeting and premium positioning",
-      avgRoas: "7.1x",
-      volume: "$980K+",
-      gradient: "from-blue-700 to-cyan-600"
-    },
-    {
-      name: "YouTube Authority",
-      icon: "📺",
-      description: "Video-first advertising that builds authority and drives conversions",
-      avgRoas: "4.2x",
-      volume: "$1.4M+",
-      gradient: "from-red-500 to-orange-500"
-    },
-    {
-      name: "Amazon Marketplace",
-      icon: "📦",
-      description: "E-commerce dominance with advanced product targeting and optimization",
-      avgRoas: "5.8x",
-      volume: "$2.1M+",
-      gradient: "from-orange-500 to-yellow-500"
+      metrics: { roas: "720%", ctr: "6.1%", conv: "34%" }
     }
   ];
 
   const results = [
-    { 
-      metric: "Average ROAS", 
-      value: "640%", 
-      description: "Return on advertising spend across all platforms",
-      icon: <TrendingUp className="w-6 h-6" />
-    },
-    { 
-      metric: "Client Revenue", 
-      value: "$127M+", 
-      description: "Total revenue generated for our clients in 2024",
-      icon: <DollarSign className="w-6 h-6" />
-    },
-    { 
-      metric: "Success Rate", 
-      value: "98.4%", 
-      description: "Campaigns that exceed performance targets",
-      icon: <Trophy className="w-6 h-6" />
-    },
-    { 
-      metric: "Global Reach", 
-      value: "47", 
-      description: "Countries where we've driven successful campaigns",
-      icon: <Globe className="w-6 h-6" />
-    }
+    { metric: "Average ROAS", value: "640%", icon: <TrendingUp className="w-6 h-6" /> },
+    { metric: "Client Revenue", value: "$127M+", icon: <DollarSign className="w-6 h-6" /> },
+    { metric: "Success Rate", value: "98.4%", icon: <Trophy className="w-6 h-6" /> },
+    { metric: "Global Reach", value: "47", icon: <Globe className="w-6 h-6" /> }
   ];
 
   const caseStudies = [
@@ -164,8 +158,7 @@ const AdsManagement = () => {
       results: ["1,900% revenue growth", "480% ROAS", "85% lower CAC"],
       investment: "$2.4M",
       returns: "$47M",
-      timeline: "18 months",
-      gradient: "from-blue-600 to-cyan-400"
+      timeline: "18 months"
     },
     {
       title: "Global E-commerce Empire",
@@ -175,8 +168,7 @@ const AdsManagement = () => {
       results: ["2,400% international growth", "620% ROAS", "Market leadership"],
       investment: "$3.8M",
       returns: "$89M",
-      timeline: "24 months",
-      gradient: "from-purple-600 to-pink-400"
+      timeline: "24 months"
     },
     {
       title: "FinTech Disruption",
@@ -186,21 +178,16 @@ const AdsManagement = () => {
       results: ["$50M+ in loans originated", "340% conversion rate", "Market penetration"],
       investment: "$1.9M",
       returns: "$23M",
-      timeline: "12 months",
-      gradient: "from-green-600 to-teal-400"
+      timeline: "12 months"
     }
   ];
 
   useEffect(() => {
     document.title = "Paid Advertising & PPC Management | Lunexo Media";
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription) {
-      metaDescription.setAttribute('content', 'Maximize ROI with targeted Google Ads, Facebook Ads, and social media ad campaigns managed by Lunexo Media\'s digital experts.');
-    }
   }, []);
 
   return (
-    <div className="min-h-screen bg-background overflow-hidden">
+    <div className="min-h-screen bg-slate-950 overflow-hidden">
       <SEO
         title="Paid Advertising & PPC Management | Lunexo Media"
         description="Maximize ROI with targeted Google Ads, Facebook Ads, and social media ad campaigns managed by Lunexo Media's digital experts."
@@ -211,682 +198,477 @@ const AdsManagement = () => {
       
       <ServiceSchema
         name="Paid Advertising & PPC Management"
-        description="Expert PPC management services for Google Ads, Facebook Ads, and social media campaigns. We maximize your ROI with data-driven strategies and continuous optimization."
+        description="Expert PPC management services for Google Ads, Facebook Ads, and social media campaigns."
         provider="Lunexo Media"
         areaServed="Worldwide"
         serviceType="PPC Management, Google Ads, Facebook Ads, Social Media Advertising"
         url="https://www.lunexomedia.com/ads-management"
         image="https://www.lunexomedia.com/og-image-new.jpg"
         priceRange="$$"
-        aggregateRating={{
-          ratingValue: 4.9,
-          reviewCount: 98
-        }}
+        aggregateRating={{ ratingValue: 4.9, reviewCount: 98 }}
       />
       
       <Navigation />
       
-      <div className="container-wide section-padding pt-8">
-        <BreadcrumbSEO 
-          items={[
-            { label: "Services", href: "/services-explore" }
-          ]}
-          currentPage="Ads Management"
-        />
-      </div>
-      
-      {/* Premium Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-background via-muted/5 to-background">
-        <ThreeDBackground />
-        
-        {/* Enhanced Animated Background Elements */}
-        <div className="absolute inset-0">
-          <div className="absolute top-20 left-10 w-80 h-80 bg-gradient-to-r from-primary/15 to-accent/15 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-20 right-10 w-96 h-96 bg-gradient-to-r from-accent-cta/15 to-primary/15 rounded-full blur-3xl animate-pulse delay-1000"></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] bg-gradient-to-r from-primary/8 to-accent/8 rounded-full blur-3xl animate-pulse delay-2000"></div>
+      {/* Premium Dark Hero Section */}
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        {/* Animated gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+          <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-full blur-[120px] animate-pulse" />
+          <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full blur-[120px] animate-pulse delay-1000" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-indigo-500/10 to-cyan-500/10 rounded-full blur-[150px]" />
         </div>
 
-        <div className="container-wide section-padding relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-            {/* Enhanced Content with Better Visual Hierarchy */}
-            <div className={`space-y-12 transition-all duration-1000 ${isVisible ? 'animate-fade-in' : 'opacity-0'}`}>
-              <div className="space-y-8">
-                <Badge variant="outline" className="inline-flex items-center gap-3 px-6 py-3 text-xl font-semibold border-primary/30 bg-primary/5 backdrop-blur-sm rounded-full">
-                  <Sparkles className="w-6 h-6 text-primary" />
-                  Premium Advertising Excellence
-                </Badge>
-                
-                {/* Enhanced Typography Hierarchy */}
-                <div className="space-y-6">
-                  <h1 className="text-4xl lg:text-6xl font-black leading-tight tracking-tight">
-                    <span className="bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
-                      Paid Ads &
-                    </span>
-                    <br />
-                    <span className="text-foreground font-bold">PPC Management Services</span>
-                  </h1>
-                  
-                  <p className="text-xl lg:text-2xl text-muted-foreground/90 leading-relaxed max-w-2xl font-medium">
-                    Enterprise-grade advertising management delivering 
-                    <span className="text-accent-cta font-bold"> 640% average ROAS</span> through 
-                    strategic campaigns that <span className="text-primary font-semibold">dominate markets</span>.
-                  </p>
-                </div>
+        {/* Grid pattern overlay */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:72px_72px]" />
 
-                {/* Enhanced Key Metrics with Better Spacing */}
-                <div className="grid grid-cols-3 gap-8 pt-8">
-                  {[
-                    { value: "$127M+", label: "Revenue Generated", accent: "text-accent-cta" },
-                    { value: "640%", label: "Average ROAS", accent: "text-primary" },
-                    { value: "98.4%", label: "Success Rate", accent: "text-accent" }
-                  ].map((metric, index) => (
-                    <div key={index} className="text-center group hover:scale-105 transition-transform duration-300">
-                      <div className={`text-2xl lg:text-3xl font-black mb-2 ${metric.accent}`}>{metric.value}</div>
-                      <div className="text-sm lg:text-base text-muted-foreground font-medium">{metric.label}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              
-              {/* Enhanced CTAs with New Colors and Better Copy */}
-              <div className="flex flex-col sm:flex-row gap-6 pt-8">
-                <Button size="lg" className="group cta-primary text-xl font-semibold px-16 py-6 rounded-2xl hover:scale-105 transition-all duration-300" asChild>
-                  <a href="/contact">
-                    Get Your Free Consultation Today
-                    <ArrowRight className="w-6 h-6 ml-3 group-hover:translate-x-2 transition-transform" />
-                  </a>
-                </Button>
-                
-                <Button size="lg" variant="outline" className="text-xl font-semibold px-16 py-6 rounded-2xl border-2 border-primary/30 hover:bg-primary hover:text-white hover:scale-105 transition-all duration-300" asChild>
-                  <a href="/portfolio">
-                    Explore Success Stories
-                  </a>
-                </Button>
-              </div>
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-32 relative z-10">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="max-w-5xl mx-auto text-center space-y-10"
+          >
+            {/* Breadcrumb */}
+            <div className="mb-8">
+              <BreadcrumbSEO 
+                items={[{ label: "Services", href: "/services-explore" }]}
+                currentPage="Ads Management"
+              />
             </div>
 
-            {/* Enhanced Video Section with Better Positioning */}
-            <div className="relative group">
-              <div className="absolute -inset-6 bg-gradient-to-r from-primary/20 via-accent-cta/20 to-accent/20 rounded-3xl blur-2xl group-hover:blur-3xl transition-all duration-500"></div>
-              <div className="relative hero-card overflow-hidden">
-                <YouTubeFacade
-                  videoId="qhFGDn37DLw"
-                  title="Premium Ads Management Excellence"
-                  width="100%"
-                  height="450"
-                  autoplay={true}
-                  loop={true}
-                  controls={false}
-                  modestbranding={true}
-                  className="w-full aspect-video rounded-2xl"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.2, duration: 0.6 }}
+            >
+              <Badge className="bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border border-cyan-500/30 text-cyan-400 px-6 py-3 text-lg font-medium rounded-full backdrop-blur-sm">
+                <Sparkles className="w-5 h-5 mr-2" />
+                Premium Performance Marketing
+              </Badge>
+            </motion.div>
 
-      {/* Premium Services Section with Enhanced Spacing */}
-      <section className="py-40 bg-gradient-to-b from-background via-muted/5 to-background relative overflow-hidden">
-        <div className="container-wide section-padding relative z-10">
-          <div className="text-center mb-24">
-            <Badge variant="outline" className="mb-8 text-primary border-primary/20 px-6 py-3 text-lg">
-              <Shield className="w-5 h-5 mr-3" />
-              Enterprise Solutions
-            </Badge>
-            
-            {/* Enhanced Visual Hierarchy */}
-            <h2 className="text-3xl lg:text-5xl font-black mb-12 leading-tight">
-              <span className="text-foreground">Google Ads</span>
-              <br />
-              <span className="bg-gradient-to-r from-primary via-accent-cta to-accent bg-clip-text text-transparent">
-                Campaigns
-              </span>
-            </h2>
-            <p className="text-lg lg:text-xl text-muted-foreground max-w-5xl mx-auto leading-relaxed font-medium">
-              Advanced advertising architecture designed for businesses that demand 
-              <span className="text-accent-cta font-semibold"> market dominance</span> and 
-              <span className="text-primary font-semibold"> exceptional returns</span>
-            </p>
-          </div>
-          
-          {/* Enhanced Cards with Better Spacing */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {premiumServices.map((service, index) => (
-              <Card 
-                key={index} 
-                className={`group modern-card overflow-hidden bg-gradient-to-br from-white/60 to-white/40 cursor-pointer hover:scale-[1.02] ${
-                  activeService === index ? 'ring-2 ring-primary/40 shadow-2xl shadow-primary/20' : ''
-                }`}
-                onMouseEnter={() => setActiveService(index)}
-              >
-                <div className={`absolute inset-0 bg-gradient-to-br ${service.gradient} opacity-0 group-hover:opacity-8 transition-opacity duration-500`} />
-                
-                <CardHeader className="pb-6 relative z-10 p-8">
-                  <div className="flex items-start gap-8">
-                    <div className={`w-24 h-24 bg-gradient-to-br ${service.gradient} rounded-3xl flex items-center justify-center text-white shadow-2xl group-hover:scale-110 transition-transform duration-500`}>
-                      {service.icon}
-                    </div>
-                    <div className="flex-1">
-                      <CardTitle className="text-xl lg:text-2xl mb-6 group-hover:text-primary transition-colors duration-300 font-bold">
-                        {service.title}
-                      </CardTitle>
-                      <p className="text-muted-foreground/90 leading-relaxed text-base">
-                        {service.description}
-                      </p>
-                    </div>
-                  </div>
-                </CardHeader>
-                
-                <CardContent className="pt-0 relative z-10 p-8">
-                  {/* Enhanced Performance Metrics */}
-                  <div className="grid grid-cols-3 gap-6 mb-8 p-6 bg-black/5 rounded-2xl">
-                    <div className="text-center">
-                      <div className="text-xl font-black text-accent-cta">{service.metrics.roas}</div>
-                      <div className="text-sm text-muted-foreground font-medium">ROAS</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-xl font-black text-primary">{service.metrics.ctr}</div>
-                      <div className="text-sm text-muted-foreground font-medium">CTR</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-xl font-black text-accent">{service.metrics.conv}</div>
-                      <div className="text-sm text-muted-foreground font-medium">Conv Rate</div>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-6 mb-8">
-                    {service.features.map((feature, featureIndex) => (
-                      <div key={featureIndex} className="flex items-center gap-4">
-                        <CheckCircle className="w-6 h-6 text-primary flex-shrink-0" />
-                        <span className="text-base font-semibold">{feature}</span>
-                      </div>
-                    ))}
-                  </div>
-                  
-                  <Button 
-                    variant="ghost" 
-                    className="w-full group/btn border-2 border-primary/30 hover:bg-primary hover:text-white transition-all duration-300 py-4 rounded-2xl text-lg font-semibold"
-                    onClick={() => document.getElementById('advanced-features')?.scrollIntoView({ behavior: 'smooth' })}
-                  >
-                    Explore Advanced Features
-                    <ChevronRight className="w-5 h-5 ml-2 group-hover/btn:translate-x-1 transition-transform" />
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Advanced Features - Precision-Engineered Performance */}
-      <section id="advanced-features" className="py-40 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-r from-cyan-500/20 to-blue-600/20 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-0 right-0 w-80 h-80 bg-gradient-to-r from-purple-500/20 to-pink-600/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-primary/10 to-accent/10 rounded-full blur-3xl animate-pulse delay-2000"></div>
-        </div>
-
-        <div className="container-wide section-padding relative z-10">
-          <div className="text-center mb-24">
-            <Badge variant="outline" className="mb-8 text-cyan-400 border-cyan-400/30 bg-cyan-400/10 px-8 py-4 text-xl font-semibold backdrop-blur-sm rounded-full">
-              <Settings className="w-6 h-6 mr-3" />
-              Advanced Features
-            </Badge>
-            
-            <h2 className="text-4xl lg:text-6xl font-black mb-12 leading-tight">
-              <span className="text-white">Explore Advanced Features for</span>
+            <motion.h1 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.8 }}
+              className="text-5xl sm:text-6xl lg:text-7xl font-black leading-tight tracking-tight"
+            >
+              <span className="text-white">Paid Ads &</span>
               <br />
               <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
-                Precision-Engineered Performance
+                PPC Management
               </span>
-            </h2>
-            <p className="text-xl lg:text-2xl text-gray-300 max-w-6xl mx-auto leading-relaxed font-medium">
-              Cutting-edge technology and advanced methodologies that deliver 
-              <span className="text-cyan-400 font-bold"> measurable excellence</span> and 
-              <span className="text-blue-400 font-bold"> unmatched precision</span> in every campaign
-            </p>
-          </div>
+            </motion.h1>
 
-          {/* Advanced Features Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-20">
-            
-            {/* AI-Powered Optimization */}
-            <Card className="group bg-gradient-to-br from-slate-800/80 to-slate-700/80 border border-cyan-500/20 hover:border-cyan-400/40 transition-all duration-500 hover:scale-[1.02] backdrop-blur-sm">
-              <CardHeader className="p-8">
-                <div className="flex items-start gap-6">
-                  <div className="w-20 h-20 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform duration-500">
-                    <BarChart3 className="w-10 h-10 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <CardTitle className="text-2xl lg:text-3xl text-white mb-4 group-hover:text-cyan-400 transition-colors duration-300 font-bold">
-                      AI-Powered Optimization Engine
-                    </CardTitle>
-                    <p className="text-gray-300 text-lg leading-relaxed">
-                      Machine learning algorithms continuously optimize your campaigns in real-time, analyzing 1000+ data points per second to maximize performance.
-                    </p>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent className="p-8 pt-0">
-                <div className="space-y-6">
-                  <div className="grid grid-cols-3 gap-4 p-6 bg-black/20 rounded-2xl border border-cyan-500/20">
-                    <div className="text-center">
-                      <div className="text-2xl font-black text-cyan-400">850%</div>
-                      <div className="text-sm text-gray-400">Performance Boost</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-2xl font-black text-blue-400">24/7</div>
-                      <div className="text-sm text-gray-400">Auto-Optimization</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-2xl font-black text-purple-400">1000+</div>
-                      <div className="text-sm text-gray-400">Data Points</div>
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-4">
-                    {[
-                      "Predictive Budget Allocation",
-                      "Real-Time Audience Insights",
-                      "Dynamic Creative Testing",
-                      "Advanced Attribution Modeling"
-                    ].map((feature, index) => (
-                      <div key={index} className="flex items-center gap-4">
-                        <CheckCircle className="w-6 h-6 text-cyan-400 flex-shrink-0" />
-                        <span className="text-white font-semibold text-lg">{feature}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            <motion.p 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5, duration: 0.8 }}
+              className="text-xl sm:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed"
+            >
+              Enterprise-grade advertising delivering{" "}
+              <span className="text-cyan-400 font-bold">640% average ROAS</span> through 
+              strategic campaigns that dominate markets.
+            </motion.p>
 
-            {/* Cross-Platform Intelligence */}
-            <Card className="group bg-gradient-to-br from-slate-800/80 to-slate-700/80 border border-purple-500/20 hover:border-purple-400/40 transition-all duration-500 hover:scale-[1.02] backdrop-blur-sm">
-              <CardHeader className="p-8">
-                <div className="flex items-start gap-6">
-                  <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform duration-500">
-                    <Globe className="w-10 h-10 text-white" />
+            {/* Metrics Row */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6, duration: 0.8 }}
+              className="grid grid-cols-3 gap-8 max-w-2xl mx-auto pt-8"
+            >
+              {[
+                { value: "$127M+", label: "Revenue Generated" },
+                { value: "640%", label: "Average ROAS" },
+                { value: "98.4%", label: "Success Rate" }
+              ].map((stat, index) => (
+                <div key={index} className="text-center group">
+                  <div className="text-3xl sm:text-4xl font-black bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent group-hover:scale-110 transition-transform duration-300">
+                    {stat.value}
                   </div>
-                  <div className="flex-1">
-                    <CardTitle className="text-2xl lg:text-3xl text-white mb-4 group-hover:text-purple-400 transition-colors duration-300 font-bold">
-                      Cross-Platform Intelligence
-                    </CardTitle>
-                    <p className="text-gray-300 text-lg leading-relaxed">
-                      Unified campaign management across all major platforms with intelligent data synchronization and strategic budget distribution.
-                    </p>
-                  </div>
+                  <div className="text-sm sm:text-base text-gray-400 mt-2 font-medium">{stat.label}</div>
                 </div>
-              </CardHeader>
-              <CardContent className="p-8 pt-0">
-                <div className="space-y-6">
-                  <div className="grid grid-cols-3 gap-4 p-6 bg-black/20 rounded-2xl border border-purple-500/20">
-                    <div className="text-center">
-                      <div className="text-2xl font-black text-purple-400">12+</div>
-                      <div className="text-sm text-gray-400">Platforms</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-2xl font-black text-pink-400">360°</div>
-                      <div className="text-sm text-gray-400">View</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-2xl font-black text-cyan-400">99.9%</div>
-                      <div className="text-sm text-gray-400">Uptime</div>
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-4">
-                    {[
-                      "Unified Dashboard Control",
-                      "Cross-Platform Attribution",
-                      "Intelligent Budget Shifting",
-                      "Competitor Intelligence"
-                    ].map((feature, index) => (
-                      <div key={index} className="flex items-center gap-4">
-                        <CheckCircle className="w-6 h-6 text-purple-400 flex-shrink-0" />
-                        <span className="text-white font-semibold text-lg">{feature}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+              ))}
+            </motion.div>
 
-            {/* Advanced Analytics Suite */}
-            <Card className="group bg-gradient-to-br from-slate-800/80 to-slate-700/80 border border-green-500/20 hover:border-green-400/40 transition-all duration-500 hover:scale-[1.02] backdrop-blur-sm">
-              <CardHeader className="p-8">
-                <div className="flex items-start gap-6">
-                  <div className="w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform duration-500">
-                    <Eye className="w-10 h-10 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <CardTitle className="text-2xl lg:text-3xl text-white mb-4 group-hover:text-green-400 transition-colors duration-300 font-bold">
-                      Advanced Analytics Suite
-                    </CardTitle>
-                    <p className="text-gray-300 text-lg leading-relaxed">
-                      Deep-dive analytics with custom reporting, predictive forecasting, and actionable insights that drive strategic decision-making.
-                    </p>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent className="p-8 pt-0">
-                <div className="space-y-6">
-                  <div className="grid grid-cols-3 gap-4 p-6 bg-black/20 rounded-2xl border border-green-500/20">
-                    <div className="text-center">
-                      <div className="text-2xl font-black text-green-400">500+</div>
-                      <div className="text-sm text-gray-400">Metrics</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-2xl font-black text-emerald-400">Real-time</div>
-                      <div className="text-sm text-gray-400">Updates</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-2xl font-black text-teal-400">Custom</div>
-                      <div className="text-sm text-gray-400">Reports</div>
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-4">
-                    {[
-                      "Custom KPI Dashboards",
-                      "Predictive Performance Models",
-                      "Cohort Analysis Tools",
-                      "Advanced Segmentation"
-                    ].map((feature, index) => (
-                      <div key={index} className="flex items-center gap-4">
-                        <CheckCircle className="w-6 h-6 text-green-400 flex-shrink-0" />
-                        <span className="text-white font-semibold text-lg">{feature}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Performance Acceleration */}
-            <Card className="group bg-gradient-to-br from-slate-800/80 to-slate-700/80 border border-orange-500/20 hover:border-orange-400/40 transition-all duration-500 hover:scale-[1.02] backdrop-blur-sm">
-              <CardHeader className="p-8">
-                <div className="flex items-start gap-6">
-                  <div className="w-20 h-20 bg-gradient-to-br from-orange-500 to-red-600 rounded-2xl flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform duration-500">
-                    <Rocket className="w-10 h-10 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <CardTitle className="text-2xl lg:text-3xl text-white mb-4 group-hover:text-orange-400 transition-colors duration-300 font-bold">
-                      Performance Acceleration
-                    </CardTitle>
-                    <p className="text-gray-300 text-lg leading-relaxed">
-                      Rapid scaling technology that identifies high-performing elements and accelerates growth through intelligent automation and optimization.
-                    </p>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent className="p-8 pt-0">
-                <div className="space-y-6">
-                  <div className="grid grid-cols-3 gap-4 p-6 bg-black/20 rounded-2xl border border-orange-500/20">
-                    <div className="text-center">
-                      <div className="text-2xl font-black text-orange-400">10x</div>
-                      <div className="text-sm text-gray-400">Faster Scaling</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-2xl font-black text-red-400">95%</div>
-                      <div className="text-sm text-gray-400">Accuracy</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-2xl font-black text-yellow-400">Auto</div>
-                      <div className="text-sm text-gray-400">Scaling</div>
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-4">
-                    {[
-                      "Smart Bid Management",
-                      "Automated A/B Testing",
-                      "Performance Trend Analysis",
-                      "Risk Management Systems"
-                    ].map((feature, index) => (
-                      <div key={index} className="flex items-center gap-4">
-                        <CheckCircle className="w-6 h-6 text-orange-400 flex-shrink-0" />
-                        <span className="text-white font-semibold text-lg">{feature}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Call to Action for Advanced Features */}
-          <div className="text-center">
-            <Card className="bg-gradient-to-br from-slate-800/60 to-slate-700/60 border border-white/10 backdrop-blur-sm max-w-4xl mx-auto">
-              <CardContent className="p-12">
-                <h3 className="text-3xl lg:text-4xl font-bold text-white mb-6">
-                  Ready to Experience 
-                  <span className="bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent"> Precision Performance</span>?
-                </h3>
-                <p className="text-xl text-gray-300 mb-8 leading-relaxed">
-                  Schedule a personalized demo to see how our advanced features can transform your advertising performance and accelerate your business growth.
-                </p>
-                
-                <div className="flex flex-col sm:flex-row gap-6 justify-center">
-                  <Button size="lg" className="group bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-600 hover:to-purple-700 text-white text-xl px-12 py-6 rounded-2xl shadow-2xl hover:scale-105 transition-all duration-300" asChild>
-                    <a href="/contact">
-                      Schedule Advanced Demo
-                      <ArrowRight className="w-6 h-6 ml-3 group-hover:translate-x-1 transition-transform" />
-                    </a>
-                  </Button>
-                  
-                  <Button size="lg" variant="outline" className="text-xl px-12 py-6 rounded-2xl border-2 border-cyan-400/30 text-cyan-400 hover:bg-cyan-400 hover:text-slate-900 transition-all duration-300" asChild>
-                    <a href="/portfolio">
-                      View Success Cases
-                    </a>
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+            {/* CTAs */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7, duration: 0.8 }}
+              className="flex flex-col sm:flex-row gap-5 justify-center pt-6"
+            >
+              <Button 
+                size="lg" 
+                className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white text-lg px-10 py-7 rounded-2xl font-semibold shadow-2xl shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all duration-300 hover:scale-105 group"
+                asChild
+              >
+                <a href="/contact">
+                  Get Free Consultation
+                  <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                </a>
+              </Button>
+              
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="text-lg px-10 py-7 rounded-2xl border-2 border-gray-600 text-white hover:bg-white hover:text-slate-900 transition-all duration-300 hover:scale-105"
+                asChild
+              >
+                <a href="/portfolio">
+                  View Success Stories
+                </a>
+              </Button>
+            </motion.div>
+          </motion.div>
         </div>
+
+        {/* Scroll indicator */}
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.2, duration: 0.8 }}
+          className="absolute bottom-10 left-1/2 -translate-x-1/2"
+        >
+          <div className="w-8 h-12 border-2 border-gray-600 rounded-full flex justify-center">
+            <motion.div 
+              animate={{ y: [0, 12, 0] }}
+              transition={{ repeat: Infinity, duration: 1.5 }}
+              className="w-2 h-2 bg-cyan-400 rounded-full mt-2"
+            />
+          </div>
+        </motion.div>
       </section>
 
-      {/* Platform Mastery Section */}
-      <section className="py-32 bg-gradient-to-b from-muted/20 to-background relative overflow-hidden">
-        <div className="container-wide section-padding">
-          <div className="text-center mb-20">
-            <Badge variant="outline" className="mb-6 text-primary border-primary/20 px-4 py-2">
-              <Globe className="w-4 h-4 mr-2" />
-              Platform Mastery
-            </Badge>
-            <h2 className="text-3xl lg:text-4xl font-bold mb-8">
-              <span className="bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
-                Omnichannel
-              </span>
-              <br />
-              <span className="bg-gradient-to-r from-primary to-cyan-400 bg-clip-text text-transparent">
-                Excellence
-              </span>
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Master every major advertising platform with sophisticated strategies tailored for maximum impact
-            </p>
-          </div>
+      {/* Platform Logos Section - Premium Style */}
+      <section className="py-24 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 relative overflow-hidden">
+        <div className="absolute inset-0">
+          <div className="absolute top-1/2 left-0 w-full h-px bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent" />
+        </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {platformsData.map((platform, index) => (
-              <Card key={index} className="group hover:shadow-2xl transition-all duration-500 border-0 bg-gradient-to-br from-white/80 to-white/60 backdrop-blur-sm hover:scale-105">
-                <CardHeader className="text-center">
-                  <div className="text-6xl mb-4">{platform.icon}</div>
-                  <CardTitle className="text-2xl mb-3">{platform.name}</CardTitle>
-                  <p className="text-muted-foreground">{platform.description}</p>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className={`p-4 bg-gradient-to-r ${platform.gradient} rounded-2xl text-white`}>
-                      <div className="grid grid-cols-2 gap-4 text-center">
-                        <div>
-                          <div className="text-2xl font-bold">{platform.avgRoas}</div>
-                          <div className="text-sm opacity-90">Avg ROAS</div>
-                        </div>
-                        <div>
-                          <div className="text-2xl font-bold">{platform.volume}</div>
-                          <div className="text-sm opacity-90">Ad Spend</div>
-                        </div>
-                      </div>
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <Badge className="bg-white/5 border border-white/10 text-gray-300 px-4 py-2 mb-6">
+              <Shield className="w-4 h-4 mr-2" />
+              Certified Partners
+            </Badge>
+            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+              Master Every Major Platform
+            </h2>
+            <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+              Certified advertising experts delivering exceptional results across all platforms
+            </p>
+          </motion.div>
+
+          {/* Platform Cards Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            {platformLogos.map((platform, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1, duration: 0.5 }}
+                className="group"
+              >
+                <div className="relative bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 rounded-2xl p-6 text-center hover:border-cyan-500/50 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-cyan-500/10 backdrop-blur-sm">
+                  <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
+                  
+                  <div className="relative z-10">
+                    <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center bg-white/5 rounded-xl group-hover:scale-110 transition-transform duration-300">
+                      {platform.logo}
                     </div>
-                    
-                    <Button 
-                      variant="outline" 
-                      className="w-full group/btn hover:bg-primary hover:text-white transition-all duration-300"
-                      asChild
-                    >
-                      <a href="/services/ads-management-learn-more">
-                        Platform Strategy
-                        <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
-                      </a>
-                    </Button>
+                    <h3 className="text-white font-semibold text-sm mb-1">{platform.name}</h3>
+                    <p className="text-gray-500 text-xs mb-3">{platform.description}</p>
+                    <div className="inline-block bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-cyan-400 text-xs font-bold px-3 py-1 rounded-full">
+                      {platform.roas} ROAS
+                    </div>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Results & Case Studies */}
-      <section className="py-32 bg-gradient-to-b from-background to-muted/10">
-        <div className="container-wide section-padding">
-          {/* Results Grid */}
-          <div className="text-center mb-20">
-            <Badge variant="outline" className="mb-6 text-primary border-primary/20 px-4 py-2">
+      {/* Premium Services Section */}
+      <section className="py-32 bg-gradient-to-b from-slate-950 to-slate-900 relative overflow-hidden">
+        <div className="absolute inset-0">
+          <div className="absolute top-1/4 left-0 w-96 h-96 bg-gradient-to-r from-blue-500/10 to-transparent rounded-full blur-[100px]" />
+          <div className="absolute bottom-1/4 right-0 w-96 h-96 bg-gradient-to-r from-purple-500/10 to-transparent rounded-full blur-[100px]" />
+        </div>
+
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-20"
+          >
+            <Badge className="bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 px-5 py-2 mb-6">
+              <Target className="w-4 h-4 mr-2" />
+              Enterprise Solutions
+            </Badge>
+            <h2 className="text-4xl sm:text-5xl font-black text-white mb-6">
+              Strategic Campaign
+              <br />
+              <span className="bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
+                Architecture
+              </span>
+            </h2>
+            <p className="text-gray-400 text-xl max-w-3xl mx-auto">
+              Advanced advertising solutions designed for businesses demanding 
+              <span className="text-cyan-400 font-semibold"> market dominance</span>
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {premiumServices.map((service, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.15, duration: 0.6 }}
+              >
+                <Card 
+                  className={`group bg-gradient-to-br from-white/[0.08] to-white/[0.02] border border-white/10 hover:border-cyan-500/50 transition-all duration-500 hover:scale-[1.02] backdrop-blur-sm cursor-pointer overflow-hidden ${activeService === index ? 'border-cyan-500/50 shadow-2xl shadow-cyan-500/10' : ''}`}
+                  onMouseEnter={() => setActiveService(index)}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  
+                  <CardHeader className="p-8 relative z-10">
+                    <div className="flex items-start gap-6">
+                      <div className="w-16 h-16 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform duration-300">
+                        {service.icon}
+                      </div>
+                      <div className="flex-1">
+                        <CardTitle className="text-xl sm:text-2xl text-white mb-3 group-hover:text-cyan-400 transition-colors">
+                          {service.title}
+                        </CardTitle>
+                        <p className="text-gray-400 leading-relaxed">
+                          {service.description}
+                        </p>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  
+                  <CardContent className="p-8 pt-0 relative z-10">
+                    {/* Metrics */}
+                    <div className="grid grid-cols-3 gap-4 mb-6 p-4 bg-white/5 rounded-xl border border-white/5">
+                      <div className="text-center">
+                        <div className="text-xl font-bold text-cyan-400">{service.metrics.roas}</div>
+                        <div className="text-xs text-gray-500">ROAS</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-xl font-bold text-blue-400">{service.metrics.ctr}</div>
+                        <div className="text-xs text-gray-500">CTR</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-xl font-bold text-purple-400">{service.metrics.conv}</div>
+                        <div className="text-xs text-gray-500">Conv Rate</div>
+                      </div>
+                    </div>
+
+                    {/* Features */}
+                    <div className="grid grid-cols-2 gap-3 mb-6">
+                      {service.features.map((feature, fIndex) => (
+                        <div key={fIndex} className="flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4 text-cyan-500 flex-shrink-0" />
+                          <span className="text-sm text-gray-300">{feature}</span>
+                        </div>
+                      ))}
+                    </div>
+
+                    <Button 
+                      variant="ghost" 
+                      className="w-full border border-white/10 hover:bg-cyan-500 hover:text-white hover:border-cyan-500 text-gray-300 transition-all duration-300 rounded-xl group/btn"
+                    >
+                      Explore Features
+                      <ChevronRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
+                    </Button>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Results Section */}
+      <section className="py-24 bg-gradient-to-b from-slate-900 to-slate-950 relative overflow-hidden">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <Badge className="bg-purple-500/10 border border-purple-500/30 text-purple-400 px-5 py-2 mb-6">
               <Trophy className="w-4 h-4 mr-2" />
               Proven Excellence
             </Badge>
-            <h2 className="text-3xl lg:text-4xl font-bold mb-8">
-              <span className="bg-gradient-to-r from-primary to-cyan-400 bg-clip-text text-transparent">
-                Extraordinary
+            <h2 className="text-4xl sm:text-5xl font-black text-white">
+              Extraordinary{" "}
+              <span className="bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
+                Results
               </span>
-              <br />
-              Results
             </h2>
-          </div>
+          </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
             {results.map((result, index) => (
-              <Card key={index} className="group text-center hover:shadow-2xl transition-all duration-500 border-0 bg-gradient-to-br from-white to-muted/10 hover:scale-105">
-                <CardContent className="p-8">
-                  <div className="w-16 h-16 bg-gradient-to-br from-primary to-cyan-400 rounded-2xl flex items-center justify-center text-white mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+              >
+                <Card className="bg-gradient-to-br from-white/[0.08] to-white/[0.02] border border-white/10 text-center p-8 hover:border-cyan-500/50 transition-all duration-300 hover:scale-105 group">
+                  <div className="w-14 h-14 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center text-white mx-auto mb-4 group-hover:scale-110 transition-transform">
                     {result.icon}
                   </div>
-                  <div className="text-4xl font-bold text-primary mb-2">{result.value}</div>
-                  <div className="text-lg font-semibold mb-2">{result.metric}</div>
-                  <div className="text-sm text-muted-foreground">{result.description}</div>
-                </CardContent>
-              </Card>
+                  <div className="text-4xl font-black bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent mb-2">
+                    {result.value}
+                  </div>
+                  <div className="text-gray-400 font-medium">{result.metric}</div>
+                </Card>
+              </motion.div>
             ))}
           </div>
 
           {/* Case Studies */}
-          <div className="space-y-12">
-            <h3 className="text-4xl font-bold text-center mb-12">Elite Case Studies</h3>
+          <div className="space-y-8">
+            <h3 className="text-3xl font-bold text-white text-center mb-12">Elite Case Studies</h3>
+            
             {caseStudies.map((study, index) => (
-              <Card key={index} className="overflow-hidden border-0 shadow-2xl bg-gradient-to-br from-white to-muted/5">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
-                  <div className={`bg-gradient-to-br ${study.gradient} p-12 text-white relative overflow-hidden`}>
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16"></div>
-                    <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full -ml-12 -mb-12"></div>
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.2 }}
+              >
+                <Card className="bg-gradient-to-br from-white/[0.08] to-white/[0.02] border border-white/10 overflow-hidden hover:border-cyan-500/30 transition-all duration-300">
+                  <div className="grid grid-cols-1 lg:grid-cols-2">
+                    <div className="bg-gradient-to-br from-cyan-600 via-blue-600 to-purple-600 p-10 relative overflow-hidden">
+                      <div className="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full -mr-20 -mt-20" />
+                      <div className="absolute bottom-0 left-0 w-32 h-32 bg-white/10 rounded-full -ml-16 -mb-16" />
+                      
+                      <div className="relative z-10">
+                        <Badge className="bg-white/20 text-white border-white/30 mb-4">
+                          {study.industry}
+                        </Badge>
+                        <h4 className="text-2xl sm:text-3xl font-bold text-white mb-6">{study.title}</h4>
+                        
+                        <div className="grid grid-cols-2 gap-6 mb-6">
+                          <div>
+                            <div className="text-2xl font-bold text-white">{study.investment}</div>
+                            <div className="text-sm text-white/70">Ad Investment</div>
+                          </div>
+                          <div>
+                            <div className="text-2xl font-bold text-white">{study.returns}</div>
+                            <div className="text-sm text-white/70">Revenue Generated</div>
+                          </div>
+                        </div>
+                        <div className="text-white/80">{study.timeline}</div>
+                      </div>
+                    </div>
                     
-                    <div className="relative z-10">
-                      <Badge variant="secondary" className="mb-4 bg-white/20 text-white border-white/30">
-                        {study.industry}
-                      </Badge>
-                      <h4 className="text-3xl font-bold mb-6">{study.title}</h4>
-                      
-                      <div className="grid grid-cols-2 gap-6 mb-8">
+                    <div className="p-10 bg-slate-900/50">
+                      <div className="space-y-6">
                         <div>
-                          <div className="text-2xl font-bold mb-1">{study.investment}</div>
-                          <div className="text-sm opacity-90">Ad Investment</div>
+                          <h5 className="font-bold text-red-400 mb-2">Challenge</h5>
+                          <p className="text-gray-400">{study.challenge}</p>
                         </div>
                         <div>
-                          <div className="text-2xl font-bold mb-1">{study.returns}</div>
-                          <div className="text-sm opacity-90">Revenue Generated</div>
+                          <h5 className="font-bold text-blue-400 mb-2">Solution</h5>
+                          <p className="text-gray-400">{study.solution}</p>
                         </div>
-                      </div>
-
-                      <div className="text-lg opacity-90">{study.timeline}</div>
-                    </div>
-                  </div>
-                  
-                  <div className="p-12">
-                    <div className="space-y-8">
-                      <div>
-                        <h5 className="font-bold mb-3 text-red-600 text-lg">Challenge</h5>
-                        <p className="text-muted-foreground">{study.challenge}</p>
-                      </div>
-                      
-                      <div>
-                        <h5 className="font-bold mb-3 text-blue-600 text-lg">Solution</h5>
-                        <p className="text-muted-foreground">{study.solution}</p>
-                      </div>
-                      
-                      <div>
-                        <h5 className="font-bold mb-4 text-green-600 text-lg">Results</h5>
-                        <div className="space-y-3">
-                          {study.results.map((result, resultIndex) => (
-                            <div key={resultIndex} className="flex items-center gap-3">
-                              <TrendingUp className="w-5 h-5 text-green-500" />
-                              <span className="font-semibold">{result}</span>
-                            </div>
-                          ))}
+                        <div>
+                          <h5 className="font-bold text-green-400 mb-3">Results</h5>
+                          <div className="space-y-2">
+                            {study.results.map((result, rIndex) => (
+                              <div key={rIndex} className="flex items-center gap-3">
+                                <TrendingUp className="w-4 h-4 text-green-500" />
+                                <span className="text-white font-medium">{result}</span>
+                              </div>
+                            ))}
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </Card>
+                </Card>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
       {/* Premium CTA Section */}
-      <section className="py-32 bg-gradient-to-br from-primary/10 via-blue-500/10 to-cyan-400/10 relative overflow-hidden">
+      <section className="py-32 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 relative overflow-hidden">
         <div className="absolute inset-0">
-          <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-r from-primary/20 to-transparent rounded-full blur-3xl"></div>
-          <div className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-r from-cyan-400/20 to-transparent rounded-full blur-3xl"></div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-cyan-500/20 to-purple-500/20 rounded-full blur-[150px]" />
         </div>
         
-        <div className="container-wide section-padding text-center relative z-10">
-          <Badge variant="outline" className="mb-6 text-primary border-primary/20 px-4 py-2">
-            <Rocket className="w-4 h-4 mr-2" />
-            Ready to Dominate?
-          </Badge>
-          
-          <h2 className="text-3xl lg:text-5xl font-bold mb-8">
-            <span className="bg-gradient-to-r from-primary via-blue-500 to-cyan-400 bg-clip-text text-transparent">
-              Scale Beyond
-            </span>
-            <br />
-            Expectations
-          </h2>
-          
-          <p className="text-2xl text-muted-foreground max-w-4xl mx-auto mb-12 leading-relaxed">
-            Join the elite businesses achieving extraordinary growth through strategic advertising excellence. 
-            Your market dominance starts with a single conversation.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row gap-6 justify-center">
-            <Button size="lg" className="group bg-gradient-to-r from-primary via-blue-500 to-cyan-400 hover:shadow-2xl hover:shadow-primary/25 text-white text-xl px-16 py-6 rounded-2xl transition-all duration-300" asChild>
-              <a href="/contact">
-                Book Strategic Consultation
-                <ArrowRight className="w-6 h-6 ml-3 group-hover:translate-x-1 transition-transform" />
-              </a>
-            </Button>
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="max-w-4xl mx-auto"
+          >
+            <Badge className="bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 px-5 py-2 mb-8">
+              <Rocket className="w-4 h-4 mr-2" />
+              Ready to Dominate?
+            </Badge>
             
-            <Button size="lg" variant="outline" className="text-xl px-16 py-6 rounded-2xl border-2 border-primary/30 hover:bg-primary hover:text-white transition-all duration-300" asChild>
-              <a href="/portfolio">
-                Explore Success Stories
-              </a>
-            </Button>
-          </div>
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white mb-8">
+              Scale Beyond{" "}
+              <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
+                Expectations
+              </span>
+            </h2>
+            
+            <p className="text-xl text-gray-400 mb-12 leading-relaxed max-w-3xl mx-auto">
+              Join elite businesses achieving extraordinary growth through strategic advertising excellence. 
+              Your market dominance starts with a single conversation.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-5 justify-center">
+              <Button 
+                size="lg" 
+                className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white text-lg px-12 py-7 rounded-2xl font-semibold shadow-2xl shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all duration-300 hover:scale-105 group"
+                asChild
+              >
+                <a href="/contact">
+                  Book Strategic Consultation
+                  <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                </a>
+              </Button>
+              
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="text-lg px-12 py-7 rounded-2xl border-2 border-gray-600 text-white hover:bg-white hover:text-slate-900 transition-all duration-300 hover:scale-105"
+                asChild
+              >
+                <a href="/portfolio">
+                  Explore Success Stories
+                </a>
+              </Button>
+            </div>
+          </motion.div>
         </div>
       </section>
 
