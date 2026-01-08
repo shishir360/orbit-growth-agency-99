@@ -12,7 +12,7 @@ import heroDashboard from "@/assets/hero-dashboard-optimized.webp";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { AnimatePresence } from "framer-motion";
-import { TypeWriter } from "@/components/ui/typewriter";
+import { TypeWriter, TypeWriterMultiLine } from "@/components/ui/typewriter";
 
 const Index = () => {
   const { content } = useContent();
@@ -342,11 +342,8 @@ const Index = () => {
               className="text-5xl lg:text-7xl font-bold mb-8" 
               style={{fontFamily: "'Playfair Display', serif"}}
             >
-              <span className="bg-gradient-to-r from-white to-white/60 bg-clip-text text-transparent">
-                <TypeWriter text="Services That " delay={60} />
-              </span>
-              <span className="bg-gradient-to-r from-violet-400 to-cyan-400 bg-clip-text text-transparent">
-                <TypeWriter text="Scale" delay={60} />
+              <span className="bg-gradient-to-r from-white via-violet-200 to-cyan-300 bg-clip-text text-transparent">
+                <TypeWriter text="Services That Scale" delay={50} />
               </span>
             </motion.h2>
             <motion.p 
