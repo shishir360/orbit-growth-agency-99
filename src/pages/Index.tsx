@@ -12,6 +12,7 @@ import heroDashboard from "@/assets/hero-dashboard-optimized.webp";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { AnimatePresence } from "framer-motion";
+import { TypeWriter } from "@/components/ui/typewriter";
 
 const Index = () => {
   const { content } = useContent();
@@ -94,10 +95,10 @@ const Index = () => {
               </div>
               
               <h1 className="text-4xl sm:text-5xl lg:text-7xl xl:text-[5.5rem] font-bold leading-[1.02] tracking-tight text-gray-900" style={{fontFamily: "'Playfair Display', serif"}}>
-                Create a website
+                <TypeWriter text="Create a website" delay={70} />
                 <br />
                 <span className="text-gray-900">
-                  without limits
+                  <TypeWriter text="without limits" delay={70} />
                 </span>
               </h1>
               
@@ -219,7 +220,8 @@ const Index = () => {
             </div>
             
             <h2 className="text-5xl lg:text-7xl font-bold mb-8 text-gray-900" style={{fontFamily: "'Playfair Display', serif"}}>
-              What We <span className="text-blue-600">Offer</span>
+              <TypeWriter text="What We " delay={60} />
+              <span className="text-blue-600"><TypeWriter text="Offer" delay={60} /></span>
             </h2>
             <p className="text-xl lg:text-2xl text-gray-600 max-w-3xl mx-auto font-light leading-relaxed">
               Three core services designed to accelerate your digital growth
@@ -468,7 +470,8 @@ const Index = () => {
               </div>
               
               <h2 className="text-4xl lg:text-6xl font-bold text-gray-900" style={{fontFamily: "'Playfair Display', serif"}}>
-                Built for <span className="text-blue-600">Success</span>
+                <TypeWriter text="Built for " delay={60} />
+                <span className="text-blue-600"><TypeWriter text="Success" delay={60} /></span>
               </h2>
               
               <p className="text-lg text-gray-600 leading-relaxed">
@@ -523,7 +526,8 @@ const Index = () => {
               </div>
               
               <h2 className="text-4xl lg:text-6xl font-bold mb-6 text-gray-900" style={{fontFamily: "'Playfair Display', serif"}}>
-                What Clients <span className="text-blue-600">Say</span>
+                <TypeWriter text="What Clients " delay={60} />
+                <span className="text-blue-600"><TypeWriter text="Say" delay={60} /></span>
               </h2>
             </div>
             
@@ -564,9 +568,9 @@ const Index = () => {
             </div>
             
             <h2 className="text-4xl lg:text-6xl font-bold text-white mb-6" style={{fontFamily: "'Playfair Display', serif"}}>
-              Let's Build Your
+              <TypeWriter text="Let's Build Your" delay={60} />
               <br />
-              Digital Empire
+              <TypeWriter text="Digital Empire" delay={60} />
             </h2>
             
             <p className="text-lg text-blue-100 mb-10 max-w-2xl mx-auto font-light">
