@@ -127,14 +127,17 @@ const AIAutomation = () => {
     { name: "Make", logo: <MakeLogo />, description: "Visual Workflows", color: "text-purple-500" }
   ];
 
-  const aiSolutions = [
+const aiSolutions = [
     {
       icon: <Brain className="w-10 h-10" />,
       title: "Cognitive AI Chatbots",
       description: "Next-generation conversational AI with advanced NLP, context awareness, and emotional intelligence.",
       features: ["Advanced NLP", "Contextual Memory", "Emotional Intelligence", "Multi-Language"],
       metrics: { efficiency: "890%", satisfaction: "96%", resolution: "84%" },
-      gradient: "from-violet-600 via-purple-500 to-fuchsia-500"
+      gradient: "from-violet-600 via-purple-500 to-fuchsia-500",
+      logo: <OpenAILogo />,
+      logoName: "OpenAI GPT-4",
+      techStack: ["GPT-4", "LangChain", "Vector DB"]
     },
     {
       icon: <Mail className="w-10 h-10" />,
@@ -142,7 +145,10 @@ const AIAutomation = () => {
       description: "AI-powered email automation that predicts behavior and personalizes content dynamically.",
       features: ["Behavioral Prediction", "Dynamic Personalization", "Optimal Timing", "A/B Optimization"],
       metrics: { efficiency: "720%", satisfaction: "94%", resolution: "78%" },
-      gradient: "from-emerald-500 via-teal-500 to-cyan-500"
+      gradient: "from-emerald-500 via-teal-500 to-cyan-500",
+      logo: <GoogleAILogo />,
+      logoName: "Google Gemini",
+      techStack: ["Gemini Pro", "SendGrid", "Analytics"]
     },
     {
       icon: <Phone className="w-10 h-10" />,
@@ -150,7 +156,10 @@ const AIAutomation = () => {
       description: "Human-like AI voice assistants with natural conversation flow for seamless interactions.",
       features: ["Natural Speech", "Context Understanding", "Smart Routing", "Sentiment Analysis"],
       metrics: { efficiency: "640%", satisfaction: "92%", resolution: "88%" },
-      gradient: "from-rose-500 via-pink-500 to-fuchsia-500"
+      gradient: "from-rose-500 via-pink-500 to-fuchsia-500",
+      logo: <AnthropicLogo />,
+      logoName: "Anthropic Claude",
+      techStack: ["Claude 3", "ElevenLabs", "Twilio"]
     },
     {
       icon: <Workflow className="w-10 h-10" />,
@@ -158,7 +167,10 @@ const AIAutomation = () => {
       description: "End-to-end business process automation using AI to learn and optimize workflows.",
       features: ["Process Learning", "Adaptive Optimization", "Real-time Analytics", "Scalable"],
       metrics: { efficiency: "850%", satisfaction: "98%", resolution: "92%" },
-      gradient: "from-amber-500 via-orange-500 to-red-500"
+      gradient: "from-amber-500 via-orange-500 to-red-500",
+      logo: <ZapierLogo />,
+      logoName: "Zapier + Make",
+      techStack: ["Zapier", "Make", "n8n"]
     }
   ];
 
@@ -593,25 +605,45 @@ const AIAutomation = () => {
                 transition={{ delay: index * 0.15 }}
               >
                 <Card 
-                  className={`group bg-gradient-to-br from-white/[0.08] to-white/[0.02] border border-white/10 hover:border-purple-500/50 transition-all duration-500 hover:scale-[1.02] backdrop-blur-sm cursor-pointer overflow-hidden h-full ${activeSolution === index ? 'border-purple-500/50 shadow-2xl shadow-purple-500/20' : ''}`}
+                  className={`group bg-gradient-to-br from-white/[0.06] to-white/[0.02] border border-white/10 hover:border-purple-500/50 transition-all duration-500 hover:scale-[1.02] backdrop-blur-xl cursor-pointer overflow-hidden h-full ${activeSolution === index ? 'border-purple-500/50 shadow-2xl shadow-purple-500/20' : ''}`}
                   onMouseEnter={() => setActiveSolution(index)}
                 >
-                  <div className={`absolute inset-0 bg-gradient-to-br ${solution.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500`} />
+                  {/* Animated gradient border */}
+                  <div className="absolute inset-0 rounded-lg overflow-hidden">
+                    <div className={`absolute inset-[-100%] bg-gradient-to-r ${solution.gradient} opacity-0 group-hover:opacity-20 animate-spin-slow transition-opacity duration-700`} style={{ animationDuration: '8s' }} />
+                  </div>
+                  <div className={`absolute inset-0 bg-gradient-to-br ${solution.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-500`} />
                   
                   <CardHeader className="p-8 relative z-10">
+                    {/* Powered by badge with logo */}
+                    <div className="flex items-center justify-between mb-6">
+                      <div className="flex items-center gap-3 bg-white/5 backdrop-blur-sm px-4 py-2 rounded-full border border-white/10">
+                        <div className="w-6 h-6">
+                          {solution.logo}
+                        </div>
+                        <span className="text-xs text-gray-400 font-medium">Powered by {solution.logoName}</span>
+                      </div>
+                      <motion.div 
+                        className={`w-3 h-3 rounded-full bg-gradient-to-r ${solution.gradient}`}
+                        animate={{ scale: [1, 1.2, 1], opacity: [0.7, 1, 0.7] }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                      />
+                    </div>
+                    
                     <div className="flex items-start gap-6">
                       <motion.div 
-                        className={`w-20 h-20 bg-gradient-to-br ${solution.gradient} rounded-2xl flex items-center justify-center text-white shadow-lg`}
+                        className={`w-20 h-20 bg-gradient-to-br ${solution.gradient} rounded-2xl flex items-center justify-center text-white shadow-lg shadow-purple-500/20 relative overflow-hidden`}
                         whileHover={{ scale: 1.1, rotate: 5 }}
                         transition={{ duration: 0.3 }}
                       >
+                        <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity" />
                         {solution.icon}
                       </motion.div>
                       <div className="flex-1">
-                        <CardTitle className="text-2xl text-white mb-3 group-hover:text-purple-400 transition-colors">
+                        <CardTitle className="text-2xl font-bold text-white mb-3 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-purple-400 group-hover:to-pink-400 group-hover:bg-clip-text transition-all">
                           {solution.title}
                         </CardTitle>
-                        <p className="text-gray-400 leading-relaxed">
+                        <p className="text-gray-400 leading-relaxed text-sm">
                           {solution.description}
                         </p>
                       </div>
@@ -619,38 +651,76 @@ const AIAutomation = () => {
                   </CardHeader>
                   
                   <CardContent className="p-8 pt-0 relative z-10">
-                    {/* Metrics */}
-                    <div className="grid grid-cols-3 gap-4 mb-6 p-4 bg-white/5 rounded-xl border border-white/5">
-                      <div className="text-center">
-                        <div className="text-xl font-bold text-purple-400">{solution.metrics.efficiency}</div>
-                        <div className="text-xs text-gray-500">Efficiency</div>
+                    {/* Tech Stack Pills */}
+                    <div className="flex flex-wrap gap-2 mb-6">
+                      {solution.techStack.map((tech, tIndex) => (
+                        <span 
+                          key={tIndex}
+                          className={`px-3 py-1 text-xs font-medium rounded-full bg-gradient-to-r ${solution.gradient} bg-opacity-10 text-white/90 border border-white/10`}
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                    
+                    {/* Metrics with animated bars */}
+                    <div className="grid grid-cols-3 gap-4 mb-6 p-5 bg-gradient-to-br from-white/[0.08] to-white/[0.03] rounded-2xl border border-white/5">
+                      <div className="text-center relative">
+                        <div className="text-2xl font-black bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">{solution.metrics.efficiency}</div>
+                        <div className="text-[10px] text-gray-500 uppercase tracking-wider mt-1">Efficiency</div>
+                        <motion.div 
+                          className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"
+                          initial={{ scaleX: 0 }}
+                          whileInView={{ scaleX: 1 }}
+                          transition={{ delay: 0.5, duration: 0.5 }}
+                        />
                       </div>
-                      <div className="text-center">
-                        <div className="text-xl font-bold text-pink-400">{solution.metrics.satisfaction}</div>
-                        <div className="text-xs text-gray-500">Satisfaction</div>
+                      <div className="text-center relative">
+                        <div className="text-2xl font-black bg-gradient-to-r from-pink-400 to-rose-400 bg-clip-text text-transparent">{solution.metrics.satisfaction}</div>
+                        <div className="text-[10px] text-gray-500 uppercase tracking-wider mt-1">Satisfaction</div>
+                        <motion.div 
+                          className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-gradient-to-r from-pink-500 to-rose-500 rounded-full"
+                          initial={{ scaleX: 0 }}
+                          whileInView={{ scaleX: 1 }}
+                          transition={{ delay: 0.6, duration: 0.5 }}
+                        />
                       </div>
-                      <div className="text-center">
-                        <div className="text-xl font-bold text-rose-400">{solution.metrics.resolution}</div>
-                        <div className="text-xs text-gray-500">Resolution</div>
+                      <div className="text-center relative">
+                        <div className="text-2xl font-black bg-gradient-to-r from-rose-400 to-orange-400 bg-clip-text text-transparent">{solution.metrics.resolution}</div>
+                        <div className="text-[10px] text-gray-500 uppercase tracking-wider mt-1">Resolution</div>
+                        <motion.div 
+                          className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-gradient-to-r from-rose-500 to-orange-500 rounded-full"
+                          initial={{ scaleX: 0 }}
+                          whileInView={{ scaleX: 1 }}
+                          transition={{ delay: 0.7, duration: 0.5 }}
+                        />
                       </div>
                     </div>
 
-                    {/* Features */}
+                    {/* Features with modern styling */}
                     <div className="grid grid-cols-2 gap-3 mb-6">
                       {solution.features.map((feature, fIndex) => (
-                        <div key={fIndex} className="flex items-center gap-2">
-                          <CheckCircle className="w-4 h-4 text-purple-500 flex-shrink-0" />
-                          <span className="text-sm text-gray-300">{feature}</span>
-                        </div>
+                        <motion.div 
+                          key={fIndex} 
+                          className="flex items-center gap-2 group/feat"
+                          initial={{ opacity: 0, x: -10 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          transition={{ delay: fIndex * 0.1 }}
+                        >
+                          <div className={`w-5 h-5 rounded-md bg-gradient-to-r ${solution.gradient} flex items-center justify-center`}>
+                            <CheckCircle className="w-3 h-3 text-white" />
+                          </div>
+                          <span className="text-sm text-gray-300 group-hover/feat:text-white transition-colors">{feature}</span>
+                        </motion.div>
                       ))}
                     </div>
 
                     <Button 
                       variant="ghost" 
-                      className="w-full border border-white/10 hover:bg-purple-600 hover:text-white hover:border-purple-600 text-gray-300 transition-all duration-300 rounded-xl group/btn"
+                      className={`w-full bg-gradient-to-r ${solution.gradient} text-white font-semibold transition-all duration-300 rounded-xl group/btn hover:shadow-lg hover:shadow-purple-500/20 border-0`}
                     >
                       Explore Solution
-                      <ChevronRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
+                      <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
                     </Button>
                   </CardContent>
                 </Card>
