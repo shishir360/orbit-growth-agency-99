@@ -134,7 +134,7 @@ const aiSolutions = [
       description: "Next-generation conversational AI with advanced NLP, context awareness, and emotional intelligence.",
       features: ["Advanced NLP", "Contextual Memory", "Emotional Intelligence", "Multi-Language"],
       metrics: { efficiency: "890%", satisfaction: "96%", resolution: "84%" },
-      gradient: "from-violet-600 via-purple-500 to-fuchsia-500",
+      gradient: "from-purple-600 via-violet-500 to-purple-400",
       logo: <OpenAILogo />,
       logoName: "OpenAI GPT-4",
       techStack: ["GPT-4", "LangChain", "Vector DB"]
@@ -145,7 +145,7 @@ const aiSolutions = [
       description: "AI-powered email automation that predicts behavior and personalizes content dynamically.",
       features: ["Behavioral Prediction", "Dynamic Personalization", "Optimal Timing", "A/B Optimization"],
       metrics: { efficiency: "720%", satisfaction: "94%", resolution: "78%" },
-      gradient: "from-emerald-500 via-teal-500 to-cyan-500",
+      gradient: "from-pink-600 via-rose-500 to-pink-400",
       logo: <GoogleAILogo />,
       logoName: "Google Gemini",
       techStack: ["Gemini Pro", "SendGrid", "Analytics"]
@@ -156,7 +156,7 @@ const aiSolutions = [
       description: "Human-like AI voice assistants with natural conversation flow for seamless interactions.",
       features: ["Natural Speech", "Context Understanding", "Smart Routing", "Sentiment Analysis"],
       metrics: { efficiency: "640%", satisfaction: "92%", resolution: "88%" },
-      gradient: "from-rose-500 via-pink-500 to-fuchsia-500",
+      gradient: "from-fuchsia-600 via-purple-500 to-violet-400",
       logo: <AnthropicLogo />,
       logoName: "Anthropic Claude",
       techStack: ["Claude 3", "ElevenLabs", "Twilio"]
@@ -166,8 +166,7 @@ const aiSolutions = [
       title: "Intelligent Process Automation",
       description: "End-to-end business process automation using AI to learn and optimize workflows.",
       features: ["Process Learning", "Adaptive Optimization", "Real-time Analytics", "Scalable"],
-      metrics: { efficiency: "850%", satisfaction: "98%", resolution: "92%" },
-      gradient: "from-amber-500 via-orange-500 to-red-500",
+      gradient: "from-violet-600 via-pink-500 to-rose-400",
       logo: <ZapierLogo />,
       logoName: "Zapier + Make",
       techStack: ["Zapier", "Make", "n8n"]
