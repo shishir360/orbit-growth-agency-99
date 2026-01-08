@@ -305,9 +305,9 @@ const Index = () => {
       {/* Portfolio Showcase Section */}
       {portfolioProjects.length > 0 && imagesLoaded && (
         <section className="py-32 bg-[#0a0a0f] relative overflow-hidden">
-          {/* Background Effects */}
-          <div className="absolute top-20 left-10 w-[600px] h-[600px] bg-gradient-to-r from-cyan-600/20 to-blue-500/15 rounded-full blur-[180px]"></div>
-          <div className="absolute bottom-20 right-10 w-[500px] h-[500px] bg-gradient-to-r from-violet-600/15 to-purple-500/15 rounded-full blur-[150px]"></div>
+          {/* Background Effects - Single Orange Color */}
+          <div className="absolute top-20 left-10 w-[600px] h-[600px] bg-gradient-to-r from-orange-600/25 to-orange-500/15 rounded-full blur-[180px]"></div>
+          <div className="absolute bottom-20 right-10 w-[500px] h-[500px] bg-gradient-to-r from-orange-500/20 to-red-500/15 rounded-full blur-[150px]"></div>
           <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-[size:80px_80px]"></div>
           
           <div className="container-wide section-padding relative z-10">
@@ -317,11 +317,11 @@ const Index = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6 }}
-                className="inline-flex items-center gap-3 bg-gradient-to-r from-cyan-500/15 to-blue-500/15 border border-cyan-500/30 text-cyan-300 px-8 py-4 rounded-full text-sm font-semibold backdrop-blur-xl mb-10 shadow-lg shadow-cyan-500/10"
+                className="inline-flex items-center gap-3 bg-orange-500/15 border border-orange-500/30 text-orange-300 px-8 py-4 rounded-full text-sm font-semibold backdrop-blur-xl mb-10 shadow-lg shadow-orange-500/10"
               >
                 <Award className="w-5 h-5" />
                 Our Portfolio
-                <span className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></span>
+                <span className="w-2 h-2 bg-orange-400 rounded-full animate-pulse"></span>
               </motion.div>
               
               <motion.h2 
@@ -332,7 +332,7 @@ const Index = () => {
                 className="text-5xl lg:text-7xl font-bold mb-8 text-white" 
                 style={{fontFamily: "'Playfair Display', serif"}}
               >
-                Success <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-violet-400 bg-clip-text text-transparent">Stories</span>
+                Success <span className="bg-gradient-to-r from-orange-400 to-orange-500 bg-clip-text text-transparent">Stories</span>
               </motion.h2>
               
               <motion.p 
@@ -349,7 +349,7 @@ const Index = () => {
             {/* Main Showcase */}
             <div className="relative max-w-5xl mx-auto">
               {/* Project Display */}
-              <div className="relative h-[500px] lg:h-[600px] rounded-3xl overflow-hidden">
+              <div className="relative h-[500px] lg:h-[600px] rounded-3xl overflow-hidden border border-orange-500/20">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={currentProjectIndex}
@@ -380,7 +380,7 @@ const Index = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6, delay: 0.3 }}
                       >
-                        <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 rounded-full text-sm text-white/80 mb-4">
+                        <div className="inline-flex items-center gap-2 bg-orange-500/20 backdrop-blur-md border border-orange-500/30 px-4 py-2 rounded-full text-sm text-orange-300 mb-4">
                           {portfolioProjects[currentProjectIndex]?.category}
                         </div>
                         
@@ -392,7 +392,7 @@ const Index = () => {
                           {portfolioProjects[currentProjectIndex]?.description}
                         </p>
                         
-                        <Button asChild className="bg-white text-black hover:bg-white/90 rounded-xl px-8 py-6 text-lg font-semibold shadow-2xl">
+                        <Button asChild className="bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 rounded-xl px-8 py-6 text-lg font-semibold shadow-2xl shadow-orange-500/30">
                           <Link to={`/portfolio/${portfolioProjects[currentProjectIndex]?.slug}`}>
                             View Project <ArrowRight className="w-5 h-5 ml-2" />
                           </Link>
@@ -401,9 +401,6 @@ const Index = () => {
                     </div>
                   </motion.div>
                 </AnimatePresence>
-                
-                {/* Decorative Border */}
-                <div className="absolute inset-0 border-2 border-white/10 rounded-3xl pointer-events-none"></div>
               </div>
 
               {/* Project Indicators */}
@@ -414,8 +411,8 @@ const Index = () => {
                     onClick={() => setCurrentProjectIndex(i)}
                     className={`h-2 rounded-full transition-all duration-500 ${
                       i === currentProjectIndex 
-                        ? 'w-12 bg-gradient-to-r from-cyan-400 to-blue-500' 
-                        : 'w-2 bg-white/30 hover:bg-white/50'
+                        ? 'w-12 bg-gradient-to-r from-orange-400 to-orange-500' 
+                        : 'w-2 bg-white/30 hover:bg-orange-400/50'
                     }`}
                   />
                 ))}
@@ -429,19 +426,12 @@ const Index = () => {
                     onClick={() => setCurrentProjectIndex(i)}
                     className={`relative px-6 py-3 rounded-xl text-sm font-medium transition-all duration-500 ${
                       i === currentProjectIndex 
-                        ? 'bg-white/10 text-white border border-white/20' 
-                        : 'text-white/50 hover:text-white/80'
+                        ? 'bg-orange-500/20 text-orange-300 border border-orange-500/30' 
+                        : 'text-white/50 hover:text-orange-300'
                     }`}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.98 }}
                   >
-                    {i === currentProjectIndex && (
-                      <motion.div
-                        layoutId="activeProject"
-                        className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-xl border border-cyan-500/30"
-                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                      />
-                    )}
                     <span className="relative z-10">{project.title?.split('—')[0]?.trim()}</span>
                   </motion.button>
                 ))}
@@ -449,7 +439,7 @@ const Index = () => {
 
               {/* View All Button */}
               <div className="text-center mt-12">
-                <Button asChild variant="outline" className="border-white/20 text-white hover:bg-white/10 rounded-xl px-8 py-6 text-lg">
+                <Button asChild variant="outline" className="border-orange-500/30 text-orange-300 hover:bg-orange-500/10 rounded-xl px-8 py-6 text-lg">
                   <Link to="/portfolio">
                     View All Projects <ArrowRight className="w-5 h-5 ml-2" />
                   </Link>
