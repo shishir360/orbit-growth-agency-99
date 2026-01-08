@@ -1,6 +1,7 @@
 import { YouTubeFacade } from '@/components/ui/youtube-facade';
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { TypeWriter } from "@/components/ui/typewriter";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import Navigation from "@/components/ui/navigation";
@@ -176,9 +177,11 @@ const WebsiteDesign = () => {
               </div>
               
               <h1 className="text-4xl lg:text-7xl font-bold leading-[1.1] tracking-tight text-gray-900" style={{fontFamily: "'Playfair Display', serif"}}>
-                Create a website
+                <TypeWriter text="Create a website" delay={80} />
                 <br />
-                <span className="text-gray-900">without limits</span>
+                <span className="text-gray-900">
+                  <TypeWriter text="without limits" delay={80} />
+                </span>
               </h1>
               
               <p className="text-lg lg:text-xl text-gray-600 leading-relaxed max-w-xl font-light">
@@ -261,7 +264,8 @@ const WebsiteDesign = () => {
               Premium Excellence
             </div>
             <h2 className="text-4xl lg:text-6xl font-bold mb-6 text-gray-900" style={{fontFamily: "'Playfair Display', serif"}}>
-              Responsive & <span className="text-blue-600">Mobile Friendly</span>
+              <TypeWriter text="Responsive & " delay={60} />
+              <span className="text-blue-600"><TypeWriter text="Mobile Friendly" delay={60} /></span>
             </h2>
             <p className="text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto font-light leading-relaxed">
               Every element meticulously crafted with precision and innovation
@@ -291,7 +295,8 @@ const WebsiteDesign = () => {
               Premium Portfolio
             </div>
             <h2 className="text-4xl lg:text-6xl font-bold mb-6 text-gray-900" style={{fontFamily: "'Playfair Display', serif"}}>
-              Award-Winning <span className="text-blue-600">Masterpieces</span>
+              <TypeWriter text="Award-Winning " delay={60} />
+              <span className="text-blue-600"><TypeWriter text="Masterpieces" delay={60} /></span>
             </h2>
             <p className="text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto font-light leading-relaxed">
               Discover transformative digital experiences that have revolutionized businesses
@@ -347,7 +352,8 @@ const WebsiteDesign = () => {
             </div>
             
             <h2 className="text-4xl lg:text-6xl font-bold mb-6 text-gray-900" style={{fontFamily: "'Playfair Display', serif"}}>
-              What Clients <span className="text-blue-600">Say</span>
+              <TypeWriter text="What Clients " delay={60} />
+              <span className="text-blue-600"><TypeWriter text="Say" delay={60} /></span>
             </h2>
             <p className="text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto font-light leading-relaxed">
               Hear from industry leaders who've experienced our design excellence
@@ -397,7 +403,7 @@ const WebsiteDesign = () => {
             </div>
             
             <h2 className="text-4xl lg:text-6xl font-bold mb-6 text-white" style={{fontFamily: "'Playfair Display', serif"}}>
-              Ready to Get Started?
+              <TypeWriter text="Ready to Get Started?" delay={60} />
             </h2>
             
             <p className="text-lg lg:text-xl text-blue-100 mb-10 max-w-2xl mx-auto font-light">
