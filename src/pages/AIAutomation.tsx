@@ -175,12 +175,12 @@ const aiSolutions = [
   ];
 
   const automationTypes = [
-    { name: "Customer Service AI", icon: <Bot className="w-8 h-8" />, savings: "85%", volume: "50K+", gradient: "from-violet-600 to-purple-600", logo: <OpenAILogo />, description: "24/7 intelligent support" },
-    { name: "Sales Automation", icon: <Target className="w-8 h-8" />, savings: "70%", volume: "25K+", gradient: "from-emerald-500 to-teal-500", logo: <GoogleAILogo />, description: "Lead scoring & nurturing" },
-    { name: "Content Generation", icon: <Sparkles className="w-8 h-8" />, savings: "90%", volume: "100K+", gradient: "from-pink-500 to-rose-500", logo: <AnthropicLogo />, description: "AI-powered creativity" },
-    { name: "Data Intelligence", icon: <BarChart3 className="w-8 h-8" />, savings: "80%", volume: "1M+", gradient: "from-blue-500 to-cyan-500", logo: <MicrosoftLogo />, description: "Advanced analytics" },
-    { name: "Workflow Optimization", icon: <Workflow className="w-8 h-8" />, savings: "75%", volume: "15K+", gradient: "from-amber-500 to-orange-500", logo: <ZapierLogo />, description: "Seamless integrations" },
-    { name: "Voice Intelligence", icon: <Phone className="w-8 h-8" />, savings: "95%", volume: "30K+", gradient: "from-fuchsia-500 to-purple-500", logo: <MakeLogo />, description: "Natural conversations" }
+    { name: "Customer Service AI", icon: <Bot className="w-8 h-8" />, savings: "85%", volume: "50K+", gradient: "from-purple-600 to-violet-500", logo: <OpenAILogo />, description: "24/7 intelligent support" },
+    { name: "Sales Automation", icon: <Target className="w-8 h-8" />, savings: "70%", volume: "25K+", gradient: "from-pink-600 to-rose-500", logo: <GoogleAILogo />, description: "Lead scoring & nurturing" },
+    { name: "Content Generation", icon: <Sparkles className="w-8 h-8" />, savings: "90%", volume: "100K+", gradient: "from-fuchsia-600 to-pink-500", logo: <AnthropicLogo />, description: "AI-powered creativity" },
+    { name: "Data Intelligence", icon: <BarChart3 className="w-8 h-8" />, savings: "80%", volume: "1M+", gradient: "from-violet-600 to-purple-400", logo: <MicrosoftLogo />, description: "Advanced analytics" },
+    { name: "Workflow Optimization", icon: <Workflow className="w-8 h-8" />, savings: "75%", volume: "15K+", gradient: "from-rose-600 to-pink-400", logo: <ZapierLogo />, description: "Seamless integrations" },
+    { name: "Voice Intelligence", icon: <Phone className="w-8 h-8" />, savings: "95%", volume: "30K+", gradient: "from-purple-600 to-fuchsia-500", logo: <MakeLogo />, description: "Natural conversations" }
   ];
 
   const results = [
