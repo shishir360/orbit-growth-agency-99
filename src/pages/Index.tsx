@@ -74,8 +74,8 @@ const Index = () => {
       {/* Ultra Premium Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#0a0a0f]">
         {/* Animated gradient orbs */}
-        <div className="absolute top-20 left-10 w-[500px] h-[500px] bg-gradient-to-r from-red-600/30 to-orange-500/20 rounded-full blur-[150px] animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-[600px] h-[600px] bg-gradient-to-r from-purple-600/20 to-pink-500/15 rounded-full blur-[120px] animate-pulse" style={{animationDelay: '1s'}}></div>
+        <div className="absolute top-20 left-10 w-[500px] h-[500px] bg-gradient-to-r from-orange-600/30 to-orange-500/20 rounded-full blur-[150px] animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-[600px] h-[600px] bg-gradient-to-r from-orange-500/20 to-red-500/15 rounded-full blur-[120px] animate-pulse" style={{animationDelay: '1s'}}></div>
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] bg-gradient-radial from-white/3 to-transparent rounded-full"></div>
         
         {/* Grid pattern overlay */}
@@ -168,10 +168,10 @@ const Index = () => {
           {/* Service Pills */}
           <div className="flex flex-wrap justify-center gap-5 mt-20 lg:mt-28">
             {[
-              { icon: Globe, label: "Web Design", color: "from-red-500 to-orange-500", glow: "shadow-red-500/40", href: "/website-design" },
-              { icon: Target, label: "Paid Ads", color: "from-orange-500 to-yellow-500", glow: "shadow-orange-500/40", href: "/ads-management" },
-              { icon: Bot, label: "AI Automation", color: "from-purple-500 to-pink-500", glow: "shadow-purple-500/40", href: "/ai-automation" },
-              { icon: Sparkles, label: "Strategy", color: "from-blue-500 to-cyan-500", glow: "shadow-cyan-500/40", href: "/contact" },
+              { icon: Globe, label: "Web Design", color: "from-orange-500 to-orange-600", glow: "shadow-orange-500/40", href: "/website-design" },
+              { icon: Target, label: "Paid Ads", color: "from-orange-500 to-orange-600", glow: "shadow-orange-500/40", href: "/ads-management" },
+              { icon: Bot, label: "AI Automation", color: "from-orange-500 to-orange-600", glow: "shadow-orange-500/40", href: "/ai-automation" },
+              { icon: Sparkles, label: "Strategy", color: "from-orange-500 to-orange-600", glow: "shadow-orange-500/40", href: "/contact" },
             ].map((service, i) => (
               <motion.div
                 key={i}
@@ -212,20 +212,20 @@ const Index = () => {
 
       {/* Services Section */}
       <section className="py-36 bg-[#0a0a0f] relative overflow-hidden">
-        <div className="absolute top-20 left-10 w-[600px] h-[600px] bg-gradient-to-r from-blue-600/20 to-cyan-500/15 rounded-full blur-[180px]"></div>
-        <div className="absolute bottom-20 right-10 w-[500px] h-[500px] bg-gradient-to-r from-purple-600/15 to-pink-500/15 rounded-full blur-[150px]"></div>
+        <div className="absolute top-20 left-10 w-[600px] h-[600px] bg-gradient-to-r from-orange-600/20 to-orange-500/15 rounded-full blur-[180px]"></div>
+        <div className="absolute bottom-20 right-10 w-[500px] h-[500px] bg-gradient-to-r from-orange-500/15 to-red-500/10 rounded-full blur-[150px]"></div>
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-[size:80px_80px]"></div>
         
         <div className="container-wide section-padding relative z-10">
           <div className="text-center mb-24">
-            <div className="inline-flex items-center gap-3 bg-gradient-to-r from-blue-500/15 to-cyan-500/15 border border-blue-500/30 text-blue-300 px-8 py-4 rounded-full text-sm font-semibold backdrop-blur-xl mb-10 shadow-lg shadow-blue-500/10">
+            <div className="inline-flex items-center gap-3 bg-orange-500/15 border border-orange-500/30 text-orange-300 px-8 py-4 rounded-full text-sm font-semibold backdrop-blur-xl mb-10 shadow-lg shadow-orange-500/10">
               <Zap className="w-5 h-5" />
               Our Services
-              <span className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></span>
+              <span className="w-2 h-2 bg-orange-400 rounded-full animate-pulse"></span>
             </div>
             
             <h2 className="text-5xl lg:text-7xl font-bold mb-8 text-white" style={{fontFamily: "'Playfair Display', serif"}}>
-              What We <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-teal-400 bg-clip-text text-transparent">Offer</span>
+              What We <span className="bg-gradient-to-r from-orange-400 to-orange-500 bg-clip-text text-transparent">Offer</span>
             </h2>
             <p className="text-xl lg:text-2xl text-white/60 max-w-3xl mx-auto font-light leading-relaxed">
               Three core services designed to accelerate your digital growth
@@ -239,8 +239,8 @@ const Index = () => {
                 title: "Website Design",
                 description: "Stunning, SEO-optimized websites that convert visitors into customers.",
                 features: ["Custom Design", "SEO Optimization", "Mobile Responsive", "Fast Loading"],
-                color: "from-red-500 to-orange-500",
-                glow: "shadow-red-500/30",
+                color: "from-orange-500 to-orange-600",
+                glow: "shadow-orange-500/30",
                 href: "/website-design"
               },
               {
@@ -248,7 +248,7 @@ const Index = () => {
                 title: "Ads Management",
                 description: "Data-driven campaigns on Google, Facebook & TikTok that maximize ROI.",
                 features: ["Multi-Platform", "ROI Focused", "Advanced Targeting", "Analytics"],
-                color: "from-orange-500 to-yellow-500",
+                color: "from-orange-500 to-orange-600",
                 glow: "shadow-orange-500/30",
                 href: "/ads-management"
               },
@@ -257,8 +257,8 @@ const Index = () => {
                 title: "AI Automation",
                 description: "Intelligent automation and chatbots that streamline your operations.",
                 features: ["Custom AI Solutions", "Workflow Automation", "Chatbots", "Integration"],
-                color: "from-purple-500 to-pink-500",
-                glow: "shadow-purple-500/30",
+                color: "from-orange-500 to-orange-600",
+                glow: "shadow-orange-500/30",
                 href: "/ai-automation"
               }
             ].map((service, i) => (
@@ -452,14 +452,14 @@ const Index = () => {
 
       {/* Stats Section */}
       <section className="py-24 bg-[#0a0a0f] relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-red-600/5 via-transparent to-purple-600/5"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-orange-600/5 via-transparent to-orange-600/5"></div>
         <div className="container-wide section-padding relative z-10">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {[
-              { value: "200%", label: "Avg Growth", icon: TrendingUp, color: "from-red-500 to-orange-500" },
-              { value: "50+", label: "Happy Clients", icon: Users, color: "from-orange-500 to-yellow-500" },
-              { value: "10x", label: "ROI Achieved", icon: Award, color: "from-purple-500 to-pink-500" },
-              { value: "24/7", label: "Support", icon: Clock, color: "from-blue-500 to-cyan-500" }
+              { value: "200%", label: "Avg Growth", icon: TrendingUp, color: "from-orange-500 to-orange-600" },
+              { value: "50+", label: "Happy Clients", icon: Users, color: "from-orange-500 to-orange-600" },
+              { value: "10x", label: "ROI Achieved", icon: Award, color: "from-orange-500 to-orange-600" },
+              { value: "24/7", label: "Support", icon: Clock, color: "from-orange-500 to-orange-600" }
             ].map((stat, i) => (
               <div key={i} className="group bg-white/5 border border-white/10 rounded-2xl p-8 backdrop-blur-sm hover:bg-white/8 transition-all duration-300 text-center">
                 <div className={`w-14 h-14 rounded-xl bg-gradient-to-r ${stat.color} flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:scale-110 transition-transform`}>
@@ -475,19 +475,19 @@ const Index = () => {
 
       {/* Why Choose Us */}
       <section className="py-32 bg-[#0a0a0f] relative overflow-hidden">
-        <div className="absolute top-20 right-10 w-[500px] h-[500px] bg-gradient-to-r from-green-600/15 to-emerald-500/10 rounded-full blur-[150px]"></div>
+        <div className="absolute top-20 right-10 w-[500px] h-[500px] bg-gradient-to-r from-orange-600/15 to-orange-500/10 rounded-full blur-[150px]"></div>
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.01)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.01)_1px,transparent_1px)] bg-[size:60px_60px]"></div>
         
         <div className="container-wide section-padding relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="space-y-8">
-              <div className="inline-flex items-center gap-3 bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/20 text-green-400 px-6 py-3 rounded-full text-sm font-medium backdrop-blur-xl">
+              <div className="inline-flex items-center gap-3 bg-orange-500/15 border border-orange-500/30 text-orange-300 px-6 py-3 rounded-full text-sm font-medium backdrop-blur-xl">
                 <Shield className="w-4 h-4" />
                 Why Lunexo Media
               </div>
               
               <h2 className="text-4xl lg:text-6xl font-bold text-white" style={{fontFamily: "'Playfair Display', serif"}}>
-                Built for <span className="bg-gradient-to-r from-green-400 via-emerald-400 to-teal-400 bg-clip-text text-transparent">Success</span>
+                Built for <span className="bg-gradient-to-r from-orange-400 to-orange-500 bg-clip-text text-transparent">Success</span>
               </h2>
               
               <p className="text-lg text-white/70 leading-relaxed">
@@ -501,7 +501,7 @@ const Index = () => {
                   { title: "Full Support", desc: "24/7 support and maintenance" }
                 ].map((item, i) => (
                   <div key={i} className="flex items-start gap-4 bg-white/5 border border-white/10 rounded-xl p-4">
-                    <Check className="w-6 h-6 text-green-400 flex-shrink-0 mt-0.5" />
+                    <Check className="w-6 h-6 text-orange-400 flex-shrink-0 mt-0.5" />
                     <div>
                       <div className="font-semibold text-white">{item.title}</div>
                       <div className="text-white/70 text-sm">{item.desc}</div>
@@ -510,7 +510,7 @@ const Index = () => {
                 ))}
               </div>
               
-              <Button asChild size="lg" className="bg-gradient-to-r from-green-500 to-emerald-500 text-white hover:from-green-600 hover:to-emerald-600 rounded-full px-8">
+              <Button asChild size="lg" className="bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 rounded-full px-8 shadow-lg shadow-orange-500/25">
                 <Link to="/contact">
                   Get Started <ArrowRight className="w-4 h-4 ml-2" />
                 </Link>
@@ -518,8 +518,8 @@ const Index = () => {
             </div>
             
             <div className="relative">
-              <div className="absolute -inset-6 bg-gradient-to-r from-green-500/30 to-emerald-500/20 rounded-3xl blur-3xl opacity-50"></div>
-              <div className="relative bg-gradient-to-br from-white/10 to-white/5 p-2 rounded-3xl border border-white/15">
+              <div className="absolute -inset-6 bg-gradient-to-r from-orange-500/30 to-orange-600/20 rounded-3xl blur-3xl opacity-50"></div>
+              <div className="relative bg-gradient-to-br from-white/10 to-white/5 p-2 rounded-3xl border border-orange-500/20">
                 <img
                   src={heroDashboard}
                   alt="Dashboard Preview"
@@ -535,26 +535,26 @@ const Index = () => {
       {/* Testimonials */}
       {visibleTestimonials.length > 0 && (
         <section className="py-32 bg-[#0a0a0f] relative overflow-hidden">
-          <div className="absolute bottom-20 left-10 w-[400px] h-[400px] bg-gradient-to-r from-yellow-600/10 to-orange-500/10 rounded-full blur-[120px]"></div>
+          <div className="absolute bottom-20 left-10 w-[400px] h-[400px] bg-gradient-to-r from-orange-600/10 to-orange-500/10 rounded-full blur-[120px]"></div>
           
           <div className="container-wide section-padding relative z-10">
             <div className="text-center mb-16">
-              <div className="inline-flex items-center gap-3 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/20 text-yellow-400 px-6 py-3 rounded-full text-sm font-medium backdrop-blur-xl mb-8">
+              <div className="inline-flex items-center gap-3 bg-orange-500/15 border border-orange-500/30 text-orange-300 px-6 py-3 rounded-full text-sm font-medium backdrop-blur-xl mb-8">
                 <Star className="w-4 h-4" />
                 Client Reviews
               </div>
               
               <h2 className="text-4xl lg:text-6xl font-bold mb-6 text-white" style={{fontFamily: "'Playfair Display', serif"}}>
-                What Clients <span className="bg-gradient-to-r from-yellow-400 via-orange-400 to-red-400 bg-clip-text text-transparent">Say</span>
+                What Clients <span className="bg-gradient-to-r from-orange-400 to-orange-500 bg-clip-text text-transparent">Say</span>
               </h2>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
               {visibleTestimonials.slice(0, 3).map((testimonial, i) => (
-                <div key={i} className="bg-white/5 border border-white/10 rounded-2xl p-8 backdrop-blur-sm">
+                <div key={i} className="bg-white/5 border border-orange-500/20 rounded-2xl p-8 backdrop-blur-sm hover:border-orange-500/40 transition-all duration-300">
                   <div className="flex gap-1 mb-4">
                     {[...Array(5)].map((_, j) => (
-                      <Star key={j} className="w-5 h-5 text-yellow-400 fill-yellow-400" />
+                      <Star key={j} className="w-5 h-5 text-orange-400 fill-orange-400" />
                     ))}
                   </div>
                   <p className="text-white/70 leading-relaxed mb-6">"{testimonial.quote}"</p>
