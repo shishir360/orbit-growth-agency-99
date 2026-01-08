@@ -60,7 +60,7 @@ const Index = () => {
       .sort((a, b) => a.order - b.order), [content.testimonials]);
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f]">
+    <div className="min-h-screen bg-[#0B1C2D]">
       <SEO
         title="Lunexo Media | Digital Marketing & Growth Solutions"
         description="Lunexo Media helps businesses grow with SEO, paid ads, web design, and AI automation. Get data-driven strategies to scale your brand."
@@ -72,7 +72,7 @@ const Index = () => {
       <Navigation />
       
       {/* Ultra Premium Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#0a0a0f]">
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#0B1C2D]">
         {/* Animated gradient orbs */}
         <div className="absolute top-20 left-10 w-[500px] h-[500px] bg-gradient-to-r from-orange-600/30 to-orange-500/20 rounded-full blur-[150px] animate-pulse"></div>
         <div className="absolute bottom-20 right-10 w-[600px] h-[600px] bg-gradient-to-r from-orange-500/20 to-red-500/15 rounded-full blur-[120px] animate-pulse" style={{animationDelay: '1s'}}></div>
@@ -211,7 +211,7 @@ const Index = () => {
       <TrustedBy />
 
       {/* Services Section */}
-      <section className="py-36 bg-[#0a0a0f] relative overflow-hidden">
+      <section className="py-36 bg-[#0B1C2D] relative overflow-hidden">
         <div className="absolute top-20 left-10 w-[600px] h-[600px] bg-gradient-to-r from-orange-400/10 to-amber-400/5 rounded-full blur-[180px]"></div>
         <div className="absolute bottom-20 right-10 w-[500px] h-[500px] bg-gradient-to-r from-amber-400/8 to-orange-400/5 rounded-full blur-[150px]"></div>
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-[size:80px_80px]"></div>
@@ -304,7 +304,7 @@ const Index = () => {
 
       {/* Portfolio Showcase Section */}
       {portfolioProjects.length > 0 && imagesLoaded && (
-        <section className="py-32 bg-[#0a0a0f] relative overflow-hidden">
+        <section className="py-32 bg-[#0B1C2D] relative overflow-hidden">
           {/* Background Effects - Single Orange Color */}
           <div className="absolute top-20 left-10 w-[600px] h-[600px] bg-gradient-to-r from-orange-600/25 to-orange-500/15 rounded-full blur-[180px]"></div>
           <div className="absolute bottom-20 right-10 w-[500px] h-[500px] bg-gradient-to-r from-orange-500/20 to-red-500/15 rounded-full blur-[150px]"></div>
@@ -451,7 +451,7 @@ const Index = () => {
       )}
 
       {/* Stats Section */}
-      <section className="py-24 bg-[#0a0a0f] relative overflow-hidden">
+      <section className="py-24 bg-[#0B1C2D] relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-orange-600/5 via-transparent to-orange-600/5"></div>
         <div className="container-wide section-padding relative z-10">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
@@ -474,7 +474,7 @@ const Index = () => {
       </section>
 
       {/* Why Choose Us */}
-      <section className="py-32 bg-[#0a0a0f] relative overflow-hidden">
+      <section className="py-32 bg-[#0B1C2D] relative overflow-hidden">
         <div className="absolute top-20 right-10 w-[500px] h-[500px] bg-gradient-to-r from-orange-600/15 to-orange-500/10 rounded-full blur-[150px]"></div>
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.01)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.01)_1px,transparent_1px)] bg-[size:60px_60px]"></div>
         
@@ -534,7 +534,7 @@ const Index = () => {
 
       {/* Testimonials */}
       {visibleTestimonials.length > 0 && (
-        <section className="py-32 bg-[#0a0a0f] relative overflow-hidden">
+        <section className="py-32 bg-[#0B1C2D] relative overflow-hidden">
           <div className="absolute bottom-20 left-10 w-[400px] h-[400px] bg-gradient-to-r from-orange-600/10 to-orange-500/10 rounded-full blur-[120px]"></div>
           
           <div className="container-wide section-padding relative z-10">
@@ -575,7 +575,7 @@ const Index = () => {
       )}
 
       {/* CTA Section */}
-      <section className="py-32 bg-[#0a0a0f] relative overflow-hidden">
+      <section className="py-32 bg-[#0B1C2D] relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-red-600/10 via-orange-500/5 to-red-600/10"></div>
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-r from-red-500/20 to-orange-500/20 rounded-full blur-[100px]"></div>
         
