@@ -71,7 +71,7 @@ const Index = () => {
       .sort((a, b) => a.order - b.order), [content.testimonials]);
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f] text-white overflow-hidden">
+    <div className="min-h-screen bg-[#f0f0f0] text-[#1a1a1a] overflow-hidden">
       <SEO
         title="Lunexo Media | Digital Marketing & Growth Solutions"
         description="Lunexo Media helps businesses grow with SEO, paid ads, web design, and AI automation. Get data-driven strategies to scale your brand."
@@ -83,9 +83,9 @@ const Index = () => {
       <Navigation />
       
       {/* Ultra Modern Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#1a1a2e]">
         {/* Animated gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0a0a0f] via-[#0f0f1a] to-[#0a0a0f]" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#1a1a2e]" />
         
         {/* Animated mesh gradient */}
         <div 
@@ -96,11 +96,11 @@ const Index = () => {
         />
         
         {/* Grid pattern */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-[size:60px_60px]" />
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.03)_1px,transparent_1px)] bg-[size:60px_60px]" />
         
         {/* Floating orbs */}
         <motion.div 
-          className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-violet-600/20 to-indigo-600/20 rounded-full blur-3xl"
+          className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-violet-600/25 to-indigo-600/25 rounded-full blur-3xl"
           animate={{ 
             x: [0, 50, 0], 
             y: [0, 30, 0],
@@ -109,7 +109,7 @@ const Index = () => {
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div 
-          className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gradient-to-r from-cyan-600/20 to-blue-600/20 rounded-full blur-3xl"
+          className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gradient-to-r from-cyan-600/25 to-blue-600/25 rounded-full blur-3xl"
           animate={{ 
             x: [0, -40, 0], 
             y: [0, -50, 0],
@@ -319,10 +319,10 @@ const Index = () => {
       <TrustedBy />
 
       {/* Services Section - Ultra Modern */}
-      <section className="py-36 relative overflow-hidden">
+      <section className="py-36 relative overflow-hidden bg-[#1a1a2e]">
         {/* Background */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0f] via-[#0f0f1a] to-[#0a0a0f]" />
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.01)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.01)_1px,transparent_1px)] bg-[size:80px_80px]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#1a1a2e] via-[#16213e] to-[#1a1a2e]" />
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-[size:80px_80px]" />
         
         <div className="container-wide section-padding relative z-10">
           <div className="text-center mb-24">
@@ -435,8 +435,8 @@ const Index = () => {
 
       {/* Portfolio Showcase Section */}
       {portfolioProjects.length > 0 && imagesLoaded && (
-        <section className="py-32 relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-b from-[#0f0f1a] via-[#0a0a0f] to-[#0f0f1a]" />
+        <section className="py-32 relative overflow-hidden bg-[#16213e]">
+          <div className="absolute inset-0 bg-gradient-to-b from-[#16213e] via-[#1a1a2e] to-[#16213e]" />
           
           <div className="container-wide section-padding relative z-10">
             <div className="text-center mb-16">

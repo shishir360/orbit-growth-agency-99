@@ -44,7 +44,7 @@ const About = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f]">
+    <div className="min-h-screen bg-[#f0f0f0]">
       <SEO
         title="About Lunexo Media | Your Partner in Digital Growth"
         description="Learn more about Lunexo Media, our mission, vision, and expert team dedicated to driving your business success."
@@ -56,15 +56,15 @@ const About = () => {
       <Navigation />
       
       {/* Hero Section */}
-      <section className="relative min-h-[80vh] flex items-center overflow-hidden">
-        <div className="absolute top-20 left-10 w-[500px] h-[500px] bg-gradient-to-r from-blue-600/20 to-cyan-500/15 rounded-full blur-[150px] animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-[400px] h-[400px] bg-gradient-to-r from-purple-600/15 to-pink-500/10 rounded-full blur-[120px] animate-pulse"></div>
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.015)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.015)_1px,transparent_1px)] bg-[size:80px_80px]"></div>
+      <section className="relative min-h-[80vh] flex items-center overflow-hidden bg-[#1a1a2e]">
+        <div className="absolute top-20 left-10 w-[500px] h-[500px] bg-gradient-to-r from-blue-600/25 to-cyan-500/20 rounded-full blur-[150px] animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-[400px] h-[400px] bg-gradient-to-r from-purple-600/20 to-pink-500/15 rounded-full blur-[120px] animate-pulse"></div>
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-[size:80px_80px]"></div>
         
         <div className="container-wide section-padding relative z-10 pt-24">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="space-y-8">
-              <div className="inline-flex items-center gap-3 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border border-blue-500/20 text-blue-400 px-6 py-3 rounded-full text-sm font-medium backdrop-blur-xl">
+              <div className="inline-flex items-center gap-3 bg-gradient-to-r from-blue-500/15 to-cyan-500/15 border border-blue-500/30 text-blue-400 px-6 py-3 rounded-full text-sm font-medium backdrop-blur-xl">
                 <Sparkles className="w-4 h-4" />
                 Our Story
               </div>
@@ -87,7 +87,7 @@ const About = () => {
                   { number: "300+", label: "Projects" },
                   { number: "$10K+", label: "Revenue" }
                 ].map((stat, i) => (
-                  <div key={i} className="text-center bg-white/5 border border-white/10 rounded-xl p-4">
+                  <div key={i} className="text-center bg-white/10 border border-white/20 rounded-xl p-4">
                     <div className="text-2xl font-bold text-white">{stat.number}</div>
                     <div className="text-xs text-white/60 uppercase tracking-wider">{stat.label}</div>
                   </div>
@@ -102,8 +102,8 @@ const About = () => {
             </div>
             
             <div className="relative">
-              <div className="absolute -inset-6 bg-gradient-to-r from-blue-500/30 to-cyan-500/20 rounded-3xl blur-3xl opacity-50"></div>
-              <div className="relative bg-white/5 border border-white/10 rounded-2xl p-8 backdrop-blur-sm">
+              <div className="absolute -inset-6 bg-gradient-to-r from-blue-500/40 to-cyan-500/30 rounded-3xl blur-3xl opacity-50"></div>
+              <div className="relative bg-white/10 border border-white/20 rounded-2xl p-8 backdrop-blur-sm">
                 <h3 className="text-xl font-bold text-white mb-6">Our Mission</h3>
                 <p className="text-white/70 leading-relaxed mb-6">
                   Making digital growth accessible to businesses of all sizes through innovative technology and proven strategies.
@@ -123,12 +123,12 @@ const About = () => {
       </section>
 
       {/* Services */}
-      <section className="py-32 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-r from-purple-600/10 to-pink-500/10 rounded-full blur-[150px]"></div>
+      <section className="py-32 relative overflow-hidden bg-[#16213e]">
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-r from-purple-600/15 to-pink-500/15 rounded-full blur-[150px]"></div>
         
         <div className="container-wide section-padding relative z-10">
           <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-3 bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/20 text-purple-400 px-6 py-3 rounded-full text-sm font-medium mb-8">
+            <div className="inline-flex items-center gap-3 bg-gradient-to-r from-purple-500/15 to-pink-500/15 border border-purple-500/30 text-purple-400 px-6 py-3 rounded-full text-sm font-medium mb-8">
               <Star className="w-4 h-4" />
               Our Expertise
             </div>
@@ -140,8 +140,8 @@ const About = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {services.map((service, i) => (
               <div key={i} className="group relative">
-                <div className={`absolute inset-0 bg-gradient-to-r ${service.color} rounded-2xl blur-xl opacity-0 group-hover:opacity-20 transition-opacity duration-500`}></div>
-                <div className="relative bg-white/5 border border-white/10 rounded-2xl p-8 backdrop-blur-sm hover:bg-white/8 transition-all duration-300 h-full text-center">
+                <div className={`absolute inset-0 bg-gradient-to-r ${service.color} rounded-2xl blur-xl opacity-0 group-hover:opacity-25 transition-opacity duration-500`}></div>
+                <div className="relative bg-white/10 border border-white/20 rounded-2xl p-8 backdrop-blur-sm hover:bg-white/15 transition-all duration-300 h-full text-center">
                   <div className={`w-20 h-20 rounded-xl bg-gradient-to-r ${service.color} flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:scale-110 transition-transform`}>
                     <service.icon className="w-10 h-10 text-white" />
                   </div>
@@ -156,12 +156,12 @@ const About = () => {
       </section>
 
       {/* Values */}
-      <section className="py-32 relative overflow-hidden">
-        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-r from-green-600/10 to-emerald-500/10 rounded-full blur-[150px]"></div>
+      <section className="py-32 relative overflow-hidden bg-[#1a1a2e]">
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-r from-green-600/15 to-emerald-500/15 rounded-full blur-[150px]"></div>
         
         <div className="container-wide section-padding relative z-10">
           <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-3 bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/20 text-green-400 px-6 py-3 rounded-full text-sm font-medium mb-8">
+            <div className="inline-flex items-center gap-3 bg-gradient-to-r from-green-500/15 to-emerald-500/15 border border-green-500/30 text-green-400 px-6 py-3 rounded-full text-sm font-medium mb-8">
               <Shield className="w-4 h-4" />
               Why Choose Us
             </div>
@@ -172,7 +172,7 @@ const About = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {values.map((value, i) => (
-              <div key={i} className="group bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-sm hover:bg-white/8 transition-all duration-300 text-center">
+              <div key={i} className="group bg-white/10 border border-white/20 rounded-2xl p-6 backdrop-blur-sm hover:bg-white/15 transition-all duration-300 text-center">
                 <div className={`w-16 h-16 rounded-xl bg-gradient-to-r ${value.color} flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:scale-110 transition-transform`}>
                   <value.icon className="w-8 h-8 text-white" />
                 </div>
@@ -185,13 +185,13 @@ const About = () => {
       </section>
 
       {/* Founder */}
-      <section className="py-32 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-r from-teal-600/10 to-cyan-500/10 rounded-full blur-[150px]"></div>
+      <section className="py-32 relative overflow-hidden bg-[#16213e]">
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-r from-teal-600/15 to-cyan-500/15 rounded-full blur-[150px]"></div>
         
         <div className="container-wide section-padding relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="relative">
-              <div className="absolute -inset-6 bg-gradient-to-r from-teal-500/30 to-cyan-500/20 rounded-3xl blur-3xl opacity-50"></div>
+              <div className="absolute -inset-6 bg-gradient-to-r from-teal-500/40 to-cyan-500/30 rounded-3xl blur-3xl opacity-50"></div>
               <div className="relative bg-gradient-to-br from-teal-500 to-cyan-500 rounded-3xl p-8 flex items-center justify-center">
                 <img
                   src={founderImage}
@@ -202,7 +202,7 @@ const About = () => {
             </div>
             
             <div className="space-y-6">
-              <div className="inline-flex items-center gap-3 bg-gradient-to-r from-teal-500/10 to-cyan-500/10 border border-teal-500/20 text-teal-400 px-6 py-3 rounded-full text-sm font-medium">
+              <div className="inline-flex items-center gap-3 bg-gradient-to-r from-teal-500/15 to-cyan-500/15 border border-teal-500/30 text-teal-400 px-6 py-3 rounded-full text-sm font-medium">
                 <Users className="w-4 h-4" />
                 Meet Our Founder
               </div>
@@ -230,9 +230,9 @@ const About = () => {
       </section>
 
       {/* CTA */}
-      <section className="py-32 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 via-transparent to-purple-600/10"></div>
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded-full blur-[100px]"></div>
+      <section className="py-32 relative overflow-hidden bg-[#1a1a2e]">
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/15 via-transparent to-purple-600/15"></div>
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-r from-blue-500/25 to-cyan-500/25 rounded-full blur-[100px]"></div>
         
         <div className="container-wide section-padding relative z-10">
           <div className="max-w-4xl mx-auto text-center">
@@ -248,7 +248,7 @@ const About = () => {
                   Start Your Project <ArrowRight className="w-4 h-4 ml-2" />
                 </Link>
               </Button>
-              <Button asChild variant="outline" size="lg" className="border border-white/20 text-white bg-white/5 hover:bg-white/10 rounded-full px-10 py-7">
+              <Button asChild variant="outline" size="lg" className="border border-white/30 text-white bg-white/10 hover:bg-white/20 rounded-full px-10 py-7">
                 <Link to="/portfolio">
                   View Our Work
                 </Link>
