@@ -211,20 +211,34 @@ const handler = async (req: Request): Promise<Response> => {
       console.log("Admin notification sent to:", ADMIN_EMAIL);
     }
 
-    // Send WhatsApp notification to admin
+    // Send WhatsApp notifications using templates (Meta 24-hour policy compliant)
     try {
       const PHONE_ID = Deno.env.get("META_WHATSAPP_PHONE_ID");
       const ACCESS_TOKEN = Deno.env.get("META_WHATSAPP_ACCESS_TOKEN");
       const ADMIN_NUMBER = Deno.env.get("ADMIN_WHATSAPP_NUMBER");
 
       if (PHONE_ID && ACCESS_TOKEN && ADMIN_NUMBER) {
-        // Send direct text message to admin (admin is within 24-hour window usually)
+        // Send template message to admin for new contact form submission
+        // Template: contact_form_alert with parameters: customer_name, email, message_preview
+        const messagePreview = message.length > 100 ? message.substring(0, 100) + '...' : message;
+        
         const adminWhatsAppPayload = {
           messaging_product: "whatsapp",
           to: ADMIN_NUMBER,
-          type: "text",
-          text: {
-            body: `🔔 *New Contact Form Submission!*\n\n👤 *Name:* ${name}\n📧 *Email:* ${email}${phone ? `\n📱 *Phone:* ${phone}` : ''}${company ? `\n🏢 *Company:* ${company}` : ''}\n\n💬 *Message:*\n${message}\n\n📅 *Submitted:* ${new Date().toLocaleString()}`
+          type: "template",
+          template: {
+            name: "contact_form_alert",
+            language: { code: "en" },
+            components: [
+              {
+                type: "body",
+                parameters: [
+                  { type: "text", text: name },
+                  { type: "text", text: email },
+                  { type: "text", text: messagePreview }
+                ]
+              }
+            ]
           }
         };
 
@@ -237,7 +251,49 @@ const handler = async (req: Request): Promise<Response> => {
           body: JSON.stringify(adminWhatsAppPayload),
         });
         const adminResult = await adminRes.json();
-        console.log("WhatsApp Admin notification result:", JSON.stringify(adminResult));
+        console.log("WhatsApp Admin template notification result:", JSON.stringify(adminResult));
+
+        // Send template message to user if phone number provided
+        if (phone) {
+          // Clean phone number - remove non-digits and handle Bangladesh format
+          let cleanPhone = phone.replace(/\D/g, '');
+          if (cleanPhone.startsWith('0')) {
+            cleanPhone = '88' + cleanPhone;
+          }
+          if (!cleanPhone.startsWith('88') && cleanPhone.length === 10) {
+            cleanPhone = '88' + cleanPhone;
+          }
+
+          // Template: contact_confirmation with parameter: customer_name
+          const userWhatsAppPayload = {
+            messaging_product: "whatsapp",
+            to: cleanPhone,
+            type: "template",
+            template: {
+              name: "contact_confirmation",
+              language: { code: "en" },
+              components: [
+                {
+                  type: "body",
+                  parameters: [
+                    { type: "text", text: name }
+                  ]
+                }
+              ]
+            }
+          };
+
+          const userRes = await fetch(`https://graph.facebook.com/v18.0/${PHONE_ID}/messages`, {
+            method: "POST",
+            headers: {
+              "Authorization": `Bearer ${ACCESS_TOKEN}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(userWhatsAppPayload),
+          });
+          const userResult = await userRes.json();
+          console.log("WhatsApp User template notification result:", JSON.stringify(userResult));
+        }
       }
     } catch (waError) {
       console.error("WhatsApp notification error:", waError);
