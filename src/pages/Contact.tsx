@@ -210,13 +210,13 @@ const Contact = () => {
                       id="countryCode" 
                       name="countryCode"
                       required
-                      className="h-12 px-4 border border-white/10 rounded-md bg-white/5 text-white min-w-[100px] focus:border-emerald-500"
+                      className="h-12 px-4 border border-white/10 rounded-md bg-zinc-900 text-white min-w-[100px] focus:border-emerald-500"
                     >
-                      <option value="+1">🇺🇸 +1</option>
-                      <option value="+44">🇬🇧 +44</option>
-                      <option value="+91">🇮🇳 +91</option>
-                      <option value="+61">🇦🇺 +61</option>
-                      <option value="+49">🇩🇪 +49</option>
+                      <option value="+1" className="bg-zinc-900 text-white">🇺🇸 +1</option>
+                      <option value="+44" className="bg-zinc-900 text-white">🇬🇧 +44</option>
+                      <option value="+91" className="bg-zinc-900 text-white">🇮🇳 +91</option>
+                      <option value="+61" className="bg-zinc-900 text-white">🇦🇺 +61</option>
+                      <option value="+49" className="bg-zinc-900 text-white">🇩🇪 +49</option>
                     </select>
                     <Input 
                       id="phone" 
@@ -244,15 +244,15 @@ const Contact = () => {
                   <select 
                     id="service" 
                     name="service"
-                    className="w-full h-12 px-4 border border-white/10 rounded-md bg-white/5 text-white focus:border-emerald-500"
+                    className="w-full h-12 px-4 border border-white/10 rounded-md bg-zinc-900 text-white focus:border-emerald-500"
                     required
                   >
-                    <option value="">Select a service</option>
-                    <option value="website-design">Website Design</option>
-                    <option value="ads-management">Ads Management</option>
-                    <option value="ai-automation">AI Automation</option>
-                    <option value="complete-package">Complete Package</option>
-                    <option value="consultation">Consultation</option>
+                    <option value="" className="bg-zinc-900 text-white">Select a service</option>
+                    <option value="website-design" className="bg-zinc-900 text-white">Website Design</option>
+                    <option value="ads-management" className="bg-zinc-900 text-white">Ads Management</option>
+                    <option value="ai-automation" className="bg-zinc-900 text-white">AI Automation</option>
+                    <option value="complete-package" className="bg-zinc-900 text-white">Complete Package</option>
+                    <option value="consultation" className="bg-zinc-900 text-white">Consultation</option>
                   </select>
                 </div>
 
