@@ -3,14 +3,14 @@ import { ArrowUpRight, Mail, MapPin, Phone } from "lucide-react";
 
 const Footer = () => {
   return (
-    <footer className="relative bg-background overflow-hidden">
+    <footer className="relative bg-black/40 backdrop-blur-xl overflow-hidden">
       {/* Top gradient line using theme primary */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent"></div>
       
       {/* Background effects with theme colors */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent-luxury/5 rounded-full blur-3xl"></div>
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent-luxury/10 rounded-full blur-3xl"></div>
       </div>
       
       {/* Grid pattern */}
