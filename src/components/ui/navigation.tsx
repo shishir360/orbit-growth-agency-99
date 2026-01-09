@@ -56,24 +56,16 @@ const Navigation = () => {
         scrolled ? 'py-2' : 'py-4'
       }`}
     >
-      {/* Solid dark background */}
-      <div className={`absolute inset-0 transition-all duration-500 bg-[#0a0a0a] ${
+      {/* Light gray solid background */}
+      <div className={`absolute inset-0 transition-all duration-500 bg-[#f0f0f0] ${
         scrolled 
-          ? 'shadow-[0_4px_30px_rgba(0,0,0,0.5)]' 
+          ? 'shadow-[0_2px_15px_rgba(0,0,0,0.08)]' 
           : ''
       }`} />
       
-      {/* Animated gradient border using theme primary */}
-      <div className="absolute bottom-0 left-0 right-0 h-px overflow-hidden">
-        <motion.div 
-          className="h-full w-[200%] bg-gradient-to-r from-transparent via-primary/50 to-transparent"
-          animate={{ x: ['-50%', '0%'] }}
-          transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-        />
-      </div>
+      {/* Subtle bottom border */}
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-[#e0e0e0]" />
       
-      {/* Subtle top glow with theme primary */}
-      <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent pointer-events-none" />
       
       <div className="container-wide section-padding relative">
         <div className="flex justify-between items-center">
@@ -96,12 +88,12 @@ const Navigation = () => {
             </motion.div>
             <div className="flex flex-col">
               <motion.span 
-                className="text-xl font-bold bg-gradient-to-r from-foreground via-foreground to-primary bg-clip-text text-transparent tracking-wide"
+                className="text-xl font-bold text-[#1a1a1a] tracking-wide"
                 whileHover={{ scale: 1.02 }}
               >
                 LUNEXO
               </motion.span>
-              <span className="text-[10px] font-semibold bg-gradient-to-r from-primary to-accent-luxury bg-clip-text text-transparent tracking-[0.25em] -mt-0.5">
+              <span className="text-[10px] font-semibold text-[#666666] tracking-[0.25em] -mt-0.5">
                 MEDIA
               </span>
             </div>
@@ -115,14 +107,14 @@ const Navigation = () => {
               whileHover={{ scale: 1.05 }}
               className={`relative px-5 py-2.5 text-sm font-medium transition-all duration-300 rounded-xl group overflow-hidden ${
                 isActive("/")
-                  ? "text-foreground"
-                  : "text-muted-foreground hover:text-foreground"
+                  ? "text-[#1a1a1a]"
+                  : "text-[#666666] hover:text-[#1a1a1a]"
               }`}
             >
               {isActive("/") && (
                 <motion.span 
                   layoutId="activeTab"
-                  className="absolute inset-0 bg-gradient-to-r from-primary/20 to-accent-luxury/20 rounded-xl border border-primary/30"
+                  className="absolute inset-0 bg-[#e0e0e0] rounded-xl"
                 />
               )}
               <span className="relative z-10 flex items-center gap-1.5">
@@ -135,7 +127,7 @@ const Navigation = () => {
               <DropdownMenuTrigger asChild>
                 <motion.button 
                   whileHover={{ scale: 1.05 }}
-                  className="relative px-5 py-2.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-all duration-300 rounded-xl group flex items-center outline-none"
+                  className="relative px-5 py-2.5 text-sm font-medium text-[#666666] hover:text-[#1a1a1a] transition-all duration-300 rounded-xl group flex items-center outline-none"
                 >
                   Services
                   <ChevronDown className="w-4 h-4 ml-1.5 transition-transform duration-300 group-data-[state=open]:rotate-180" />
@@ -143,7 +135,7 @@ const Navigation = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent 
                 align="start" 
-                className="w-56 bg-background/98 backdrop-blur-2xl border-border p-3 rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.5)]"
+                className="w-56 bg-white border-[#e0e0e0] p-3 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.1)]"
               >
                 {serviceItems.map((item, index) => (
                   <DropdownMenuItem key={item.id} asChild>
@@ -154,11 +146,11 @@ const Navigation = () => {
                       transition={{ delay: index * 0.05 }}
                       className={`w-full rounded-xl px-4 py-3 text-sm transition-all duration-300 flex items-center gap-3 ${
                         isActive(item.href) 
-                          ? "text-foreground bg-gradient-to-r from-primary/20 to-accent-luxury/20 border border-primary/30" 
-                          : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+                          ? "text-[#1a1a1a] bg-[#f0f0f0]" 
+                          : "text-[#666666] hover:text-[#1a1a1a] hover:bg-[#f5f5f5]"
                       }`}
                     >
-                      <Zap className="w-4 h-4 text-primary" />
+                      <Zap className="w-4 h-4 text-[#1a1a1a]" />
                       {item.name}
                     </motion.a>
                   </DropdownMenuItem>
@@ -172,14 +164,14 @@ const Navigation = () => {
               whileHover={{ scale: 1.05 }}
               className={`relative px-5 py-2.5 text-sm font-medium transition-all duration-300 rounded-xl group ${
                 isActive("/portfolio")
-                  ? "text-foreground"
-                  : "text-muted-foreground hover:text-foreground"
+                  ? "text-[#1a1a1a]"
+                  : "text-[#666666] hover:text-[#1a1a1a]"
               }`}
             >
               {isActive("/portfolio") && (
                 <motion.span 
                   layoutId="activeTab"
-                  className="absolute inset-0 bg-gradient-to-r from-primary/20 to-accent-luxury/20 rounded-xl border border-primary/30"
+                  className="absolute inset-0 bg-[#e0e0e0] rounded-xl"
                 />
               )}
               <span className="relative z-10">Portfolio</span>
@@ -193,29 +185,28 @@ const Navigation = () => {
                 whileHover={{ scale: 1.05 }}
                 className={`relative px-5 py-2.5 text-sm font-medium transition-all duration-300 rounded-xl group ${
                   isActive(item.href)
-                    ? "text-foreground"
-                    : "text-muted-foreground hover:text-foreground"
+                    ? "text-[#1a1a1a]"
+                    : "text-[#666666] hover:text-[#1a1a1a]"
                 }`}
               >
                 {isActive(item.href) && (
                   <motion.span 
                     layoutId="activeTab"
-                    className="absolute inset-0 bg-gradient-to-r from-primary/20 to-accent-luxury/20 rounded-xl border border-primary/30"
+                    className="absolute inset-0 bg-[#e0e0e0] rounded-xl"
                   />
                 )}
                 <span className="relative z-10">{item.name}</span>
               </motion.a>
             ))}
             
-            {/* Premium CTA Button */}
+            {/* CTA Button */}
             <motion.a 
               href="/book-apartment" 
               className="relative ml-6 group"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.98 }}
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-primary to-accent-luxury rounded-xl blur-lg opacity-50 group-hover:opacity-80 transition-all duration-500" />
-              <div className="relative inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-primary to-accent-luxury hover:from-primary/90 hover:to-accent-luxury/90 text-primary-foreground text-sm font-semibold rounded-xl transition-all duration-300 border border-primary/30 shadow-[0_0_30px_hsl(var(--primary)/0.3)]">
+              <div className="relative inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#1a1a1a] hover:bg-[#333333] text-white text-sm font-semibold rounded-xl transition-all duration-300">
                 <motion.div
                   animate={{ rotate: [0, 15, -15, 0] }}
                   transition={{ duration: 2, repeat: Infinity }}
@@ -232,7 +223,7 @@ const Navigation = () => {
             <motion.button
               whileTap={{ scale: 0.9 }}
               onClick={() => setIsOpen(!isOpen)}
-              className="relative w-12 h-12 text-foreground hover:text-foreground rounded-xl bg-secondary border border-border flex items-center justify-center"
+              className="relative w-12 h-12 text-[#1a1a1a] hover:text-[#1a1a1a] rounded-xl bg-[#e0e0e0] border border-[#d0d0d0] flex items-center justify-center"
             >
               <AnimatePresence mode="wait">
                 {isOpen ? (
@@ -271,7 +262,7 @@ const Navigation = () => {
               transition={{ duration: 0.3, ease: "easeInOut" }}
               className="md:hidden overflow-hidden"
             >
-              <div className="py-6 border-t border-border mt-4">
+              <div className="py-6 border-t border-[#e0e0e0] mt-4">
                 <div className="flex flex-col space-y-2">
                   {/* Home Link */}
                   <motion.a
@@ -281,8 +272,8 @@ const Navigation = () => {
                     transition={{ delay: 0.1 }}
                     className={`px-5 py-4 text-base font-medium transition-all rounded-xl flex items-center gap-3 ${
                       isActive("/")
-                        ? "text-foreground bg-gradient-to-r from-primary/20 to-accent-luxury/20 border border-primary/30"
-                        : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+                        ? "text-[#1a1a1a] bg-[#e0e0e0]"
+                        : "text-[#666666] hover:text-[#1a1a1a] hover:bg-[#e5e5e5]"
                     }`}
                   >
                     Home
@@ -295,10 +286,10 @@ const Navigation = () => {
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.15 }}
                       onClick={() => setServicesOpen(!servicesOpen)}
-                      className="w-full px-5 py-4 text-base font-medium transition-all rounded-xl flex items-center justify-between text-muted-foreground hover:text-foreground hover:bg-secondary"
+                      className="w-full px-5 py-4 text-base font-medium transition-all rounded-xl flex items-center justify-between text-[#666666] hover:text-[#1a1a1a] hover:bg-[#e5e5e5]"
                     >
                       <span className="flex items-center gap-3">
-                        <Zap className="w-4 h-4 text-primary" />
+                        <Zap className="w-4 h-4 text-[#1a1a1a]" />
                         Services
                       </span>
                       <motion.div
@@ -318,7 +309,7 @@ const Navigation = () => {
                           transition={{ duration: 0.3 }}
                           className="overflow-hidden"
                         >
-                          <div className="ml-4 space-y-1 py-2 border-l-2 border-primary/30">
+                          <div className="ml-4 space-y-1 py-2 border-l-2 border-[#d0d0d0]">
                             {serviceItems.map((item, index) => (
                               <motion.a
                                 key={item.id}
@@ -328,11 +319,11 @@ const Navigation = () => {
                                 transition={{ delay: index * 0.05 }}
                                 className={`px-5 py-3 text-base font-medium transition-all rounded-xl ml-2 flex items-center gap-3 ${
                                   isActive(item.href)
-                                    ? "text-foreground bg-gradient-to-r from-primary/20 to-accent-luxury/20 border border-primary/30"
-                                    : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+                                    ? "text-[#1a1a1a] bg-[#e0e0e0]"
+                                    : "text-[#666666] hover:text-[#1a1a1a] hover:bg-[#e5e5e5]"
                                 }`}
                               >
-                                <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+                                <span className="w-1.5 h-1.5 rounded-full bg-[#1a1a1a]" />
                                 {item.name}
                               </motion.a>
                             ))}
@@ -350,8 +341,8 @@ const Navigation = () => {
                     transition={{ delay: 0.35 }}
                     className={`px-5 py-4 text-base font-medium transition-all rounded-xl flex items-center gap-3 ${
                       isActive("/portfolio")
-                        ? "text-foreground bg-gradient-to-r from-primary/20 to-accent-luxury/20 border border-primary/30"
-                        : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+                        ? "text-[#1a1a1a] bg-[#e0e0e0]"
+                        : "text-[#666666] hover:text-[#1a1a1a] hover:bg-[#e5e5e5]"
                     }`}
                   >
                     Portfolio
@@ -367,8 +358,8 @@ const Navigation = () => {
                       transition={{ delay: 0.4 + index * 0.05 }}
                       className={`px-5 py-4 text-base font-medium transition-all rounded-xl flex items-center gap-3 ${
                         isActive(item.href)
-                          ? "text-foreground bg-gradient-to-r from-primary/20 to-accent-luxury/20 border border-primary/30"
-                          : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+                          ? "text-[#1a1a1a] bg-[#e0e0e0]"
+                          : "text-[#666666] hover:text-[#1a1a1a] hover:bg-[#e5e5e5]"
                       }`}
                     >
                       {item.name}
@@ -384,7 +375,7 @@ const Navigation = () => {
                   >
                     <a 
                       href="/book-apartment" 
-                      className="flex items-center justify-center gap-3 px-6 py-4 bg-gradient-to-r from-primary to-accent-luxury text-primary-foreground text-base font-semibold rounded-xl shadow-[0_0_30px_hsl(var(--primary)/0.3)] border border-primary/30"
+                      className="flex items-center justify-center gap-3 px-6 py-4 bg-[#1a1a1a] hover:bg-[#333333] text-white text-base font-semibold rounded-xl"
                     >
                       <Sparkles className="w-5 h-5" />
                       Book Now
