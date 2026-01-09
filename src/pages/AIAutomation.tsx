@@ -54,6 +54,25 @@ interface BlogPost {
   publish_date: string;
 }
 
+// Portfolio project type
+interface PortfolioProject {
+  id: string;
+  title: string;
+  slug: string;
+  description: string;
+  category: string;
+  image_url: string | null;
+  technologies: string[] | null;
+}
+
+// Trusted logo type
+interface TrustedLogo {
+  id: string;
+  name: string;
+  logo_url: string;
+  visible: boolean;
+}
+
 // Import images
 import aiHeroDashboard from "@/assets/ai-hero-dashboard.jpg";
 import aiBrainNetwork from "@/assets/ai-brain-network.jpg";
@@ -122,6 +141,8 @@ const AIAutomation = () => {
   const heroRef = useRef<HTMLElement>(null);
 
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+  const [portfolioProjects, setPortfolioProjects] = useState<PortfolioProject[]>([]);
+  const [trustedLogos, setTrustedLogos] = useState<TrustedLogo[]>([]);
 
   useEffect(() => {
     setIsVisible(true);
@@ -155,6 +176,41 @@ const AIAutomation = () => {
       }
     };
     fetchBlogPosts();
+  }, []);
+
+  // Fetch portfolio projects (AI Automation category)
+  useEffect(() => {
+    const fetchProjects = async () => {
+      const { data, error } = await supabase
+        .from('portfolio')
+        .select('*')
+        .eq('published', true)
+        .eq('blocked', false)
+        .eq('category', 'AI Automation')
+        .limit(6)
+        .order('created_at', { ascending: false });
+      
+      if (data && !error) {
+        setPortfolioProjects(data);
+      }
+    };
+    fetchProjects();
+  }, []);
+
+  // Fetch trusted logos
+  useEffect(() => {
+    const fetchLogos = async () => {
+      const { data, error } = await supabase
+        .from('trusted_logos')
+        .select('*')
+        .eq('visible', true)
+        .order('display_order', { ascending: true });
+      
+      if (data && !error) {
+        setTrustedLogos(data);
+      }
+    };
+    fetchLogos();
   }, []);
 
   // AI Platform Partners
@@ -975,6 +1031,283 @@ const AIAutomation = () => {
           </motion.div>
         </div>
       </section>
+
+      {/* Portfolio Section */}
+      {portfolioProjects.length > 0 && (
+        <section className="py-32 bg-gradient-to-b from-black to-[#0a0f0a] relative overflow-hidden">
+          {/* Background effects */}
+          <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-bl from-[#C5FF4A]/10 to-transparent rounded-full blur-3xl" />
+            <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-gradient-to-tr from-emerald-500/10 to-transparent rounded-full blur-3xl" />
+          </div>
+
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            {/* Section Header with Typing Animation */}
+            <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between mb-16">
+              <div>
+                <motion.div
+                  initial={{ opacity: 0, x: -30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6 }}
+                >
+                  <Badge className="bg-[#C5FF4A] text-black px-4 py-2 rounded-full text-sm font-bold mb-6">
+                    <Sparkles className="w-4 h-4 mr-2" />
+                    Our AI Projects
+                  </Badge>
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8, delay: 0.2 }}
+                >
+                  <h2 className="text-4xl lg:text-6xl font-black text-white overflow-hidden">
+                    <motion.span className="inline-block">
+                      {"AI Automation Portfolio".split("").map((char, index) => (
+                        <motion.span
+                          key={index}
+                          initial={{ opacity: 0, y: 50 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ 
+                            duration: 0.05,
+                            delay: index * 0.03,
+                            ease: "easeOut"
+                          }}
+                          className="inline-block"
+                        >
+                          {char === " " ? "\u00A0" : char}
+                        </motion.span>
+                      ))}
+                    </motion.span>
+                  </h2>
+                </motion.div>
+                <motion.p
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.8 }}
+                  className="text-gray-400 text-lg mt-4 max-w-xl"
+                >
+                  See how we've transformed businesses with cutting-edge AI solutions
+                </motion.p>
+              </div>
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 1 }}
+              >
+                <Button 
+                  variant="outline" 
+                  className="mt-6 lg:mt-0 border-2 border-[#C5FF4A]/50 text-[#C5FF4A] hover:bg-[#C5FF4A] hover:text-black rounded-full px-8 transition-all duration-300"
+                  asChild
+                >
+                  <Link to="/portfolio">
+                    View All Projects
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Link>
+                </Button>
+              </motion.div>
+            </div>
+
+            {/* Portfolio Cards with Staggered Animation */}
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {portfolioProjects.map((project, index) => (
+                <motion.div
+                  key={project.id}
+                  initial={{ opacity: 0, y: 50 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ 
+                    duration: 0.6, 
+                    delay: index * 0.15,
+                    ease: "easeOut"
+                  }}
+                >
+                  <Link
+                    to={`/portfolio/${project.slug}`}
+                    className="group bg-gradient-to-br from-white/[0.08] to-white/[0.02] backdrop-blur-sm border border-white/10 rounded-[1.5rem] overflow-hidden hover:border-[#C5FF4A]/50 transition-all duration-500 hover:shadow-2xl hover:shadow-[#C5FF4A]/10 block"
+                  >
+                    {/* Image */}
+                    <div className="relative overflow-hidden aspect-[4/3]">
+                      {project.image_url ? (
+                        <motion.img 
+                          src={project.image_url}
+                          alt={project.title}
+                          className="w-full h-full object-cover"
+                          whileHover={{ scale: 1.1 }}
+                          transition={{ duration: 0.7 }}
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-gradient-to-br from-[#C5FF4A]/20 to-emerald-500/20 flex items-center justify-center">
+                          <Brain className="w-12 h-12 text-[#C5FF4A]/50" />
+                        </div>
+                      )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                      <motion.div 
+                        className="absolute top-4 left-4"
+                        initial={{ opacity: 0, x: -20 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: index * 0.15 + 0.3 }}
+                      >
+                        <span className="bg-[#C5FF4A] text-black px-4 py-2 rounded-full text-sm font-bold shadow-lg">
+                          {project.category}
+                        </span>
+                      </motion.div>
+                    </div>
+                    
+                    {/* Content with Typing Effect */}
+                    <div className="p-6">
+                      <motion.h3 
+                        className="text-xl font-bold text-white mb-3 group-hover:text-[#C5FF4A] transition-colors overflow-hidden"
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: index * 0.15 + 0.4 }}
+                      >
+                        {project.title.split("").map((char, charIndex) => (
+                          <motion.span
+                            key={charIndex}
+                            initial={{ opacity: 0 }}
+                            whileInView={{ opacity: 1 }}
+                            viewport={{ once: true }}
+                            transition={{ 
+                              duration: 0.02,
+                              delay: index * 0.15 + 0.4 + charIndex * 0.02
+                            }}
+                            className="inline-block"
+                          >
+                            {char === " " ? "\u00A0" : char}
+                          </motion.span>
+                        ))}
+                      </motion.h3>
+                      <motion.p 
+                        className="text-gray-400 text-sm line-clamp-2 mb-4"
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: index * 0.15 + 0.6 }}
+                      >
+                        {project.description}
+                      </motion.p>
+                      
+                      {/* Technologies with Staggered Animation */}
+                      {project.technologies && project.technologies.length > 0 && (
+                        <motion.div 
+                          className="flex flex-wrap gap-2 pt-4 border-t border-white/10"
+                          initial={{ opacity: 0 }}
+                          whileInView={{ opacity: 1 }}
+                          viewport={{ once: true }}
+                          transition={{ delay: index * 0.15 + 0.7 }}
+                        >
+                          {project.technologies.slice(0, 3).map((tech, tIndex) => (
+                            <motion.span 
+                              key={tIndex} 
+                              className="text-xs font-medium bg-white/10 text-gray-300 px-3 py-1 rounded-full"
+                              initial={{ opacity: 0, scale: 0.8 }}
+                              whileInView={{ opacity: 1, scale: 1 }}
+                              viewport={{ once: true }}
+                              transition={{ delay: index * 0.15 + 0.7 + tIndex * 0.1 }}
+                              whileHover={{ scale: 1.05, backgroundColor: "#C5FF4A", color: "#000" }}
+                            >
+                              {tech}
+                            </motion.span>
+                          ))}
+                        </motion.div>
+                      )}
+                    </div>
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Trusted By Section with Infinite Scroll */}
+      {trustedLogos.length > 0 && (
+        <section className="py-20 bg-black relative overflow-hidden border-y border-white/5">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-center mb-12"
+            >
+              <span className="text-sm font-semibold text-[#C5FF4A] uppercase tracking-widest">
+                Trusted By Industry Leaders
+              </span>
+            </motion.div>
+
+            {/* Infinite Scroll Animation */}
+            <div className="relative overflow-hidden">
+              {/* Gradient Masks */}
+              <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-black to-transparent z-10" />
+              <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-black to-transparent z-10" />
+              
+              {/* First Row - Scroll Left */}
+              <div className="flex animate-scroll-left-ai hover:[animation-play-state:paused] mb-8">
+                {[...trustedLogos, ...trustedLogos, ...trustedLogos].map((logo, index) => (
+                  <motion.div
+                    key={`${logo.id}-${index}`}
+                    className="flex-shrink-0 mx-8 group"
+                    whileHover={{ scale: 1.1 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <div className="w-32 h-16 flex items-center justify-center bg-white/5 rounded-xl border border-white/10 group-hover:border-[#C5FF4A]/50 transition-all duration-300 p-4">
+                      <img 
+                        src={logo.logo_url} 
+                        alt={logo.name}
+                        className="max-w-full max-h-full object-contain filter brightness-0 invert opacity-60 group-hover:opacity-100 transition-opacity duration-300"
+                      />
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* Second Row - Scroll Right */}
+              <div className="flex animate-scroll-right-ai hover:[animation-play-state:paused]">
+                {[...trustedLogos, ...trustedLogos, ...trustedLogos].reverse().map((logo, index) => (
+                  <motion.div
+                    key={`${logo.id}-reverse-${index}`}
+                    className="flex-shrink-0 mx-8 group"
+                    whileHover={{ scale: 1.1 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <div className="w-32 h-16 flex items-center justify-center bg-white/5 rounded-xl border border-white/10 group-hover:border-[#C5FF4A]/50 transition-all duration-300 p-4">
+                      <img 
+                        src={logo.logo_url} 
+                        alt={logo.name}
+                        className="max-w-full max-h-full object-contain filter brightness-0 invert opacity-60 group-hover:opacity-100 transition-opacity duration-300"
+                      />
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <style>{`
+            @keyframes scroll-left-ai {
+              0% { transform: translateX(0); }
+              100% { transform: translateX(-33.33%); }
+            }
+            @keyframes scroll-right-ai {
+              0% { transform: translateX(-33.33%); }
+              100% { transform: translateX(0); }
+            }
+            .animate-scroll-left-ai {
+              animation: scroll-left-ai 30s linear infinite;
+            }
+            .animate-scroll-right-ai {
+              animation: scroll-right-ai 30s linear infinite;
+            }
+          `}</style>
+        </section>
+      )}
 
       {/* CTA Section */}
       <section className="py-32 bg-black relative overflow-hidden">
