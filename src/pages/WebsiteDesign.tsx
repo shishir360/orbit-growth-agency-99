@@ -1,134 +1,175 @@
-import { YouTubeFacade } from '@/components/ui/youtube-facade';
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { TypeWriter } from "@/components/ui/typewriter";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
 import Navigation from "@/components/ui/navigation";
 import Footer from "@/components/ui/footer";
 import SEO from "@/components/ui/seo";
-import HeroSection from "@/components/ui/hero-section";
 import ServiceSchema from "@/components/ui/service-schema";
 import FAQSchema from "@/components/ui/faq-schema";
 import BreadcrumbSEO from "@/components/ui/breadcrumb-seo";
 import { 
-  Zap, 
   ArrowRight,
+  ArrowUpRight,
+  Check,
+  Star,
+  Play,
   Sparkles,
   Globe,
-  Shield,
-  Award,
   Palette,
   Code,
-  BarChart3,
-  Infinity,
-  CheckCircle,
-  Star,
-  Trophy,
-  Heart,
-  ExternalLink,
-  Play
+  Smartphone,
+  Search,
+  Gauge,
+  Users,
+  Shield,
+  Zap,
+  Target,
+  LineChart,
+  Clock,
+  Award,
+  ChevronRight
 } from "lucide-react";
-import websiteDesignHero from "@/assets/website-design-hero.jpg";
 import { Link } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+
+// Import client logos
+import apexLogo from "@/assets/logos/apex-logo.png";
+import forgeLogo from "@/assets/logos/forge-logo.png";
+import nexusLogo from "@/assets/logos/nexus-logo.png";
+import onyxLogo from "@/assets/logos/onyx-logo.png";
+import prismLogo from "@/assets/logos/prism-logo.png";
+import quantumLogo from "@/assets/logos/quantum-logo.png";
+import stellarLogo from "@/assets/logos/stellar-logo.png";
+import vertexLogo from "@/assets/logos/vertex-logo.png";
 
 const WebsiteDesign = () => {
+  const [activeService, setActiveService] = useState(0);
+
+  const clientLogos = [
+    { name: "Apex", logo: apexLogo },
+    { name: "Forge", logo: forgeLogo },
+    { name: "Nexus", logo: nexusLogo },
+    { name: "Onyx", logo: onyxLogo },
+    { name: "Prism", logo: prismLogo },
+    { name: "Quantum", logo: quantumLogo },
+    { name: "Stellar", logo: stellarLogo },
+    { name: "Vertex", logo: vertexLogo },
+  ];
+
   const services = [
     {
-      icon: <Globe className="w-8 h-8" />,
-      title: "Responsive Design",
-      description: "Beautiful layouts that adapt seamlessly across all devices and screen sizes.",
-      color: "bg-green-500"
+      number: "01",
+      title: "Responsive Web Design",
+      description: "Create stunning, mobile-first websites that look perfect on every device. Our responsive designs ensure seamless user experiences across desktops, tablets, and smartphones.",
+      features: ["Mobile-First Approach", "Cross-Browser Compatible", "Retina Ready Graphics", "Fluid Layouts"]
     },
     {
-      icon: <Zap className="w-8 h-8" />,
-      title: "Performance Optimized", 
-      description: "Lightning-fast loading speeds with optimized code and modern techniques.",
-      color: "bg-blue-500"
+      number: "02",
+      title: "UX/UI Design & Audit",
+      description: "Transform your digital presence with intuitive interfaces. We analyze user behavior and create designs that drive engagement and conversions.",
+      features: ["User Research", "Wireframing", "Interactive Prototypes", "Usability Testing"]
     },
     {
-      icon: <Shield className="w-8 h-8" />,
-      title: "SEO Ready",
-      description: "Built-in search optimization to help your site rank higher on Google.",
-      color: "bg-purple-500"
+      number: "03",
+      title: "Custom Web Development",
+      description: "Build powerful, scalable web applications using cutting-edge technologies. From simple landing pages to complex platforms, we deliver excellence.",
+      features: ["React/Next.js", "Performance Optimization", "API Integration", "Scalable Architecture"]
     },
     {
-      icon: <Palette className="w-8 h-8" />,
-      title: "Custom Design",
-      description: "Unique, brand-focused designs tailored specifically to your business.",
-      color: "bg-orange-500"
+      number: "04",
+      title: "E-commerce Solutions",
+      description: "Launch your online store with confidence. We create conversion-focused e-commerce experiences that turn visitors into loyal customers.",
+      features: ["Shopify/WooCommerce", "Payment Integration", "Inventory Management", "Analytics Dashboard"]
     },
     {
-      icon: <Code className="w-8 h-8" />,
-      title: "Clean Code",
-      description: "Modern, maintainable code following industry best practices.",
-      color: "bg-teal-500"
-    },
-    {
-      icon: <BarChart3 className="w-8 h-8" />,
-      title: "Conversion Focused",
-      description: "Strategic design elements that turn visitors into customers.",
-      color: "bg-pink-500"
+      number: "05",
+      title: "SEO & Performance",
+      description: "Boost your visibility and speed. We optimize every aspect of your website to rank higher and load faster than competitors.",
+      features: ["Technical SEO", "Core Web Vitals", "Speed Optimization", "Schema Markup"]
     }
   ];
 
-  const portfolio = [
+  const caseStudies = [
     {
-      title: "E-commerce Platform",
-      category: "Retail",
-      image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=800&q=80",
-      results: "300% increase in sales"
+      title: "Nuport",
+      category: "Fintech Platform",
+      description: "Complete redesign of a supply chain finance platform, resulting in 340% increase in user engagement.",
+      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80",
+      stats: [
+        { value: "340%", label: "Engagement" },
+        { value: "2.5x", label: "Conversion" }
+      ]
     },
     {
-      title: "SaaS Dashboard",
-      category: "Technology", 
-      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80",
-      results: "50% reduction in bounce rate"
+      title: "HealthTech Pro",
+      category: "Healthcare SaaS",
+      description: "Modern healthcare dashboard with improved patient management and real-time analytics.",
+      image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?auto=format&fit=crop&w=1200&q=80",
+      stats: [
+        { value: "89%", label: "Satisfaction" },
+        { value: "4.9", label: "App Rating" }
+      ]
     },
     {
-      title: "Healthcare Portal",
-      category: "Healthcare",
-      image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?auto=format&fit=crop&w=800&q=80", 
-      results: "90% user satisfaction"
+      title: "Commerce Plus",
+      category: "E-commerce",
+      description: "End-to-end e-commerce solution with AI-powered recommendations and seamless checkout.",
+      image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1200&q=80",
+      stats: [
+        { value: "$2.4M", label: "Revenue" },
+        { value: "180%", label: "Growth" }
+      ]
     }
   ];
 
-  const testimonials = [
+  const industries = [
+    { name: "Fintech", icon: <LineChart className="w-6 h-6" /> },
+    { name: "Healthcare", icon: <Shield className="w-6 h-6" /> },
+    { name: "E-commerce", icon: <Globe className="w-6 h-6" /> },
+    { name: "SaaS", icon: <Code className="w-6 h-6" /> },
+    { name: "Education", icon: <Users className="w-6 h-6" /> },
+    { name: "Real Estate", icon: <Target className="w-6 h-6" /> }
+  ];
+
+  const processSteps = [
+    { step: "01", title: "Discovery", description: "We dive deep into your business goals, target audience, and competitive landscape." },
+    { step: "02", title: "Strategy", description: "Develop a comprehensive plan including sitemap, user flows, and content strategy." },
+    { step: "03", title: "Design", description: "Create stunning visual designs with multiple iterations until perfection." },
+    { step: "04", title: "Development", description: "Build your website with clean, scalable code and modern technologies." },
+    { step: "05", title: "Launch", description: "Rigorous testing, optimization, and seamless deployment to production." }
+  ];
+
+  const faqs = [
     {
-      quote: "The team delivered an exceptional website that exceeded our expectations. Our conversion rate increased by 200% within the first month.",
-      author: "Sarah Johnson",
-      role: "CEO",
-      company: "TechStart",
-      avatar: "https://images.unsplash.com/photo-1494790108755-2616b9dc5ca2?w=400&h=400&fit=crop&crop=face"
+      question: "How long does a website project take?",
+      answer: "Typically 4-8 weeks depending on complexity. Simple landing pages can be done in 2-3 weeks, while complex web applications may take 12+ weeks."
     },
     {
-      quote: "Professional, fast, and exactly what we needed. The design perfectly captures our brand and our customers love it.",
-      author: "Michael Chen", 
-      role: "Founder",
-      company: "GrowthCorp",
-      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face"
+      question: "What technologies do you use?",
+      answer: "We primarily use React, Next.js, and TypeScript for frontend. For backend, we leverage Node.js, Supabase, and various cloud services."
     },
     {
-      quote: "Outstanding work. The website looks amazing and performs even better. Highly recommend their services.",
-      author: "Emily Rodriguez",
-      role: "Director",
-      company: "InnovateLab", 
-      avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop&crop=face"
+      question: "Do you provide ongoing support?",
+      answer: "Yes! We offer monthly maintenance packages that include updates, security patches, content changes, and performance monitoring."
+    },
+    {
+      question: "Can you redesign my existing website?",
+      answer: "Absolutely. We specialize in redesigns that preserve your brand while dramatically improving user experience and conversions."
     }
   ];
 
   useEffect(() => {
-    document.title = "Web Design & Development | Modern, Fast & Responsive Websites";
+    document.title = "Website Design & Development Services | Lunexo Media";
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#E8F4FD]">
+    <div className="min-h-screen bg-white">
       <SEO
-        title="Web Design & Development | Modern, Fast & Responsive Websites"
-        description="Build fast, mobile-friendly, and conversion-focused websites. Lunexo Media offers creative web design and professional development services."
+        title="Website Design & Development Services | Lunexo Media"
+        description="Transform your digital presence with stunning, conversion-focused websites. Expert web design and development services that drive results."
         image="https://www.lunexomedia.com/og-image-new.jpg"
         url="https://www.lunexomedia.com/website-design"
-        keywords="web design, website development, responsive design, modern websites, custom web design"
+        keywords="web design, website development, responsive design, UI/UX design, custom websites"
       />
       
       <ServiceSchema
@@ -136,7 +177,7 @@ const WebsiteDesign = () => {
         description="Professional web design and development services. We create fast, mobile-friendly, and conversion-focused websites tailored to your business needs."
         provider="Lunexo Media"
         areaServed="Worldwide"
-        serviceType="Web Design, Web Development, Responsive Design"
+        serviceType="Web Design, Web Development, UI/UX Design"
         url="https://www.lunexomedia.com/website-design"
         image="https://www.lunexomedia.com/og-image-new.jpg"
         priceRange="$$"
@@ -148,336 +189,454 @@ const WebsiteDesign = () => {
       
       <Navigation />
       
-      <div className="container-wide section-padding pt-8">
-        <BreadcrumbSEO 
-          items={[
-            { label: "Services", href: "/services-explore" }
-          ]}
-          currentPage="Website Design"
-        />
-      </div>
-      
-      {/* Wix-Style Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#E8F4FD]">
-        {/* Decorative colored circles like Wix */}
-        <div className="absolute top-24 left-20 flex gap-3">
-          <div className="w-6 h-6 rounded-full bg-orange-400"></div>
-          <div className="w-6 h-6 rounded-full bg-blue-500"></div>
-          <div className="w-6 h-6 rounded-full bg-blue-200"></div>
-          <div className="w-6 h-6 rounded-full bg-green-500"></div>
-        </div>
+      {/* Hero Section - MuseMind Style */}
+      <section className="relative min-h-screen flex items-center bg-white overflow-hidden pt-20">
+        {/* Subtle Background Pattern */}
+        <div className="absolute inset-0 opacity-[0.02]" style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+        }}></div>
 
-        <div className="container-wide section-padding relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            {/* Content */}
-            <div className="space-y-8 animate-fade-in">
-              <div className="inline-flex items-center gap-3 bg-white border border-gray-200 text-gray-700 px-6 py-3 rounded-full text-sm font-medium shadow-sm">
-                <Sparkles className="w-5 h-5 text-blue-500" />
-                Premium Website Design
-              </div>
-              
-              <h1 className="text-4xl lg:text-7xl font-bold leading-[1.1] tracking-tight text-gray-900" style={{fontFamily: "'Playfair Display', serif"}}>
-                <TypeWriter text="Create a website" delay={80} />
-                <br />
-                <span className="text-gray-900">
-                  <TypeWriter text="without limits" delay={80} />
-                </span>
-              </h1>
-              
-              <p className="text-lg lg:text-xl text-gray-600 leading-relaxed max-w-xl font-light">
-                Bring your ideas to life with premium website design, performance optimization & responsive development.
-              </p>
-
-              {/* Stats */}
-              <div className="grid grid-cols-3 gap-8 pt-4">
-                {[
-                  { value: "500%", label: "ROI Increase", icon: <Trophy className="w-5 h-5" /> },
-                  { value: "99.9%", label: "Uptime", icon: <Shield className="w-5 h-5" /> },
-                  { value: "24/7", label: "Support", icon: <Award className="w-5 h-5" /> }
-                ].map((stat, index) => (
-                  <div key={index} className="text-center">
-                    <div className="text-blue-500 mb-2 flex justify-center">{stat.icon}</div>
-                    <div className="text-2xl lg:text-3xl font-bold text-gray-900 mb-1">{stat.value}</div>
-                    <div className="text-sm text-gray-500">{stat.label}</div>
-                  </div>
-                ))}
-              </div>
-              
-              {/* CTAs - Wix Style */}
-              <div className="flex flex-col sm:flex-row gap-4 pt-6">
-                <Button size="lg" className="group text-base font-semibold px-10 py-7 bg-blue-600 text-white hover:bg-blue-700 rounded-full transition-all duration-300 hover:scale-105 shadow-lg" asChild>
-                  <Link to="/contact">
-                    Get Started
-                    <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-                  </Link>
-                </Button>
-                
-                <Button size="lg" variant="outline" className="text-base font-semibold px-10 py-7 border border-gray-300 text-gray-700 bg-white hover:bg-gray-50 rounded-full transition-all duration-300" asChild>
-                  <Link to="/portfolio">
-                    <Play className="w-4 h-4 mr-2" />
-                    View Portfolio
-                  </Link>
-                </Button>
-              </div>
-              
-              <p className="text-sm text-gray-500">Start for free. No credit card required.</p>
+        <div className="container mx-auto px-4 lg:px-8 relative z-10">
+          <div className="max-w-6xl mx-auto">
+            {/* Breadcrumb */}
+            <div className="mb-8">
+              <BreadcrumbSEO 
+                items={[
+                  { label: "Services", href: "/services-explore" }
+                ]}
+                currentPage="Website Design"
+              />
             </div>
 
-            {/* Video Section */}
-            <div className="relative animate-scale-in">
-              <div className="relative bg-white p-2 rounded-3xl shadow-2xl border border-gray-100">
-                <YouTubeFacade
-                  videoId="7Q0fNLTUOSA"
-                  title="YouTube video player"
-                  width="100%"
-                  height="400"
-                  autoplay={true}
-                  loop={true}
-                  className="w-full aspect-video rounded-2xl shadow-lg"
-                />
-                
-                {/* Video Overlay Badge */}
-                <div className="absolute top-6 left-6">
-                  <div className="bg-white/90 text-gray-700 px-4 py-2 rounded-full text-sm font-medium shadow-md border border-gray-100 flex items-center gap-2">
-                    <Globe className="w-4 h-4 text-blue-500" />
-                    Premium Showcase
-                  </div>
+            <div className="grid lg:grid-cols-2 gap-16 items-center">
+              {/* Left Content */}
+              <div className="space-y-8">
+                <div className="inline-flex items-center gap-2 bg-gray-100 text-gray-800 px-4 py-2 rounded-full text-sm font-medium">
+                  <Sparkles className="w-4 h-4 text-black" />
+                  Premium Web Design Agency
                 </div>
-              </div>
-              
-              {/* Floating badge */}
-              <div className="absolute -bottom-4 -left-4 bg-white text-gray-700 px-4 py-2 rounded-xl text-sm font-semibold shadow-lg border border-gray-100 flex items-center gap-2">
-                <Trophy className="w-4 h-4 text-green-500" />
-                Award Winning
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      {/* Services Section - Clean White */}
-      <section className="py-32 bg-white relative overflow-hidden">
-        <div className="container-wide section-padding relative z-10">
-          <div className="text-center mb-20">
-            <div className="inline-flex items-center gap-3 bg-blue-50 border border-blue-200 text-blue-600 px-6 py-3 rounded-full text-sm font-semibold mb-8">
-              <Award className="w-5 h-5" />
-              Premium Excellence
-            </div>
-            <h2 className="text-4xl lg:text-6xl font-bold mb-6 text-gray-900" style={{fontFamily: "'Playfair Display', serif"}}>
-              <TypeWriter text="Responsive & " delay={60} />
-              <span className="text-blue-600"><TypeWriter text="Mobile Friendly" delay={60} /></span>
-            </h2>
-            <p className="text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto font-light leading-relaxed">
-              Every element meticulously crafted with precision and innovation
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {services.map((service, index) => (
-              <div key={index} className="group bg-white border border-gray-200 rounded-3xl p-10 text-center hover:shadow-xl hover:border-blue-200 hover:-translate-y-2 transition-all duration-500">
-                <div className={`inline-flex items-center justify-center w-20 h-20 ${service.color} rounded-2xl text-white mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
-                  {service.icon}
-                </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-4 group-hover:text-blue-600 transition-colors">{service.title}</h3>
-                <p className="text-gray-600 text-lg leading-relaxed">{service.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+                <h1 className="text-5xl lg:text-7xl font-bold text-black leading-[1.1] tracking-tight">
+                  Website Design and Development Services
+                </h1>
 
-      {/* Portfolio Section */}
-      <section className="py-32 bg-[#E8F4FD] relative overflow-hidden">
-        <div className="container-wide section-padding relative z-10">
-          <div className="text-center mb-20">
-            <div className="inline-flex items-center gap-3 bg-white border border-gray-200 text-gray-700 px-6 py-3 rounded-full text-sm font-semibold mb-8 shadow-sm">
-              <Trophy className="w-5 h-5 text-blue-500" />
-              Premium Portfolio
-            </div>
-            <h2 className="text-4xl lg:text-6xl font-bold mb-6 text-gray-900" style={{fontFamily: "'Playfair Display', serif"}}>
-              <TypeWriter text="Award-Winning " delay={60} />
-              <span className="text-blue-600"><TypeWriter text="Masterpieces" delay={60} /></span>
-            </h2>
-            <p className="text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto font-light leading-relaxed">
-              Discover transformative digital experiences that have revolutionized businesses
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {portfolio.map((project, index) => (
-              <div key={index} className="group bg-white border border-gray-200 rounded-3xl overflow-hidden hover:shadow-2xl hover:-translate-y-2 transition-all duration-500">
-                <div className="relative overflow-hidden">
-                  <img 
-                    src={project.image} 
-                    alt={project.title}
-                    className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-700"
-                  />
-                  <div className="absolute top-4 left-4">
-                    <span className="bg-blue-500 text-white px-4 py-2 rounded-full text-sm font-semibold">
-                      {project.category}
-                    </span>
-                  </div>
-                </div>
-                
-                <div className="p-8">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4 group-hover:text-blue-600 transition-colors">
-                    {project.title}
-                  </h3>
+                <p className="text-xl text-gray-600 leading-relaxed max-w-xl">
+                  Is your website confusing visitors instead of converting them? With the right mix of user experience and stunning design, you'll ignite growth. Let us take you there.
+                </p>
+
+                <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                  <Button 
+                    size="lg" 
+                    className="bg-black text-white hover:bg-gray-900 text-lg px-8 py-7 rounded-full font-semibold group"
+                    asChild
+                  >
+                    <Link to="/contact">
+                      Design My Website Now
+                      <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                    </Link>
+                  </Button>
                   
-                  <div className="flex items-center gap-3 mb-6 p-4 bg-green-50 border border-green-200 rounded-xl">
-                    <Trophy className="w-5 h-5 text-green-600" />
-                    <span className="font-semibold text-green-700">{project.results}</span>
-                  </div>
-                  
-                  <Button variant="outline" className="w-full font-semibold py-4 rounded-xl border-gray-300 text-gray-700 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all duration-300" asChild>
-                    <Link to={`/case-study/${index === 0 ? 'ecommerce-platform' : index === 1 ? 'saas-dashboard' : 'healthcare-portal'}`}>
-                      View Case Study
-                      <ExternalLink className="w-4 h-4 ml-2" />
+                  <Button 
+                    size="lg" 
+                    variant="outline"
+                    className="border-2 border-gray-300 text-black hover:bg-gray-100 text-lg px-8 py-7 rounded-full font-semibold"
+                    asChild
+                  >
+                    <Link to="/portfolio">
+                      View Our Work
+                      <ArrowUpRight className="w-5 h-5 ml-2" />
                     </Link>
                   </Button>
                 </div>
+
+                {/* Quick Stats */}
+                <div className="flex items-center gap-8 pt-4">
+                  <div className="flex items-center gap-2">
+                    <div className="flex -space-x-2">
+                      {[1,2,3,4].map((i) => (
+                        <div key={i} className="w-8 h-8 rounded-full bg-gray-300 border-2 border-white"></div>
+                      ))}
+                    </div>
+                    <span className="text-sm text-gray-600">300+ Happy Clients</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    {[1,2,3,4,5].map((i) => (
+                      <Star key={i} className="w-4 h-4 text-yellow-400 fill-yellow-400" />
+                    ))}
+                    <span className="text-sm text-gray-600 ml-1">4.9/5 Rating</span>
+                  </div>
+                </div>
               </div>
-            ))}
+
+              {/* Right - Hero Image */}
+              <div className="relative">
+                <div className="relative rounded-3xl overflow-hidden shadow-2xl">
+                  <img 
+                    src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80"
+                    alt="Website Design Services"
+                    className="w-full h-[500px] object-cover"
+                  />
+                  {/* Overlay Card */}
+                  <div className="absolute bottom-6 left-6 right-6 bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-xl">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm text-gray-500 mb-1">Average ROI Increase</p>
+                        <p className="text-3xl font-bold text-black">+340%</p>
+                      </div>
+                      <div className="w-16 h-16 bg-black rounded-full flex items-center justify-center">
+                        <Play className="w-6 h-6 text-white fill-white ml-1" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Floating Badge */}
+                <div className="absolute -top-4 -right-4 bg-black text-white px-6 py-3 rounded-full text-sm font-semibold shadow-lg">
+                  ✨ Award Winning
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Testimonials Section */}
-      <section className="py-32 bg-white relative overflow-hidden">
-        <div className="container-wide section-padding relative z-10">
-          <div className="text-center mb-20">
-            <div className="inline-flex items-center gap-3 bg-yellow-50 border border-yellow-200 text-yellow-700 px-6 py-3 rounded-full text-sm font-semibold mb-8">
-              <Heart className="w-5 h-5 text-yellow-500" />
-              Client Reviews
-            </div>
-            
-            <h2 className="text-4xl lg:text-6xl font-bold mb-6 text-gray-900" style={{fontFamily: "'Playfair Display', serif"}}>
-              <TypeWriter text="What Clients " delay={60} />
-              <span className="text-blue-600"><TypeWriter text="Say" delay={60} /></span>
-            </h2>
-            <p className="text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto font-light leading-relaxed">
-              Hear from industry leaders who've experienced our design excellence
-            </p>
-          </div>
+      {/* Trusted By - Logo Marquee */}
+      <section className="py-16 bg-gray-50 border-y border-gray-200">
+        <div className="container mx-auto px-4">
+          <p className="text-center text-sm text-gray-500 uppercase tracking-widest mb-8 font-medium">
+            Trusted by 300+ Global Brands
+          </p>
           
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <div key={index} className="group bg-white border border-gray-200 rounded-3xl p-10 text-center hover:shadow-xl hover:border-blue-200 transition-all duration-500">
-                <div className="relative mb-6">
+          <div className="relative overflow-hidden">
+            <div className="flex animate-scroll gap-16">
+              {[...clientLogos, ...clientLogos].map((client, index) => (
+                <div key={index} className="flex-shrink-0 grayscale hover:grayscale-0 transition-all duration-300 opacity-60 hover:opacity-100">
                   <img 
-                    src={testimonial.avatar} 
-                    alt={testimonial.author}
-                    className="w-20 h-20 rounded-full mx-auto group-hover:scale-110 transition-transform duration-500 shadow-lg"
+                    src={client.logo} 
+                    alt={client.name}
+                    className="h-8 w-auto object-contain"
                   />
                 </div>
-                
-                <div className="flex justify-center gap-1 mb-6">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 text-yellow-400 fill-yellow-400" />
-                  ))}
-                </div>
-                
-                <blockquote className="text-lg text-gray-600 leading-relaxed mb-6 font-light">
-                  "{testimonial.quote}"
-                </blockquote>
-                
-                <div className="space-y-1">
-                  <div className="text-lg font-bold text-gray-900">{testimonial.author}</div>
-                  <div className="text-gray-500">{testimonial.role}, {testimonial.company}</div>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* CTA Section - Blue like Wix button */}
-      <section className="py-32 bg-blue-600 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.05)_1px,transparent_1px)] bg-[size:60px_60px]"></div>
-
-        <div className="container-wide section-padding relative z-10 text-center">
-          <div className="max-w-4xl mx-auto">
-            <div className="inline-flex items-center gap-2 bg-white/20 border border-white/30 text-white px-5 py-2.5 rounded-full text-sm font-medium backdrop-blur-sm mb-8">
-              <Sparkles className="w-4 h-4" />
-              Transform Your Business
+      {/* Services Section - Numbered List Style */}
+      <section className="py-32 bg-white">
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="max-w-6xl mx-auto">
+            {/* Section Header */}
+            <div className="text-center mb-20">
+              <span className="inline-block text-sm font-semibold text-gray-500 uppercase tracking-widest mb-4">
+                Our Services
+              </span>
+              <h2 className="text-4xl lg:text-6xl font-bold text-black mb-6">
+                What We Offer
+              </h2>
+              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+                Comprehensive web design and development services tailored to your unique business needs.
+              </p>
             </div>
-            
-            <h2 className="text-4xl lg:text-6xl font-bold mb-6 text-white" style={{fontFamily: "'Playfair Display', serif"}}>
-              <TypeWriter text="Ready to Get Started?" delay={60} />
-            </h2>
-            
-            <p className="text-lg lg:text-xl text-blue-100 mb-10 max-w-2xl mx-auto font-light">
-              Join the brands who've transformed their business with our premium design expertise
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="group text-base font-semibold px-10 py-7 bg-white text-blue-600 hover:bg-blue-50 rounded-full transition-all duration-300 hover:scale-105 shadow-lg" asChild>
-                <Link to="/contact">
-                  Start Your Project
-                  <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-                </Link>
-              </Button>
-              
-              <Button size="lg" variant="outline" className="text-base font-semibold px-10 py-7 border-2 border-white/50 text-white bg-white/10 hover:bg-white/20 rounded-full transition-all duration-300" asChild>
+
+            {/* Services List */}
+            <div className="space-y-0">
+              {services.map((service, index) => (
+                <div 
+                  key={index}
+                  className={`group border-t border-gray-200 ${index === services.length - 1 ? 'border-b' : ''}`}
+                  onMouseEnter={() => setActiveService(index)}
+                >
+                  <div className="py-10 lg:py-16 cursor-pointer">
+                    <div className="flex flex-col lg:flex-row lg:items-start gap-6 lg:gap-16">
+                      {/* Number */}
+                      <span className="text-5xl lg:text-7xl font-bold text-gray-200 group-hover:text-black transition-colors duration-300">
+                        {service.number}
+                      </span>
+                      
+                      {/* Content */}
+                      <div className="flex-1">
+                        <h3 className="text-2xl lg:text-4xl font-bold text-black mb-4 group-hover:text-gray-700 transition-colors">
+                          {service.title}
+                        </h3>
+                        <p className="text-lg text-gray-600 mb-6 max-w-2xl">
+                          {service.description}
+                        </p>
+                        
+                        {/* Features */}
+                        <div className={`grid grid-cols-2 lg:grid-cols-4 gap-3 overflow-hidden transition-all duration-500 ${activeService === index ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'}`}>
+                          {service.features.map((feature, fIndex) => (
+                            <div key={fIndex} className="flex items-center gap-2 text-sm text-gray-700">
+                              <Check className="w-4 h-4 text-green-600" />
+                              {feature}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                      
+                      {/* Arrow */}
+                      <div className="hidden lg:flex items-center">
+                        <div className="w-14 h-14 rounded-full border-2 border-gray-200 flex items-center justify-center group-hover:bg-black group-hover:border-black transition-all duration-300">
+                          <ArrowUpRight className="w-6 h-6 text-gray-400 group-hover:text-white transition-colors" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Case Studies Section */}
+      <section className="py-32 bg-gray-50">
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="max-w-6xl mx-auto">
+            {/* Section Header */}
+            <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between mb-16">
+              <div>
+                <span className="inline-block text-sm font-semibold text-gray-500 uppercase tracking-widest mb-4">
+                  Case Studies
+                </span>
+                <h2 className="text-4xl lg:text-6xl font-bold text-black">
+                  Featured Work
+                </h2>
+              </div>
+              <Button 
+                variant="outline" 
+                className="mt-6 lg:mt-0 border-2 border-black text-black hover:bg-black hover:text-white rounded-full px-8"
+                asChild
+              >
                 <Link to="/portfolio">
-                  View Portfolio
+                  View All Projects
+                  <ArrowRight className="w-4 h-4 ml-2" />
                 </Link>
               </Button>
+            </div>
+
+            {/* Case Study Cards */}
+            <div className="grid lg:grid-cols-3 gap-8">
+              {caseStudies.map((study, index) => (
+                <div key={index} className="group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500">
+                  {/* Image */}
+                  <div className="relative overflow-hidden aspect-[4/3]">
+                    <img 
+                      src={study.image}
+                      alt={study.title}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                    />
+                    <div className="absolute top-4 left-4">
+                      <span className="bg-white/90 backdrop-blur-sm text-black px-4 py-2 rounded-full text-sm font-medium">
+                        {study.category}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  {/* Content */}
+                  <div className="p-8">
+                    <h3 className="text-2xl font-bold text-black mb-3">
+                      {study.title}
+                    </h3>
+                    <p className="text-gray-600 mb-6">
+                      {study.description}
+                    </p>
+                    
+                    {/* Stats */}
+                    <div className="flex gap-8 pt-6 border-t border-gray-100">
+                      {study.stats.map((stat, sIndex) => (
+                        <div key={sIndex}>
+                          <p className="text-2xl font-bold text-black">{stat.value}</p>
+                          <p className="text-sm text-gray-500">{stat.label}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Process Section */}
+      <section className="py-32 bg-black text-white">
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="max-w-6xl mx-auto">
+            {/* Section Header */}
+            <div className="text-center mb-20">
+              <span className="inline-block text-sm font-semibold text-gray-400 uppercase tracking-widest mb-4">
+                Our Process
+              </span>
+              <h2 className="text-4xl lg:text-6xl font-bold mb-6">
+                How We Work
+              </h2>
+              <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+                A proven methodology that delivers results consistently.
+              </p>
+            </div>
+
+            {/* Process Steps */}
+            <div className="grid lg:grid-cols-5 gap-8">
+              {processSteps.map((process, index) => (
+                <div key={index} className="relative group">
+                  {/* Connector Line */}
+                  {index < processSteps.length - 1 && (
+                    <div className="hidden lg:block absolute top-8 left-1/2 w-full h-[2px] bg-gray-800"></div>
+                  )}
+                  
+                  <div className="relative z-10 text-center">
+                    <div className="w-16 h-16 rounded-full bg-white text-black text-2xl font-bold flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
+                      {process.step}
+                    </div>
+                    <h3 className="text-xl font-bold mb-3">{process.title}</h3>
+                    <p className="text-gray-400 text-sm">{process.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Industries Section */}
+      <section className="py-32 bg-white">
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="max-w-6xl mx-auto">
+            {/* Section Header */}
+            <div className="text-center mb-16">
+              <span className="inline-block text-sm font-semibold text-gray-500 uppercase tracking-widest mb-4">
+                Industries
+              </span>
+              <h2 className="text-4xl lg:text-6xl font-bold text-black mb-6">
+                Expertise Across Sectors
+              </h2>
+            </div>
+
+            {/* Industry Grid */}
+            <div className="grid grid-cols-2 lg:grid-cols-6 gap-4">
+              {industries.map((industry, index) => (
+                <div 
+                  key={index}
+                  className="group bg-gray-50 hover:bg-black rounded-2xl p-8 text-center transition-all duration-300 cursor-pointer"
+                >
+                  <div className="w-12 h-12 rounded-full bg-white shadow-md flex items-center justify-center mx-auto mb-4 group-hover:bg-gray-100 transition-colors">
+                    <span className="text-black">{industry.icon}</span>
+                  </div>
+                  <p className="font-semibold text-black group-hover:text-white transition-colors">
+                    {industry.name}
+                  </p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
       {/* FAQ Section */}
-      <section className="py-24 bg-white">
-        <div className="container-wide section-padding">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-3 bg-blue-50 border border-blue-200 text-blue-600 px-6 py-3 rounded-full text-sm font-semibold mb-8">
-              Frequently Asked Questions
+      <section className="py-32 bg-gray-50">
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="max-w-4xl mx-auto">
+            {/* Section Header */}
+            <div className="text-center mb-16">
+              <span className="inline-block text-sm font-semibold text-gray-500 uppercase tracking-widest mb-4">
+                FAQ
+              </span>
+              <h2 className="text-4xl lg:text-5xl font-bold text-black">
+                Frequently Asked Questions
+              </h2>
             </div>
-            <h2 className="text-4xl lg:text-5xl font-bold mb-4 text-gray-900" style={{fontFamily: "'Playfair Display', serif"}}>
-              Got <span className="text-blue-600">Questions?</span>
-            </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Everything you need to know about our web design services
-            </p>
-          </div>
-          
-          <div className="max-w-3xl mx-auto">
-            <FAQSchema 
-              faqs={[
-                {
-                  question: "How long does it take to design and develop a website?",
-                  answer: "Typically, a professional website takes 2-6 weeks depending on complexity. Simple websites can be completed in 2-3 weeks, while e-commerce or custom web applications may take 4-6 weeks or more. We provide a detailed timeline during our initial consultation."
-                },
-                {
-                  question: "Do you provide mobile-responsive designs?",
-                  answer: "Absolutely! All our websites are fully mobile-responsive and optimized for all devices including smartphones, tablets, and desktops. Mobile-first design is a core part of our development process."
-                },
-                {
-                  question: "Will I be able to update the website content myself?",
-                  answer: "Yes! We build websites with user-friendly Content Management Systems (CMS) like WordPress or custom solutions that allow you to easily update text, images, and content without any technical knowledge. We also provide training and documentation."
-                },
-                {
-                  question: "What is included in your web design packages?",
-                  answer: "Our packages include custom design, responsive development, SEO optimization, contact forms, Google Analytics setup, social media integration, and ongoing support. E-commerce packages also include payment gateway integration and product management systems."
-                },
-                {
-                  question: "Do you offer website maintenance and support?",
-                  answer: "Yes! We offer ongoing maintenance packages that include security updates, content updates, performance optimization, backups, and technical support. Our basic packages include 1-6 months of support, with extended plans available."
-                },
-                {
-                  question: "Will my website be SEO-friendly?",
-                  answer: "Absolutely! We implement SEO best practices including proper heading structure, meta tags, image optimization, fast loading speeds, mobile optimization, and clean code. This gives your website a strong foundation for search engine rankings."
-                }
-              ]}
-              className="w-full"
-            />
+
+            {/* FAQ Items */}
+            <div className="space-y-4">
+              {faqs.map((faq, index) => (
+                <details 
+                  key={index}
+                  className="group bg-white rounded-2xl border border-gray-200 overflow-hidden"
+                >
+                  <summary className="flex items-center justify-between p-6 cursor-pointer list-none">
+                    <span className="text-lg font-semibold text-black pr-4">{faq.question}</span>
+                    <ChevronRight className="w-5 h-5 text-gray-400 group-open:rotate-90 transition-transform flex-shrink-0" />
+                  </summary>
+                  <div className="px-6 pb-6 text-gray-600">
+                    {faq.answer}
+                  </div>
+                </details>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
+      {/* CTA Section */}
+      <section className="py-32 bg-black text-white">
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-4xl lg:text-6xl font-bold mb-6">
+              Ready to Transform Your Digital Presence?
+            </h2>
+            <p className="text-xl text-gray-400 mb-10 max-w-2xl mx-auto">
+              Let's create something extraordinary together. Get a free consultation and see how we can help your business grow.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button 
+                size="lg"
+                className="bg-white text-black hover:bg-gray-100 text-lg px-10 py-7 rounded-full font-semibold group"
+                asChild
+              >
+                <Link to="/contact">
+                  Start Your Project
+                  <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </Button>
+              
+              <Button 
+                size="lg"
+                variant="outline"
+                className="border-2 border-gray-600 text-white hover:bg-gray-900 text-lg px-10 py-7 rounded-full font-semibold"
+                asChild
+              >
+                <Link to="/book-call">
+                  <Clock className="w-5 h-5 mr-2" />
+                  Book a Call
+                </Link>
+              </Button>
+            </div>
+
+            {/* Trust Indicators */}
+            <div className="flex items-center justify-center gap-8 mt-12">
+              <div className="flex items-center gap-2 text-gray-400">
+                <Check className="w-5 h-5 text-green-500" />
+                Free Consultation
+              </div>
+              <div className="flex items-center gap-2 text-gray-400">
+                <Check className="w-5 h-5 text-green-500" />
+                No Hidden Fees
+              </div>
+              <div className="flex items-center gap-2 text-gray-400">
+                <Check className="w-5 h-5 text-green-500" />
+                Quick Turnaround
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <FAQSchema faqs={faqs} />
       <Footer />
+
+      {/* Custom Scroll Animation */}
+      <style>{`
+        @keyframes scroll {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        .animate-scroll {
+          animation: scroll 30s linear infinite;
+        }
+      `}</style>
     </div>
   );
 };
