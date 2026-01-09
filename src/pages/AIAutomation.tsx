@@ -1261,7 +1261,7 @@ const AIAutomation = () => {
                       <img 
                         src={logo.logo_url} 
                         alt={logo.name}
-                        className="max-w-full max-h-full object-contain filter brightness-0 invert opacity-60 group-hover:opacity-100 transition-opacity duration-300"
+                        className="max-w-full max-h-full object-contain opacity-80 group-hover:opacity-100 transition-opacity duration-300"
                       />
                     </div>
                   </motion.div>
@@ -1281,7 +1281,7 @@ const AIAutomation = () => {
                       <img 
                         src={logo.logo_url} 
                         alt={logo.name}
-                        className="max-w-full max-h-full object-contain filter brightness-0 invert opacity-60 group-hover:opacity-100 transition-opacity duration-300"
+                        className="max-w-full max-h-full object-contain opacity-80 group-hover:opacity-100 transition-opacity duration-300"
                       />
                     </div>
                   </motion.div>
