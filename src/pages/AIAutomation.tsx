@@ -375,7 +375,7 @@ const AIAutomation = () => {
                 <Button 
                   size="lg" 
                   variant="outline"
-                  className="border-white/20 text-white hover:bg-white/10 text-lg px-8 py-7 rounded-full"
+                  className="border-[#C5FF4A]/50 text-[#C5FF4A] hover:bg-[#C5FF4A]/10 hover:border-[#C5FF4A] text-lg px-8 py-7 rounded-full font-medium"
                   asChild
                 >
                   <a href="#how-it-works">
@@ -771,7 +771,7 @@ const AIAutomation = () => {
                   <p className="text-sm text-gray-400 mb-6">{plan.description}</p>
                   
                   <Button 
-                    className={`w-full rounded-full py-6 font-semibold transition-all duration-300 ${index === 1 ? 'bg-[#C5FF4A] text-black hover:bg-[#d4ff6a]' : 'bg-white/10 text-white hover:bg-white/20'}`}
+                    className={`w-full rounded-full py-6 font-semibold transition-all duration-300 ${index === 1 ? 'bg-[#C5FF4A] text-black hover:bg-[#d4ff6a]' : 'bg-emerald-500/20 border border-emerald-500/50 text-emerald-400 hover:bg-emerald-500 hover:text-black'}`}
                     asChild
                   >
                     <a href="/contact">
@@ -866,7 +866,7 @@ const AIAutomation = () => {
           >
             <Button 
               variant="outline" 
-              className="rounded-full border-white/20 text-white hover:bg-white hover:text-black transition-all duration-300"
+              className="rounded-full border-[#C5FF4A]/50 text-[#C5FF4A] hover:bg-[#C5FF4A] hover:text-black transition-all duration-300 px-6"
               asChild
             >
               <a href="/contact">
@@ -1015,7 +1015,7 @@ const AIAutomation = () => {
               <Button 
                 size="lg" 
                 variant="outline" 
-                className="text-lg px-12 py-7 rounded-full border-2 border-white/20 text-white hover:bg-white hover:text-black transition-all duration-300 hover:scale-105"
+                className="text-lg px-12 py-7 rounded-full border-2 border-[#C5FF4A]/50 text-[#C5FF4A] hover:bg-[#C5FF4A] hover:text-black transition-all duration-300 hover:scale-105"
                 asChild
               >
                 <a href="/portfolio">
