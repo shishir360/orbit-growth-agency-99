@@ -3,7 +3,7 @@ import { ArrowUpRight, Mail, MapPin, Phone } from "lucide-react";
 
 const Footer = () => {
   return (
-    <footer className="relative bg-black/40 backdrop-blur-xl overflow-hidden">
+    <footer className="relative bg-[#0a0a0a] overflow-hidden">
       {/* Top gradient line using theme primary */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent"></div>
       
