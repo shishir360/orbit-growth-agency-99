@@ -32,7 +32,12 @@ import {
   Network,
   Workflow,
   Play,
-  MousePointerClick
+  MousePointerClick,
+  Users,
+  Database,
+  LineChart,
+  Puzzle,
+  Check
 } from "lucide-react";
 
 // AI Platform Logos as SVG components
@@ -79,18 +84,15 @@ const MakeLogo = () => (
   </svg>
 );
 
-const n8nLogo = () => (
+const HubSpotLogo = () => (
   <svg viewBox="0 0 24 24" className="w-8 h-8">
-    <path fill="#EA4B71" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15H9V7h2v10zm4 0h-2V7h2v10z"/>
+    <path fill="#FF7A59" d="M18.164 7.93V5.084a2.198 2.198 0 001.267-1.984v-.066A2.198 2.198 0 0017.24.845h-.067a2.198 2.198 0 00-2.19 2.19v.065c0 .877.527 1.645 1.267 1.984V7.93a5.749 5.749 0 00-3.247 1.64L5.07 3.654a2.35 2.35 0 00.072-.56 2.395 2.395 0 10-2.395 2.395c.396 0 .769-.101 1.097-.275l7.848 5.86a5.754 5.754 0 00-.098 1.046c0 .385.038.76.111 1.123l-3.905 1.9a2.48 2.48 0 00-2.162-1.272 2.488 2.488 0 100 4.977 2.487 2.487 0 002.477-2.72l3.74-1.82a5.783 5.783 0 1010.31-6.178l-.001-.2z"/>
   </svg>
 );
 
-const HuggingFaceLogo = () => (
+const SalesforceLogo = () => (
   <svg viewBox="0 0 24 24" className="w-8 h-8">
-    <path fill="#FFD21E" d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z"/>
-    <circle fill="#FFD21E" cx="8.5" cy="10.5" r="1.5"/>
-    <circle fill="#FFD21E" cx="15.5" cy="10.5" r="1.5"/>
-    <path fill="#FFD21E" d="M12 17c-2.206 0-4-1.794-4-4h8c0 2.206-1.794 4-4 4z"/>
+    <path fill="#00A1E0" d="M10.006 5.415a4.195 4.195 0 013.045-1.306c1.56 0 2.954.854 3.69 2.169a5.014 5.014 0 012.064-.44c2.79 0 5.052 2.262 5.052 5.052 0 2.79-2.262 5.052-5.052 5.052a5.02 5.02 0 01-1.036-.108 3.74 3.74 0 01-3.346 2.066c-.71 0-1.377-.197-1.946-.54a4.493 4.493 0 01-4.032 2.49c-1.927 0-3.596-1.21-4.238-2.913a3.74 3.74 0 01-.734.073c-2.065 0-3.74-1.674-3.74-3.74 0-1.337.702-2.51 1.758-3.173a4.495 4.495 0 01-.317-1.654c0-2.483 2.013-4.496 4.496-4.496 1.02 0 1.96.34 2.714.913a4.19 4.19 0 011.622-.445z"/>
   </svg>
 );
 
@@ -119,116 +121,103 @@ const AIAutomation = () => {
 
   // AI Platform Partners
   const aiPlatforms = [
-    { name: "OpenAI", logo: <OpenAILogo />, description: "GPT-4 & DALL-E", color: "text-white" },
-    { name: "Google AI", logo: <GoogleAILogo />, description: "Gemini & Vertex", color: "text-blue-400" },
-    { name: "Anthropic", logo: <AnthropicLogo />, description: "Claude AI", color: "text-orange-300" },
-    { name: "Microsoft", logo: <MicrosoftLogo />, description: "Azure AI", color: "text-blue-300" },
-    { name: "Zapier", logo: <ZapierLogo />, description: "Automation Hub", color: "text-orange-500" },
-    { name: "Make", logo: <MakeLogo />, description: "Visual Workflows", color: "text-purple-500" }
+    { name: "HubSpot", logo: <HubSpotLogo />, description: "CRM Automation" },
+    { name: "Salesforce", logo: <SalesforceLogo />, description: "Enterprise CRM" },
+    { name: "Zapier", logo: <ZapierLogo />, description: "Workflow Hub" },
+    { name: "OpenAI", logo: <OpenAILogo />, description: "GPT-4 & DALL-E" },
+    { name: "Make", logo: <MakeLogo />, description: "Visual Automation" },
+    { name: "Google AI", logo: <GoogleAILogo />, description: "Gemini AI" }
   ];
 
-const aiSolutions = [
+  // Feature services
+  const featureServices = [
+    { icon: <Zap className="w-8 h-8" />, title: "CRM Automation", description: "Automate your customer relationship management" },
+    { icon: <Database className="w-8 h-8" />, title: "Financial Automation", description: "Streamline invoicing, payments & reporting" },
+    { icon: <Puzzle className="w-8 h-8" />, title: "Workflow Automation", description: "Connect apps and automate processes" },
+    { icon: <Target className="w-8 h-8" />, title: "Marketing Automation", description: "Scale your marketing with AI" },
+    { icon: <LineChart className="w-8 h-8" />, title: "AI Chatbots", description: "24/7 intelligent customer support" },
+    { icon: <Settings className="w-8 h-8" />, title: "Business Process", description: "End-to-end process optimization" }
+  ];
+
+  // Pricing plans
+  const pricingPlans = [
     {
-      icon: <Brain className="w-10 h-10" />,
-      title: "Cognitive AI Chatbots",
-      description: "Next-generation conversational AI with advanced NLP, context awareness, and emotional intelligence.",
-      features: ["Advanced NLP", "Contextual Memory", "Emotional Intelligence", "Multi-Language"],
-      metrics: { efficiency: "890%", satisfaction: "96%", resolution: "84%" },
-      gradient: "from-purple-600 via-violet-500 to-purple-400",
-      logo: <OpenAILogo />,
-      logoName: "OpenAI GPT-4",
-      techStack: ["GPT-4", "LangChain", "Vector DB"]
+      name: "90 Day Fast-Track",
+      price: "Call",
+      period: "3 mo",
+      description: "Done-for-you in 90 days with ongoing support available",
+      badge: null,
+      features: [
+        "90 days done-for-you",
+        "Weekly progress calls",
+        "Full AI end-to-end journey",
+        "Bespoke for your business",
+        "Quick wins in month 1",
+        "ROI guaranteed"
+      ],
+      guarantee: "Money back guarantee*"
     },
     {
-      icon: <Mail className="w-10 h-10" />,
-      title: "Predictive Email AI",
-      description: "AI-powered email automation that predicts behavior and personalizes content dynamically.",
-      features: ["Behavioral Prediction", "Dynamic Personalization", "Optimal Timing", "A/B Optimization"],
-      metrics: { efficiency: "720%", satisfaction: "94%", resolution: "78%" },
-      gradient: "from-pink-600 via-rose-500 to-pink-400",
-      logo: <GoogleAILogo />,
-      logoName: "Google Gemini",
-      techStack: ["Gemini Pro", "SendGrid", "Analytics"]
+      name: "Retainer",
+      price: "Call",
+      period: "mo",
+      description: "Ongoing monthly management with the latest updates",
+      badge: "Most popular",
+      features: [
+        "Expert AI systems long term",
+        "Weekly progress calls",
+        "Full AI end-to-end journey",
+        "Bespoke for your business",
+        "Grows with your business",
+        "Massive ROI long term"
+      ],
+      guarantee: "Hands off for you. Hands on for us"
     },
     {
-      icon: <Phone className="w-10 h-10" />,
-      title: "Neural Voice Agents",
-      description: "Human-like AI voice assistants with natural conversation flow for seamless interactions.",
-      features: ["Natural Speech", "Context Understanding", "Smart Routing", "Sentiment Analysis"],
-      metrics: { efficiency: "640%", satisfaction: "92%", resolution: "88%" },
-      gradient: "from-fuchsia-600 via-purple-500 to-violet-400",
-      logo: <AnthropicLogo />,
-      logoName: "Anthropic Claude",
-      techStack: ["Claude 3", "ElevenLabs", "Twilio"]
-    },
-    {
-      icon: <Workflow className="w-10 h-10" />,
-      title: "Intelligent Process Automation",
-      description: "End-to-end business process automation using AI to learn and optimize workflows.",
-      features: ["Process Learning", "Adaptive Optimization", "Real-time Analytics", "Scalable"],
-      metrics: { efficiency: "850%", satisfaction: "98%", resolution: "92%" },
-      gradient: "from-violet-600 via-pink-500 to-rose-400",
-      logo: <ZapierLogo />,
-      logoName: "Zapier + Make",
-      techStack: ["Zapier", "Make", "n8n"]
+      name: "Support",
+      price: "$87",
+      period: "week",
+      description: "Get experts on hand daily for AI support",
+      badge: null,
+      features: [
+        "Access to AI experts daily",
+        "Help for one brand/company",
+        "Fast response times",
+        "On hand to help",
+        "Pick our brains"
+      ],
+      guarantee: "Billed monthly"
     }
   ];
 
-  const automationTypes = [
-    { name: "Customer Service AI", icon: <Bot className="w-8 h-8" />, savings: "85%", volume: "50K+", gradient: "from-purple-600 to-violet-500", logo: <OpenAILogo />, description: "24/7 intelligent support" },
-    { name: "Sales Automation", icon: <Target className="w-8 h-8" />, savings: "70%", volume: "25K+", gradient: "from-pink-600 to-rose-500", logo: <GoogleAILogo />, description: "Lead scoring & nurturing" },
-    { name: "Content Generation", icon: <Sparkles className="w-8 h-8" />, savings: "90%", volume: "100K+", gradient: "from-fuchsia-600 to-pink-500", logo: <AnthropicLogo />, description: "AI-powered creativity" },
-    { name: "Data Intelligence", icon: <BarChart3 className="w-8 h-8" />, savings: "80%", volume: "1M+", gradient: "from-violet-600 to-purple-400", logo: <MicrosoftLogo />, description: "Advanced analytics" },
-    { name: "Workflow Optimization", icon: <Workflow className="w-8 h-8" />, savings: "75%", volume: "15K+", gradient: "from-rose-600 to-pink-400", logo: <ZapierLogo />, description: "Seamless integrations" },
-    { name: "Voice Intelligence", icon: <Phone className="w-8 h-8" />, savings: "95%", volume: "30K+", gradient: "from-purple-600 to-fuchsia-500", logo: <MakeLogo />, description: "Natural conversations" }
-  ];
-
-  const results = [
-    { metric: "Time Saved", value: "50K+", unit: "hrs/month", icon: <Clock className="w-7 h-7" /> },
-    { metric: "Cost Reduction", value: "85%", unit: "average", icon: <TrendingUp className="w-7 h-7" /> },
-    { metric: "Accuracy Rate", value: "99.7%", unit: "precision", icon: <Target className="w-7 h-7" /> },
-    { metric: "Client Growth", value: "340%", unit: "average", icon: <BarChart3 className="w-7 h-7" /> }
-  ];
-
-  const caseStudies = [
+  // FAQ items
+  const faqItems = [
     {
-      title: "Global Customer Service Revolution",
-      industry: "Technology",
-      challenge: "Handle 100K+ monthly support tickets across 24 time zones",
-      solution: "Multi-language AI chatbot with advanced context understanding",
-      results: ["98% automation rate", "60% cost reduction", "45% faster resolution"],
-      investment: "$240K",
-      savings: "$2.8M annually",
-      timeline: "8 weeks"
+      question: "What exactly does your AI Automation service offer?",
+      answer: "We provide expert advisory services to help you identify the best automation opportunities, recommend the right AI tools and systems, and assist your team through the implementation process. We guide you at every step to ensure successful adoption."
     },
     {
-      title: "Enterprise Sales Acceleration",
-      industry: "B2B SaaS",
-      challenge: "Scale lead qualification to 10K+ prospects monthly",
-      solution: "AI-powered lead scoring and automated nurturing",
-      results: ["450% qualified leads", "70% faster sales cycle", "8x ROI"],
-      investment: "$180K",
-      savings: "$4.2M annually",
-      timeline: "12 weeks"
+      question: "Do I need technical expertise to work with you?",
+      answer: "Not at all! We handle all the technical complexity for you. Our team works with businesses of all technical levels and ensures everything is set up and running smoothly without requiring any coding knowledge from you."
     },
     {
-      title: "Content Generation Engine",
-      industry: "Media & Marketing",
-      challenge: "Create 1000+ pieces of content weekly",
-      solution: "AI content creation with brand voice training",
-      results: ["2400% content output", "90% time savings", "85% engagement boost"],
-      investment: "$120K",
-      savings: "$1.9M annually",
-      timeline: "6 weeks"
+      question: "How long does it take to see results?",
+      answer: "Most clients see initial results within the first 30 days with quick wins. Full implementation typically takes 90 days, but you'll experience improvements in efficiency and cost savings throughout the entire process."
+    },
+    {
+      question: "What kind of ROI can I expect?",
+      answer: "Our clients typically see 85% cost reduction in automated processes, 340% growth acceleration, and save 50,000+ hours per month. The exact ROI depends on your business size and current processes."
     }
   ];
+
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   useEffect(() => {
     document.title = "AI Automation for Business | Lunexo Media";
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#0A0A0F] overflow-hidden">
+    <div className="min-h-screen bg-black overflow-hidden">
       <SEO
         title="AI Automation for Business | Lunexo Media"
         description="Transform your business with enterprise-grade AI automation. Chatbots, workflows, voice AI, and intelligent agents delivering 85% cost savings."
@@ -251,249 +240,123 @@ const aiSolutions = [
       
       <Navigation />
       
-      {/* Premium Hero Section - $50M Design */}
+      {/* Hero Section - TheAIAutomationAgency Style */}
       <section 
         ref={heroRef}
-        className="relative min-h-screen flex items-center justify-center overflow-hidden"
+        className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20"
       >
-        {/* Dynamic gradient background following mouse */}
-        <div className="absolute inset-0 bg-[#0A0A0F]">
-          {/* Main gradient orbs */}
+        {/* Emerald/Teal glow effects */}
+        <div className="absolute inset-0 bg-black">
           <motion.div 
-            className="absolute w-[1000px] h-[1000px] rounded-full blur-[150px]"
+            className="absolute w-[1000px] h-[1000px] rounded-full blur-[200px]"
             style={{
-              background: 'radial-gradient(circle, rgba(139, 92, 246, 0.3) 0%, transparent 70%)',
-              left: `${mousePosition.x * 30}%`,
-              top: `${mousePosition.y * 30}%`,
+              background: 'radial-gradient(circle, rgba(16, 185, 129, 0.25) 0%, transparent 70%)',
+              left: '-10%',
+              top: '10%',
             }}
             animate={{
               scale: [1, 1.1, 1],
+              opacity: [0.5, 0.7, 0.5]
             }}
             transition={{ duration: 8, repeat: Infinity }}
           />
           <motion.div 
-            className="absolute w-[800px] h-[800px] rounded-full blur-[150px]"
+            className="absolute w-[800px] h-[800px] rounded-full blur-[200px]"
             style={{
-              background: 'radial-gradient(circle, rgba(236, 72, 153, 0.25) 0%, transparent 70%)',
-              right: `${(1 - mousePosition.x) * 30}%`,
-              bottom: `${(1 - mousePosition.y) * 30}%`,
+              background: 'radial-gradient(circle, rgba(6, 182, 212, 0.2) 0%, transparent 70%)',
+              right: '-5%',
+              bottom: '0%',
             }}
             animate={{
               scale: [1, 1.15, 1],
+              opacity: [0.4, 0.6, 0.4]
             }}
             transition={{ duration: 10, repeat: Infinity }}
           />
-          <div className="absolute top-1/4 right-1/4 w-[600px] h-[600px] bg-gradient-to-r from-blue-600/20 to-cyan-500/20 rounded-full blur-[120px] animate-pulse delay-500" />
         </div>
 
-        {/* Animated grid pattern */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.015)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.015)_1px,transparent_1px)] bg-[size:60px_60px]" />
-        
-        {/* Floating particles */}
-        <div className="absolute inset-0 overflow-hidden">
-          {[...Array(20)].map((_, i) => (
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-20 relative z-10">
+          <div className="max-w-5xl mx-auto text-center">
+            {/* Top Badge */}
             <motion.div
-              key={i}
-              className="absolute w-1 h-1 bg-purple-400/50 rounded-full"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-              }}
-              animate={{
-                y: [0, -30, 0],
-                opacity: [0.3, 0.8, 0.3],
-              }}
-              transition={{
-                duration: 3 + Math.random() * 2,
-                repeat: Infinity,
-                delay: Math.random() * 2,
-              }}
-            />
-          ))}
-        </div>
-
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-32 relative z-10">
-          <div className="max-w-6xl mx-auto">
-            {/* Breadcrumb */}
-            <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="mb-10"
+              className="mb-8"
             >
-              <BreadcrumbSEO 
-                items={[{ label: "Services", href: "/services-explore" }]}
-                currentPage="AI Automation"
-              />
+              <span className="inline-flex items-center px-4 py-2 rounded-full bg-white/5 border border-white/10 text-gray-400 text-sm">
+                Done for you AI Setup
+              </span>
             </motion.div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-              {/* Left content */}
-              <motion.div 
-                initial={{ opacity: 0, x: -50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8 }}
-                className="space-y-10"
+            {/* Main Headline */}
+            <motion.h1 
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.8 }}
+              className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-black leading-[1.05] tracking-tight mb-8"
+            >
+              <span className="text-white">Done-for-you AI</span>
+              <br />
+              <span className="inline-block bg-[#C5FF4A] text-black px-4 py-1 rounded-2xl mt-2">
+                Plan. Build. Deploy.
+              </span>
+              <br />
+              <span className="text-white mt-2 inline-block">In just 90 Days</span>
+            </motion.h1>
+
+            {/* Subtitle */}
+            <motion.p 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4, duration: 0.8 }}
+              className="text-xl sm:text-2xl text-gray-400 leading-relaxed max-w-3xl mx-auto mb-12"
+            >
+              AI fully integrated into your business within 90 days.
+            </motion.p>
+
+            {/* CTA Button */}
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5, duration: 0.8 }}
+            >
+              <Button 
+                size="lg" 
+                className="bg-emerald-500 hover:bg-emerald-400 text-white text-lg px-10 py-7 rounded-full font-semibold shadow-2xl shadow-emerald-500/30 hover:shadow-emerald-500/50 transition-all duration-300 hover:scale-105 group"
+                asChild
               >
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.2, duration: 0.5 }}
-                >
-                  <Badge className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 text-purple-300 px-5 py-2.5 text-base font-medium rounded-full backdrop-blur-sm">
-                    <Brain className="w-5 h-5 mr-2" />
-                    Enterprise AI Solutions
-                  </Badge>
-                </motion.div>
+                <a href="/contact">
+                  Get Automated
+                  <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                </a>
+              </Button>
+            </motion.div>
 
-                <motion.h1 
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3, duration: 0.8 }}
-                  className="text-5xl sm:text-6xl lg:text-7xl font-black leading-[1.1] tracking-tight"
-                >
-                  <span className="text-white">AI Automation</span>
-                  <br />
-                  <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-rose-400 bg-clip-text text-transparent">
-                    That Actually Works
-                  </span>
-                </motion.h1>
-
-                <motion.p 
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.5, duration: 0.8 }}
-                  className="text-xl sm:text-2xl text-gray-300 leading-relaxed max-w-xl"
-                >
-                  Enterprise-grade AI delivering{" "}
-                  <span className="text-purple-400 font-bold">85% cost reduction</span> and{" "}
-                  <span className="text-pink-400 font-bold">340% growth</span> acceleration.
-                </motion.p>
-
-                {/* Floating stats cards */}
-                <motion.div 
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.6, duration: 0.8 }}
-                  className="grid grid-cols-3 gap-4"
-                >
-                  {[
-                    { value: "50K+", label: "Hours Saved" },
-                    { value: "99.7%", label: "AI Accuracy" },
-                    { value: "340%", label: "Growth" }
-                  ].map((stat, index) => (
-                    <motion.div 
-                      key={index}
-                      whileHover={{ scale: 1.05, y: -5 }}
-                      className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-4 text-center hover:border-purple-500/50 transition-all duration-300"
-                    >
-                      <div className="text-2xl sm:text-3xl font-black bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                        {stat.value}
-                      </div>
-                      <div className="text-sm text-gray-400 font-medium mt-1">{stat.label}</div>
-                    </motion.div>
-                  ))}
-                </motion.div>
-
-                {/* CTAs */}
-                <motion.div 
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.7, duration: 0.8 }}
-                  className="flex flex-col sm:flex-row gap-5 pt-4"
-                >
-                  <Button 
-                    size="lg" 
-                    className="bg-gradient-to-r from-purple-600 via-pink-600 to-rose-600 hover:from-purple-500 hover:via-pink-500 hover:to-rose-500 text-white text-lg px-10 py-7 rounded-2xl font-semibold shadow-2xl shadow-purple-500/25 hover:shadow-purple-500/40 transition-all duration-300 hover:scale-105 group"
-                    asChild
-                  >
-                    <a href="/contact">
-                      Get Free AI Audit
-                      <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-                    </a>
-                  </Button>
-                  
-                  <Button 
-                    size="lg" 
-                    variant="outline" 
-                    className="text-lg px-10 py-7 rounded-2xl border-2 border-gray-600 text-white hover:bg-white hover:text-[#0A0A0F] transition-all duration-300 hover:scale-105 group"
-                    asChild
-                  >
-                    <a href="/portfolio">
-                      <Play className="w-5 h-5 mr-2" />
-                      Watch Demo
-                    </a>
-                  </Button>
-                </motion.div>
-              </motion.div>
-
-              {/* Right - AI Visual */}
-              <motion.div 
-                initial={{ opacity: 0, x: 50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.4, duration: 0.8 }}
-                className="relative"
-              >
-                <div className="relative">
-                  {/* Glowing orb behind */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple-600/40 via-pink-600/40 to-rose-600/40 rounded-full blur-3xl scale-110" />
-                  
-                  {/* Main AI Brain Visual */}
-                  <motion.div 
-                    className="relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20 rounded-3xl p-8 overflow-hidden"
-                    whileHover={{ scale: 1.02 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    {/* Animated circuit lines */}
-                    <div className="absolute inset-0">
-                      <svg className="w-full h-full opacity-20">
-                        <pattern id="circuit" x="0" y="0" width="50" height="50" patternUnits="userSpaceOnUse">
-                          <path d="M0 25 L25 25 M25 0 L25 25 M25 25 L50 25 M25 25 L25 50" stroke="currentColor" strokeWidth="1" fill="none" className="text-purple-400"/>
-                          <circle cx="25" cy="25" r="3" className="fill-purple-400"/>
-                        </pattern>
-                        <rect x="0" y="0" width="100%" height="100%" fill="url(#circuit)"/>
-                      </svg>
-                    </div>
-
-                    {/* Center brain icon */}
-                    <div className="relative z-10 flex flex-col items-center justify-center py-12">
-                      <motion.div 
-                        className="w-32 h-32 bg-gradient-to-br from-purple-500 to-pink-500 rounded-3xl flex items-center justify-center shadow-2xl shadow-purple-500/50"
-                        animate={{ 
-                          boxShadow: [
-                            '0 0 60px rgba(168, 85, 247, 0.4)',
-                            '0 0 80px rgba(236, 72, 153, 0.4)',
-                            '0 0 60px rgba(168, 85, 247, 0.4)'
-                          ]
-                        }}
-                        transition={{ duration: 3, repeat: Infinity }}
-                      >
-                        <Brain className="w-16 h-16 text-white" />
-                      </motion.div>
-                      
-                      <h3 className="text-2xl font-bold text-white mt-6 mb-2">AI-Powered Automation</h3>
-                      <p className="text-gray-400 text-center max-w-sm">
-                        Intelligent systems that learn, adapt, and optimize your business processes 24/7
-                      </p>
-
-                      {/* Floating tech icons */}
-                      <div className="flex gap-4 mt-8">
-                        {[<Cpu key="cpu" />, <Network key="network" />, <Workflow key="workflow" />, <Sparkles key="sparkles" />].map((icon, i) => (
-                          <motion.div
-                            key={i}
-                            className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center text-purple-400 border border-white/10"
-                            animate={{ y: [0, -5, 0] }}
-                            transition={{ duration: 2, repeat: Infinity, delay: i * 0.2 }}
-                          >
-                            {icon}
-                          </motion.div>
-                        ))}
-                      </div>
-                    </div>
-                  </motion.div>
-                </div>
-              </motion.div>
-            </div>
+            {/* Floating user avatars decoration */}
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.8 }}
+              className="absolute top-1/4 left-10 hidden lg:flex items-center gap-2"
+            >
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center">
+                <Users className="w-5 h-5 text-white" />
+              </div>
+              <MousePointerClick className="w-4 h-4 text-gray-500" />
+            </motion.div>
+            
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1 }}
+              className="absolute top-1/3 right-16 hidden lg:flex items-center gap-2"
+            >
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center">
+                <Bot className="w-5 h-5 text-white" />
+              </div>
+              <MousePointerClick className="w-4 h-4 text-gray-500" />
+            </motion.div>
           </div>
         </div>
 
@@ -507,41 +370,30 @@ const aiSolutions = [
           <motion.div 
             animate={{ y: [0, 10, 0] }}
             transition={{ duration: 2, repeat: Infinity }}
-            className="flex flex-col items-center gap-2 text-gray-400"
+            className="flex flex-col items-center gap-2 text-gray-500"
           >
             <span className="text-sm font-medium">Scroll to explore</span>
-            <MousePointerClick className="w-5 h-5" />
+            <ChevronRight className="w-5 h-5 rotate-90" />
           </motion.div>
         </motion.div>
       </section>
 
-      {/* AI Platform Partners - Premium Logos Section */}
-      <section className="py-20 bg-gradient-to-b from-[#0A0A0F] to-[#0F0F18] relative overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute top-1/2 left-0 w-full h-px bg-gradient-to-r from-transparent via-purple-500/30 to-transparent" />
-        </div>
-
+      {/* AI Platform Partners - Logo Cloud */}
+      <section className="py-20 bg-black relative overflow-hidden">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
+            className="text-center mb-14"
           >
-            <Badge className="bg-white/5 border border-white/10 text-gray-300 px-4 py-2 mb-6">
-              <Zap className="w-4 h-4 mr-2" />
-              Powered By Leading AI
-            </Badge>
-            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
-              Enterprise AI Stack
+            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">
+              Leading AI Companies We Work With
             </h2>
-            <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-              We leverage the world's most advanced AI platforms to build your automation
-            </p>
           </motion.div>
 
           {/* Platform logos grid */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+          <div className="grid grid-cols-3 md:grid-cols-6 gap-6 md:gap-10">
             {aiPlatforms.map((platform, index) => (
               <motion.div
                 key={index}
@@ -549,15 +401,57 @@ const aiSolutions = [
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                whileHover={{ scale: 1.05, y: -5 }}
-                className="group"
+                className="flex flex-col items-center group"
               >
-                <div className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 text-center hover:border-purple-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/10">
-                  <div className={`w-16 h-16 mx-auto mb-4 flex items-center justify-center ${platform.color} group-hover:scale-110 transition-transform duration-300`}>
-                    {platform.logo}
+                <div className="w-16 h-16 flex items-center justify-center grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-300">
+                  {platform.logo}
+                </div>
+                <span className="text-gray-500 text-xs mt-2 group-hover:text-white transition-colors">{platform.name}</span>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Feature Services Grid */}
+      <section className="py-24 bg-black relative overflow-hidden">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl sm:text-5xl font-black text-white mb-6">
+              AI Automation{" "}
+              <span className="text-[#C5FF4A]">Services</span>
+            </h2>
+            <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+              Transform every aspect of your business with intelligent automation
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {featureServices.map((service, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                whileHover={{ y: -5, scale: 1.02 }}
+              >
+                <div className="relative bg-gradient-to-br from-white/[0.05] to-white/[0.02] backdrop-blur-sm border border-white/10 rounded-[2rem] p-8 h-full hover:border-emerald-500/50 transition-all duration-300 group overflow-hidden">
+                  {/* Hover glow effect */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-[2rem]" />
+                  
+                  <div className="relative z-10">
+                    <div className="w-14 h-14 bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 rounded-2xl flex items-center justify-center text-[#C5FF4A] mb-5 group-hover:scale-110 transition-transform duration-300">
+                      {service.icon}
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-3">{service.title}</h3>
+                    <p className="text-gray-400 text-sm leading-relaxed">{service.description}</p>
                   </div>
-                  <h3 className="text-white font-semibold text-sm mb-1">{platform.name}</h3>
-                  <p className="text-gray-500 text-xs">{platform.description}</p>
                 </div>
               </motion.div>
             ))}
@@ -565,409 +459,193 @@ const aiSolutions = [
         </div>
       </section>
 
-      {/* AI Solutions Section - Premium Cards */}
-      <section className="py-32 bg-gradient-to-b from-[#0F0F18] to-[#0A0A0F] relative overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute top-1/4 left-0 w-[500px] h-[500px] bg-gradient-to-r from-purple-600/10 to-transparent rounded-full blur-[150px]" />
-          <div className="absolute bottom-1/4 right-0 w-[500px] h-[500px] bg-gradient-to-r from-pink-600/10 to-transparent rounded-full blur-[150px]" />
-        </div>
-
+      {/* Stats Section */}
+      <section className="py-20 bg-black relative overflow-hidden">
+        {/* Emerald glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-gradient-to-r from-emerald-500/20 via-teal-500/20 to-cyan-500/20 rounded-full blur-[150px]" />
+        
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-20"
-          >
-            <Badge className="bg-purple-500/10 border border-purple-500/30 text-purple-400 px-5 py-2 mb-6">
-              <Sparkles className="w-4 h-4 mr-2" />
-              Intelligent Solutions
-            </Badge>
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white mb-6">
-              AI That Transforms
-              <br />
-              <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-rose-400 bg-clip-text text-transparent">
-                Your Business
-              </span>
-            </h2>
-            <p className="text-gray-400 text-xl max-w-3xl mx-auto">
-              Revolutionary automation solutions designed to eliminate manual work and accelerate growth
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {aiSolutions.map((solution, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.15 }}
-              >
-                <Card 
-                  className={`group bg-gradient-to-br from-white/[0.06] to-white/[0.02] border border-white/10 hover:border-purple-500/50 transition-all duration-500 hover:scale-[1.02] backdrop-blur-xl cursor-pointer overflow-hidden h-full ${activeSolution === index ? 'border-purple-500/50 shadow-2xl shadow-purple-500/20' : ''}`}
-                  onMouseEnter={() => setActiveSolution(index)}
-                >
-                  {/* Animated gradient border */}
-                  <div className="absolute inset-0 rounded-lg overflow-hidden">
-                    <div className={`absolute inset-[-100%] bg-gradient-to-r ${solution.gradient} opacity-0 group-hover:opacity-20 animate-spin-slow transition-opacity duration-700`} style={{ animationDuration: '8s' }} />
-                  </div>
-                  <div className={`absolute inset-0 bg-gradient-to-br ${solution.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-500`} />
-                  
-                  <CardHeader className="p-8 relative z-10">
-                    {/* Powered by badge with logo */}
-                    <div className="flex items-center justify-between mb-6">
-                      <div className="flex items-center gap-3 bg-white/5 backdrop-blur-sm px-4 py-2 rounded-full border border-white/10">
-                        <div className="w-6 h-6">
-                          {solution.logo}
-                        </div>
-                        <span className="text-xs text-gray-400 font-medium">Powered by {solution.logoName}</span>
-                      </div>
-                      <motion.div 
-                        className={`w-3 h-3 rounded-full bg-gradient-to-r ${solution.gradient}`}
-                        animate={{ scale: [1, 1.2, 1], opacity: [0.7, 1, 0.7] }}
-                        transition={{ duration: 2, repeat: Infinity }}
-                      />
-                    </div>
-                    
-                    <div className="flex items-start gap-6">
-                      <motion.div 
-                        className={`w-20 h-20 bg-gradient-to-br ${solution.gradient} rounded-2xl flex items-center justify-center text-white shadow-lg shadow-purple-500/20 relative overflow-hidden`}
-                        whileHover={{ scale: 1.1, rotate: 5 }}
-                        transition={{ duration: 0.3 }}
-                      >
-                        <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity" />
-                        {solution.icon}
-                      </motion.div>
-                      <div className="flex-1">
-                        <CardTitle className="text-2xl font-bold text-white mb-3 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-purple-400 group-hover:to-pink-400 group-hover:bg-clip-text transition-all">
-                          {solution.title}
-                        </CardTitle>
-                        <p className="text-gray-400 leading-relaxed text-sm">
-                          {solution.description}
-                        </p>
-                      </div>
-                    </div>
-                  </CardHeader>
-                  
-                  <CardContent className="p-8 pt-0 relative z-10">
-                    {/* Tech Stack Pills */}
-                    <div className="flex flex-wrap gap-2 mb-6">
-                      {solution.techStack.map((tech, tIndex) => (
-                        <span 
-                          key={tIndex}
-                          className={`px-3 py-1 text-xs font-medium rounded-full bg-gradient-to-r ${solution.gradient} bg-opacity-10 text-white/90 border border-white/10`}
-                        >
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-                    
-                    {/* Metrics with animated bars */}
-                    <div className="grid grid-cols-3 gap-4 mb-6 p-5 bg-gradient-to-br from-white/[0.08] to-white/[0.03] rounded-2xl border border-white/5">
-                      <div className="text-center relative">
-                        <div className="text-2xl font-black bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">{solution.metrics.efficiency}</div>
-                        <div className="text-[10px] text-gray-500 uppercase tracking-wider mt-1">Efficiency</div>
-                        <motion.div 
-                          className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"
-                          initial={{ scaleX: 0 }}
-                          whileInView={{ scaleX: 1 }}
-                          transition={{ delay: 0.5, duration: 0.5 }}
-                        />
-                      </div>
-                      <div className="text-center relative">
-                        <div className="text-2xl font-black bg-gradient-to-r from-pink-400 to-rose-400 bg-clip-text text-transparent">{solution.metrics.satisfaction}</div>
-                        <div className="text-[10px] text-gray-500 uppercase tracking-wider mt-1">Satisfaction</div>
-                        <motion.div 
-                          className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-gradient-to-r from-pink-500 to-rose-500 rounded-full"
-                          initial={{ scaleX: 0 }}
-                          whileInView={{ scaleX: 1 }}
-                          transition={{ delay: 0.6, duration: 0.5 }}
-                        />
-                      </div>
-                      <div className="text-center relative">
-                        <div className="text-2xl font-black bg-gradient-to-r from-rose-400 to-orange-400 bg-clip-text text-transparent">{solution.metrics.resolution}</div>
-                        <div className="text-[10px] text-gray-500 uppercase tracking-wider mt-1">Resolution</div>
-                        <motion.div 
-                          className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-gradient-to-r from-rose-500 to-orange-500 rounded-full"
-                          initial={{ scaleX: 0 }}
-                          whileInView={{ scaleX: 1 }}
-                          transition={{ delay: 0.7, duration: 0.5 }}
-                        />
-                      </div>
-                    </div>
-
-                    {/* Features with modern styling */}
-                    <div className="grid grid-cols-2 gap-3 mb-6">
-                      {solution.features.map((feature, fIndex) => (
-                        <motion.div 
-                          key={fIndex} 
-                          className="flex items-center gap-2 group/feat"
-                          initial={{ opacity: 0, x: -10 }}
-                          whileInView={{ opacity: 1, x: 0 }}
-                          transition={{ delay: fIndex * 0.1 }}
-                        >
-                          <div className={`w-5 h-5 rounded-md bg-gradient-to-r ${solution.gradient} flex items-center justify-center`}>
-                            <CheckCircle className="w-3 h-3 text-white" />
-                          </div>
-                          <span className="text-sm text-gray-300 group-hover/feat:text-white transition-colors">{feature}</span>
-                        </motion.div>
-                      ))}
-                    </div>
-
-                    <Button 
-                      variant="ghost" 
-                      className={`w-full bg-gradient-to-r ${solution.gradient} text-white font-semibold transition-all duration-300 rounded-xl group/btn hover:shadow-lg hover:shadow-purple-500/20 border-0`}
-                    >
-                      Explore Solution
-                      <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
-                    </Button>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Automation Types Grid */}
-      <section className="py-24 bg-gradient-to-b from-[#0A0A0F] to-[#0F0F18] relative overflow-hidden">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <Badge className="bg-pink-500/10 border border-pink-500/30 text-pink-400 px-5 py-2 mb-6">
-              <Bot className="w-4 h-4 mr-2" />
-              Automation Portfolio
-            </Badge>
-            <h2 className="text-4xl sm:text-5xl font-black text-white mb-4">
-              Complete AI{" "}
-              <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                Ecosystem
-              </span>
-            </h2>
-          </motion.div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {automationTypes.map((type, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30, rotateX: 10 }}
-                whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1, duration: 0.5 }}
-                whileHover={{ scale: 1.02, y: -8 }}
-                className="group perspective-1000"
-              >
-                <Card className="relative bg-gradient-to-br from-white/[0.08] to-white/[0.02] border border-white/10 hover:border-white/30 transition-all duration-500 backdrop-blur-xl overflow-hidden">
-                  {/* Animated gradient background */}
-                  <div className={`absolute inset-0 bg-gradient-to-br ${type.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500`} />
-                  
-                  {/* Glowing orb effect */}
-                  <div className={`absolute -top-20 -right-20 w-40 h-40 bg-gradient-to-br ${type.gradient} rounded-full blur-[80px] opacity-0 group-hover:opacity-30 transition-opacity duration-700`} />
-                  
-                  <div className="relative z-10 p-8">
-                    {/* Header with logo */}
-                    <div className="flex items-center justify-between mb-6">
-                      <div className="flex items-center gap-3">
-                        <motion.div 
-                          className={`w-14 h-14 bg-gradient-to-br ${type.gradient} rounded-2xl flex items-center justify-center text-white shadow-lg`}
-                          whileHover={{ rotate: 10, scale: 1.1 }}
-                          transition={{ duration: 0.3 }}
-                        >
-                          {type.icon}
-                        </motion.div>
-                        <div className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center backdrop-blur-sm">
-                          {type.logo}
-                        </div>
-                      </div>
-                      <motion.div 
-                        className={`w-2 h-2 rounded-full bg-gradient-to-r ${type.gradient}`}
-                        animate={{ scale: [1, 1.5, 1], opacity: [0.5, 1, 0.5] }}
-                        transition={{ duration: 2, repeat: Infinity }}
-                      />
-                    </div>
-                    
-                    {/* Title & Description */}
-                    <h3 className="text-xl font-bold text-white mb-2 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-gray-300 group-hover:bg-clip-text transition-all">
-                      {type.name}
-                    </h3>
-                    <p className="text-sm text-gray-500 mb-6">{type.description}</p>
-                    
-                    {/* Stats */}
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="bg-gradient-to-br from-white/[0.08] to-white/[0.03] rounded-xl p-4 border border-white/5 group-hover:border-white/10 transition-all">
-                        <div className={`text-2xl font-black bg-gradient-to-r ${type.gradient} bg-clip-text text-transparent`}>
-                          {type.savings}
-                        </div>
-                        <div className="text-[10px] text-gray-500 uppercase tracking-wider mt-1">Cost Saved</div>
-                        <motion.div 
-                          className={`w-full h-1 bg-gradient-to-r ${type.gradient} rounded-full mt-2 origin-left`}
-                          initial={{ scaleX: 0 }}
-                          whileInView={{ scaleX: parseFloat(type.savings) / 100 }}
-                          transition={{ delay: 0.5 + index * 0.1, duration: 0.8 }}
-                        />
-                      </div>
-                      <div className="bg-gradient-to-br from-white/[0.08] to-white/[0.03] rounded-xl p-4 border border-white/5 group-hover:border-white/10 transition-all">
-                        <div className="text-2xl font-black text-white">
-                          {type.volume}
-                        </div>
-                        <div className="text-[10px] text-gray-500 uppercase tracking-wider mt-1">Processes</div>
-                        <div className="flex gap-1 mt-2">
-                          {[...Array(5)].map((_, i) => (
-                            <motion.div
-                              key={i}
-                              className={`w-full h-1 bg-gradient-to-r ${type.gradient} rounded-full`}
-                              initial={{ opacity: 0.2 }}
-                              whileInView={{ opacity: 1 }}
-                              transition={{ delay: 0.6 + i * 0.1 }}
-                            />
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                    
-                    {/* Hover arrow */}
-                    <motion.div 
-                      className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity"
-                      initial={{ x: -10 }}
-                      whileHover={{ x: 0 }}
-                    >
-                      <ArrowRight className={`w-5 h-5 text-gray-400`} />
-                    </motion.div>
-                  </div>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Results Section */}
-      <section className="py-24 bg-gradient-to-b from-[#0F0F18] to-[#0A0A0F] relative overflow-hidden">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <Badge className="bg-rose-500/10 border border-rose-500/30 text-rose-400 px-5 py-2 mb-6">
-              <Trophy className="w-4 h-4 mr-2" />
-              Proven Results
-            </Badge>
-            <h2 className="text-4xl sm:text-5xl font-black text-white">
-              Measurable{" "}
-              <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                Excellence
-              </span>
-            </h2>
-          </motion.div>
-
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
-            {results.map((result, index) => (
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              { value: "85%", label: "Cost Reduction" },
+              { value: "340%", label: "Growth Rate" },
+              { value: "50K+", label: "Hours Saved" },
+              { value: "99.7%", label: "AI Accuracy" }
+            ].map((stat, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                whileHover={{ scale: 1.05, y: -10 }}
+                className="text-center"
               >
-                <Card className="bg-gradient-to-br from-white/[0.1] to-white/[0.02] border border-white/10 text-center p-8 hover:border-purple-500/50 transition-all duration-300 backdrop-blur-sm group">
-                  <motion.div 
-                    className="w-16 h-16 bg-gradient-to-br from-purple-600 to-pink-600 rounded-2xl flex items-center justify-center text-white mx-auto mb-4"
-                    whileHover={{ rotate: 10 }}
-                  >
-                    {result.icon}
-                  </motion.div>
-                  <div className="text-4xl font-black bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-1">
-                    {result.value}
-                  </div>
-                  <div className="text-sm text-gray-500 mb-2">{result.unit}</div>
-                  <div className="text-white font-semibold">{result.metric}</div>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Case Studies */}
-          <div className="space-y-8">
-            <h3 className="text-3xl font-bold text-white text-center mb-12">Transformation Stories</h3>
-            
-            {caseStudies.map((study, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.2 }}
-              >
-                <Card className="bg-gradient-to-br from-white/[0.08] to-white/[0.02] border border-white/10 overflow-hidden hover:border-purple-500/30 transition-all duration-300">
-                  <div className="grid grid-cols-1 lg:grid-cols-2">
-                    <div className="bg-gradient-to-br from-purple-600 via-pink-600 to-rose-600 p-10 relative overflow-hidden">
-                      <div className="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full -mr-20 -mt-20" />
-                      <div className="absolute bottom-0 left-0 w-32 h-32 bg-white/10 rounded-full -ml-16 -mb-16" />
-                      
-                      <div className="relative z-10">
-                        <Badge className="bg-white/20 text-white border-white/30 mb-4">
-                          {study.industry}
-                        </Badge>
-                        <h4 className="text-2xl sm:text-3xl font-bold text-white mb-6">{study.title}</h4>
-                        
-                        <div className="grid grid-cols-2 gap-6 mb-6">
-                          <div>
-                            <div className="text-2xl font-bold text-white">{study.investment}</div>
-                            <div className="text-sm text-white/70">Investment</div>
-                          </div>
-                          <div>
-                            <div className="text-2xl font-bold text-white">{study.savings}</div>
-                            <div className="text-sm text-white/70">Annual Savings</div>
-                          </div>
-                        </div>
-                        <div className="text-white/80">{study.timeline}</div>
-                      </div>
-                    </div>
-                    
-                    <div className="p-10 bg-[#0A0A0F]/50">
-                      <div className="space-y-6">
-                        <div>
-                          <h5 className="font-bold text-red-400 mb-2">Challenge</h5>
-                          <p className="text-gray-400">{study.challenge}</p>
-                        </div>
-                        <div>
-                          <h5 className="font-bold text-purple-400 mb-2">AI Solution</h5>
-                          <p className="text-gray-400">{study.solution}</p>
-                        </div>
-                        <div>
-                          <h5 className="font-bold text-green-400 mb-3">Results</h5>
-                          <div className="space-y-2">
-                            {study.results.map((result, rIndex) => (
-                              <div key={rIndex} className="flex items-center gap-3">
-                                <Zap className="w-4 h-4 text-green-500" />
-                                <span className="text-white font-medium">{result}</span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </Card>
+                <div className="text-5xl sm:text-6xl font-black text-[#C5FF4A] mb-2">
+                  {stat.value}
+                </div>
+                <div className="text-gray-400 text-sm uppercase tracking-wider">
+                  {stat.label}
+                </div>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Premium CTA Section */}
-      <section className="py-32 bg-gradient-to-br from-[#0A0A0F] via-[#0F0F18] to-[#0A0A0F] relative overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-purple-600/30 via-pink-600/30 to-rose-600/30 rounded-full blur-[200px]" />
+      {/* Pricing Section */}
+      <section className="py-24 bg-black relative overflow-hidden">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <p className="text-gray-400 mb-4">Work short-term or long-term. Your choice.</p>
+            <h2 className="text-4xl sm:text-5xl font-black text-white">
+              Pricing{" "}
+              <span className="text-[#C5FF4A]">Plans</span>
+            </h2>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {pricingPlans.map((plan, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.15 }}
+                className={`relative ${index === 1 ? 'lg:-mt-4 lg:mb-4' : ''}`}
+              >
+                <div className={`relative bg-gradient-to-br from-white/[0.08] to-white/[0.02] backdrop-blur-sm border rounded-[2rem] p-8 h-full transition-all duration-300 ${index === 1 ? 'border-[#C5FF4A]/50' : 'border-white/10 hover:border-white/20'}`}>
+                  {/* Popular badge */}
+                  {plan.badge && (
+                    <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                      <span className="bg-[#C5FF4A] text-black text-xs font-bold px-4 py-1.5 rounded-full">
+                        {plan.badge}
+                      </span>
+                    </div>
+                  )}
+                  
+                  <div className="text-sm text-gray-400 mb-2">{plan.name}</div>
+                  <div className="flex items-baseline gap-2 mb-2">
+                    <span className="text-4xl font-black text-white">{plan.price}</span>
+                    <span className="text-gray-500">/ {plan.period}</span>
+                  </div>
+                  <p className="text-sm text-gray-400 mb-6">{plan.description}</p>
+                  
+                  <Button 
+                    className={`w-full rounded-full py-6 font-semibold transition-all duration-300 ${index === 1 ? 'bg-[#C5FF4A] text-black hover:bg-[#d4ff6a]' : 'bg-white/10 text-white hover:bg-white/20'}`}
+                    asChild
+                  >
+                    <a href="/contact">
+                      {plan.price === "Call" ? "Book a Call" : "Get started"}
+                      <ArrowRight className="w-4 h-4 ml-2" />
+                    </a>
+                  </Button>
+                  
+                  <div className="mt-4 mb-6 text-center">
+                    <span className="text-xs text-emerald-400">{plan.guarantee}</span>
+                  </div>
+                  
+                  <div className="space-y-3">
+                    {plan.features.map((feature, fIndex) => (
+                      <div key={fIndex} className="flex items-center gap-3 text-sm text-gray-300">
+                        <Check className="w-4 h-4 text-[#C5FF4A] flex-shrink-0" />
+                        {feature}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-24 bg-black relative overflow-hidden">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <span className="text-[#C5FF4A] text-sm font-medium uppercase tracking-wider mb-4 block">FAQs</span>
+            <h2 className="text-4xl sm:text-5xl font-black text-white mb-4">
+              Frequently Asked Questions
+            </h2>
+            <p className="text-gray-400 max-w-2xl mx-auto">
+              These FAQs are based on the real, pressing questions our clients asked
+            </p>
+          </motion.div>
+
+          <div className="max-w-3xl mx-auto space-y-4">
+            {faqItems.map((item, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+              >
+                <div 
+                  className="bg-gradient-to-br from-white/[0.05] to-white/[0.02] border border-white/10 rounded-2xl overflow-hidden hover:border-white/20 transition-all duration-300"
+                >
+                  <button
+                    onClick={() => setOpenFaq(openFaq === index ? null : index)}
+                    className="w-full p-6 text-left flex items-center justify-between gap-4"
+                  >
+                    <span className="text-white font-medium">{item.question}</span>
+                    <ChevronRight 
+                      className={`w-5 h-5 text-gray-400 flex-shrink-0 transition-transform duration-300 ${openFaq === index ? 'rotate-90' : ''}`}
+                    />
+                  </button>
+                  <AnimatePresence>
+                    {openFaq === index && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="overflow-hidden"
+                      >
+                        <p className="px-6 pb-6 text-gray-400 leading-relaxed">
+                          {item.answer}
+                        </p>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          <motion.div 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="text-center mt-10"
+          >
+            <Button 
+              variant="outline" 
+              className="rounded-full border-white/20 text-white hover:bg-white hover:text-black transition-all duration-300"
+              asChild
+            >
+              <a href="/contact">
+                Still have a question?
+              </a>
+            </Button>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-32 bg-black relative overflow-hidden">
+        {/* Large emerald glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[600px] bg-gradient-to-r from-emerald-500/30 via-teal-500/30 to-cyan-500/30 rounded-full blur-[200px]" />
         
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <motion.div
@@ -976,40 +654,26 @@ const aiSolutions = [
             viewport={{ once: true }}
             className="max-w-4xl mx-auto"
           >
-            <motion.div
-              animate={{ 
-                scale: [1, 1.05, 1],
-                rotate: [0, 2, -2, 0]
-              }}
-              transition={{ duration: 5, repeat: Infinity }}
-            >
-              <Badge className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 text-purple-300 px-6 py-3 text-lg mb-8">
-                <Rocket className="w-5 h-5 mr-2" />
-                Ready for Transformation?
-              </Badge>
-            </motion.div>
-            
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white mb-8 leading-tight">
-              Automate Your
+              Ready to{" "}
+              <span className="text-[#C5FF4A]">Automate</span>
               <br />
-              <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-rose-400 bg-clip-text text-transparent">
-                Future Today
-              </span>
+              Your Business?
             </h2>
             
-            <p className="text-xl text-gray-400 mb-12 leading-relaxed max-w-3xl mx-auto">
+            <p className="text-xl text-gray-400 mb-12 leading-relaxed max-w-2xl mx-auto">
               Join the AI revolution and transform your business operations. 
-              Your competitive advantage starts with a single conversation.
+              Get fully automated in just 90 days.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-5 justify-center">
               <Button 
                 size="lg" 
-                className="bg-gradient-to-r from-purple-600 via-pink-600 to-rose-600 hover:from-purple-500 hover:via-pink-500 hover:to-rose-500 text-white text-lg px-12 py-7 rounded-2xl font-semibold shadow-2xl shadow-purple-500/30 hover:shadow-purple-500/50 transition-all duration-300 hover:scale-105 group"
+                className="bg-[#C5FF4A] hover:bg-[#d4ff6a] text-black text-lg px-12 py-7 rounded-full font-semibold shadow-2xl shadow-[#C5FF4A]/30 hover:shadow-[#C5FF4A]/50 transition-all duration-300 hover:scale-105 group"
                 asChild
               >
                 <a href="/contact">
-                  Get AI Automation Audit
+                  Get Automated Now
                   <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
                 </a>
               </Button>
@@ -1017,11 +681,11 @@ const aiSolutions = [
               <Button 
                 size="lg" 
                 variant="outline" 
-                className="text-lg px-12 py-7 rounded-2xl border-2 border-gray-600 text-white hover:bg-white hover:text-[#0A0A0F] transition-all duration-300 hover:scale-105"
+                className="text-lg px-12 py-7 rounded-full border-2 border-white/20 text-white hover:bg-white hover:text-black transition-all duration-300 hover:scale-105"
                 asChild
               >
                 <a href="/portfolio">
-                  Explore AI Solutions
+                  View Our Work
                 </a>
               </Button>
             </div>
