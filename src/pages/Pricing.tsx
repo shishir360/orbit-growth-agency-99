@@ -114,7 +114,7 @@ const Pricing = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f]">
+    <div className="min-h-screen bg-[#f0f0f0]">
       <SEO
         title="Affordable Digital Marketing Packages | Lunexo Media Pricing"
         description="Transparent pricing for SEO, ads, website design, and AI automation."
@@ -126,14 +126,14 @@ const Pricing = () => {
       <Navigation />
       
       {/* Hero */}
-      <section className="relative py-32 overflow-hidden">
-        <div className="absolute top-20 left-10 w-[500px] h-[500px] bg-gradient-to-r from-blue-600/20 to-cyan-500/15 rounded-full blur-[150px] animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-[400px] h-[400px] bg-gradient-to-r from-purple-600/15 to-pink-500/10 rounded-full blur-[120px]"></div>
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.015)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.015)_1px,transparent_1px)] bg-[size:80px_80px]"></div>
+      <section className="relative py-32 overflow-hidden bg-[#1a1a2e]">
+        <div className="absolute top-20 left-10 w-[500px] h-[500px] bg-gradient-to-r from-blue-600/25 to-cyan-500/20 rounded-full blur-[150px] animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-[400px] h-[400px] bg-gradient-to-r from-purple-600/20 to-pink-500/15 rounded-full blur-[120px]"></div>
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-[size:80px_80px]"></div>
         
         <div className="container-wide section-padding relative z-10">
           <div className="text-center max-w-4xl mx-auto">
-            <div className="inline-flex items-center gap-3 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border border-blue-500/20 text-blue-400 px-6 py-3 rounded-full text-sm font-medium backdrop-blur-xl mb-8">
+            <div className="inline-flex items-center gap-3 bg-gradient-to-r from-blue-500/15 to-cyan-500/15 border border-blue-500/30 text-blue-400 px-6 py-3 rounded-full text-sm font-medium backdrop-blur-xl mb-8">
               <Sparkles className="w-4 h-4" />
               Transparent Pricing
             </div>
@@ -146,7 +146,7 @@ const Pricing = () => {
               </span>
             </h1>
             
-            <p className="text-lg text-white/50 max-w-2xl mx-auto mb-12">
+            <p className="text-lg text-white/60 max-w-2xl mx-auto mb-12">
               Choose the perfect plan for your business. No hidden fees, just results.
             </p>
             
@@ -160,7 +160,7 @@ const Pricing = () => {
                   className={`rounded-full transition-all duration-300 ${
                     selectedCategory === category
                       ? "bg-gradient-to-r from-blue-500 to-cyan-500 text-white border-0"
-                      : "border-white/20 text-white/70 bg-white/5 hover:bg-white/10"
+                      : "border-white/30 text-white/80 bg-white/10 hover:bg-white/20"
                   }`}
                   onClick={() => setSelectedCategory(category)}
                 >
@@ -173,7 +173,7 @@ const Pricing = () => {
       </section>
 
       {/* Pricing Cards */}
-      <section className="py-24 relative">
+      <section className="py-24 relative bg-[#16213e]">
         <div className="container-wide section-padding space-y-24">
           {filteredServices.map((service) => (
             <div key={service.category}>
@@ -191,10 +191,10 @@ const Pricing = () => {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
                 {service.packages.map((pkg) => (
                   <div key={pkg.name} className={`relative group ${pkg.popular ? 'md:-mt-4 md:mb-4' : ''}`}>
-                    <div className={`absolute inset-0 bg-gradient-to-r ${service.color} rounded-2xl blur-xl opacity-0 group-hover:opacity-20 transition-opacity duration-500`}></div>
+                    <div className={`absolute inset-0 bg-gradient-to-r ${service.color} rounded-2xl blur-xl opacity-0 group-hover:opacity-25 transition-opacity duration-500`}></div>
                     
-                    <div className={`relative bg-white/5 border rounded-2xl p-8 backdrop-blur-sm transition-all duration-300 h-full ${
-                      pkg.popular ? 'border-blue-500/50 bg-white/8' : 'border-white/10 hover:bg-white/8'
+                    <div className={`relative bg-white/10 border rounded-2xl p-8 backdrop-blur-sm transition-all duration-300 h-full ${
+                      pkg.popular ? 'border-blue-500/50 bg-white/15' : 'border-white/20 hover:bg-white/15'
                     }`}>
                       {pkg.popular && (
                         <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-blue-500 to-cyan-500 text-white border-0">
@@ -204,16 +204,16 @@ const Pricing = () => {
                       
                       <div className="text-center mb-6">
                         <h3 className="text-xl font-bold text-white mb-2">{pkg.name}</h3>
-                        <p className="text-white/50 text-sm mb-4">{pkg.description}</p>
+                        <p className="text-white/60 text-sm mb-4">{pkg.description}</p>
                         <div className="text-3xl font-bold text-white">
                           {pkg.price}
-                          <span className="text-sm text-white/50 font-normal">/{pkg.period}</span>
+                          <span className="text-sm text-white/60 font-normal">/{pkg.period}</span>
                         </div>
                       </div>
                       
                       <ul className="space-y-3 mb-8">
                         {pkg.features.map((feature, i) => (
-                          <li key={i} className="flex items-center gap-3 text-white/70">
+                          <li key={i} className="flex items-center gap-3 text-white/80">
                             <Check className="w-4 h-4 text-green-400 flex-shrink-0" />
                             {feature}
                           </li>
@@ -223,7 +223,7 @@ const Pricing = () => {
                       <Button asChild className={`w-full rounded-xl ${
                         pkg.popular 
                           ? `bg-gradient-to-r ${service.color} text-white hover:opacity-90`
-                          : 'bg-white/10 text-white hover:bg-white/20 border border-white/10'
+                          : 'bg-white/15 text-white hover:bg-white/25 border border-white/20'
                       }`}>
                         <Link to="/contact">
                           Get Started <ArrowRight className="w-4 h-4 ml-2" />
@@ -239,8 +239,8 @@ const Pricing = () => {
       </section>
 
       {/* Benefits */}
-      <section className="py-24 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-green-600/5 via-transparent to-emerald-600/5"></div>
+      <section className="py-24 relative overflow-hidden bg-[#1a1a2e]">
+        <div className="absolute inset-0 bg-gradient-to-r from-green-600/10 via-transparent to-emerald-600/10"></div>
         
         <div className="container-wide section-padding relative z-10">
           <div className="text-center mb-16">
@@ -255,12 +255,12 @@ const Pricing = () => {
               { icon: Zap, title: "Fast Implementation", desc: "Get started in 24-48 hours", color: "from-yellow-500 to-orange-500" },
               { icon: HeadphonesIcon, title: "Expert Support", desc: "Dedicated team for all clients", color: "from-blue-500 to-cyan-500" }
             ].map((benefit, i) => (
-              <div key={i} className="group bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-sm text-center hover:bg-white/8 transition-all">
+              <div key={i} className="group bg-white/10 border border-white/20 rounded-2xl p-6 backdrop-blur-sm text-center hover:bg-white/15 transition-all">
                 <div className={`w-14 h-14 bg-gradient-to-r ${benefit.color} rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:scale-110 transition-transform`}>
                   <benefit.icon className="w-7 h-7 text-white" />
                 </div>
                 <h3 className="text-lg font-bold text-white mb-2">{benefit.title}</h3>
-                <p className="text-white/50 text-sm">{benefit.desc}</p>
+                <p className="text-white/60 text-sm">{benefit.desc}</p>
               </div>
             ))}
           </div>
@@ -268,16 +268,16 @@ const Pricing = () => {
       </section>
 
       {/* CTA */}
-      <section className="py-24 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 via-transparent to-purple-600/10"></div>
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded-full blur-[100px]"></div>
+      <section className="py-24 relative overflow-hidden bg-[#16213e]">
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/15 via-transparent to-purple-600/15"></div>
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-r from-blue-500/25 to-cyan-500/25 rounded-full blur-[100px]"></div>
         
         <div className="container-wide section-padding relative z-10">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-3xl lg:text-5xl font-bold text-white mb-6" style={{fontFamily: "'Playfair Display', serif"}}>
               Need a <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">Custom Quote?</span>
             </h2>
-            <p className="text-lg text-white/50 mb-10">
+            <p className="text-lg text-white/60 mb-10">
               Let's discuss your specific requirements and create a tailored solution.
             </p>
             <Button asChild size="lg" className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white hover:from-blue-600 hover:to-cyan-600 rounded-full px-10 py-7">

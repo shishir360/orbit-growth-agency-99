@@ -87,7 +87,7 @@ const Contact = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f]">
+    <div className="min-h-screen bg-[#f0f0f0]">
       <SEO
         title="Contact Lunexo Media | Let's Grow Your Business"
         description="Get in touch with Lunexo Media for SEO, paid ads, and web design solutions."
@@ -99,14 +99,14 @@ const Contact = () => {
       <Navigation />
       
       {/* Hero */}
-      <section className="relative py-32 overflow-hidden">
-        <div className="absolute top-20 left-10 w-[500px] h-[500px] bg-gradient-to-r from-blue-600/20 to-cyan-500/15 rounded-full blur-[150px] animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-[400px] h-[400px] bg-gradient-to-r from-purple-600/15 to-pink-500/10 rounded-full blur-[120px]"></div>
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.015)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.015)_1px,transparent_1px)] bg-[size:80px_80px]"></div>
+      <section className="relative py-32 overflow-hidden bg-[#1a1a2e]">
+        <div className="absolute top-20 left-10 w-[500px] h-[500px] bg-gradient-to-r from-blue-600/25 to-cyan-500/20 rounded-full blur-[150px] animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-[400px] h-[400px] bg-gradient-to-r from-purple-600/20 to-pink-500/15 rounded-full blur-[120px]"></div>
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-[size:80px_80px]"></div>
         
         <div className="container-wide section-padding relative z-10">
           <div className="text-center max-w-4xl mx-auto">
-            <div className="inline-flex items-center gap-3 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border border-blue-500/20 text-blue-400 px-6 py-3 rounded-full text-sm font-medium backdrop-blur-xl mb-8">
+            <div className="inline-flex items-center gap-3 bg-gradient-to-r from-blue-500/15 to-cyan-500/15 border border-blue-500/30 text-blue-400 px-6 py-3 rounded-full text-sm font-medium backdrop-blur-xl mb-8">
               <Sparkles className="w-4 h-4" />
               Get In Touch
             </div>
@@ -127,7 +127,7 @@ const Contact = () => {
       </section>
 
       {/* Contact Methods */}
-      <section className="py-16 relative">
+      <section className="py-16 relative bg-[#16213e]">
         <div className="container-wide section-padding">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {contactMethods.map((method, i) => (
@@ -136,7 +136,7 @@ const Contact = () => {
                 href={method.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-sm hover:bg-white/8 hover:border-white/20 transition-all duration-300 text-center"
+                className="group bg-white/10 border border-white/20 rounded-2xl p-6 backdrop-blur-sm hover:bg-white/15 hover:border-white/30 transition-all duration-300 text-center"
               >
                 <div className={`w-14 h-14 rounded-xl bg-gradient-to-r ${method.color} flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:scale-110 transition-transform`}>
                   <method.icon className="w-7 h-7 text-white" />
@@ -151,13 +151,13 @@ const Contact = () => {
       </section>
 
       {/* Contact Form */}
-      <section className="py-24 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-r from-purple-600/10 to-pink-500/10 rounded-full blur-[150px]"></div>
+      <section className="py-24 relative overflow-hidden bg-[#1a1a2e]">
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-r from-purple-600/15 to-pink-500/15 rounded-full blur-[150px]"></div>
         
         <div className="container-wide section-padding relative z-10">
           <div className="max-w-3xl mx-auto">
             <div className="text-center mb-12">
-              <div className="inline-flex items-center gap-3 bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/20 text-purple-400 px-6 py-3 rounded-full text-sm font-medium mb-6">
+              <div className="inline-flex items-center gap-3 bg-gradient-to-r from-purple-500/15 to-pink-500/15 border border-purple-500/30 text-purple-400 px-6 py-3 rounded-full text-sm font-medium mb-6">
                 <Zap className="w-4 h-4" />
                 Book Your Free Consultation
               </div>
@@ -166,7 +166,7 @@ const Contact = () => {
               </h2>
             </div>
 
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-8 lg:p-10 backdrop-blur-sm">
+            <div className="bg-white/10 border border-white/20 rounded-2xl p-8 lg:p-10 backdrop-blur-sm">
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
@@ -175,7 +175,7 @@ const Contact = () => {
                       id="firstName" 
                       name="firstName" 
                       required 
-                      className="h-12 bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-blue-500"
+                      className="h-12 bg-white/10 border-white/20 text-white placeholder:text-white/40 focus:border-blue-500"
                       placeholder="John"
                     />
                   </div>
@@ -185,7 +185,7 @@ const Contact = () => {
                       id="lastName" 
                       name="lastName" 
                       required 
-                      className="h-12 bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-blue-500"
+                      className="h-12 bg-white/10 border-white/20 text-white placeholder:text-white/40 focus:border-blue-500"
                       placeholder="Doe"
                     />
                   </div>
@@ -198,7 +198,7 @@ const Contact = () => {
                     name="email" 
                     type="email" 
                     required 
-                    className="h-12 bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-blue-500"
+                    className="h-12 bg-white/10 border-white/20 text-white placeholder:text-white/40 focus:border-blue-500"
                     placeholder="john@company.com"
                   />
                 </div>
@@ -210,7 +210,7 @@ const Contact = () => {
                       id="countryCode" 
                       name="countryCode"
                       required
-                      className="h-12 px-4 border border-white/10 rounded-md bg-white/5 text-white min-w-[100px] focus:border-blue-500"
+                      className="h-12 px-4 border border-white/20 rounded-md bg-white/10 text-white min-w-[100px] focus:border-blue-500"
                     >
                       <option value="+1">🇺🇸 +1</option>
                       <option value="+44">🇬🇧 +44</option>
@@ -224,7 +224,7 @@ const Contact = () => {
                       type="tel" 
                       required
                       placeholder="123 456 7890"
-                      className="flex-1 h-12 bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-blue-500"
+                      className="flex-1 h-12 bg-white/10 border-white/20 text-white placeholder:text-white/40 focus:border-blue-500"
                     />
                   </div>
                 </div>
@@ -234,7 +234,7 @@ const Contact = () => {
                   <Input 
                     id="company" 
                     name="company" 
-                    className="h-12 bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-blue-500"
+                    className="h-12 bg-white/10 border-white/20 text-white placeholder:text-white/40 focus:border-blue-500"
                     placeholder="Your company"
                   />
                 </div>
@@ -244,7 +244,7 @@ const Contact = () => {
                   <select 
                     id="service" 
                     name="service"
-                    className="w-full h-12 px-4 border border-white/10 rounded-md bg-white/5 text-white focus:border-blue-500"
+                    className="w-full h-12 px-4 border border-white/20 rounded-md bg-white/10 text-white focus:border-blue-500"
                     required
                   >
                     <option value="">Select a service</option>
@@ -263,7 +263,7 @@ const Contact = () => {
                     name="message" 
                     required
                     rows={4}
-                    className="bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-blue-500"
+                    className="bg-white/10 border-white/20 text-white placeholder:text-white/40 focus:border-blue-500"
                     placeholder="Tell us about your project..."
                   />
                 </div>
@@ -290,8 +290,8 @@ const Contact = () => {
       </section>
 
       {/* CTA */}
-      <section className="py-24 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 via-transparent to-purple-600/10"></div>
+      <section className="py-24 relative overflow-hidden bg-[#16213e]">
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/15 via-transparent to-purple-600/15"></div>
         
         <div className="container-wide section-padding relative z-10">
           <div className="max-w-4xl mx-auto text-center">
