@@ -211,6 +211,38 @@ const handler = async (req: Request): Promise<Response> => {
       console.log("Admin notification sent to:", ADMIN_EMAIL);
     }
 
+    // Send WhatsApp notification to admin
+    try {
+      const PHONE_ID = Deno.env.get("META_WHATSAPP_PHONE_ID");
+      const ACCESS_TOKEN = Deno.env.get("META_WHATSAPP_ACCESS_TOKEN");
+      const ADMIN_NUMBER = Deno.env.get("ADMIN_WHATSAPP_NUMBER");
+
+      if (PHONE_ID && ACCESS_TOKEN && ADMIN_NUMBER) {
+        // Send direct text message to admin (admin is within 24-hour window usually)
+        const adminWhatsAppPayload = {
+          messaging_product: "whatsapp",
+          to: ADMIN_NUMBER,
+          type: "text",
+          text: {
+            body: `🔔 *New Contact Form Submission!*\n\n👤 *Name:* ${name}\n📧 *Email:* ${email}${phone ? `\n📱 *Phone:* ${phone}` : ''}${company ? `\n🏢 *Company:* ${company}` : ''}\n\n💬 *Message:*\n${message}\n\n📅 *Submitted:* ${new Date().toLocaleString()}`
+          }
+        };
+
+        const adminRes = await fetch(`https://graph.facebook.com/v18.0/${PHONE_ID}/messages`, {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${ACCESS_TOKEN}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(adminWhatsAppPayload),
+        });
+        const adminResult = await adminRes.json();
+        console.log("WhatsApp Admin notification result:", JSON.stringify(adminResult));
+      }
+    } catch (waError) {
+      console.error("WhatsApp notification error:", waError);
+    }
+
     return new Response(
       JSON.stringify({
         success: true,
