@@ -39,9 +39,21 @@ interface TrustedLogo {
   visible: boolean;
 }
 
+interface PortfolioProject {
+  id: string;
+  title: string;
+  slug: string;
+  description: string;
+  category: string;
+  image_url: string | null;
+  technologies: string[] | null;
+}
+
 const WebsiteDesign = () => {
   const [activeService, setActiveService] = useState(0);
   const [trustedLogos, setTrustedLogos] = useState<TrustedLogo[]>([]);
+  const [portfolioProjects, setPortfolioProjects] = useState<PortfolioProject[]>([]);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   // Fetch trusted logos from database
   useEffect(() => {
@@ -57,6 +69,25 @@ const WebsiteDesign = () => {
       }
     };
     fetchLogos();
+  }, []);
+
+  // Fetch portfolio projects from database
+  useEffect(() => {
+    const fetchProjects = async () => {
+      const { data, error } = await supabase
+        .from('portfolio')
+        .select('*')
+        .eq('published', true)
+        .eq('blocked', false)
+        .limit(6)
+        .order('created_at', { ascending: false });
+      
+      if (data && !error) {
+        setPortfolioProjects(data);
+      }
+      setIsLoaded(true);
+    };
+    fetchProjects();
   }, []);
 
   const services = [
@@ -425,15 +456,15 @@ const WebsiteDesign = () => {
         </div>
       </section>
 
-      {/* Case Studies Section */}
-      <section className="py-32 bg-gray-50">
+      {/* Portfolio Section - Database Driven with Animations */}
+      <section className="py-32 bg-gray-50 overflow-hidden">
         <div className="container mx-auto px-4 lg:px-8">
           <div className="max-w-6xl mx-auto">
             {/* Section Header */}
             <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between mb-16">
-              <div>
+              <div className={`transition-all duration-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
                 <span className="inline-block text-sm font-semibold text-gray-500 uppercase tracking-widest mb-4">
-                  Case Studies
+                  Our Portfolio
                 </span>
                 <h2 className="text-4xl lg:text-6xl font-bold text-black">
                   Featured Work
@@ -441,7 +472,7 @@ const WebsiteDesign = () => {
               </div>
               <Button 
                 variant="outline" 
-                className="mt-6 lg:mt-0 border-2 border-black text-black hover:bg-black hover:text-white rounded-full px-8"
+                className={`mt-6 lg:mt-0 border-2 border-black text-black hover:bg-black hover:text-white rounded-full px-8 transition-all duration-700 delay-200 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
                 asChild
               >
                 <Link to="/portfolio">
@@ -451,46 +482,81 @@ const WebsiteDesign = () => {
               </Button>
             </div>
 
-            {/* Case Study Cards */}
-            <div className="grid lg:grid-cols-3 gap-8">
-              {caseStudies.map((study, index) => (
-                <div key={index} className="group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500">
-                  {/* Image */}
-                  <div className="relative overflow-hidden aspect-[4/3]">
-                    <img 
-                      src={study.image}
-                      alt={study.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                    />
-                    <div className="absolute top-4 left-4">
-                      <span className="bg-white/90 backdrop-blur-sm text-black px-4 py-2 rounded-full text-sm font-medium">
-                        {study.category}
-                      </span>
-                    </div>
-                  </div>
-                  
-                  {/* Content */}
-                  <div className="p-8">
-                    <h3 className="text-2xl font-bold text-black mb-3">
-                      {study.title}
-                    </h3>
-                    <p className="text-gray-600 mb-6">
-                      {study.description}
-                    </p>
-                    
-                    {/* Stats */}
-                    <div className="flex gap-8 pt-6 border-t border-gray-100">
-                      {study.stats.map((stat, sIndex) => (
-                        <div key={sIndex}>
-                          <p className="text-2xl font-bold text-black">{stat.value}</p>
-                          <p className="text-sm text-gray-500">{stat.label}</p>
+            {/* Portfolio Cards with Staggered Animation */}
+            {portfolioProjects.length > 0 ? (
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {portfolioProjects.map((project, index) => (
+                  <Link
+                    key={project.id}
+                    to={`/portfolio/${project.slug}`}
+                    className={`group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
+                    style={{ transitionDelay: `${index * 100 + 300}ms` }}
+                  >
+                    {/* Image */}
+                    <div className="relative overflow-hidden aspect-[4/3]">
+                      {project.image_url ? (
+                        <img 
+                          src={project.image_url}
+                          alt={project.title}
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
+                          <Globe className="w-12 h-12 text-gray-400" />
                         </div>
-                      ))}
+                      )}
+                      <div className="absolute top-4 left-4">
+                        <span className="bg-white/90 backdrop-blur-sm text-black px-4 py-2 rounded-full text-sm font-medium shadow-sm">
+                          {project.category}
+                        </span>
+                      </div>
+                      {/* Hover Overlay */}
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center">
+                        <div className="w-14 h-14 rounded-full bg-white shadow-xl flex items-center justify-center opacity-0 group-hover:opacity-100 scale-75 group-hover:scale-100 transition-all duration-300">
+                          <ArrowUpRight className="w-6 h-6 text-black" />
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+                    
+                    {/* Content */}
+                    <div className="p-8">
+                      <h3 className="text-xl font-bold text-black mb-3 group-hover:text-gray-700 transition-colors">
+                        {project.title}
+                      </h3>
+                      <p className="text-gray-600 text-sm line-clamp-2 mb-4">
+                        {project.description}
+                      </p>
+                      
+                      {/* Technologies */}
+                      {project.technologies && project.technologies.length > 0 && (
+                        <div className="flex flex-wrap gap-2 pt-4 border-t border-gray-100">
+                          {project.technologies.slice(0, 3).map((tech, tIndex) => (
+                            <span 
+                              key={tIndex} 
+                              className="text-xs font-medium bg-gray-100 text-gray-600 px-3 py-1 rounded-full"
+                            >
+                              {tech}
+                            </span>
+                          ))}
+                          {project.technologies.length > 3 && (
+                            <span className="text-xs font-medium text-gray-400">
+                              +{project.technologies.length - 3} more
+                            </span>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              <div className={`text-center py-16 transition-all duration-700 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
+                <Globe className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                <p className="text-gray-500">
+                  No projects yet. Add projects from your admin panel.
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </section>
