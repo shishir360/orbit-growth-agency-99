@@ -932,7 +932,7 @@ const WebsiteDesign = () => {
               <Button 
                 size="lg"
                 variant="outline"
-                className="border-2 border-white text-white hover:bg-white hover:text-black text-lg px-10 py-7 rounded-full font-semibold transition-all duration-300"
+                className="border-2 border-black text-black hover:bg-black hover:text-white text-lg px-10 py-7 rounded-full font-semibold transition-all duration-300"
                 asChild
               >
                 <Link to="/book-call">
