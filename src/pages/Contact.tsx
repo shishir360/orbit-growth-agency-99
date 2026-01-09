@@ -39,7 +39,7 @@ const Contact = () => {
 
       toast({
         title: "Message sent!",
-        description: "We'll get back to you within 24 hours.",
+        description: "We’ll get back to you within 24 hours. WhatsApp reply is delivered only if you’ve recently messaged us on WhatsApp.",
       });
       
       form.reset();
