@@ -702,7 +702,19 @@ We look forward to speaking with you! 🚀`;
 
       if (value?.statuses) {
         for (const status of value.statuses) {
-          console.log(`Status: ${status.id} - ${status.status}`);
+          const recipient = status.recipient_id || status.recipient || "";
+          const ts = status.timestamp ? new Date(Number(status.timestamp) * 1000).toISOString() : "";
+          const errors = status.errors || status.error || null;
+
+          console.log(
+            `Status: ${status.id} - ${status.status}` +
+              (recipient ? ` | to: ${recipient}` : "") +
+              (ts ? ` | at: ${ts}` : "")
+          );
+
+          if (status.status === "failed" && errors) {
+            console.log("Status failed details:", JSON.stringify(errors));
+          }
         }
       }
 
