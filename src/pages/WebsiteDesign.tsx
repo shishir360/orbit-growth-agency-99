@@ -304,7 +304,7 @@ const WebsiteDesign = () => {
       </section>
 
       {/* Trusted By - Logo Grid */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-white overflow-hidden">
         <div className="container mx-auto px-4 lg:px-8">
           <div className="max-w-6xl mx-auto">
             <p className="text-center text-sm text-gray-500 uppercase tracking-[0.2em] mb-12 font-semibold">
@@ -312,19 +312,42 @@ const WebsiteDesign = () => {
             </p>
             
             {trustedLogos.length > 0 ? (
-              <div className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-8 lg:gap-12 items-center justify-items-center">
-                {trustedLogos.map((logo) => (
-                  <div 
-                    key={logo.id} 
-                    className="flex items-center justify-center h-12 w-full grayscale hover:grayscale-0 opacity-70 hover:opacity-100 transition-all duration-300"
-                  >
-                    <img 
-                      src={logo.logo_url} 
-                      alt={logo.name}
-                      className="max-h-10 max-w-[120px] w-auto object-contain"
-                    />
+              <div className="space-y-8">
+                {/* Row 1 - Scroll Left */}
+                <div className="relative overflow-hidden">
+                  <div className="flex animate-scroll-left gap-16 items-center">
+                    {[...trustedLogos, ...trustedLogos, ...trustedLogos].map((logo, index) => (
+                      <div 
+                        key={`row1-${index}`} 
+                        className="flex-shrink-0 flex items-center justify-center h-12 grayscale hover:grayscale-0 opacity-60 hover:opacity-100 transition-all duration-300"
+                      >
+                        <img 
+                          src={logo.logo_url} 
+                          alt={logo.name}
+                          className="h-8 w-auto object-contain"
+                        />
+                      </div>
+                    ))}
                   </div>
-                ))}
+                </div>
+
+                {/* Row 2 - Scroll Right */}
+                <div className="relative overflow-hidden">
+                  <div className="flex animate-scroll-right gap-16 items-center">
+                    {[...trustedLogos.slice().reverse(), ...trustedLogos.slice().reverse(), ...trustedLogos.slice().reverse()].map((logo, index) => (
+                      <div 
+                        key={`row2-${index}`} 
+                        className="flex-shrink-0 flex items-center justify-center h-12 grayscale hover:grayscale-0 opacity-60 hover:opacity-100 transition-all duration-300"
+                      >
+                        <img 
+                          src={logo.logo_url} 
+                          alt={logo.name}
+                          className="h-8 w-auto object-contain"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             ) : (
               <p className="text-center text-gray-400 text-sm">
@@ -641,12 +664,23 @@ const WebsiteDesign = () => {
 
       {/* Custom Scroll Animation */}
       <style>{`
-        @keyframes scroll {
+        @keyframes scroll-left {
           0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
+          100% { transform: translateX(-33.33%); }
         }
-        .animate-scroll {
-          animation: scroll 30s linear infinite;
+        @keyframes scroll-right {
+          0% { transform: translateX(-33.33%); }
+          100% { transform: translateX(0); }
+        }
+        .animate-scroll-left {
+          animation: scroll-left 25s linear infinite;
+        }
+        .animate-scroll-right {
+          animation: scroll-right 25s linear infinite;
+        }
+        .animate-scroll-left:hover,
+        .animate-scroll-right:hover {
+          animation-play-state: paused;
         }
       `}</style>
     </div>
