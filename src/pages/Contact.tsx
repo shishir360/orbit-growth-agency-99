@@ -213,10 +213,53 @@ const Contact = () => {
                       className="h-12 px-4 border border-white/10 rounded-md bg-zinc-900 text-white min-w-[100px] focus:border-emerald-500"
                     >
                       <option value="+1" className="bg-zinc-900 text-white">🇺🇸 +1</option>
+                      <option value="+1" className="bg-zinc-900 text-white">🇨🇦 +1</option>
                       <option value="+44" className="bg-zinc-900 text-white">🇬🇧 +44</option>
                       <option value="+91" className="bg-zinc-900 text-white">🇮🇳 +91</option>
+                      <option value="+880" className="bg-zinc-900 text-white">🇧🇩 +880</option>
                       <option value="+61" className="bg-zinc-900 text-white">🇦🇺 +61</option>
                       <option value="+49" className="bg-zinc-900 text-white">🇩🇪 +49</option>
+                      <option value="+33" className="bg-zinc-900 text-white">🇫🇷 +33</option>
+                      <option value="+971" className="bg-zinc-900 text-white">🇦🇪 +971</option>
+                      <option value="+966" className="bg-zinc-900 text-white">🇸🇦 +966</option>
+                      <option value="+92" className="bg-zinc-900 text-white">🇵🇰 +92</option>
+                      <option value="+81" className="bg-zinc-900 text-white">🇯🇵 +81</option>
+                      <option value="+86" className="bg-zinc-900 text-white">🇨🇳 +86</option>
+                      <option value="+82" className="bg-zinc-900 text-white">🇰🇷 +82</option>
+                      <option value="+65" className="bg-zinc-900 text-white">🇸🇬 +65</option>
+                      <option value="+60" className="bg-zinc-900 text-white">🇲🇾 +60</option>
+                      <option value="+39" className="bg-zinc-900 text-white">🇮🇹 +39</option>
+                      <option value="+34" className="bg-zinc-900 text-white">🇪🇸 +34</option>
+                      <option value="+31" className="bg-zinc-900 text-white">🇳🇱 +31</option>
+                      <option value="+55" className="bg-zinc-900 text-white">🇧🇷 +55</option>
+                      <option value="+52" className="bg-zinc-900 text-white">🇲🇽 +52</option>
+                      <option value="+27" className="bg-zinc-900 text-white">🇿🇦 +27</option>
+                      <option value="+234" className="bg-zinc-900 text-white">🇳🇬 +234</option>
+                      <option value="+20" className="bg-zinc-900 text-white">🇪🇬 +20</option>
+                      <option value="+7" className="bg-zinc-900 text-white">🇷🇺 +7</option>
+                      <option value="+380" className="bg-zinc-900 text-white">🇺🇦 +380</option>
+                      <option value="+48" className="bg-zinc-900 text-white">🇵🇱 +48</option>
+                      <option value="+90" className="bg-zinc-900 text-white">🇹🇷 +90</option>
+                      <option value="+62" className="bg-zinc-900 text-white">🇮🇩 +62</option>
+                      <option value="+63" className="bg-zinc-900 text-white">🇵🇭 +63</option>
+                      <option value="+66" className="bg-zinc-900 text-white">🇹🇭 +66</option>
+                      <option value="+84" className="bg-zinc-900 text-white">🇻🇳 +84</option>
+                      <option value="+64" className="bg-zinc-900 text-white">🇳🇿 +64</option>
+                      <option value="+353" className="bg-zinc-900 text-white">🇮🇪 +353</option>
+                      <option value="+41" className="bg-zinc-900 text-white">🇨🇭 +41</option>
+                      <option value="+43" className="bg-zinc-900 text-white">🇦🇹 +43</option>
+                      <option value="+32" className="bg-zinc-900 text-white">🇧🇪 +32</option>
+                      <option value="+46" className="bg-zinc-900 text-white">🇸🇪 +46</option>
+                      <option value="+47" className="bg-zinc-900 text-white">🇳🇴 +47</option>
+                      <option value="+45" className="bg-zinc-900 text-white">🇩🇰 +45</option>
+                      <option value="+358" className="bg-zinc-900 text-white">🇫🇮 +358</option>
+                      <option value="+351" className="bg-zinc-900 text-white">🇵🇹 +351</option>
+                      <option value="+30" className="bg-zinc-900 text-white">🇬🇷 +30</option>
+                      <option value="+972" className="bg-zinc-900 text-white">🇮🇱 +972</option>
+                      <option value="+974" className="bg-zinc-900 text-white">🇶🇦 +974</option>
+                      <option value="+968" className="bg-zinc-900 text-white">🇴🇲 +968</option>
+                      <option value="+965" className="bg-zinc-900 text-white">🇰🇼 +965</option>
+                      <option value="+973" className="bg-zinc-900 text-white">🇧🇭 +973</option>
                     </select>
                     <Input 
                       id="phone" 
