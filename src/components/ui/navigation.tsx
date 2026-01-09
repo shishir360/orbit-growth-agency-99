@@ -56,11 +56,11 @@ const Navigation = () => {
         scrolled ? 'py-2' : 'py-4'
       }`}
     >
-      {/* Transparent glass background */}
-      <div className={`absolute inset-0 transition-all duration-500 ${
+      {/* Solid dark background */}
+      <div className={`absolute inset-0 transition-all duration-500 bg-[#0a0a0a] ${
         scrolled 
-          ? 'bg-black/40 backdrop-blur-2xl shadow-[0_4px_30px_rgba(0,0,0,0.4)]' 
-          : 'bg-black/20 backdrop-blur-xl'
+          ? 'shadow-[0_4px_30px_rgba(0,0,0,0.5)]' 
+          : ''
       }`} />
       
       {/* Animated gradient border using theme primary */}
