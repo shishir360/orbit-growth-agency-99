@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Navigation from "@/components/ui/navigation";
@@ -7,7 +7,7 @@ import SEO from "@/components/ui/seo";
 import ServiceSchema from "@/components/ui/service-schema";
 import FAQSchema from "@/components/ui/faq-schema";
 import BreadcrumbSEO from "@/components/ui/breadcrumb-seo";
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { 
   ArrowRight,
   ArrowUpRight,
@@ -32,6 +32,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import portfolioShowcaseImage from "@/assets/portfolio-showcase-devices.png";
 
 interface TrustedLogo {
   id: string;
@@ -507,106 +508,245 @@ const WebsiteDesign = () => {
         </div>
       </section>
 
-      {/* Portfolio Section - Database Driven with Animations */}
-      <section className="py-32 bg-gray-50 overflow-hidden">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="max-w-6xl mx-auto">
-            {/* Section Header */}
+      {/* Portfolio Section with Floating Devices */}
+      <section className="py-32 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden">
+        {/* Background Decoration */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-bl from-purple-100/40 to-transparent rounded-full blur-3xl" />
+          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-gradient-to-tr from-blue-100/30 to-transparent rounded-full blur-3xl" />
+        </div>
+
+        <div className="container mx-auto px-4 lg:px-8 relative z-10">
+          <div className="max-w-7xl mx-auto">
+            {/* Floating Devices Showcase with Animation */}
+            <motion.div 
+              initial={{ opacity: 0, y: 60 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="mb-20"
+            >
+              <motion.img 
+                src={portfolioShowcaseImage}
+                alt="Portfolio Showcase - Multiple Devices"
+                className="w-full max-w-5xl mx-auto"
+                initial={{ scale: 0.9, opacity: 0 }}
+                whileInView={{ scale: 1, opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1, delay: 0.2 }}
+                whileHover={{ scale: 1.02, y: -10 }}
+              />
+            </motion.div>
+
+            {/* Section Header with Typing Animation */}
             <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between mb-16">
-              <div className={`transition-all duration-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-                <span className="inline-block text-sm font-semibold text-gray-500 uppercase tracking-widest mb-4">
-                  Our Portfolio
-                </span>
-                <h2 className="text-4xl lg:text-6xl font-bold text-black">
-                  Featured Work
-                </h2>
+              <div>
+                <motion.div
+                  initial={{ opacity: 0, x: -30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6 }}
+                >
+                  <Badge className="bg-black text-white px-4 py-2 rounded-full text-sm font-medium mb-6">
+                    <Sparkles className="w-4 h-4 mr-2" />
+                    Our Portfolio
+                  </Badge>
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8, delay: 0.2 }}
+                >
+                  <h2 className="text-4xl lg:text-6xl font-bold text-black overflow-hidden">
+                    <motion.span className="inline-block">
+                      {"Featured Work".split("").map((char, index) => (
+                        <motion.span
+                          key={index}
+                          initial={{ opacity: 0, y: 50 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ 
+                            duration: 0.05,
+                            delay: index * 0.05,
+                            ease: "easeOut"
+                          }}
+                          className="inline-block"
+                        >
+                          {char === " " ? "\u00A0" : char}
+                        </motion.span>
+                      ))}
+                    </motion.span>
+                  </h2>
+                </motion.div>
+                <motion.p
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.8 }}
+                  className="text-gray-600 text-lg mt-4 max-w-xl"
+                >
+                  Explore our latest projects showcasing cutting-edge design and development
+                </motion.p>
               </div>
-              <Button 
-                variant="outline" 
-                className={`mt-6 lg:mt-0 border-2 border-black text-black hover:bg-black hover:text-white rounded-full px-8 transition-all duration-700 delay-200 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
-                asChild
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 1 }}
               >
-                <Link to="/portfolio">
-                  View All Projects
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Link>
-              </Button>
+                <Button 
+                  variant="outline" 
+                  className="mt-6 lg:mt-0 border-2 border-black text-black hover:bg-black hover:text-white rounded-full px-8 transition-all duration-300"
+                  asChild
+                >
+                  <Link to="/portfolio">
+                    View All Projects
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Link>
+                </Button>
+              </motion.div>
             </div>
 
-            {/* Portfolio Cards with Staggered Animation */}
+            {/* Portfolio Cards with Staggered Typing Animation */}
             {portfolioProjects.length > 0 ? (
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {portfolioProjects.map((project, index) => (
-                  <Link
+                  <motion.div
                     key={project.id}
-                    to={`/portfolio/${project.slug}`}
-                    className={`group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
-                    style={{ transitionDelay: `${index * 100 + 300}ms` }}
+                    initial={{ opacity: 0, y: 50 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ 
+                      duration: 0.6, 
+                      delay: index * 0.15,
+                      ease: "easeOut"
+                    }}
                   >
-                    {/* Image */}
-                    <div className="relative overflow-hidden aspect-[4/3]">
-                      {project.image_url ? (
-                        <img 
-                          src={project.image_url}
-                          alt={project.title}
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                        />
-                      ) : (
-                        <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
-                          <Globe className="w-12 h-12 text-gray-400" />
+                    <Link
+                      to={`/portfolio/${project.slug}`}
+                      className="group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 block"
+                    >
+                      {/* Image */}
+                      <div className="relative overflow-hidden aspect-[4/3]">
+                        {project.image_url ? (
+                          <motion.img 
+                            src={project.image_url}
+                            alt={project.title}
+                            className="w-full h-full object-cover"
+                            whileHover={{ scale: 1.1 }}
+                            transition={{ duration: 0.7 }}
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
+                            <Globe className="w-12 h-12 text-gray-400" />
+                          </div>
+                        )}
+                        <motion.div 
+                          className="absolute top-4 left-4"
+                          initial={{ opacity: 0, x: -20 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ delay: index * 0.15 + 0.3 }}
+                        >
+                          <span className="bg-white/90 backdrop-blur-sm text-black px-4 py-2 rounded-full text-sm font-medium shadow-sm">
+                            {project.category}
+                          </span>
+                        </motion.div>
+                        {/* Hover Overlay */}
+                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center">
+                          <motion.div 
+                            className="w-14 h-14 rounded-full bg-white shadow-xl flex items-center justify-center opacity-0 group-hover:opacity-100"
+                            whileHover={{ scale: 1.1, rotate: 45 }}
+                            transition={{ duration: 0.3 }}
+                          >
+                            <ArrowUpRight className="w-6 h-6 text-black" />
+                          </motion.div>
                         </div>
-                      )}
-                      <div className="absolute top-4 left-4">
-                        <span className="bg-white/90 backdrop-blur-sm text-black px-4 py-2 rounded-full text-sm font-medium shadow-sm">
-                          {project.category}
-                        </span>
                       </div>
-                      {/* Hover Overlay */}
-                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center">
-                        <div className="w-14 h-14 rounded-full bg-white shadow-xl flex items-center justify-center opacity-0 group-hover:opacity-100 scale-75 group-hover:scale-100 transition-all duration-300">
-                          <ArrowUpRight className="w-6 h-6 text-black" />
-                        </div>
-                      </div>
-                    </div>
-                    
-                    {/* Content */}
-                    <div className="p-8">
-                      <h3 className="text-xl font-bold text-black mb-3 group-hover:text-gray-700 transition-colors">
-                        {project.title}
-                      </h3>
-                      <p className="text-gray-600 text-sm line-clamp-2 mb-4">
-                        {project.description}
-                      </p>
                       
-                      {/* Technologies */}
-                      {project.technologies && project.technologies.length > 0 && (
-                        <div className="flex flex-wrap gap-2 pt-4 border-t border-gray-100">
-                          {project.technologies.slice(0, 3).map((tech, tIndex) => (
-                            <span 
-                              key={tIndex} 
-                              className="text-xs font-medium bg-gray-100 text-gray-600 px-3 py-1 rounded-full"
+                      {/* Content with Typing Effect */}
+                      <div className="p-8">
+                        <motion.h3 
+                          className="text-xl font-bold text-black mb-3 group-hover:text-gray-700 transition-colors overflow-hidden"
+                          initial={{ opacity: 0 }}
+                          whileInView={{ opacity: 1 }}
+                          viewport={{ once: true }}
+                          transition={{ delay: index * 0.15 + 0.4 }}
+                        >
+                          {project.title.split("").map((char, charIndex) => (
+                            <motion.span
+                              key={charIndex}
+                              initial={{ opacity: 0 }}
+                              whileInView={{ opacity: 1 }}
+                              viewport={{ once: true }}
+                              transition={{ 
+                                duration: 0.02,
+                                delay: index * 0.15 + 0.4 + charIndex * 0.03
+                              }}
+                              className="inline-block"
                             >
-                              {tech}
-                            </span>
+                              {char === " " ? "\u00A0" : char}
+                            </motion.span>
                           ))}
-                          {project.technologies.length > 3 && (
-                            <span className="text-xs font-medium text-gray-400">
-                              +{project.technologies.length - 3} more
-                            </span>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  </Link>
+                        </motion.h3>
+                        <motion.p 
+                          className="text-gray-600 text-sm line-clamp-2 mb-4"
+                          initial={{ opacity: 0, y: 10 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ delay: index * 0.15 + 0.6 }}
+                        >
+                          {project.description}
+                        </motion.p>
+                        
+                        {/* Technologies with Staggered Animation */}
+                        {project.technologies && project.technologies.length > 0 && (
+                          <motion.div 
+                            className="flex flex-wrap gap-2 pt-4 border-t border-gray-100"
+                            initial={{ opacity: 0 }}
+                            whileInView={{ opacity: 1 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: index * 0.15 + 0.7 }}
+                          >
+                            {project.technologies.slice(0, 3).map((tech, tIndex) => (
+                              <motion.span 
+                                key={tIndex} 
+                                className="text-xs font-medium bg-gray-100 text-gray-600 px-3 py-1 rounded-full"
+                                initial={{ opacity: 0, scale: 0.8 }}
+                                whileInView={{ opacity: 1, scale: 1 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: index * 0.15 + 0.7 + tIndex * 0.1 }}
+                                whileHover={{ scale: 1.05, backgroundColor: "#000", color: "#fff" }}
+                              >
+                                {tech}
+                              </motion.span>
+                            ))}
+                            {project.technologies.length > 3 && (
+                              <span className="text-xs font-medium text-gray-400">
+                                +{project.technologies.length - 3} more
+                              </span>
+                            )}
+                          </motion.div>
+                        )}
+                      </div>
+                    </Link>
+                  </motion.div>
                 ))}
               </div>
             ) : (
-              <div className={`text-center py-16 transition-all duration-700 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
+              <motion.div 
+                className="text-center py-16"
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
+              >
                 <Globe className="w-16 h-16 text-gray-300 mx-auto mb-4" />
                 <p className="text-gray-500">
                   No projects yet. Add projects from your admin panel.
                 </p>
-              </div>
+              </motion.div>
             )}
           </div>
         </div>
