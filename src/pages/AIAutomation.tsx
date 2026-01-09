@@ -1228,7 +1228,7 @@ const AIAutomation = () => {
       )}
 
       {/* Trusted By Section with Infinite Scroll */}
-      {trustedLogos.length > 0 && (
+      {trustedLogos.length > 0 ? (
         <section className="py-20 bg-black relative overflow-hidden border-y border-white/5">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
@@ -1307,7 +1307,7 @@ const AIAutomation = () => {
             }
           `}</style>
         </section>
-      )}
+      ) : null}
 
       {/* CTA Section */}
       <section className="py-32 bg-black relative overflow-hidden">
