@@ -54,6 +54,11 @@ interface BlogPost {
   publish_date: string;
 }
 
+// Import images
+import aiHeroDashboard from "@/assets/ai-hero-dashboard.jpg";
+import aiBrainNetwork from "@/assets/ai-brain-network.jpg";
+import aiTeamWorking from "@/assets/ai-team-working.jpg";
+
 // AI Platform Logos as SVG components
 const OpenAILogo = () => (
   <svg viewBox="0 0 24 24" className="w-8 h-8">
@@ -273,10 +278,10 @@ const AIAutomation = () => {
       
       <Navigation />
       
-      {/* Hero Section - TheAIAutomationAgency Style */}
+      {/* Hero Section - TheAIAutomationAgency Style with Image */}
       <section 
         ref={heroRef}
-        className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20"
+        className="relative min-h-screen flex items-center overflow-hidden pt-20"
       >
         {/* Emerald/Teal glow effects */}
         <div className="absolute inset-0 bg-black">
@@ -309,86 +314,124 @@ const AIAutomation = () => {
         </div>
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-20 relative z-10">
-          <div className="max-w-5xl mx-auto text-center">
-            {/* Top Badge */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="mb-8"
-            >
-              <span className="inline-flex items-center px-4 py-2 rounded-full bg-white/5 border border-white/10 text-gray-400 text-sm">
-                Done for you AI Setup
-              </span>
-            </motion.div>
-
-            {/* Main Headline */}
-            <motion.h1 
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2, duration: 0.8 }}
-              className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-black leading-[1.05] tracking-tight mb-8"
-            >
-              <span className="text-white">Done-for-you AI</span>
-              <br />
-              <span className="inline-block bg-[#C5FF4A] text-black px-4 py-1 rounded-2xl mt-2">
-                Plan. Build. Deploy.
-              </span>
-              <br />
-              <span className="text-white mt-2 inline-block">In just 90 Days</span>
-            </motion.h1>
-
-            {/* Subtitle */}
-            <motion.p 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4, duration: 0.8 }}
-              className="text-xl sm:text-2xl text-gray-400 leading-relaxed max-w-3xl mx-auto mb-12"
-            >
-              AI fully integrated into your business within 90 days.
-            </motion.p>
-
-            {/* CTA Button */}
-            <motion.div 
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5, duration: 0.8 }}
-            >
-              <Button 
-                size="lg" 
-                className="bg-emerald-500 hover:bg-emerald-400 text-white text-lg px-10 py-7 rounded-full font-semibold shadow-2xl shadow-emerald-500/30 hover:shadow-emerald-500/50 transition-all duration-300 hover:scale-105 group"
-                asChild
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* Left Content */}
+            <div className="text-center lg:text-left">
+              {/* Top Badge */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="mb-8"
               >
-                <a href="/contact">
-                  Get Automated
-                  <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-                </a>
-              </Button>
-            </motion.div>
+                <span className="inline-flex items-center px-4 py-2 rounded-full bg-white/5 border border-white/10 text-gray-400 text-sm">
+                  Done for you AI Setup
+                </span>
+              </motion.div>
 
-            {/* Floating user avatars decoration */}
+              {/* Main Headline */}
+              <motion.h1 
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2, duration: 0.8 }}
+                className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black leading-[1.05] tracking-tight mb-8"
+              >
+                <span className="text-white">Done-for-you AI</span>
+                <br />
+                <span className="inline-block bg-[#C5FF4A] text-black px-4 py-1 rounded-2xl mt-2">
+                  Plan. Build. Deploy.
+                </span>
+                <br />
+                <span className="text-white mt-2 inline-block">In just 90 Days</span>
+              </motion.h1>
+
+              {/* Subtitle */}
+              <motion.p 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.4, duration: 0.8 }}
+                className="text-xl text-gray-400 leading-relaxed max-w-xl mx-auto lg:mx-0 mb-10"
+              >
+                AI fully integrated into your business within 90 days. Scale faster, reduce costs, automate everything.
+              </motion.p>
+
+              {/* CTA Button */}
+              <motion.div 
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5, duration: 0.8 }}
+                className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
+              >
+                <Button 
+                  size="lg" 
+                  className="bg-[#C5FF4A] hover:bg-[#d4ff6a] text-black text-lg px-10 py-7 rounded-full font-semibold shadow-2xl shadow-[#C5FF4A]/30 hover:shadow-[#C5FF4A]/50 transition-all duration-300 hover:scale-105 group"
+                  asChild
+                >
+                  <a href="/contact">
+                    Get Automated
+                    <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                  </a>
+                </Button>
+                <Button 
+                  size="lg" 
+                  variant="outline"
+                  className="border-white/20 text-white hover:bg-white/10 text-lg px-8 py-7 rounded-full"
+                  asChild
+                >
+                  <a href="#how-it-works">
+                    <Play className="w-5 h-5 mr-2" />
+                    See How It Works
+                  </a>
+                </Button>
+              </motion.div>
+            </div>
+
+            {/* Right Image */}
             <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.8 }}
-              className="absolute top-1/4 left-10 hidden lg:flex items-center gap-2"
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.4, duration: 0.8 }}
+              className="relative hidden lg:block"
             >
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center">
-                <Users className="w-5 h-5 text-white" />
+              <div className="relative">
+                {/* Main Image */}
+                <div className="relative rounded-[2rem] overflow-hidden border border-white/10 shadow-2xl shadow-emerald-500/20">
+                  <img 
+                    src={aiHeroDashboard} 
+                    alt="AI Automation Dashboard"
+                    className="w-full h-auto"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                </div>
+                
+                {/* Floating Stats Card */}
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.8 }}
+                  className="absolute -bottom-6 -left-6 bg-black/90 backdrop-blur-xl border border-[#C5FF4A]/30 rounded-2xl p-4 shadow-xl"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 bg-[#C5FF4A]/20 rounded-xl flex items-center justify-center">
+                      <TrendingUp className="w-6 h-6 text-[#C5FF4A]" />
+                    </div>
+                    <div>
+                      <div className="text-2xl font-black text-white">340%</div>
+                      <div className="text-xs text-gray-400">Growth Rate</div>
+                    </div>
+                  </div>
+                </motion.div>
+
+                {/* Floating Badge */}
+                <motion.div 
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 1 }}
+                  className="absolute -top-4 -right-4 bg-emerald-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg"
+                >
+                  ✨ AI-Powered
+                </motion.div>
               </div>
-              <MousePointerClick className="w-4 h-4 text-gray-500" />
-            </motion.div>
-            
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1 }}
-              className="absolute top-1/3 right-16 hidden lg:flex items-center gap-2"
-            >
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center">
-                <Bot className="w-5 h-5 text-white" />
-              </div>
-              <MousePointerClick className="w-4 h-4 text-gray-500" />
             </motion.div>
           </div>
         </div>
@@ -442,6 +485,165 @@ const AIAutomation = () => {
                 <span className="text-gray-500 text-xs mt-2 group-hover:text-white transition-colors">{platform.name}</span>
               </motion.div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* How It Works Section with Images */}
+      <section id="how-it-works" className="py-24 bg-black relative overflow-hidden">
+        {/* Background glow */}
+        <div className="absolute top-1/2 left-0 w-[600px] h-[600px] bg-gradient-to-r from-emerald-500/20 to-transparent rounded-full blur-[200px] -translate-y-1/2" />
+        
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <span className="text-[#C5FF4A] text-sm font-medium uppercase tracking-wider mb-4 block">How It Works</span>
+            <h2 className="text-4xl sm:text-5xl font-black text-white mb-6">
+              Your AI Journey in{" "}
+              <span className="text-[#C5FF4A]">3 Steps</span>
+            </h2>
+            <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+              From strategy to deployment, we handle everything for you
+            </p>
+          </motion.div>
+
+          {/* Step 1 */}
+          <div className="grid lg:grid-cols-2 gap-12 items-center mb-20">
+            <motion.div 
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="order-2 lg:order-1"
+            >
+              <div className="inline-flex items-center gap-2 bg-[#C5FF4A]/10 border border-[#C5FF4A]/30 rounded-full px-4 py-2 mb-6">
+                <span className="w-8 h-8 bg-[#C5FF4A] text-black rounded-full flex items-center justify-center font-bold text-sm">1</span>
+                <span className="text-[#C5FF4A] font-medium">Plan</span>
+              </div>
+              <h3 className="text-3xl sm:text-4xl font-bold text-white mb-4">Strategic AI Assessment</h3>
+              <p className="text-gray-400 text-lg leading-relaxed mb-6">
+                We analyze your business processes, identify automation opportunities, and create a custom AI implementation roadmap tailored to your specific needs and goals.
+              </p>
+              <ul className="space-y-3">
+                {["Business process audit", "AI opportunity mapping", "ROI projections", "Custom implementation plan"].map((item, i) => (
+                  <li key={i} className="flex items-center gap-3 text-gray-300">
+                    <Check className="w-5 h-5 text-[#C5FF4A]" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+            <motion.div 
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="order-1 lg:order-2"
+            >
+              <div className="relative rounded-[2rem] overflow-hidden border border-white/10 shadow-2xl shadow-emerald-500/10">
+                <img 
+                  src={aiBrainNetwork} 
+                  alt="AI Strategy Planning"
+                  className="w-full h-auto"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Step 2 */}
+          <div className="grid lg:grid-cols-2 gap-12 items-center mb-20">
+            <motion.div 
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+            >
+              <div className="relative rounded-[2rem] overflow-hidden border border-white/10 shadow-2xl shadow-cyan-500/10">
+                <img 
+                  src={aiTeamWorking} 
+                  alt="AI Implementation Team"
+                  className="w-full h-auto"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+              </div>
+            </motion.div>
+            <motion.div 
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+            >
+              <div className="inline-flex items-center gap-2 bg-cyan-500/10 border border-cyan-500/30 rounded-full px-4 py-2 mb-6">
+                <span className="w-8 h-8 bg-cyan-500 text-white rounded-full flex items-center justify-center font-bold text-sm">2</span>
+                <span className="text-cyan-400 font-medium">Build</span>
+              </div>
+              <h3 className="text-3xl sm:text-4xl font-bold text-white mb-4">Expert Implementation</h3>
+              <p className="text-gray-400 text-lg leading-relaxed mb-6">
+                Our team of AI specialists builds and integrates custom automation solutions, connecting all your tools and systems for seamless operation.
+              </p>
+              <ul className="space-y-3">
+                {["Custom AI development", "System integrations", "Workflow automation", "Quality assurance testing"].map((item, i) => (
+                  <li key={i} className="flex items-center gap-3 text-gray-300">
+                    <Check className="w-5 h-5 text-cyan-400" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+          </div>
+
+          {/* Step 3 */}
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <motion.div 
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="order-2 lg:order-1"
+            >
+              <div className="inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/30 rounded-full px-4 py-2 mb-6">
+                <span className="w-8 h-8 bg-emerald-500 text-white rounded-full flex items-center justify-center font-bold text-sm">3</span>
+                <span className="text-emerald-400 font-medium">Deploy</span>
+              </div>
+              <h3 className="text-3xl sm:text-4xl font-bold text-white mb-4">Launch & Optimize</h3>
+              <p className="text-gray-400 text-lg leading-relaxed mb-6">
+                We deploy your AI systems, train your team, and provide ongoing optimization to ensure maximum performance and ROI.
+              </p>
+              <ul className="space-y-3">
+                {["Full deployment support", "Team training sessions", "Performance monitoring", "Continuous optimization"].map((item, i) => (
+                  <li key={i} className="flex items-center gap-3 text-gray-300">
+                    <Check className="w-5 h-5 text-emerald-400" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+            <motion.div 
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="order-1 lg:order-2"
+            >
+              <div className="relative rounded-[2rem] overflow-hidden border border-white/10 shadow-2xl shadow-emerald-500/10">
+                <img 
+                  src={aiHeroDashboard} 
+                  alt="AI Deployment Dashboard"
+                  className="w-full h-auto"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                {/* Success badge */}
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.3 }}
+                  className="absolute bottom-6 right-6 bg-emerald-500 text-white px-4 py-2 rounded-full text-sm font-bold flex items-center gap-2"
+                >
+                  <CheckCircle className="w-4 h-4" />
+                  Go Live!
+                </motion.div>
+              </div>
+            </motion.div>
           </div>
         </div>
       </section>
