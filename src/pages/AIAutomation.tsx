@@ -8,6 +8,8 @@ import Footer from "@/components/ui/footer";
 import SEO from "@/components/ui/seo";
 import ServiceSchema from "@/components/ui/service-schema";
 import BreadcrumbSEO from "@/components/ui/breadcrumb-seo";
+import { Link } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 import { 
   Brain, 
   MessageSquare, 
@@ -37,8 +39,20 @@ import {
   Database,
   LineChart,
   Puzzle,
-  Check
+  Check,
+  Calendar
 } from "lucide-react";
+
+// Blog post type
+interface BlogPost {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  image_url: string | null;
+  author: string;
+  publish_date: string;
+}
 
 // AI Platform Logos as SVG components
 const OpenAILogo = () => (
@@ -102,6 +116,8 @@ const AIAutomation = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const heroRef = useRef<HTMLElement>(null);
 
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+
   useEffect(() => {
     setIsVisible(true);
     
@@ -117,6 +133,23 @@ const AIAutomation = () => {
     
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
+  // Fetch blog posts
+  useEffect(() => {
+    const fetchBlogPosts = async () => {
+      const { data, error } = await supabase
+        .from('blog_posts')
+        .select('id, title, slug, excerpt, image_url, author, publish_date')
+        .eq('published', true)
+        .order('publish_date', { ascending: false })
+        .limit(3);
+      
+      if (data && !error) {
+        setBlogPosts(data);
+      }
+    };
+    fetchBlogPosts();
   }, []);
 
   // AI Platform Partners
@@ -637,6 +670,105 @@ const AIAutomation = () => {
               <a href="/contact">
                 Still have a question?
               </a>
+            </Button>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Blog Posts Section */}
+      <section className="py-24 bg-black relative overflow-hidden">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <span className="text-[#C5FF4A] text-sm font-medium uppercase tracking-wider mb-4 block">Blog</span>
+            <h2 className="text-4xl sm:text-5xl font-black text-white mb-4">
+              Latest <span className="text-[#C5FF4A]">Insights</span>
+            </h2>
+            <p className="text-gray-400 max-w-2xl mx-auto">
+              Expert articles on AI automation, business growth, and digital transformation
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {blogPosts.map((post, index) => (
+              <motion.div
+                key={post.id}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+              >
+                <Link to={`/blog/${post.slug}`} className="block group h-full">
+                  <div className="bg-gradient-to-br from-white/[0.08] to-white/[0.02] backdrop-blur-sm border border-white/10 rounded-[1.5rem] overflow-hidden h-full hover:border-[#C5FF4A]/50 transition-all duration-500 hover:shadow-2xl hover:shadow-[#C5FF4A]/10">
+                    {/* Image */}
+                    <div className="relative h-52 overflow-hidden">
+                      <img 
+                        src={post.image_url || '/assets/ai-automation-beginners-guide.png'} 
+                        alt={post.title}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                      
+                      {/* Category Badge */}
+                      <div className="absolute top-4 left-4">
+                        <span className="bg-[#C5FF4A] text-black text-xs font-bold px-3 py-1 rounded-full">
+                          AI Automation
+                        </span>
+                      </div>
+                    </div>
+                    
+                    {/* Content */}
+                    <div className="p-6">
+                      <div className="flex items-center gap-3 text-gray-400 text-sm mb-3">
+                        <Calendar className="w-4 h-4" />
+                        {new Date(post.publish_date).toLocaleDateString('en-US', { 
+                          month: 'short', 
+                          day: 'numeric', 
+                          year: 'numeric' 
+                        })}
+                      </div>
+                      
+                      <h3 className="text-xl font-bold text-white mb-3 line-clamp-2 group-hover:text-[#C5FF4A] transition-colors duration-300">
+                        {post.title}
+                      </h3>
+                      
+                      {post.excerpt && (
+                        <p className="text-gray-400 text-sm line-clamp-2 mb-4">
+                          {post.excerpt}
+                        </p>
+                      )}
+                      
+                      <div className="flex items-center gap-2 text-[#C5FF4A] font-medium text-sm group-hover:gap-3 transition-all duration-300">
+                        Read Article
+                        <ArrowRight className="w-4 h-4" />
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* View All Button */}
+          <motion.div 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="text-center mt-12"
+          >
+            <Button 
+              variant="outline" 
+              className="rounded-full border-white/20 text-white hover:bg-[#C5FF4A] hover:text-black hover:border-[#C5FF4A] transition-all duration-300 px-8"
+              asChild
+            >
+              <Link to="/blog">
+                View All Articles
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Link>
             </Button>
           </motion.div>
         </div>
