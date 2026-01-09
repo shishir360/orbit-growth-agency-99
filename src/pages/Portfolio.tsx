@@ -81,7 +81,7 @@ const Portfolio = () => {
   const regularProjects = filteredProjects.filter(project => !project.featured);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-black">
       <SEO
         title="Our Work & Case Studies | Lunexo Media"
         description="See how Lunexo Media helped businesses achieve real growth. Browse our portfolio and case studies showcasing SEO, ads, and web design success."
@@ -99,33 +99,33 @@ const Portfolio = () => {
       </div>
       
       {/* Ultra Premium Hero Section */}
-      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-[#0a0a0f]">
+      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-black">
         {/* Animated gradient orbs */}
-        <div className="absolute top-20 right-10 w-[600px] h-[600px] bg-gradient-to-r from-red-600/25 to-orange-500/20 rounded-full blur-[130px] animate-pulse"></div>
-        <div className="absolute bottom-20 left-10 w-[500px] h-[500px] bg-gradient-to-r from-purple-600/20 to-blue-500/15 rounded-full blur-[100px] animate-pulse" style={{animationDelay: '1s'}}></div>
+        <div className="absolute top-20 right-10 w-[600px] h-[600px] bg-gradient-to-r from-emerald-600/25 to-cyan-500/20 rounded-full blur-[130px] animate-pulse"></div>
+        <div className="absolute bottom-20 left-10 w-[500px] h-[500px] bg-gradient-to-r from-cyan-600/20 to-teal-500/15 rounded-full blur-[100px] animate-pulse" style={{animationDelay: '1s'}}></div>
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] bg-gradient-radial from-white/3 to-transparent rounded-full"></div>
         
         {/* Grid pattern overlay */}
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.015)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.015)_1px,transparent_1px)] bg-[size:80px_80px]"></div>
 
         {/* Floating particles */}
-        <div className="absolute top-1/4 right-1/4 w-2 h-2 bg-yellow-500/50 rounded-full animate-pulse"></div>
-        <div className="absolute top-1/3 left-1/3 w-1.5 h-1.5 bg-red-500/50 rounded-full animate-pulse" style={{animationDelay: '0.5s'}}></div>
-        <div className="absolute bottom-1/4 right-1/3 w-1 h-1 bg-orange-500/50 rounded-full animate-pulse" style={{animationDelay: '1.5s'}}></div>
+        <div className="absolute top-1/4 right-1/4 w-2 h-2 bg-emerald-500/50 rounded-full animate-pulse"></div>
+        <div className="absolute top-1/3 left-1/3 w-1.5 h-1.5 bg-cyan-500/50 rounded-full animate-pulse" style={{animationDelay: '0.5s'}}></div>
+        <div className="absolute bottom-1/4 right-1/3 w-1 h-1 bg-teal-500/50 rounded-full animate-pulse" style={{animationDelay: '1.5s'}}></div>
 
         <div className="container-wide section-padding relative z-10 pt-20">
           <div className="text-center max-w-5xl mx-auto animate-fade-in">
             {/* Premium badge */}
-            <div className="inline-flex items-center gap-3 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/20 text-yellow-400 px-6 py-3 rounded-full text-sm font-medium backdrop-blur-xl mb-8">
+            <div className="inline-flex items-center gap-3 bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 border border-emerald-500/20 text-emerald-400 px-6 py-3 rounded-full text-sm font-medium backdrop-blur-xl mb-8">
               <Trophy className="w-5 h-5" />
               Award-Winning Portfolio
-              <span className="w-1.5 h-1.5 bg-yellow-400 rounded-full animate-pulse"></span>
+              <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span>
             </div>
             
             <h1 className="text-4xl sm:text-5xl lg:text-7xl xl:text-[5.5rem] font-bold leading-[1.02] tracking-tight text-white mb-8" style={{fontFamily: "'Playfair Display', serif"}}>
               Our Work &
               <br />
-              <span className="bg-gradient-to-r from-red-500 via-orange-400 to-yellow-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-emerald-400 via-cyan-400 to-teal-400 bg-clip-text text-transparent">
                 Success Stories
               </span>
             </h1>
@@ -142,9 +142,9 @@ const Portfolio = () => {
                 { value: "95%", label: "Client Satisfaction", icon: Award },
                 { value: "30 Days", label: "Avg. Delivery", icon: Calendar }
               ].map((stat, index) => (
-                <div key={index} className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-xl px-5 py-4 backdrop-blur-sm hover:bg-white/8 transition-all duration-300">
-                  <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-red-500/20 to-orange-500/20 flex items-center justify-center">
-                    <stat.icon className="w-5 h-5 text-red-400" />
+                <div key={index} className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-xl px-5 py-4 backdrop-blur-sm hover:bg-white/10 transition-all duration-300">
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 flex items-center justify-center">
+                    <stat.icon className="w-5 h-5 text-emerald-400" />
                   </div>
                   <div className="text-left">
                     <div className="text-xl lg:text-2xl font-bold text-white">{stat.value}</div>
@@ -155,7 +155,7 @@ const Portfolio = () => {
             </div>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="group text-base px-10 py-7 bg-gradient-to-r from-red-500 to-orange-500 text-white hover:from-red-600 hover:to-orange-600 rounded-full transition-all duration-300 hover:scale-105 font-semibold shadow-lg shadow-red-500/25" asChild>
+              <Button size="lg" className="group text-base px-10 py-7 bg-[#C5FF4A] text-black hover:bg-[#d4ff6a] rounded-full transition-all duration-300 hover:scale-105 font-semibold shadow-lg shadow-[#C5FF4A]/25" asChild>
                 <a href="/book-appointment">
                   Start Your Project
                   <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
@@ -173,9 +173,9 @@ const Portfolio = () => {
       </section>
 
       {/* Modern Categories Filter - Enhanced */}
-      <section className="py-20 bg-[#0a0a0f] relative overflow-hidden" id="featured-projects">
+      <section className="py-20 bg-black relative overflow-hidden" id="featured-projects">
         {/* Subtle gradient */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[200px] bg-gradient-to-r from-red-600/10 via-orange-500/10 to-red-600/10 rounded-full blur-[80px]"></div>
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[200px] bg-gradient-to-r from-emerald-600/10 via-cyan-500/10 to-emerald-600/10 rounded-full blur-[80px]"></div>
         
         <div className="container-wide section-padding relative z-10">
           <div className="text-center mb-14">
@@ -195,7 +195,7 @@ const Portfolio = () => {
                 key={category} 
                 className={`px-8 py-4 rounded-full font-medium text-sm transition-all duration-300 ${
                   category === activeCategory 
-                    ? "bg-gradient-to-r from-red-500 to-orange-500 text-white shadow-lg shadow-red-500/25" 
+                    ? "bg-[#C5FF4A] text-black shadow-lg shadow-[#C5FF4A]/25 font-semibold" 
                     : "bg-white/5 text-white/70 border border-white/10 hover:bg-white/10 hover:text-white hover:border-white/20"
                 }`}
                 onClick={() => setActiveCategory(category)}
@@ -208,10 +208,10 @@ const Portfolio = () => {
       </section>
 
       {/* Featured Projects Section */}
-      <section className="py-20 bg-[#0a0a0f] relative overflow-hidden">
+      <section className="py-20 bg-black relative overflow-hidden">
         <div className="container-wide section-padding relative z-10">
           <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 px-4 py-2 rounded-full text-sm font-medium mb-6">
+            <div className="inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-4 py-2 rounded-full text-sm font-medium mb-6">
               <Trophy className="w-4 h-4" />
               Featured Projects
             </div>
@@ -237,10 +237,10 @@ const Portfolio = () => {
                     alt={project.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0f] via-transparent to-transparent"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
                   
                   <div className="absolute top-4 left-4 flex gap-2">
-                    <span className="inline-flex items-center gap-1.5 bg-yellow-500/20 border border-yellow-500/30 text-yellow-400 px-3 py-1.5 rounded-full text-xs font-medium">
+                    <span className="inline-flex items-center gap-1.5 bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 px-3 py-1.5 rounded-full text-xs font-medium">
                       <Trophy className="w-3 h-3" />
                       Featured
                     </span>
@@ -255,7 +255,7 @@ const Portfolio = () => {
                 
                 <div className="p-6">
                   <span className="text-xs text-white/60 uppercase tracking-wider">{project.category}</span>
-                  <h3 className="text-xl font-bold text-white mt-1 mb-3 group-hover:text-red-400 transition-colors">
+                  <h3 className="text-xl font-bold text-white mt-1 mb-3 group-hover:text-emerald-400 transition-colors">
                     {project.title}
                   </h3>
                   
@@ -294,7 +294,7 @@ const Portfolio = () => {
       </section>
 
       {/* All Projects Grid */}
-      <section className="py-20 bg-[#0a0a0f] relative overflow-hidden">
+      <section className="py-20 bg-black relative overflow-hidden">
         <div className="container-wide section-padding">
           <div className="text-center mb-16">
             <h2 className="text-2xl lg:text-4xl font-bold text-white mb-4" style={{fontFamily: "'Playfair Display', serif"}}>
@@ -322,9 +322,9 @@ const Portfolio = () => {
                     alt={project.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0f] via-transparent to-transparent"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
                   
-                  <span className="absolute top-3 left-3 text-xs px-2.5 py-1 bg-red-500/20 border border-red-500/30 text-red-400 rounded-full font-medium">
+                  <span className="absolute top-3 left-3 text-xs px-2.5 py-1 bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 rounded-full font-medium">
                     {project.category}
                   </span>
 
@@ -336,7 +336,7 @@ const Portfolio = () => {
                 </div>
                 
                 <div className="p-5">
-                  <h3 className="text-lg font-bold text-white mb-2 group-hover:text-red-400 transition-colors">
+                  <h3 className="text-lg font-bold text-white mb-2 group-hover:text-emerald-400 transition-colors">
                     {project.title}
                   </h3>
                   

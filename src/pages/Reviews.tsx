@@ -49,7 +49,7 @@ const Reviews = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-black">
       <SEO
         title="Client Testimonials | Success Stories with Lunexo Media"
         description="Hear from our happy clients who achieved growth through Lunexo Media's SEO, ads, and digital marketing services."
@@ -61,14 +61,23 @@ const Reviews = () => {
       
       <main className="pt-16">
         {/* Hero Section */}
-        <section className="py-20 bg-gradient-to-r from-primary/5 to-primary/10">
-          <div className="container-wide section-padding">
+        <section className="py-24 relative overflow-hidden bg-black">
+          <div className="absolute top-20 left-10 w-[500px] h-[500px] bg-gradient-to-r from-emerald-600/25 to-cyan-500/20 rounded-full blur-[150px] animate-pulse"></div>
+          <div className="absolute bottom-20 right-10 w-[400px] h-[400px] bg-gradient-to-r from-cyan-600/20 to-teal-500/15 rounded-full blur-[120px]"></div>
+          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-[size:80px_80px]"></div>
+          
+          <div className="container-wide section-padding relative z-10">
             <div className="text-center max-w-3xl mx-auto">
-              <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
+              <div className="inline-flex items-center gap-3 bg-gradient-to-r from-emerald-500/15 to-cyan-500/15 border border-emerald-500/30 text-emerald-400 px-6 py-3 rounded-full text-sm font-medium backdrop-blur-xl mb-8">
+                <Star className="w-4 h-4" />
+                Client Reviews
+              </div>
+              <h1 className="text-4xl md:text-6xl font-bold text-white mb-6" style={{fontFamily: "'Playfair Display', serif"}}>
                 Client Reviews &
-                <span className="text-primary"> Testimonials</span>
+                <br />
+                <span className="bg-gradient-to-r from-emerald-400 via-cyan-400 to-teal-400 bg-clip-text text-transparent"> Testimonials</span>
               </h1>
-              <p className="text-xl text-muted-foreground mb-8">
+              <p className="text-xl text-white/70 mb-8">
                 See what our clients say about working with LUNEXO MEDIA, and share your own experience.
               </p>
             </div>
@@ -76,13 +85,14 @@ const Reviews = () => {
         </section>
 
         {/* Review Submission Section */}
-        <section className="py-20 bg-white">
-          <div className="container-wide section-padding">
+        <section className="py-20 bg-black relative">
+          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-r from-emerald-600/15 to-cyan-500/15 rounded-full blur-[150px]"></div>
+          <div className="container-wide section-padding relative z-10">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-                Share Your Experience
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4" style={{fontFamily: "'Playfair Display', serif"}}>
+                Share Your <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">Experience</span>
               </h2>
-              <p className="text-xl text-muted-foreground">
+              <p className="text-xl text-white/70">
                 Your feedback helps us improve and helps others make informed decisions
               </p>
             </div>
@@ -91,34 +101,35 @@ const Reviews = () => {
         </section>
 
         {/* Existing Reviews */}
-        <section className="py-20 bg-muted/30">
-          <div className="container-wide section-padding">
+        <section className="py-20 bg-black relative">
+          <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-r from-cyan-600/15 to-teal-500/15 rounded-full blur-[150px]"></div>
+          <div className="container-wide section-padding relative z-10">
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-                What Our Clients Say
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4" style={{fontFamily: "'Playfair Display', serif"}}>
+                What Our <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">Clients Say</span>
               </h2>
-              <p className="text-xl text-muted-foreground">
+              <p className="text-xl text-white/70">
                 Real feedback from real clients who've worked with us
               </p>
             </div>
             
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
               {existingReviews.map((review) => (
-                <Card key={review.id} className="h-full">
+                <Card key={review.id} className="h-full bg-white/5 border-white/10 backdrop-blur-sm">
                   <CardContent className="p-6">
-                    <div className="flex items-center mb-4">
-                      <Quote className="w-8 h-8 text-primary mr-3" />
+                    <div className="flex items-center mb-4 text-emerald-400">
+                      <Quote className="w-8 h-8 text-emerald-400 mr-3" />
                       <div className="flex">{renderStars(review.rating)}</div>
                     </div>
                     
-                    <p className="text-muted-foreground mb-6 leading-relaxed">
+                    <p className="text-white/70 mb-6 leading-relaxed">
                       "{review.review}"
                     </p>
                     
-                    <div className="border-t pt-4">
-                      <div className="font-semibold text-foreground">{review.name}</div>
-                      <div className="text-sm text-muted-foreground">{review.company}</div>
-                      <div className="text-xs text-primary mt-1">{review.service}</div>
+                    <div className="border-t border-white/10 pt-4">
+                      <div className="font-semibold text-white">{review.name}</div>
+                      <div className="text-sm text-white/60">{review.company}</div>
+                      <div className="text-xs text-emerald-400 mt-1">{review.service}</div>
                     </div>
                   </CardContent>
                 </Card>
@@ -128,24 +139,27 @@ const Reviews = () => {
         </section>
 
         {/* CTA Section */}
-        <section className="py-20 bg-gradient-primary text-white">
-          <div className="container-wide section-padding text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Ready to Create Your Success Story?
+        <section className="py-24 relative overflow-hidden bg-black">
+          <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/15 via-transparent to-cyan-600/15"></div>
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-r from-emerald-500/25 to-cyan-500/25 rounded-full blur-[100px]"></div>
+          
+          <div className="container-wide section-padding text-center relative z-10">
+            <h2 className="text-3xl md:text-5xl font-bold mb-6 text-white" style={{fontFamily: "'Playfair Display', serif"}}>
+              Ready to Create Your <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">Success Story?</span>
             </h2>
-            <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
+            <p className="text-xl text-white/70 mb-8 max-w-2xl mx-auto">
               Join our satisfied clients and let us help you achieve your digital goals.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
                 href="/contact"
-                className="inline-flex items-center justify-center px-8 py-3 bg-white text-primary font-medium rounded-md hover:bg-white/90 transition-colors"
+                className="inline-flex items-center justify-center px-8 py-4 bg-[#C5FF4A] text-black font-semibold rounded-full hover:bg-[#d4ff6a] transition-colors shadow-2xl shadow-[#C5FF4A]/30"
               >
                 Get Started Today
               </a>
               <a
                 href="/portfolio"
-                className="inline-flex items-center justify-center px-8 py-3 border border-white/20 text-white font-medium rounded-md hover:bg-white/10 transition-colors"
+                className="inline-flex items-center justify-center px-8 py-4 border border-white/20 text-white font-medium rounded-full bg-white/5 hover:bg-white/10 transition-colors"
               >
                 View Our Work
               </a>

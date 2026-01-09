@@ -71,7 +71,7 @@ const Index = () => {
       .sort((a, b) => a.order - b.order), [content.testimonials]);
 
   return (
-    <div className="min-h-screen bg-[#f0f0f0] text-[#1a1a1a] overflow-hidden">
+    <div className="min-h-screen bg-black text-white overflow-hidden">
       <SEO
         title="Lunexo Media | Digital Marketing & Growth Solutions"
         description="Lunexo Media helps businesses grow with SEO, paid ads, web design, and AI automation. Get data-driven strategies to scale your brand."
@@ -83,40 +83,39 @@ const Index = () => {
       <Navigation />
       
       {/* Ultra Modern Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#1a1a2e]">
-        {/* Animated gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#1a1a2e]" />
-        
-        {/* Animated mesh gradient */}
-        <div 
-          className="absolute inset-0 opacity-30"
-          style={{
-            background: `radial-gradient(600px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(99, 102, 241, 0.15), transparent 40%)`
-          }}
-        />
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black">
+        {/* Emerald/Teal glow effects */}
+        <div className="absolute inset-0 bg-black">
+          <motion.div 
+            className="absolute w-[1000px] h-[1000px] rounded-full blur-[200px]"
+            style={{
+              background: 'radial-gradient(circle, rgba(16, 185, 129, 0.25) 0%, transparent 70%)',
+              left: '-10%',
+              top: '10%',
+            }}
+            animate={{
+              scale: [1, 1.1, 1],
+              opacity: [0.5, 0.7, 0.5]
+            }}
+            transition={{ duration: 8, repeat: Infinity }}
+          />
+          <motion.div 
+            className="absolute w-[800px] h-[800px] rounded-full blur-[200px]"
+            style={{
+              background: 'radial-gradient(circle, rgba(6, 182, 212, 0.2) 0%, transparent 70%)',
+              right: '-5%',
+              bottom: '0%',
+            }}
+            animate={{
+              scale: [1, 1.15, 1],
+              opacity: [0.4, 0.6, 0.4]
+            }}
+            transition={{ duration: 10, repeat: Infinity }}
+          />
+        </div>
         
         {/* Grid pattern */}
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.03)_1px,transparent_1px)] bg-[size:60px_60px]" />
-        
-        {/* Floating orbs */}
-        <motion.div 
-          className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-violet-600/25 to-indigo-600/25 rounded-full blur-3xl"
-          animate={{ 
-            x: [0, 50, 0], 
-            y: [0, 30, 0],
-            scale: [1, 1.1, 1]
-          }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.div 
-          className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gradient-to-r from-cyan-600/25 to-blue-600/25 rounded-full blur-3xl"
-          animate={{ 
-            x: [0, -40, 0], 
-            y: [0, -50, 0],
-            scale: [1, 1.2, 1]
-          }}
-          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-        />
         
         <div className="container-wide section-padding relative z-10 pt-24">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
@@ -319,9 +318,9 @@ const Index = () => {
       <TrustedBy />
 
       {/* Services Section - Ultra Modern */}
-      <section className="py-36 relative overflow-hidden bg-[#1a1a2e]">
+      <section className="py-36 relative overflow-hidden bg-black">
         {/* Background */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#1a1a2e] via-[#16213e] to-[#1a1a2e]" />
+        <div className="absolute inset-0 bg-black" />
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-[size:80px_80px]" />
         
         <div className="container-wide section-padding relative z-10">
