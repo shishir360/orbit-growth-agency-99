@@ -7,6 +7,7 @@ import SEO from "@/components/ui/seo";
 import ServiceSchema from "@/components/ui/service-schema";
 import FAQSchema from "@/components/ui/faq-schema";
 import BreadcrumbSEO from "@/components/ui/breadcrumb-seo";
+import { motion } from "framer-motion";
 import { 
   ArrowRight,
   ArrowUpRight,
@@ -245,20 +246,40 @@ const WebsiteDesign = () => {
             <div className="grid lg:grid-cols-2 gap-16 items-center">
               {/* Left Content */}
               <div className="space-y-8">
-                <div className="inline-flex items-center gap-2 bg-gray-100 text-gray-800 px-4 py-2 rounded-full text-sm font-medium">
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6 }}
+                  className="inline-flex items-center gap-2 bg-gray-100 text-gray-800 px-4 py-2 rounded-full text-sm font-medium"
+                >
                   <Sparkles className="w-4 h-4 text-black" />
                   Premium Web Design Agency
-                </div>
+                </motion.div>
 
-                <h1 className="text-5xl lg:text-7xl font-bold text-black leading-[1.1] tracking-tight">
+                <motion.h1 
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.7, delay: 0.1 }}
+                  className="text-5xl lg:text-7xl font-bold text-black leading-[1.1] tracking-tight"
+                >
                   Website Design and Development Services
-                </h1>
+                </motion.h1>
 
-                <p className="text-xl text-gray-600 leading-relaxed max-w-xl">
+                <motion.p 
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.7, delay: 0.2 }}
+                  className="text-xl text-gray-600 leading-relaxed max-w-xl"
+                >
                   Is your website confusing visitors instead of converting them? With the right mix of user experience and stunning design, you'll ignite growth. Let us take you there.
-                </p>
+                </motion.p>
 
-                <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                <motion.div 
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.7, delay: 0.3 }}
+                  className="flex flex-col sm:flex-row gap-4 pt-4"
+                >
                   <Button 
                     size="lg" 
                     className="bg-black text-white hover:bg-gray-900 text-lg px-8 py-7 rounded-full font-semibold group"
@@ -281,17 +302,22 @@ const WebsiteDesign = () => {
                       <ArrowUpRight className="w-5 h-5 ml-2" />
                     </Link>
                   </Button>
-                </div>
+                </motion.div>
 
                 {/* Quick Stats */}
-                <div className="flex items-center gap-8 pt-4">
+                <motion.div 
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.7, delay: 0.4 }}
+                  className="flex items-center gap-8 pt-4"
+                >
                   <div className="flex items-center gap-2">
                     <div className="flex -space-x-2">
                       {[1,2,3,4].map((i) => (
                         <div key={i} className="w-8 h-8 rounded-full bg-gray-300 border-2 border-white"></div>
                       ))}
                     </div>
-                    <span className="text-sm text-gray-600">300+ Happy Clients</span>
+                    <span className="text-sm text-gray-600">50+ Happy Clients</span>
                   </div>
                   <div className="flex items-center gap-1">
                     {[1,2,3,4,5].map((i) => (
@@ -299,11 +325,16 @@ const WebsiteDesign = () => {
                     ))}
                     <span className="text-sm text-gray-600 ml-1">4.9/5 Rating</span>
                   </div>
-                </div>
+                </motion.div>
               </div>
 
               {/* Right - Hero Image */}
-              <div className="relative">
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.95, x: 50 }}
+                animate={{ opacity: 1, scale: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="relative"
+              >
                 <div className="relative rounded-3xl overflow-hidden shadow-2xl">
                   <img 
                     src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80"
@@ -311,24 +342,34 @@ const WebsiteDesign = () => {
                     className="w-full h-[500px] object-cover"
                   />
                   {/* Overlay Card */}
-                  <div className="absolute bottom-6 left-6 right-6 bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-xl">
+                  <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.6 }}
+                    className="absolute bottom-6 left-6 right-6 bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-xl"
+                  >
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-sm text-gray-500 mb-1">Average ROI Increase</p>
                         <p className="text-3xl font-bold text-black">+340%</p>
                       </div>
-                      <div className="w-16 h-16 bg-black rounded-full flex items-center justify-center">
+                      <div className="w-16 h-16 bg-black rounded-full flex items-center justify-center cursor-pointer hover:scale-110 transition-transform">
                         <Play className="w-6 h-6 text-white fill-white ml-1" />
                       </div>
                     </div>
-                  </div>
+                  </motion.div>
                 </div>
 
                 {/* Floating Badge */}
-                <div className="absolute -top-4 -right-4 bg-black text-white px-6 py-3 rounded-full text-sm font-semibold shadow-lg">
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5, delay: 0.8, type: "spring" }}
+                  className="absolute -top-4 -right-4 bg-black text-white px-6 py-3 rounded-full text-sm font-semibold shadow-lg"
+                >
                   ✨ Award Winning
-                </div>
-              </div>
+                </motion.div>
+              </motion.div>
             </div>
           </div>
         </div>
@@ -394,7 +435,13 @@ const WebsiteDesign = () => {
         <div className="container mx-auto px-4 lg:px-8">
           <div className="max-w-6xl mx-auto">
             {/* Section Header */}
-            <div className="text-center mb-20">
+            <motion.div 
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.7 }}
+              className="text-center mb-20"
+            >
               <span className="inline-block text-sm font-semibold text-gray-500 uppercase tracking-widest mb-4">
                 Our Services
               </span>
@@ -404,13 +451,17 @@ const WebsiteDesign = () => {
               <p className="text-xl text-gray-600 max-w-2xl mx-auto">
                 Comprehensive web design and development services tailored to your unique business needs.
               </p>
-            </div>
+            </motion.div>
 
             {/* Services List */}
             <div className="space-y-0">
               {services.map((service, index) => (
-                <div 
+                <motion.div 
                   key={index}
+                  initial={{ opacity: 0, x: -30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
                   className={`group border-t border-gray-200 ${index === services.length - 1 ? 'border-b' : ''}`}
                   onMouseEnter={() => setActiveService(index)}
                 >
@@ -449,7 +500,7 @@ const WebsiteDesign = () => {
                       </div>
                     </div>
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>
@@ -566,7 +617,13 @@ const WebsiteDesign = () => {
         <div className="container mx-auto px-4 lg:px-8">
           <div className="max-w-6xl mx-auto">
             {/* Section Header */}
-            <div className="text-center mb-20">
+            <motion.div 
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7 }}
+              className="text-center mb-20"
+            >
               <span className="inline-block text-sm font-semibold text-gray-400 uppercase tracking-widest mb-4">
                 Our Process
               </span>
@@ -576,12 +633,19 @@ const WebsiteDesign = () => {
               <p className="text-xl text-gray-400 max-w-2xl mx-auto">
                 A proven methodology that delivers results consistently.
               </p>
-            </div>
+            </motion.div>
 
             {/* Process Steps */}
             <div className="grid lg:grid-cols-5 gap-8">
               {processSteps.map((process, index) => (
-                <div key={index} className="relative group">
+                <motion.div 
+                  key={index} 
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  className="relative group"
+                >
                   {/* Connector Line */}
                   {index < processSteps.length - 1 && (
                     <div className="hidden lg:block absolute top-8 left-1/2 w-full h-[2px] bg-gray-800"></div>
@@ -594,7 +658,7 @@ const WebsiteDesign = () => {
                     <h3 className="text-xl font-bold mb-3">{process.title}</h3>
                     <p className="text-gray-400 text-sm">{process.description}</p>
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>
@@ -606,20 +670,30 @@ const WebsiteDesign = () => {
         <div className="container mx-auto px-4 lg:px-8">
           <div className="max-w-6xl mx-auto">
             {/* Section Header */}
-            <div className="text-center mb-16">
+            <motion.div 
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7 }}
+              className="text-center mb-16"
+            >
               <span className="inline-block text-sm font-semibold text-gray-500 uppercase tracking-widest mb-4">
                 Industries
               </span>
               <h2 className="text-4xl lg:text-6xl font-bold text-black mb-6">
                 Expertise Across Sectors
               </h2>
-            </div>
+            </motion.div>
 
             {/* Industry Grid */}
             <div className="grid grid-cols-2 lg:grid-cols-6 gap-4">
               {industries.map((industry, index) => (
-                <div 
+                <motion.div 
                   key={index}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: index * 0.05 }}
                   className="group bg-gray-50 hover:bg-black rounded-2xl p-8 text-center transition-all duration-300 cursor-pointer"
                 >
                   <div className="w-12 h-12 rounded-full bg-white shadow-md flex items-center justify-center mx-auto mb-4 group-hover:bg-gray-100 transition-colors">
@@ -628,7 +702,7 @@ const WebsiteDesign = () => {
                   <p className="font-semibold text-black group-hover:text-white transition-colors">
                     {industry.name}
                   </p>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>
@@ -640,20 +714,30 @@ const WebsiteDesign = () => {
         <div className="container mx-auto px-4 lg:px-8">
           <div className="max-w-4xl mx-auto">
             {/* Section Header */}
-            <div className="text-center mb-16">
+            <motion.div 
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7 }}
+              className="text-center mb-16"
+            >
               <span className="inline-block text-sm font-semibold text-gray-500 uppercase tracking-widest mb-4">
                 FAQ
               </span>
               <h2 className="text-4xl lg:text-5xl font-bold text-black">
                 Frequently Asked Questions
               </h2>
-            </div>
+            </motion.div>
 
             {/* FAQ Items */}
             <div className="space-y-4">
               {faqs.map((faq, index) => (
-                <details 
+                <motion.details 
                   key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: index * 0.1 }}
                   className="group bg-white rounded-2xl border border-gray-200 overflow-hidden"
                 >
                   <summary className="flex items-center justify-between p-6 cursor-pointer list-none">
@@ -663,7 +747,7 @@ const WebsiteDesign = () => {
                   <div className="px-6 pb-6 text-gray-600">
                     {faq.answer}
                   </div>
-                </details>
+                </motion.details>
               ))}
             </div>
           </div>
@@ -671,9 +755,15 @@ const WebsiteDesign = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-32 bg-black text-white">
+      <section className="py-32 bg-black text-white overflow-hidden">
         <div className="container mx-auto px-4 lg:px-8">
-          <div className="max-w-4xl mx-auto text-center">
+          <motion.div 
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="max-w-4xl mx-auto text-center"
+          >
             <h2 className="text-4xl lg:text-6xl font-bold mb-6">
               Ready to Transform Your Digital Presence?
             </h2>
@@ -681,7 +771,13 @@ const WebsiteDesign = () => {
               Let's create something extraordinary together. Get a free consultation and see how we can help your business grow.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="flex flex-col sm:flex-row gap-4 justify-center"
+            >
               <Button 
                 size="lg"
                 className="bg-white text-black hover:bg-gray-100 text-lg px-10 py-7 rounded-full font-semibold group"
@@ -704,10 +800,16 @@ const WebsiteDesign = () => {
                   Book a Call
                 </Link>
               </Button>
-            </div>
+            </motion.div>
 
             {/* Trust Indicators */}
-            <div className="flex items-center justify-center gap-8 mt-12">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="flex flex-wrap items-center justify-center gap-8 mt-12"
+            >
               <div className="flex items-center gap-2 text-gray-400">
                 <Check className="w-5 h-5 text-green-500" />
                 Free Consultation
@@ -720,8 +822,8 @@ const WebsiteDesign = () => {
                 <Check className="w-5 h-5 text-green-500" />
                 Quick Turnaround
               </div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 
