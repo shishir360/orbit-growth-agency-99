@@ -114,7 +114,7 @@ const Pricing = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#f0f0f0]">
+    <div className="min-h-screen bg-black">
       <SEO
         title="Affordable Digital Marketing Packages | Lunexo Media Pricing"
         description="Transparent pricing for SEO, ads, website design, and AI automation."
@@ -126,14 +126,14 @@ const Pricing = () => {
       <Navigation />
       
       {/* Hero */}
-      <section className="relative py-32 overflow-hidden bg-[#1a1a2e]">
-        <div className="absolute top-20 left-10 w-[500px] h-[500px] bg-gradient-to-r from-blue-600/25 to-cyan-500/20 rounded-full blur-[150px] animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-[400px] h-[400px] bg-gradient-to-r from-purple-600/20 to-pink-500/15 rounded-full blur-[120px]"></div>
+      <section className="relative py-32 overflow-hidden bg-black">
+        <div className="absolute top-20 left-10 w-[500px] h-[500px] bg-gradient-to-r from-emerald-600/25 to-cyan-500/20 rounded-full blur-[150px] animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-[400px] h-[400px] bg-gradient-to-r from-cyan-600/20 to-teal-500/15 rounded-full blur-[120px]"></div>
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-[size:80px_80px]"></div>
         
         <div className="container-wide section-padding relative z-10">
           <div className="text-center max-w-4xl mx-auto">
-            <div className="inline-flex items-center gap-3 bg-gradient-to-r from-blue-500/15 to-cyan-500/15 border border-blue-500/30 text-blue-400 px-6 py-3 rounded-full text-sm font-medium backdrop-blur-xl mb-8">
+            <div className="inline-flex items-center gap-3 bg-gradient-to-r from-emerald-500/15 to-cyan-500/15 border border-emerald-500/30 text-emerald-400 px-6 py-3 rounded-full text-sm font-medium backdrop-blur-xl mb-8">
               <Sparkles className="w-4 h-4" />
               Transparent Pricing
             </div>
@@ -141,7 +141,7 @@ const Pricing = () => {
             <h1 className="text-4xl lg:text-7xl font-bold text-white mb-6" style={{fontFamily: "'Playfair Display', serif"}}>
               Simple
               <br />
-              <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-teal-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-emerald-400 via-cyan-400 to-teal-400 bg-clip-text text-transparent">
                 Pricing Plans
               </span>
             </h1>
@@ -159,8 +159,8 @@ const Pricing = () => {
                   size="sm"
                   className={`rounded-full transition-all duration-300 ${
                     selectedCategory === category
-                      ? "bg-gradient-to-r from-blue-500 to-cyan-500 text-white border-0"
-                      : "border-white/30 text-white/80 bg-white/10 hover:bg-white/20"
+                      ? "bg-[#C5FF4A] text-black border-0 font-semibold"
+                      : "border-white/20 text-white/80 bg-white/5 hover:bg-white/10"
                   }`}
                   onClick={() => setSelectedCategory(category)}
                 >
@@ -173,7 +173,7 @@ const Pricing = () => {
       </section>
 
       {/* Pricing Cards */}
-      <section className="py-24 relative bg-[#16213e]">
+      <section className="py-24 relative bg-black">
         <div className="container-wide section-padding space-y-24">
           {filteredServices.map((service) => (
             <div key={service.category}>
@@ -193,11 +193,11 @@ const Pricing = () => {
                   <div key={pkg.name} className={`relative group ${pkg.popular ? 'md:-mt-4 md:mb-4' : ''}`}>
                     <div className={`absolute inset-0 bg-gradient-to-r ${service.color} rounded-2xl blur-xl opacity-0 group-hover:opacity-25 transition-opacity duration-500`}></div>
                     
-                    <div className={`relative bg-white/10 border rounded-2xl p-8 backdrop-blur-sm transition-all duration-300 h-full ${
-                      pkg.popular ? 'border-blue-500/50 bg-white/15' : 'border-white/20 hover:bg-white/15'
+                    <div className={`relative bg-white/5 border rounded-2xl p-8 backdrop-blur-sm transition-all duration-300 h-full ${
+                      pkg.popular ? 'border-emerald-500/50 bg-white/10' : 'border-white/10 hover:bg-white/10'
                     }`}>
                       {pkg.popular && (
-                        <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-blue-500 to-cyan-500 text-white border-0">
+                        <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#C5FF4A] text-black border-0 font-semibold">
                           <Star className="w-3 h-3 mr-1" /> Popular
                         </Badge>
                       )}
@@ -222,8 +222,8 @@ const Pricing = () => {
                       
                       <Button asChild className={`w-full rounded-xl ${
                         pkg.popular 
-                          ? `bg-gradient-to-r ${service.color} text-white hover:opacity-90`
-                          : 'bg-white/15 text-white hover:bg-white/25 border border-white/20'
+                          ? `bg-[#C5FF4A] text-black hover:bg-[#d4ff6a] font-semibold`
+                          : 'bg-white/5 text-white hover:bg-white/10 border border-white/10'
                       }`}>
                         <Link to="/contact">
                           Get Started <ArrowRight className="w-4 h-4 ml-2" />
@@ -239,8 +239,8 @@ const Pricing = () => {
       </section>
 
       {/* Benefits */}
-      <section className="py-24 relative overflow-hidden bg-[#1a1a2e]">
-        <div className="absolute inset-0 bg-gradient-to-r from-green-600/10 via-transparent to-emerald-600/10"></div>
+      <section className="py-24 relative overflow-hidden bg-black">
+        <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/10 via-transparent to-cyan-600/10"></div>
         
         <div className="container-wide section-padding relative z-10">
           <div className="text-center mb-16">
@@ -255,7 +255,7 @@ const Pricing = () => {
               { icon: Zap, title: "Fast Implementation", desc: "Get started in 24-48 hours", color: "from-yellow-500 to-orange-500" },
               { icon: HeadphonesIcon, title: "Expert Support", desc: "Dedicated team for all clients", color: "from-blue-500 to-cyan-500" }
             ].map((benefit, i) => (
-              <div key={i} className="group bg-white/10 border border-white/20 rounded-2xl p-6 backdrop-blur-sm text-center hover:bg-white/15 transition-all">
+              <div key={i} className="group bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-sm text-center hover:bg-white/10 transition-all">
                 <div className={`w-14 h-14 bg-gradient-to-r ${benefit.color} rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:scale-110 transition-transform`}>
                   <benefit.icon className="w-7 h-7 text-white" />
                 </div>
@@ -268,19 +268,19 @@ const Pricing = () => {
       </section>
 
       {/* CTA */}
-      <section className="py-24 relative overflow-hidden bg-[#16213e]">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/15 via-transparent to-purple-600/15"></div>
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-r from-blue-500/25 to-cyan-500/25 rounded-full blur-[100px]"></div>
+      <section className="py-24 relative overflow-hidden bg-black">
+        <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/15 via-transparent to-cyan-600/15"></div>
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-r from-emerald-500/25 to-cyan-500/25 rounded-full blur-[100px]"></div>
         
         <div className="container-wide section-padding relative z-10">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-3xl lg:text-5xl font-bold text-white mb-6" style={{fontFamily: "'Playfair Display', serif"}}>
-              Need a <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">Custom Quote?</span>
+              Need a <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">Custom Quote?</span>
             </h2>
             <p className="text-lg text-white/60 mb-10">
               Let's discuss your specific requirements and create a tailored solution.
             </p>
-            <Button asChild size="lg" className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white hover:from-blue-600 hover:to-cyan-600 rounded-full px-10 py-7">
+            <Button asChild size="lg" className="bg-[#C5FF4A] hover:bg-[#d4ff6a] text-black rounded-full px-10 py-7 font-semibold shadow-2xl shadow-[#C5FF4A]/30">
               <Link to="/contact">
                 Get Custom Quote <ArrowRight className="w-4 h-4 ml-2" />
               </Link>
