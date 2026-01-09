@@ -434,8 +434,8 @@ const Index = () => {
 
       {/* Portfolio Showcase Section */}
       {portfolioProjects.length > 0 && imagesLoaded && (
-        <section className="py-32 relative overflow-hidden bg-[#16213e]">
-          <div className="absolute inset-0 bg-gradient-to-b from-[#16213e] via-[#1a1a2e] to-[#16213e]" />
+        <section className="py-32 relative overflow-hidden bg-black">
+          <div className="absolute inset-0 bg-black" />
           
           <div className="container-wide section-padding relative z-10">
             <div className="text-center mb-16">
