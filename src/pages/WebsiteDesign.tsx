@@ -32,29 +32,32 @@ import {
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 
-// Import client logos
-import apexLogo from "@/assets/logos/apex-logo.png";
-import forgeLogo from "@/assets/logos/forge-logo.png";
-import nexusLogo from "@/assets/logos/nexus-logo.png";
-import onyxLogo from "@/assets/logos/onyx-logo.png";
-import prismLogo from "@/assets/logos/prism-logo.png";
-import quantumLogo from "@/assets/logos/quantum-logo.png";
-import stellarLogo from "@/assets/logos/stellar-logo.png";
-import vertexLogo from "@/assets/logos/vertex-logo.png";
+interface TrustedLogo {
+  id: string;
+  name: string;
+  logo_url: string;
+  visible: boolean;
+}
 
 const WebsiteDesign = () => {
   const [activeService, setActiveService] = useState(0);
+  const [trustedLogos, setTrustedLogos] = useState<TrustedLogo[]>([]);
 
-  const clientLogos = [
-    { name: "Apex", logo: apexLogo },
-    { name: "Forge", logo: forgeLogo },
-    { name: "Nexus", logo: nexusLogo },
-    { name: "Onyx", logo: onyxLogo },
-    { name: "Prism", logo: prismLogo },
-    { name: "Quantum", logo: quantumLogo },
-    { name: "Stellar", logo: stellarLogo },
-    { name: "Vertex", logo: vertexLogo },
-  ];
+  // Fetch trusted logos from database
+  useEffect(() => {
+    const fetchLogos = async () => {
+      const { data, error } = await supabase
+        .from('trusted_logos')
+        .select('*')
+        .eq('visible', true)
+        .order('display_order', { ascending: true });
+      
+      if (data && !error) {
+        setTrustedLogos(data);
+      }
+    };
+    fetchLogos();
+  }, []);
 
   const services = [
     {
@@ -300,25 +303,34 @@ const WebsiteDesign = () => {
         </div>
       </section>
 
-      {/* Trusted By - Logo Marquee */}
-      <section className="py-16 bg-gray-50 border-y border-gray-200">
-        <div className="container mx-auto px-4">
-          <p className="text-center text-sm text-gray-500 uppercase tracking-widest mb-8 font-medium">
-            Trusted by 300+ Global Brands
-          </p>
-          
-          <div className="relative overflow-hidden">
-            <div className="flex animate-scroll gap-16">
-              {[...clientLogos, ...clientLogos].map((client, index) => (
-                <div key={index} className="flex-shrink-0 grayscale hover:grayscale-0 transition-all duration-300 opacity-60 hover:opacity-100">
-                  <img 
-                    src={client.logo} 
-                    alt={client.name}
-                    className="h-8 w-auto object-contain"
-                  />
-                </div>
-              ))}
-            </div>
+      {/* Trusted By - Logo Grid */}
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="max-w-6xl mx-auto">
+            <p className="text-center text-sm text-gray-500 uppercase tracking-[0.2em] mb-12 font-semibold">
+              Trusted by 50+ Global Brands
+            </p>
+            
+            {trustedLogos.length > 0 ? (
+              <div className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-8 lg:gap-12 items-center justify-items-center">
+                {trustedLogos.map((logo) => (
+                  <div 
+                    key={logo.id} 
+                    className="flex items-center justify-center h-12 w-full grayscale hover:grayscale-0 opacity-70 hover:opacity-100 transition-all duration-300"
+                  >
+                    <img 
+                      src={logo.logo_url} 
+                      alt={logo.name}
+                      className="max-h-10 max-w-[120px] w-auto object-contain"
+                    />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-center text-gray-400 text-sm">
+                Add logos from your admin panel at /admin-dashboard → Trusted Logos
+              </p>
+            )}
           </div>
         </div>
       </section>
