@@ -1020,7 +1020,7 @@ const AIAutomation = () => {
           >
             <Button 
               variant="outline" 
-              className="rounded-full border-white/20 text-white hover:bg-[#C5FF4A] hover:text-black hover:border-[#C5FF4A] transition-all duration-300 px-8"
+              className="rounded-full border-[#C5FF4A] text-[#C5FF4A] hover:bg-[#C5FF4A] hover:text-black hover:border-[#C5FF4A] transition-all duration-300 px-8"
               asChild
             >
               <Link to="/blog">
