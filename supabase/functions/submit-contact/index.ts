@@ -211,34 +211,22 @@ const handler = async (req: Request): Promise<Response> => {
       console.log("Admin notification sent to:", ADMIN_EMAIL);
     }
 
-    // Send WhatsApp notifications using templates (Meta 24-hour policy compliant)
+    // Send WhatsApp notifications using direct text messages
     try {
       const PHONE_ID = Deno.env.get("META_WHATSAPP_PHONE_ID");
       const ACCESS_TOKEN = Deno.env.get("META_WHATSAPP_ACCESS_TOKEN");
       const ADMIN_NUMBER = Deno.env.get("ADMIN_WHATSAPP_NUMBER");
 
       if (PHONE_ID && ACCESS_TOKEN && ADMIN_NUMBER) {
-        // Send template message to admin for new contact form submission
-        // Template: contact_form_alert with parameters: customer_name, email, message_preview
-        const messagePreview = message.length > 100 ? message.substring(0, 100) + '...' : message;
+        // Send direct text message to admin
+        const messagePreview = message.length > 200 ? message.substring(0, 200) + '...' : message;
         
         const adminWhatsAppPayload = {
           messaging_product: "whatsapp",
           to: ADMIN_NUMBER,
-          type: "template",
-          template: {
-            name: "contact_form_alert",
-            language: { code: "en" },
-            components: [
-              {
-                type: "body",
-                parameters: [
-                  { type: "text", text: name },
-                  { type: "text", text: email },
-                  { type: "text", text: messagePreview }
-                ]
-              }
-            ]
+          type: "text",
+          text: {
+            body: `🔔 *New Contact Form Submission!*\n\n👤 *Name:* ${name}\n📧 *Email:* ${email}${phone ? `\n📱 *Phone:* ${phone}` : ''}${company ? `\n🏢 *Company:* ${company}` : ''}\n\n💬 *Message:*\n${messagePreview}\n\n📅 *Submitted:* ${new Date().toLocaleString()}`
           }
         };
 
@@ -251,35 +239,25 @@ const handler = async (req: Request): Promise<Response> => {
           body: JSON.stringify(adminWhatsAppPayload),
         });
         const adminResult = await adminRes.json();
-        console.log("WhatsApp Admin template notification result:", JSON.stringify(adminResult));
+        console.log("WhatsApp Admin notification result:", JSON.stringify(adminResult));
 
-        // Send template message to user if phone number provided
+        // Try to send message to user if phone number provided
+        // Note: This will only work if user has messaged the business within 24 hours
+        // Otherwise, a pre-approved template is required
         if (phone) {
-          // Clean phone number - remove non-digits and handle Bangladesh format
+          // Clean phone number - remove non-digits and handle country codes
           let cleanPhone = phone.replace(/\D/g, '');
+          // If starts with 0, assume Bangladesh and add country code
           if (cleanPhone.startsWith('0')) {
             cleanPhone = '88' + cleanPhone;
           }
-          if (!cleanPhone.startsWith('88') && cleanPhone.length === 10) {
-            cleanPhone = '88' + cleanPhone;
-          }
 
-          // Template: contact_confirmation with parameter: customer_name
           const userWhatsAppPayload = {
             messaging_product: "whatsapp",
             to: cleanPhone,
-            type: "template",
-            template: {
-              name: "contact_confirmation",
-              language: { code: "en" },
-              components: [
-                {
-                  type: "body",
-                  parameters: [
-                    { type: "text", text: name }
-                  ]
-                }
-              ]
+            type: "text",
+            text: {
+              body: `Hi ${name}! 👋\n\nThank you for contacting Lunexo Media! We've received your message and our team will get back to you within 24 hours.\n\nIf you have any urgent questions, feel free to reply to this message.\n\nBest regards,\nLunexo Media Team 🚀`
             }
           };
 
@@ -292,7 +270,7 @@ const handler = async (req: Request): Promise<Response> => {
             body: JSON.stringify(userWhatsAppPayload),
           });
           const userResult = await userRes.json();
-          console.log("WhatsApp User template notification result:", JSON.stringify(userResult));
+          console.log("WhatsApp User notification result:", JSON.stringify(userResult));
         }
       }
     } catch (waError) {
