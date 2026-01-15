@@ -406,34 +406,28 @@ const Index = () => {
             </motion.p>
           </div>
           
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {[{
             icon: Globe,
             title: "Website Design",
             description: "Stunning, SEO-optimized websites that convert visitors into customers.",
             features: ["Custom Design", "SEO Optimization", "Mobile Responsive", "Fast Loading"],
-            gradient: "from-emerald-500 to-green-600",
-            glowColor: "rgba(16,185,129,0.2)",
             href: "/website-design"
           }, {
             icon: Target,
             title: "Ads Management",
             description: "Data-driven campaigns on Google, Facebook & TikTok that maximize ROI.",
             features: ["Multi-Platform", "ROI Focused", "Advanced Targeting", "Analytics"],
-            gradient: "from-blue-500 to-cyan-600",
-            glowColor: "rgba(59,130,246,0.2)",
             href: "/ads-management"
           }, {
             icon: Bot,
             title: "AI Automation",
             description: "Intelligent automation and chatbots that streamline your operations.",
             features: ["Custom AI Solutions", "Workflow Automation", "Chatbots", "Integration"],
-            gradient: "from-violet-500 to-purple-600",
-            glowColor: "rgba(139,92,246,0.2)",
             href: "/ai-automation"
           }].map((service, i) => <motion.div key={i} className="group relative" initial={{
             opacity: 0,
-            y: 60
+            y: 40
           }} whileInView={{
             opacity: 1,
             y: 0
@@ -441,35 +435,29 @@ const Index = () => {
             once: true,
             margin: "-100px"
           }} transition={{
-            duration: 0.6,
-            delay: i * 0.15,
+            duration: 0.5,
+            delay: i * 0.1,
             ease: [0.22, 1, 0.36, 1]
           }} whileHover={{
-            y: -10
+            y: -4
           }}>
-                <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-10 hover:border-white/20 transition-all duration-500 h-full group-hover:shadow-2xl" style={{
-              boxShadow: `0 0 60px ${service.glowColor}`
-            }}>
-                  <div className={`w-20 h-20 rounded-2xl bg-gradient-to-br ${service.gradient} flex items-center justify-center mb-8 shadow-lg`}>
-                    <service.icon className="w-10 h-10 text-white" />
+                <div className="relative bg-[#1c1c1c] border border-[#2e2e2e] rounded-lg p-8 hover:border-[#3e3e3e] transition-all duration-300 h-full">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-10 h-10 rounded-lg bg-[#2e2e2e] flex items-center justify-center">
+                      <service.icon className="w-5 h-5 text-[#3ECF8E]" />
+                    </div>
                   </div>
-                  <h3 className="text-3xl font-bold text-white mb-5" style={{
-                fontFamily: "'Playfair Display', serif"
-              }}>{service.title}</h3>
-                  <p className="text-white/50 mb-8 leading-relaxed text-lg">{service.description}</p>
-                  <ul className="space-y-4 mb-10">
-                    {service.features.map((feature, j) => <li key={j} className="flex items-center gap-4 text-white/70">
-                        <div className={`w-6 h-6 rounded-full bg-gradient-to-br ${service.gradient} flex items-center justify-center`}>
-                          <Check className="w-3.5 h-3.5 text-white" />
-                        </div>
-                        <span className="font-medium">{feature}</span>
+                  <h3 className="text-xl font-semibold text-white mb-3">{service.title}</h3>
+                  <p className="text-[#888888] mb-6 leading-relaxed text-sm">{service.description}</p>
+                  <ul className="space-y-3 mb-8">
+                    {service.features.map((feature, j) => <li key={j} className="flex items-center gap-3 text-[#888888] text-sm">
+                        <Check className="w-4 h-4 text-[#3ECF8E]" />
+                        <span>{feature}</span>
                       </li>)}
                   </ul>
-                  <Button asChild className={`w-full bg-gradient-to-r ${service.gradient} text-white hover:opacity-90 rounded-xl py-6 text-lg font-semibold shadow-lg transition-all duration-300`}>
-                    <Link to={service.href}>
-                      Learn More <ArrowRight className="w-5 h-5 ml-2" />
-                    </Link>
-                  </Button>
+                  <Link to={service.href} className="inline-flex items-center gap-2 text-[#3ECF8E] text-sm font-medium hover:underline transition-all">
+                    View Template <ArrowRight className="w-4 h-4" />
+                  </Link>
                 </div>
               </motion.div>)}
           </div>
