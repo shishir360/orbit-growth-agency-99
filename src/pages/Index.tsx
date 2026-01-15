@@ -65,7 +65,7 @@ const Index = () => {
     return () => clearInterval(interval);
   }, [portfolioProjects.length, imagesLoaded]);
   const visibleTestimonials = useMemo(() => content.testimonials.filter(testimonial => testimonial.visible).sort((a, b) => a.order - b.order), [content.testimonials]);
-  return <div className="min-h-screen bg-[#0a0a0f] text-white overflow-hidden">
+  return <div className="min-h-screen bg-[#1c1c1c] text-white overflow-hidden">
       <SEO title="Lunexo Media | Digital Marketing & Growth Solutions" description="Lunexo Media helps businesses grow with SEO, paid ads, web design, and AI automation. Get data-driven strategies to scale your brand." image="https://www.lunexomedia.com/og-image-new.jpg" url="https://www.lunexomedia.com" keywords="digital marketing, SEO services, Google ads, web design, AI automation, business growth, Lunexo Media" />
       
       <Navigation />
@@ -73,18 +73,18 @@ const Index = () => {
       {/* Ultra Modern Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
         {/* Animated gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0a0a0f] via-[#0f0f1a] to-[#0a0a0f]" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#1c1c1c] via-[#11181C] to-[#1c1c1c]" />
         
         {/* Animated mesh gradient */}
         <div className="absolute inset-0 opacity-30" style={{
-        background: `radial-gradient(600px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(99, 102, 241, 0.15), transparent 40%)`
+        background: `radial-gradient(600px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(62, 207, 142, 0.15), transparent 40%)`
       }} />
         
         {/* Grid pattern */}
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-[size:60px_60px]" />
         
         {/* Floating orbs */}
-        <motion.div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-violet-600/20 to-indigo-600/20 rounded-full blur-3xl" animate={{
+        <motion.div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-[#3ECF8E]/20 to-[#34B27B]/20 rounded-full blur-3xl" animate={{
         x: [0, 50, 0],
         y: [0, 30, 0],
         scale: [1, 1.1, 1]
@@ -93,7 +93,7 @@ const Index = () => {
         repeat: Infinity,
         ease: "easeInOut"
       }} />
-        <motion.div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gradient-to-r from-cyan-600/20 to-blue-600/20 rounded-full blur-3xl" animate={{
+        <motion.div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gradient-to-r from-[#3ECF8E]/15 to-[#2E9B6B]/15 rounded-full blur-3xl" animate={{
         x: [0, -40, 0],
         y: [0, -50, 0],
         scale: [1, 1.2, 1]
@@ -116,7 +116,7 @@ const Index = () => {
               y: 0
             }} transition={{
               duration: 0.6
-            }} className="inline-flex items-center gap-3 bg-white/5 backdrop-blur-xl border border-white/10 text-white/90 px-6 py-3 rounded-full text-sm font-medium mb-8 shadow-[0_0_30px_rgba(99,102,241,0.3)]">
+            }} className="inline-flex items-center gap-3 bg-white/5 backdrop-blur-xl border border-white/10 text-white/90 px-6 py-3 rounded-full text-sm font-medium mb-8 shadow-[0_0_30px_rgba(62,207,142,0.3)]">
                 <span className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
@@ -142,7 +142,7 @@ const Index = () => {
                   <TypeWriter text="We Build" delay={80} />
                 </span>
                 <br />
-                <span className="bg-gradient-to-r from-violet-400 via-indigo-400 to-cyan-400 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-[#3ECF8E] via-[#34B27B] to-[#2E9B6B] bg-clip-text text-transparent">
                   <TypeWriter text="Digital Empires" delay={80} />
                 </span>
               </motion.h1>
@@ -172,7 +172,7 @@ const Index = () => {
               duration: 0.6,
               delay: 0.5
             }} className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-10">
-                <Button asChild size="lg" className="group relative text-base px-10 py-7 bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:from-violet-500 hover:to-indigo-500 rounded-full transition-all duration-500 hover:scale-105 font-semibold shadow-[0_0_40px_rgba(99,102,241,0.4)] hover:shadow-[0_0_60px_rgba(99,102,241,0.6)]">
+                <Button asChild size="lg" className="group relative text-base px-10 py-7 bg-[#3ECF8E] text-[#1c1c1c] hover:bg-[#34B27B] rounded-full transition-all duration-500 hover:scale-105 font-semibold shadow-[0_0_40px_rgba(62,207,142,0.4)] hover:shadow-[0_0_60px_rgba(62,207,142,0.6)]">
                   <Link to="/contact" className="flex items-center gap-2">
                     <Rocket className="w-5 h-5" />
                     Start Your Project
@@ -257,7 +257,7 @@ const Index = () => {
             }} transition={{
               duration: 3,
               repeat: Infinity
-            }} className="absolute -bottom-4 -left-4 bg-gradient-to-r from-emerald-600 to-green-600 text-white px-4 py-2 rounded-xl text-sm font-semibold shadow-lg flex items-center gap-2">
+            }} className="absolute -bottom-4 -left-4 bg-[#3ECF8E] text-[#1c1c1c] px-4 py-2 rounded-xl text-sm font-semibold shadow-lg flex items-center gap-2">
                 <TrendingUp className="w-4 h-4" />
                 Live Results
               </motion.div>
@@ -268,7 +268,7 @@ const Index = () => {
               duration: 4,
               repeat: Infinity,
               delay: 1
-            }} className="absolute -top-4 -right-4 bg-gradient-to-r from-violet-600 to-indigo-600 text-white px-4 py-2 rounded-xl text-sm font-semibold shadow-lg flex items-center gap-2">
+            }} className="absolute -top-4 -right-4 bg-[#3ECF8E] text-[#1c1c1c] px-4 py-2 rounded-xl text-sm font-semibold shadow-lg flex items-center gap-2">
                 <Award className="w-4 h-4" />
                 Premium Quality
               </motion.div>
@@ -356,7 +356,7 @@ const Index = () => {
       {/* Services Section - Ultra Modern */}
       <section className="py-36 relative overflow-hidden">
         {/* Background */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0f] via-[#0f0f1a] to-[#0a0a0f]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#1c1c1c] via-[#11181C] to-[#1c1c1c]" />
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.01)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.01)_1px,transparent_1px)] bg-[size:80px_80px]" />
         
         <div className="container-wide section-padding relative z-10">
@@ -369,10 +369,10 @@ const Index = () => {
             y: 0
           }} viewport={{
             once: true
-          }} className="inline-flex items-center gap-3 bg-gradient-to-r from-violet-500/20 to-indigo-500/20 backdrop-blur-xl border border-violet-500/30 text-violet-300 px-6 py-3 rounded-full text-sm font-semibold mb-10">
+          }} className="inline-flex items-center gap-3 bg-gradient-to-r from-[#3ECF8E]/20 to-[#34B27B]/20 backdrop-blur-xl border border-[#3ECF8E]/30 text-[#3ECF8E] px-6 py-3 rounded-full text-sm font-semibold mb-10">
               <Layers className="w-5 h-5" />
               What We Do
-              <span className="w-2 h-2 bg-violet-400 rounded-full animate-pulse"></span>
+              <span className="w-2 h-2 bg-[#3ECF8E] rounded-full animate-pulse"></span>
             </motion.div>
             
             <motion.h2 initial={{
@@ -389,7 +389,7 @@ const Index = () => {
               <span className="bg-gradient-to-r from-white to-white/60 bg-clip-text text-transparent">
                 Services That{" "}
               </span>
-              <span className="bg-gradient-to-r from-violet-400 to-cyan-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-[#3ECF8E] to-[#34B27B] bg-clip-text text-transparent">
                 Scale
               </span>
             </motion.h2>
@@ -478,7 +478,7 @@ const Index = () => {
 
       {/* Portfolio Showcase Section */}
       {portfolioProjects.length > 0 && imagesLoaded && <section className="py-32 relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-b from-[#0f0f1a] via-[#0a0a0f] to-[#0f0f1a]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#11181C] via-[#1c1c1c] to-[#11181C]" />
           
           <div className="container-wide section-padding relative z-10">
             <div className="text-center mb-16">
@@ -490,10 +490,10 @@ const Index = () => {
             y: 0
           }} viewport={{
             once: true
-          }} className="inline-flex items-center gap-3 bg-gradient-to-r from-amber-500/20 to-orange-500/20 backdrop-blur-xl border border-amber-500/30 text-amber-300 px-6 py-3 rounded-full text-sm font-semibold mb-10">
+          }} className="inline-flex items-center gap-3 bg-gradient-to-r from-[#3ECF8E]/20 to-[#34B27B]/20 backdrop-blur-xl border border-[#3ECF8E]/30 text-[#3ECF8E] px-6 py-3 rounded-full text-sm font-semibold mb-10">
                 <Award className="w-5 h-5" />
                 Our Portfolio
-                <span className="w-2 h-2 bg-amber-400 rounded-full animate-pulse"></span>
+                <span className="w-2 h-2 bg-[#3ECF8E] rounded-full animate-pulse"></span>
               </motion.div>
               
               <motion.h2 initial={{
@@ -508,7 +508,7 @@ const Index = () => {
             fontFamily: "'Playfair Display', serif"
           }}>
                 <span className="bg-gradient-to-r from-white to-white/60 bg-clip-text text-transparent">Success </span>
-                <span className="bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">Stories</span>
+                <span className="bg-gradient-to-r from-[#3ECF8E] to-[#34B27B] bg-clip-text text-transparent">Stories</span>
               </motion.h2>
               
               <motion.p initial={{
@@ -544,7 +544,7 @@ const Index = () => {
                 duration: 0.8,
                 ease: [0.22, 1, 0.36, 1]
               }} className="absolute inset-0">
-                    <div className="absolute inset-0 bg-gradient-to-br from-violet-900/30 to-indigo-900/30">
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#3ECF8E]/20 to-[#1c1c1c]/30">
                       {portfolioProjects[currentProjectIndex]?.image_url && <img src={portfolioProjects[currentProjectIndex].image_url} alt={portfolioProjects[currentProjectIndex].title} className="w-full h-full object-cover" />}
                     </div>
                     
@@ -561,7 +561,7 @@ const Index = () => {
                     duration: 0.6,
                     delay: 0.3
                   }}>
-                        <div className="inline-flex items-center gap-2 bg-gradient-to-r from-violet-500 to-indigo-500 px-4 py-2 rounded-full text-sm text-white mb-4">
+                        <div className="inline-flex items-center gap-2 bg-[#3ECF8E] px-4 py-2 rounded-full text-sm text-[#1c1c1c] font-medium mb-4">
                           {portfolioProjects[currentProjectIndex]?.category}
                         </div>
                         
@@ -575,7 +575,7 @@ const Index = () => {
                           {portfolioProjects[currentProjectIndex]?.description}
                         </p>
                         
-                        <Button asChild className="bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:from-violet-500 hover:to-indigo-500 rounded-xl px-8 py-6 text-lg font-semibold shadow-lg">
+                        <Button asChild className="bg-[#3ECF8E] text-[#1c1c1c] hover:bg-[#34B27B] rounded-xl px-8 py-6 text-lg font-semibold shadow-lg">
                           <Link to={`/portfolio/${portfolioProjects[currentProjectIndex]?.slug}`}>
                             View Project <ArrowRight className="w-5 h-5 ml-2" />
                           </Link>
@@ -588,7 +588,7 @@ const Index = () => {
 
               {/* Project Indicators */}
               <div className="flex justify-center gap-3 mt-8">
-                {portfolioProjects.map((_, i) => <button key={i} onClick={() => setCurrentProjectIndex(i)} className={`h-2 rounded-full transition-all duration-500 ${i === currentProjectIndex ? 'w-12 bg-gradient-to-r from-violet-500 to-indigo-500' : 'w-2 bg-white/20 hover:bg-white/40'}`} />)}
+                {portfolioProjects.map((_, i) => <button key={i} onClick={() => setCurrentProjectIndex(i)} className={`h-2 rounded-full transition-all duration-500 ${i === currentProjectIndex ? 'w-12 bg-[#3ECF8E]' : 'w-2 bg-white/20 hover:bg-white/40'}`} />)}
               </div>
 
               {/* View All Button */}
@@ -605,7 +605,7 @@ const Index = () => {
 
       {/* Stats Section */}
       <section className="py-24 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-violet-900/20 via-indigo-900/20 to-violet-900/20" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#3ECF8E]/10 via-[#1c1c1c] to-[#3ECF8E]/10" />
         
         <div className="container-wide section-padding relative z-10">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
@@ -652,7 +652,7 @@ const Index = () => {
 
       {/* Why Choose Us */}
       <section className="py-32 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0f] via-[#0f0f1a] to-[#0a0a0f]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#1c1c1c] via-[#11181C] to-[#1c1c1c]" />
         
         <div className="container-wide section-padding relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -665,7 +665,7 @@ const Index = () => {
           }} viewport={{
             once: true
           }} className="space-y-8">
-              <div className="inline-flex items-center gap-3 bg-gradient-to-r from-emerald-500/20 to-green-500/20 backdrop-blur-xl border border-emerald-500/30 text-emerald-300 px-6 py-3 rounded-full text-sm font-medium">
+              <div className="inline-flex items-center gap-3 bg-gradient-to-r from-[#3ECF8E]/20 to-[#34B27B]/20 backdrop-blur-xl border border-[#3ECF8E]/30 text-[#3ECF8E] px-6 py-3 rounded-full text-sm font-medium">
                 <Shield className="w-4 h-4" />
                 Why Lunexo Media
               </div>
@@ -676,7 +676,7 @@ const Index = () => {
                 <span className="bg-gradient-to-r from-white to-white/60 bg-clip-text text-transparent">
                   <TypeWriter text="Built for " delay={60} />
                 </span>
-                <span className="bg-gradient-to-r from-emerald-400 to-green-400 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-[#3ECF8E] to-[#34B27B] bg-clip-text text-transparent">
                   <TypeWriter text="Success" delay={60} />
                 </span>
               </h2>
@@ -708,8 +708,8 @@ const Index = () => {
                 once: true
               }} transition={{
                 delay: i * 0.1
-              }} className="flex items-start gap-4 bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl p-4 hover:border-emerald-500/30 hover:bg-emerald-500/5 transition-all">
-                    <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center flex-shrink-0">
+              }} className="flex items-start gap-4 bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl p-4 hover:border-[#3ECF8E]/30 hover:bg-[#3ECF8E]/5 transition-all">
+                    <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#3ECF8E] to-[#34B27B] flex items-center justify-center flex-shrink-0">
                       <item.icon className="w-5 h-5 text-white" />
                     </div>
                     <div>
@@ -719,7 +719,7 @@ const Index = () => {
                   </motion.div>)}
               </div>
               
-              <Button asChild size="lg" className="bg-gradient-to-r from-emerald-600 to-green-600 text-white hover:from-emerald-500 hover:to-green-500 rounded-full px-8 shadow-lg">
+              <Button asChild size="lg" className="bg-[#3ECF8E] text-[#1c1c1c] hover:bg-[#34B27B] rounded-full px-8 shadow-lg font-semibold">
                 <Link to="/contact">
                   Get Started <ArrowRight className="w-4 h-4 ml-2" />
                 </Link>
@@ -745,7 +745,7 @@ const Index = () => {
             }} transition={{
               duration: 3,
               repeat: Infinity
-            }} className="absolute -top-6 -right-6 bg-gradient-to-r from-violet-600 to-indigo-600 text-white px-4 py-2 rounded-xl text-sm font-semibold shadow-lg flex items-center gap-2">
+            }} className="absolute -top-6 -right-6 bg-[#3ECF8E] text-[#1c1c1c] px-4 py-2 rounded-xl text-sm font-semibold shadow-lg flex items-center gap-2">
                 <TrendingUp className="w-4 h-4" />
                 +200% Growth
               </motion.div>
@@ -756,10 +756,10 @@ const Index = () => {
 
       {/* Testimonials - Infinite Scroll Animation */}
       {visibleTestimonials.length > 0 && <section className="py-32 relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-b from-[#0f0f1a] via-[#0a0a0f] to-[#0f0f1a]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#11181C] via-[#1c1c1c] to-[#11181C]" />
           
           {/* Gradient line top */}
-          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-500/30 to-transparent"></div>
+          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#3ECF8E]/30 to-transparent"></div>
           
           <div className="container-wide section-padding relative z-10">
             <div className="text-center mb-16">
@@ -771,8 +771,8 @@ const Index = () => {
             y: 0
           }} viewport={{
             once: true
-          }} className="inline-flex items-center gap-3 bg-gradient-to-r from-amber-500/20 to-yellow-500/20 backdrop-blur-xl border border-amber-500/30 text-amber-300 px-6 py-3 rounded-full text-sm font-medium mb-8">
-                <Star className="w-4 h-4 text-amber-400" />
+          }} className="inline-flex items-center gap-3 bg-gradient-to-r from-[#3ECF8E]/20 to-[#34B27B]/20 backdrop-blur-xl border border-[#3ECF8E]/30 text-[#3ECF8E] px-6 py-3 rounded-full text-sm font-medium mb-8">
+                <Star className="w-4 h-4 text-[#3ECF8E]" />
                 Client Reviews
               </motion.div>
               
@@ -790,7 +790,7 @@ const Index = () => {
                 <span className="bg-gradient-to-r from-white to-white/60 bg-clip-text text-transparent">
                   <TypeWriter text="What Clients " delay={60} />
                 </span>
-                <span className="bg-gradient-to-r from-amber-400 to-yellow-400 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-[#3ECF8E] to-[#34B27B] bg-clip-text text-transparent">
                   <TypeWriter text="Say" delay={60} />
                 </span>
               </motion.h2>
@@ -799,8 +799,8 @@ const Index = () => {
             {/* Infinite Scroll Testimonials */}
             <div className="relative overflow-hidden">
               {/* Gradient masks for smooth fade */}
-              <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#0a0a0f] to-transparent z-10"></div>
-              <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#0a0a0f] to-transparent z-10"></div>
+              <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#1c1c1c] to-transparent z-10"></div>
+              <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#1c1c1c] to-transparent z-10"></div>
               
               <motion.div className="flex gap-8" animate={{
             x: [0, -400 * visibleTestimonials.length]
@@ -828,15 +828,15 @@ const Index = () => {
                 delay: i * 0.3
               }}>
                       {/* Glow effect on hover */}
-                      <div className="absolute inset-0 bg-gradient-to-r from-amber-500/20 to-yellow-500/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-2xl"></div>
+                      <div className="absolute inset-0 bg-gradient-to-r from-[#3ECF8E]/20 to-[#34B27B]/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-2xl"></div>
                       
-                      <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 group-hover:border-amber-500/30 group-hover:bg-white/[0.08] transition-all duration-500 h-full">
+                      <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 group-hover:border-[#3ECF8E]/30 group-hover:bg-white/[0.08] transition-all duration-500 h-full">
                         <div className="flex gap-1 mb-4">
-                          {[...Array(5)].map((_, j) => <Star key={j} className="w-5 h-5 text-amber-400 fill-amber-400" />)}
+                          {[...Array(5)].map((_, j) => <Star key={j} className="w-5 h-5 text-[#3ECF8E] fill-[#3ECF8E]" />)}
                         </div>
                         <p className="text-white/60 leading-relaxed mb-6 line-clamp-4">"{testimonial.quote}"</p>
                         <div className="flex items-center gap-4">
-                          {testimonial.image && <img src={testimonial.image} alt={testimonial.author} className="w-12 h-12 rounded-full object-cover border-2 border-amber-500/30" />}
+                          {testimonial.image && <img src={testimonial.image} alt={testimonial.author} className="w-12 h-12 rounded-full object-cover border-2 border-[#3ECF8E]/30" />}
                           <div>
                             <div className="font-semibold text-white">{testimonial.author}</div>
                             <div className="text-white/40 text-sm">{testimonial.role}, {testimonial.company}</div>
@@ -850,7 +850,7 @@ const Index = () => {
             
             {/* Animated dots indicator */}
             <div className="flex justify-center items-center gap-2 mt-12">
-              {[...Array(4)].map((_, i) => <motion.div key={i} className={`rounded-full ${i === 0 ? 'w-8 h-1.5 bg-gradient-to-r from-amber-400 to-yellow-500' : 'w-1.5 h-1.5 bg-white/20'}`} animate={{
+              {[...Array(4)].map((_, i) => <motion.div key={i} className={`rounded-full ${i === 0 ? 'w-8 h-1.5 bg-[#3ECF8E]' : 'w-1.5 h-1.5 bg-white/20'}`} animate={{
             scale: i === 0 ? [1, 1.1, 1] : 1
           }} transition={{
             duration: 2,
@@ -860,26 +860,26 @@ const Index = () => {
           </div>
           
           {/* Gradient line bottom */}
-          <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-500/30 to-transparent"></div>
+          <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#3ECF8E]/30 to-transparent"></div>
         </section>}
 
       {/* CTA Section - Premium Full Screen */}
       <section className="min-h-screen flex items-center justify-center relative overflow-hidden">
         {/* Premium gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0a0a15] via-[#1a1a35] to-[#0a0a15]" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#1c1c1c] via-[#11181C] to-[#1c1c1c]" />
         
         {/* Animated mesh gradient */}
         <div className="absolute inset-0">
-          <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top_left,rgba(124,58,237,0.15),transparent_50%)]" />
-          <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,rgba(59,130,246,0.15),transparent_50%)]" />
-          <div className="absolute bottom-0 left-1/2 w-full h-full bg-[radial-gradient(ellipse_at_bottom,rgba(168,85,247,0.1),transparent_50%)]" />
+          <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top_left,rgba(62,207,142,0.15),transparent_50%)]" />
+          <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,rgba(52,178,123,0.12),transparent_50%)]" />
+          <div className="absolute bottom-0 left-1/2 w-full h-full bg-[radial-gradient(ellipse_at_bottom,rgba(62,207,142,0.08),transparent_50%)]" />
         </div>
         
         {/* Premium grid pattern */}
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.015)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.015)_1px,transparent_1px)] bg-[size:100px_100px]" />
         
         {/* Floating orbs with glow */}
-        <motion.div className="absolute top-1/4 left-1/6 w-[500px] h-[500px] bg-violet-600/10 rounded-full blur-[120px]" animate={{
+        <motion.div className="absolute top-1/4 left-1/6 w-[500px] h-[500px] bg-[#3ECF8E]/10 rounded-full blur-[120px]" animate={{
         x: [0, 80, 0],
         y: [0, 50, 0],
         scale: [1, 1.2, 1]
@@ -888,7 +888,7 @@ const Index = () => {
         repeat: Infinity,
         ease: "easeInOut"
       }} />
-        <motion.div className="absolute bottom-1/4 right-1/6 w-[400px] h-[400px] bg-cyan-500/10 rounded-full blur-[100px]" animate={{
+        <motion.div className="absolute bottom-1/4 right-1/6 w-[400px] h-[400px] bg-[#34B27B]/10 rounded-full blur-[100px]" animate={{
         x: [0, -60, 0],
         y: [0, -40, 0],
         scale: [1, 1.15, 1]
@@ -897,7 +897,7 @@ const Index = () => {
         repeat: Infinity,
         ease: "easeInOut"
       }} />
-        <motion.div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-500/5 rounded-full blur-[150px]" animate={{
+        <motion.div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#3ECF8E]/5 rounded-full blur-[150px]" animate={{
         scale: [1, 1.3, 1],
         opacity: [0.3, 0.6, 0.3]
       }} transition={{
@@ -934,7 +934,7 @@ const Index = () => {
             once: true
           }} transition={{
             duration: 0.6
-          }} className="inline-flex items-center gap-3 bg-gradient-to-r from-amber-500/20 to-orange-500/20 backdrop-blur-2xl border border-amber-500/30 text-amber-300 px-7 py-3.5 rounded-full text-sm font-semibold mb-12 shadow-[0_0_40px_rgba(251,191,36,0.15)]">
+          }} className="inline-flex items-center gap-3 bg-gradient-to-r from-[#3ECF8E]/20 to-[#34B27B]/20 backdrop-blur-2xl border border-[#3ECF8E]/30 text-[#3ECF8E] px-7 py-3.5 rounded-full text-sm font-semibold mb-12 shadow-[0_0_40px_rgba(62,207,142,0.15)]">
               <motion.div animate={{
               rotate: 360
             }} transition={{
@@ -945,7 +945,7 @@ const Index = () => {
                 <Sparkles className="w-5 h-5" />
               </motion.div>
               Ready to Transform?
-              <span className="w-2 h-2 bg-amber-400 rounded-full animate-pulse"></span>
+              <span className="w-2 h-2 bg-[#3ECF8E] rounded-full animate-pulse"></span>
             </motion.div>
             
             {/* Main heading with TypeWriter */}
@@ -966,7 +966,7 @@ const Index = () => {
               <span className="text-white block mb-4">
                 <TypeWriter text="Let's Build Your" delay={50} />
               </span>
-              <span className="bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-[#3ECF8E] via-[#34B27B] to-[#2E9B6B] bg-clip-text text-transparent">
                 <TypeWriter text="Digital Empire" delay={50} />
               </span>
             </motion.h2>
@@ -1000,7 +1000,7 @@ const Index = () => {
             duration: 0.6,
             delay: 0.6
           }} className="flex flex-col sm:flex-row gap-5 justify-center">
-              <Button asChild size="lg" className="group relative text-lg px-12 py-8 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white rounded-full transition-all duration-500 hover:scale-105 font-semibold shadow-[0_0_50px_rgba(139,92,246,0.4)] hover:shadow-[0_0_80px_rgba(139,92,246,0.6)] overflow-hidden">
+              <Button asChild size="lg" className="group relative text-lg px-12 py-8 bg-[#3ECF8E] hover:bg-[#34B27B] text-[#1c1c1c] rounded-full transition-all duration-500 hover:scale-105 font-semibold shadow-[0_0_50px_rgba(62,207,142,0.4)] hover:shadow-[0_0_80px_rgba(62,207,142,0.6)] overflow-hidden">
                 <Link to="/contact" className="flex items-center gap-3">
                   <span className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></span>
                   <Rocket className="w-6 h-6" />
@@ -1030,15 +1030,15 @@ const Index = () => {
             delay: 0.8
           }} className="mt-16 flex flex-wrap justify-center gap-8 text-white/40">
               <div className="flex items-center gap-2">
-                <Shield className="w-5 h-5 text-emerald-400" />
+                <Shield className="w-5 h-5 text-[#3ECF8E]" />
                 <span className="text-sm">100% Satisfaction</span>
               </div>
               <div className="flex items-center gap-2">
-                <Clock className="w-5 h-5 text-blue-400" />
+                <Clock className="w-5 h-5 text-[#3ECF8E]" />
                 <span className="text-sm">Fast Delivery</span>
               </div>
               <div className="flex items-center gap-2">
-                <Star className="w-5 h-5 text-amber-400" />
+                <Star className="w-5 h-5 text-[#3ECF8E]" />
                 <span className="text-sm">5-Star Rated</span>
               </div>
             </motion.div>
@@ -1046,7 +1046,7 @@ const Index = () => {
         </div>
         
         {/* Bottom gradient fade */}
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#0a0a0f] to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#1c1c1c] to-transparent" />
       </section>
 
       {/* Completed Clients Section */}
