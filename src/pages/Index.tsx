@@ -601,22 +601,26 @@ const Index = () => {
             value: "200%",
             label: "Avg Growth",
             icon: TrendingUp,
-            gradient: "from-emerald-500 to-green-600"
+            color: "#3ECF8E",
+            glow: "rgba(62, 207, 142, 0.4)"
           }, {
             value: "50+",
             label: "Happy Clients",
             icon: Users,
-            gradient: "from-blue-500 to-cyan-600"
+            color: "#3ECF8E",
+            glow: "rgba(62, 207, 142, 0.4)"
           }, {
             value: "10x",
             label: "ROI Achieved",
             icon: Award,
-            gradient: "from-violet-500 to-purple-600"
+            color: "#3ECF8E",
+            glow: "rgba(62, 207, 142, 0.4)"
           }, {
             value: "24/7",
             label: "Support",
             icon: Clock,
-            gradient: "from-amber-500 to-orange-600"
+            color: "#3ECF8E",
+            glow: "rgba(62, 207, 142, 0.4)"
           }].map((stat, i) => <motion.div key={i} initial={{
             opacity: 0,
             y: 30
@@ -627,12 +631,25 @@ const Index = () => {
             once: true
           }} transition={{
             delay: i * 0.1
-          }} className="group bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 hover:border-white/20 transition-all duration-300 text-center">
-                <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${stat.gradient} flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:scale-110 transition-transform`}>
-                  <stat.icon className="w-7 h-7 text-white" />
+          }} className="group relative bg-[#1c1c1c]/80 backdrop-blur-xl border border-[#2e2e2e] rounded-2xl p-8 hover:border-[#3ECF8E]/40 transition-all duration-500 text-center overflow-hidden" style={{ boxShadow: `0 0 0 rgba(62, 207, 142, 0)` }}>
+                {/* Subtle glow effect on hover */}
+                <div className="absolute inset-0 bg-gradient-to-br from-[#3ECF8E]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                
+                {/* Icon container */}
+                <div className="relative w-16 h-16 rounded-2xl bg-[#3ECF8E]/10 border border-[#3ECF8E]/20 flex items-center justify-center mx-auto mb-5 group-hover:scale-110 group-hover:shadow-[0_0_30px_rgba(62,207,142,0.3)] transition-all duration-500">
+                  <stat.icon className="w-8 h-8 text-[#3ECF8E]" />
                 </div>
-                <div className={`text-4xl font-bold bg-gradient-to-r ${stat.gradient} bg-clip-text text-transparent mb-2`}>{stat.value}</div>
-                <div className="text-white/40 text-sm">{stat.label}</div>
+                
+                {/* Value with glow */}
+                <div className="relative text-5xl font-bold text-[#3ECF8E] mb-2 tracking-tight" style={{ textShadow: '0 0 30px rgba(62, 207, 142, 0.5)' }}>
+                  {stat.value}
+                </div>
+                
+                {/* Label */}
+                <div className="text-white/50 text-sm font-medium uppercase tracking-wider">{stat.label}</div>
+                
+                {/* Bottom accent line */}
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-gradient-to-r from-transparent via-[#3ECF8E] to-transparent group-hover:w-full transition-all duration-500" />
               </motion.div>)}
           </div>
         </div>
