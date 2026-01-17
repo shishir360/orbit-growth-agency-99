@@ -152,11 +152,11 @@ const BlogCategories = () => {
                               </div>
                             </div>
                             <h3 className="text-xl font-space font-bold mb-3 group-hover:text-gradient transition-colors">
-                              <a href={`/blog/${post.slug}`}>{post.title}</a>
+                              <a href={`https://lunexomedia.com/blog/${post.slug}`}>{post.title}</a>
                             </h3>
                             <p className="text-muted-foreground mb-4 leading-relaxed">{post.excerpt}</p>
                             <Button variant="outline" size="sm" asChild className="hover:bg-primary/5 border-primary/20 hover:border-primary/40 transition-all">
-                              <a href={`/blog/${post.slug}`}>
+                              <a href={`https://lunexomedia.com/blog/${post.slug}`}>
                                 Read More
                                 <ArrowRight className="w-4 h-4 ml-2" />
                               </a>

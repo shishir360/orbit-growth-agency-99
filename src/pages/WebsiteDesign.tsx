@@ -286,10 +286,10 @@ const WebsiteDesign = () => {
                     className="bg-black text-white hover:bg-gray-900 text-lg px-8 py-7 rounded-full font-semibold group"
                     asChild
                   >
-                    <Link to="/contact">
+                    <a href="https://lunexomedia.com/contact">
                       Design My Website Now
                       <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-                    </Link>
+                    </a>
                   </Button>
                   
                   <Button 
@@ -298,10 +298,10 @@ const WebsiteDesign = () => {
                     className="border-2 border-gray-300 text-black hover:bg-gray-100 text-lg px-8 py-7 rounded-full font-semibold"
                     asChild
                   >
-                    <Link to="/portfolio">
+                    <a href="https://lunexomedia.com/portfolio">
                       View Our Work
                       <ArrowUpRight className="w-5 h-5 ml-2" />
-                    </Link>
+                    </a>
                   </Button>
                 </motion.div>
 
@@ -600,10 +600,10 @@ const WebsiteDesign = () => {
                   className="mt-6 lg:mt-0 border-2 border-black text-black hover:bg-black hover:text-white rounded-full px-8 transition-all duration-300"
                   asChild
                 >
-                  <Link to="/portfolio">
+                  <a href="https://lunexomedia.com/portfolio">
                     View All Projects
                     <ArrowRight className="w-4 h-4 ml-2" />
-                  </Link>
+                  </a>
                 </Button>
               </motion.div>
             </div>
@@ -923,10 +923,10 @@ const WebsiteDesign = () => {
                 className="bg-white text-black hover:bg-gray-100 text-lg px-10 py-7 rounded-full font-semibold group"
                 asChild
               >
-                <Link to="/contact">
+                <a href="https://lunexomedia.com/contact">
                   Start Your Project
                   <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-                </Link>
+                </a>
               </Button>
               
               <Button 
@@ -935,10 +935,10 @@ const WebsiteDesign = () => {
                 className="border-2 border-black text-black hover:bg-black hover:text-white text-lg px-10 py-7 rounded-full font-semibold transition-all duration-300"
                 asChild
               >
-                <Link to="/book-call">
+                <a href="https://lunexomedia.com/book-apartment">
                   <Clock className="w-5 h-5 mr-2" />
                   Book a Call
-                </Link>
+                </a>
               </Button>
             </motion.div>
 

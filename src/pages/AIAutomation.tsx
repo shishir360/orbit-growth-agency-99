@@ -830,7 +830,7 @@ const AIAutomation = () => {
                     className={`w-full rounded-full py-6 font-semibold transition-all duration-300 ${index === 1 ? 'bg-[#C5FF4A] text-black hover:bg-[#d4ff6a]' : 'bg-emerald-500/20 border border-emerald-500/50 text-emerald-400 hover:bg-emerald-500 hover:text-black'}`}
                     asChild
                   >
-                    <a href="/contact">
+                    <a href="https://lunexomedia.com/contact">
                       {plan.price === "Call" ? "Book a Call" : "Get started"}
                       <ArrowRight className="w-4 h-4 ml-2" />
                     </a>
@@ -925,7 +925,7 @@ const AIAutomation = () => {
               className="rounded-full border-[#C5FF4A]/50 text-[#C5FF4A] hover:bg-[#C5FF4A] hover:text-black transition-all duration-300 px-6"
               asChild
             >
-              <a href="/contact">
+              <a href="https://lunexomedia.com/contact">
                 Still have a question?
               </a>
             </Button>
@@ -1023,10 +1023,10 @@ const AIAutomation = () => {
               className="rounded-full border-[#C5FF4A] text-[#C5FF4A] hover:bg-[#C5FF4A] hover:text-black hover:border-[#C5FF4A] transition-all duration-300 px-8"
               asChild
             >
-              <Link to="/blog">
+              <a href="https://lunexomedia.com/blog">
                 View All Articles
                 <ArrowRight className="w-4 h-4 ml-2" />
-              </Link>
+              </a>
             </Button>
           </motion.div>
         </div>
@@ -1104,10 +1104,10 @@ const AIAutomation = () => {
                   className="mt-6 lg:mt-0 border-2 border-[#C5FF4A]/50 text-[#C5FF4A] hover:bg-[#C5FF4A] hover:text-black rounded-full px-8 transition-all duration-300"
                   asChild
                 >
-                  <Link to="/portfolio">
+                  <a href="https://lunexomedia.com/portfolio">
                     View All Projects
                     <ArrowRight className="w-4 h-4 ml-2" />
-                  </Link>
+                  </a>
                 </Button>
               </motion.div>
             </div>
@@ -1339,7 +1339,7 @@ const AIAutomation = () => {
                 className="bg-[#C5FF4A] hover:bg-[#d4ff6a] text-black text-lg px-12 py-7 rounded-full font-semibold shadow-2xl shadow-[#C5FF4A]/30 hover:shadow-[#C5FF4A]/50 transition-all duration-300 hover:scale-105 group"
                 asChild
               >
-                <a href="/contact">
+                <a href="https://lunexomedia.com/contact">
                   Get Automated Now
                   <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
                 </a>
@@ -1351,7 +1351,7 @@ const AIAutomation = () => {
                 className="text-lg px-12 py-7 rounded-full border-2 border-[#C5FF4A]/50 text-[#C5FF4A] hover:bg-[#C5FF4A] hover:text-black transition-all duration-300 hover:scale-105"
                 asChild
               >
-                <a href="/portfolio">
+                <a href="https://lunexomedia.com/portfolio">
                   View Our Work
                 </a>
               </Button>
