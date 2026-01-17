@@ -515,9 +515,9 @@ const AdsManagementLearnMore = () => {
                     variant={plan.popular ? 'default' : 'outline'}
                     asChild
                   >
-                    <Link to="/contact">
+                    <a href="https://lunexomedia.com/contact">
                       {plan.price === 'Custom' ? 'Contact Sales' : 'Get Started'}
-                    </Link>
+                    </a>
                   </Button>
                 </CardContent>
               </Card>
@@ -537,10 +537,10 @@ const AdsManagementLearnMore = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg" asChild>
-              <Link to="/book-apartment">Book Strategy Call</Link>
+              <a href="https://lunexomedia.com/book-apartment">Book Strategy Call</a>
             </Button>
             <Button size="lg" variant="outline" className="border-primary/20 hover:bg-primary hover:text-white" asChild>
-              <Link to="/portfolio">View Case Studies</Link>
+              <a href="https://lunexomedia.com/portfolio">View Case Studies</a>
             </Button>
           </div>
         </div>

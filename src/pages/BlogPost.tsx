@@ -350,7 +350,7 @@ const BlogPost = () => {
                         size="sm" 
                         className="w-full bg-gradient-primary text-white border-0 hover:shadow-glow transition-all"
                       >
-                        <a href="/contact">
+                        <a href="https://lunexomedia.com/contact">
                           Book Consultation
                         </a>
                       </Button>
@@ -417,10 +417,10 @@ const BlogPost = () => {
                   </div>
                   <CardContent className="p-6">
                     <h3 className="text-xl font-bold mb-4 group-hover:text-primary transition-colors">
-                      <a href={`/blog/${post.slug}`}>{post.title}</a>
+                      <a href={`https://lunexomedia.com/blog/${post.slug}`}>{post.title}</a>
                     </h3>
                     <Button variant="outline" size="sm" asChild>
-                      <a href={`/blog/${post.slug}`}>
+                      <a href={`https://lunexomedia.com/blog/${post.slug}`}>
                         Read Article
                       </a>
                     </Button>
@@ -487,7 +487,7 @@ const BlogPost = () => {
                   size="lg" 
                   className="bg-white text-primary hover:bg-white/90 border-0 shadow-glow transition-all duration-300 hover:scale-105 font-semibold px-8"
                 >
-                  <a href="/contact">
+                  <a href="https://lunexomedia.com/contact">
                     Book Your Free Consultation
                     <ArrowRight className="w-5 h-5 ml-2" />
                   </a>
@@ -498,7 +498,7 @@ const BlogPost = () => {
                   size="lg" 
                   className="border-white/30 text-white hover:bg-white/10 hover:border-white/50 transition-all duration-300"
                 >
-                  <a href="/portfolio">
+                  <a href="https://lunexomedia.com/portfolio">
                     See Our Success Stories
                   </a>
                 </Button>

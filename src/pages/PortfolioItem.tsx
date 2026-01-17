@@ -164,9 +164,9 @@ const PortfolioItem = () => {
                   </Button>
                 )}
                 <Button asChild variant="outline" size="lg" className="text-base px-8 py-7 border border-white/20 text-white bg-white/5 hover:bg-white/10 rounded-full transition-all duration-300 backdrop-blur-sm">
-                  <Link to="/contact">
+                  <a href="https://lunexomedia.com/contact">
                     Start Similar Project
-                  </Link>
+                  </a>
                 </Button>
               </div>
             </div>

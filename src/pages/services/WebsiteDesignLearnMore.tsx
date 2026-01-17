@@ -739,9 +739,9 @@ const WebsiteDesignLearnMore = () => {
                     variant={plan.popular ? 'default' : 'outline'}
                     asChild
                   >
-                    <Link to="/contact">
+                    <a href="https://lunexomedia.com/contact">
                       {plan.price === 'Custom' ? 'Contact Sales' : 'Get Started'}
-                    </Link>
+                    </a>
                   </Button>
                 </CardContent>
               </Card>
@@ -761,10 +761,10 @@ const WebsiteDesignLearnMore = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg" asChild>
-              <Link to="/contact">Start Your Project</Link>
+              <a href="https://lunexomedia.com/contact">Start Your Project</a>
             </Button>
             <Button size="lg" variant="outline" className="border-primary/20 hover:bg-primary hover:text-white" asChild>
-              <Link to="/portfolio">View Our Portfolio</Link>
+              <a href="https://lunexomedia.com/portfolio">View Our Portfolio</a>
             </Button>
           </div>
         </div>

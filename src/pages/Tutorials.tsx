@@ -261,7 +261,7 @@ const Tutorials = () => {
                     {tutorial.excerpt}
                   </p>
                   <Button variant="ghost" size="sm" className="group/btn p-0 h-auto" asChild>
-                    <a href={`/tutorials/${tutorial.slug}`}>
+                    <a href={`https://lunexomedia.com/tutorials/${tutorial.slug}`}>
                       Read Tutorial
                       <ArrowRight className="w-4 h-4 ml-1 group-hover/btn:translate-x-1 transition-transform" />
                     </a>
@@ -379,7 +379,7 @@ const Tutorials = () => {
                       </div>
                       
                       <Button variant="ghost" size="sm" className="group/btn" asChild>
-                        <a href={`/tutorials/${tutorial.slug}`}>
+                        <a href={`https://lunexomedia.com/tutorials/${tutorial.slug}`}>
                           Read Tutorial
                           <ArrowRight className="w-4 h-4 ml-1 group-hover/btn:translate-x-1 transition-transform" />
                         </a>

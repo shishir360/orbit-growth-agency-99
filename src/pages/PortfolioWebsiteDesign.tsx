@@ -253,10 +253,10 @@ const PortfolioWebsiteDesign = () => {
 
                   <div className="flex gap-4">
                     <Button className="flex-1 font-bold hover:scale-105 transition-all duration-300" asChild>
-                      <Link to={`/portfolio/${project.id}`}>
+                      <a href={`https://lunexomedia.com/portfolio/${project.id}`}>
                         View Case Study
                         <ArrowRight className="w-5 h-5 ml-2" />
-                      </Link>
+                      </a>
                     </Button>
                     
                     {project.liveUrl && (
