@@ -130,23 +130,43 @@ async function getFileUrl(fileId: string): Promise<string | null> {
   }
 }
 
-const INVOICE_PROMPT = `Analyze this invoice/receipt and extract the following information. Return ONLY a valid JSON object with these fields:
+const INVOICE_PROMPT = `Analyze this image carefully. It could be an invoice, receipt, payment screenshot, bank transfer confirmation, or any financial document.
+
+Look for:
+- Payment received/sent amounts
+- Transaction amounts
+- Balance changes
+- Any monetary values
+
+Return ONLY a valid JSON object with these fields:
 {
-  "type": "income" or "expense" (most receipts are expenses),
-  "amount": the total amount as a number (no currency symbols),
-  "currency": the currency code like "USD", "BDT", "EUR", "GBP", "INR" etc,
-  "purpose": a short description of what was purchased/paid (max 50 chars),
-  "details": additional details about the transaction (vendor name, items, date if visible)
+  "type": "income" or "expense" (payment received = income, payment sent/purchase = expense),
+  "amount": the main transaction amount as a number (no currency symbols),
+  "currency": the currency code like "USD", "BDT", "EUR", "GBP", "INR", "AED" etc,
+  "purpose": a short description of the transaction (max 50 chars),
+  "details": additional details (sender/receiver name, date, reference number if visible)
 }
 
 If you cannot determine a value, use these defaults:
 - type: "expense"
 - amount: 0
 - currency: "USD"
-- purpose: "Invoice"
+- purpose: "Transaction"
 - details: "Unable to extract details"
 
-Important: Return ONLY the JSON object, no markdown, no explanation.`;
+Important: Return ONLY the JSON object, no markdown, no explanation, no code blocks.`;
+
+// Helper function to convert ArrayBuffer to base64 in chunks
+function arrayBufferToBase64(buffer: ArrayBuffer): string {
+  const bytes = new Uint8Array(buffer);
+  let binary = '';
+  const chunkSize = 8192;
+  for (let i = 0; i < bytes.length; i += chunkSize) {
+    const chunk = bytes.slice(i, i + chunkSize);
+    binary += String.fromCharCode(...chunk);
+  }
+  return btoa(binary);
+}
 
 async function analyzeInvoiceImage(imageUrl: string): Promise<{
   type: 'income' | 'expense';
@@ -156,13 +176,29 @@ async function analyzeInvoiceImage(imageUrl: string): Promise<{
   details: string;
 } | null> {
   try {
-    // Download the image and convert to base64
+    console.log('Fetching image from:', imageUrl);
+    
+    // Download the image
     const imageResponse = await fetch(imageUrl);
+    if (!imageResponse.ok) {
+      console.error('Failed to fetch image:', imageResponse.status);
+      return null;
+    }
+    
     const imageBuffer = await imageResponse.arrayBuffer();
-    const base64Image = btoa(String.fromCharCode(...new Uint8Array(imageBuffer)));
+    console.log('Image size:', imageBuffer.byteLength, 'bytes');
+    
+    // Check if image is too large (limit to 4MB for base64)
+    if (imageBuffer.byteLength > 4 * 1024 * 1024) {
+      console.error('Image too large for processing');
+      return null;
+    }
+    
+    // Convert to base64 using chunked approach
+    const base64Image = arrayBufferToBase64(imageBuffer);
     const mimeType = imageResponse.headers.get('content-type') || 'image/jpeg';
     
-    console.log('Analyzing invoice image...');
+    console.log('Analyzing invoice image with AI...');
     
     const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
@@ -171,7 +207,7 @@ async function analyzeInvoiceImage(imageUrl: string): Promise<{
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'google/gemini-3-flash-preview',
+        model: 'google/gemini-2.5-flash',
         messages: [
           {
             role: 'user',
@@ -189,7 +225,8 @@ async function analyzeInvoiceImage(imageUrl: string): Promise<{
     });
 
     if (!response.ok) {
-      console.error('AI gateway error:', response.status);
+      const errorText = await response.text();
+      console.error('AI gateway error:', response.status, errorText);
       return null;
     }
 
