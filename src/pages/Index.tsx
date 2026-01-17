@@ -591,36 +591,32 @@ const Index = () => {
           </div>
         </section>}
 
-      {/* Stats Section */}
+      {/* Stats Section - Supabase Style */}
       <section className="py-24 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-[#3ECF8E]/5 via-[#0d0d0d] to-[#3ECF8E]/5" />
+        <div className="absolute inset-0 bg-[#0d0d0d]" />
         
         <div className="container-wide section-padding relative z-10">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[{
             value: "200%",
             label: "Avg Growth",
             icon: TrendingUp,
-            color: "#3ECF8E",
-            glow: "rgba(62, 207, 142, 0.4)"
+            features: ["Revenue boost", "Traffic increase"]
           }, {
             value: "50+",
             label: "Happy Clients",
             icon: Users,
-            color: "#3ECF8E",
-            glow: "rgba(62, 207, 142, 0.4)"
+            features: ["Global reach", "B2B & B2C"]
           }, {
             value: "10x",
             label: "ROI Achieved",
             icon: Award,
-            color: "#3ECF8E",
-            glow: "rgba(62, 207, 142, 0.4)"
+            features: ["Data-driven", "Optimized spend"]
           }, {
             value: "24/7",
             label: "Support",
             icon: Clock,
-            color: "#3ECF8E",
-            glow: "rgba(62, 207, 142, 0.4)"
+            features: ["Always available", "Quick response"]
           }].map((stat, i) => <motion.div key={i} initial={{
             opacity: 0,
             y: 30
@@ -631,25 +627,29 @@ const Index = () => {
             once: true
           }} transition={{
             delay: i * 0.1
-          }} className="group relative bg-[#1c1c1c]/80 backdrop-blur-xl border border-[#2e2e2e] rounded-2xl p-8 hover:border-[#3ECF8E]/40 transition-all duration-500 text-center overflow-hidden" style={{ boxShadow: `0 0 0 rgba(62, 207, 142, 0)` }}>
-                {/* Subtle glow effect on hover */}
-                <div className="absolute inset-0 bg-gradient-to-br from-[#3ECF8E]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                
+          }} whileHover={{ y: -4 }} className="group relative bg-[#161616] border border-[#262626] rounded-lg p-6 hover:border-[#333333] transition-all duration-300">
                 {/* Icon container */}
-                <div className="relative w-16 h-16 rounded-2xl bg-[#3ECF8E]/10 border border-[#3ECF8E]/20 flex items-center justify-center mx-auto mb-5 group-hover:scale-110 group-hover:shadow-[0_0_30px_rgba(62,207,142,0.3)] transition-all duration-500">
-                  <stat.icon className="w-8 h-8 text-[#3ECF8E]" />
+                <div className="w-10 h-10 rounded-lg bg-[#1e1e1e] flex items-center justify-center mb-5">
+                  <stat.icon className="w-5 h-5 text-[#3ECF8E]" />
                 </div>
                 
-                {/* Value with glow */}
-                <div className="relative text-5xl font-bold text-[#3ECF8E] mb-2 tracking-tight" style={{ textShadow: '0 0 30px rgba(62, 207, 142, 0.5)' }}>
+                {/* Value */}
+                <div className="text-3xl font-bold text-white mb-1">
                   {stat.value}
                 </div>
                 
                 {/* Label */}
-                <div className="text-white/50 text-sm font-medium uppercase tracking-wider">{stat.label}</div>
+                <div className="text-[#888888] text-sm mb-4">{stat.label}</div>
                 
-                {/* Bottom accent line */}
-                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-gradient-to-r from-transparent via-[#3ECF8E] to-transparent group-hover:w-full transition-all duration-500" />
+                {/* Feature list */}
+                <ul className="space-y-2">
+                  {stat.features.map((feature, j) => (
+                    <li key={j} className="flex items-center gap-2 text-[#888888] text-xs">
+                      <Check className="w-3.5 h-3.5 text-[#3ECF8E]" />
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
               </motion.div>)}
           </div>
         </div>
