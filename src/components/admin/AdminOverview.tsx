@@ -12,10 +12,29 @@ import {
   Globe,
   Wallet,
   ArrowUpRight,
-  ArrowDownRight
+  ArrowDownRight,
+  Clock
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { format, subMonths, startOfMonth, endOfMonth } from 'date-fns';
+
+interface Transaction {
+  id: string;
+  type: string;
+  amount: number;
+  amount_in_usd: number | null;
+  currency: string;
+  purpose: string;
+  created_at: string;
+}
+
+interface ChartData {
+  month: string;
+  income: number;
+  expenses: number;
+}
 
 const AdminOverview = () => {
   const navigate = useNavigate();
@@ -25,6 +44,8 @@ const AdminOverview = () => {
     monthlyExpenses: 0,
     loading: true
   });
+  const [recentTransactions, setRecentTransactions] = useState<Transaction[]>([]);
+  const [chartData, setChartData] = useState<ChartData[]>([]);
 
   useEffect(() => {
     fetchWalletData();
@@ -34,29 +55,66 @@ const AdminOverview = () => {
     try {
       const { data: transactions } = await supabase
         .from('wallet_transactions')
-        .select('*');
+        .select('*')
+        .order('created_at', { ascending: false });
       
       if (transactions) {
         const now = new Date();
-        const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+        const startOfCurrentMonth = new Date(now.getFullYear(), now.getMonth(), 1);
         
         let totalIncome = 0;
         let totalExpenses = 0;
         let monthlyIncome = 0;
         let monthlyExpenses = 0;
 
+        // Process transactions for totals
         transactions.forEach((t) => {
           const amountUsd = t.amount_in_usd || t.amount;
           const txDate = new Date(t.created_at);
           
           if (t.type === 'income') {
             totalIncome += amountUsd;
-            if (txDate >= startOfMonth) monthlyIncome += amountUsd;
+            if (txDate >= startOfCurrentMonth) monthlyIncome += amountUsd;
           } else {
             totalExpenses += amountUsd;
-            if (txDate >= startOfMonth) monthlyExpenses += amountUsd;
+            if (txDate >= startOfCurrentMonth) monthlyExpenses += amountUsd;
           }
         });
+
+        // Get last 5 transactions
+        setRecentTransactions(transactions.slice(0, 5));
+
+        // Build chart data for last 6 months
+        const monthlyData: ChartData[] = [];
+        for (let i = 5; i >= 0; i--) {
+          const monthDate = subMonths(now, i);
+          const monthStart = startOfMonth(monthDate);
+          const monthEnd = endOfMonth(monthDate);
+          
+          let monthIncome = 0;
+          let monthExpense = 0;
+          
+          transactions.forEach((t) => {
+            const txDate = new Date(t.created_at);
+            const amountUsd = t.amount_in_usd || t.amount;
+            
+            if (txDate >= monthStart && txDate <= monthEnd) {
+              if (t.type === 'income') {
+                monthIncome += amountUsd;
+              } else {
+                monthExpense += amountUsd;
+              }
+            }
+          });
+          
+          monthlyData.push({
+            month: format(monthDate, 'MMM'),
+            income: Math.round(monthIncome * 100) / 100,
+            expenses: Math.round(monthExpense * 100) / 100
+          });
+        }
+        
+        setChartData(monthlyData);
 
         setWalletData({
           totalBalance: totalIncome - totalExpenses,
@@ -85,6 +143,19 @@ const AdminOverview = () => {
     { action: 'Page updated', item: 'About Us', time: '1 day ago', type: 'page' },
     { action: 'Image uploaded', item: 'hero-banner.jpg', time: '2 days ago', type: 'image' },
   ];
+
+  const formatTimeAgo = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+    
+    if (diffMins < 60) return `${diffMins}m ago`;
+    if (diffHours < 24) return `${diffHours}h ago`;
+    return `${diffDays}d ago`;
+  };
 
   return (
     <div className="space-y-6">
@@ -163,6 +234,123 @@ const AdminOverview = () => {
           </div>
         </CardContent>
       </Card>
+
+      {/* Financial Chart and Recent Transactions */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Monthly Financial Chart */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <BarChart3 className="h-5 w-5 text-emerald-500" />
+              Income vs Expenses
+            </CardTitle>
+            <CardDescription>Last 6 months financial trend</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="h-[250px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id="incomeGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#10b981" stopOpacity={0.3}/>
+                      <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
+                    </linearGradient>
+                    <linearGradient id="expenseGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#ef4444" stopOpacity={0.3}/>
+                      <stop offset="95%" stopColor="#ef4444" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#333" opacity={0.3} />
+                  <XAxis dataKey="month" stroke="#888" fontSize={12} />
+                  <YAxis stroke="#888" fontSize={12} tickFormatter={(value) => `$${value}`} />
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: 'hsl(var(--card))', 
+                      border: '1px solid hsl(var(--border))',
+                      borderRadius: '8px'
+                    }}
+                    formatter={(value: number) => [`$${value.toFixed(2)}`, '']}
+                  />
+                  <Legend />
+                  <Area 
+                    type="monotone" 
+                    dataKey="income" 
+                    stroke="#10b981" 
+                    strokeWidth={2}
+                    fillOpacity={1} 
+                    fill="url(#incomeGradient)" 
+                    name="Income"
+                  />
+                  <Area 
+                    type="monotone" 
+                    dataKey="expenses" 
+                    stroke="#ef4444" 
+                    strokeWidth={2}
+                    fillOpacity={1} 
+                    fill="url(#expenseGradient)" 
+                    name="Expenses"
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Recent Transactions Widget */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Clock className="h-5 w-5 text-blue-500" />
+              Recent Transactions
+            </CardTitle>
+            <CardDescription>Last 5 wallet transactions</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {recentTransactions.length === 0 ? (
+                <p className="text-sm text-muted-foreground text-center py-8">No transactions yet</p>
+              ) : (
+                recentTransactions.map((tx) => (
+                  <div 
+                    key={tx.id} 
+                    className="flex items-center justify-between p-3 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className={`p-2 rounded-full ${tx.type === 'income' ? 'bg-emerald-500/10' : 'bg-red-500/10'}`}>
+                        {tx.type === 'income' ? (
+                          <ArrowUpRight className="h-4 w-4 text-emerald-500" />
+                        ) : (
+                          <ArrowDownRight className="h-4 w-4 text-red-500" />
+                        )}
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium truncate max-w-[150px]">{tx.purpose}</p>
+                        <p className="text-xs text-muted-foreground">{formatTimeAgo(tx.created_at)}</p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <p className={`text-sm font-semibold ${tx.type === 'income' ? 'text-emerald-500' : 'text-red-500'}`}>
+                        {tx.type === 'income' ? '+' : '-'}${(tx.amount_in_usd || tx.amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      </p>
+                      {tx.currency !== 'USD' && (
+                        <p className="text-xs text-muted-foreground">{tx.currency}</p>
+                      )}
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+            {recentTransactions.length > 0 && (
+              <button 
+                onClick={() => navigate('/admin-dashboard/wallet')}
+                className="w-full mt-4 py-2 text-sm text-emerald-500 hover:text-emerald-400 transition-colors"
+              >
+                View all transactions →
+              </button>
+            )}
+          </CardContent>
+        </Card>
+      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Recent Activity */}
