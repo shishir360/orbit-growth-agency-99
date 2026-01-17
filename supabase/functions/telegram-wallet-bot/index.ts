@@ -196,8 +196,23 @@ async function analyzeInvoiceImage(imageUrl: string): Promise<{
     
     // Convert to base64 using chunked approach
     const base64Image = arrayBufferToBase64(imageBuffer);
-    const mimeType = imageResponse.headers.get('content-type') || 'image/jpeg';
     
+    // Determine MIME type - Telegram often returns application/octet-stream, so detect from URL
+    let mimeType = imageResponse.headers.get('content-type') || 'image/jpeg';
+    if (mimeType === 'application/octet-stream') {
+      // Detect from URL extension
+      if (imageUrl.includes('.jpg') || imageUrl.includes('.jpeg')) {
+        mimeType = 'image/jpeg';
+      } else if (imageUrl.includes('.png')) {
+        mimeType = 'image/png';
+      } else if (imageUrl.includes('.webp')) {
+        mimeType = 'image/webp';
+      } else {
+        mimeType = 'image/jpeg'; // Default to JPEG for Telegram photos
+      }
+    }
+    
+    console.log('Detected MIME type:', mimeType);
     console.log('Analyzing invoice image with AI...');
     
     const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
