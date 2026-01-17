@@ -363,14 +363,14 @@ const ServicesExplore = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg" asChild>
-              <Link to="/contact">
+              <a href="https://lunexomedia.com/contact">
                 Book Free Consultation
-              </Link>
+              </a>
             </Button>
             <Button size="lg" variant="outline" className="border-primary/20 hover:bg-primary hover:text-white" asChild>
-              <Link to="/portfolio">
+              <a href="https://lunexomedia.com/portfolio">
                 View Our Work
-              </Link>
+              </a>
             </Button>
           </div>
         </div>

@@ -345,7 +345,7 @@ const Contact = () => {
               Book a free 15-minute strategy call with our team.
             </p>
             <Button asChild size="lg" className="bg-[#C5FF4A] hover:bg-[#d4ff6a] text-black rounded-full px-10 py-7 font-semibold shadow-2xl shadow-[#C5FF4A]/30">
-              <a href="/book-appointment">
+              <a href="https://lunexomedia.com/book-appointment">
                 Book a Call <ArrowRight className="w-4 h-4 ml-2" />
               </a>
             </Button>

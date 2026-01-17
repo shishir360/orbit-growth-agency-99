@@ -189,7 +189,7 @@ export const QuickActionCTA = () => {
             size="lg" 
             className="bg-white text-primary hover:bg-white/90 border-0 font-semibold"
           >
-            <a href="/contact">
+            <a href="https://lunexomedia.com/contact">
               Start Your Project Today
               <ArrowRight className="w-5 h-5 ml-2" />
             </a>
@@ -200,7 +200,7 @@ export const QuickActionCTA = () => {
             size="lg" 
             className="border-white/30 text-white hover:bg-white/10 hover:border-white/50"
           >
-            <a href="/pricing">
+            <a href="https://lunexomedia.com/pricing">
               View Our Packages
             </a>
           </Button>

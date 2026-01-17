@@ -10,64 +10,64 @@ const Sitemap = () => {
     {
       title: "Main Pages",
       links: [
-        { name: "Home", url: "/" },
-        { name: "About Us", url: "/about" },
-        { name: "Reviews", url: "/reviews" },
-        { name: "Contact Us", url: "/contact" },
-        { name: "Pricing", url: "/pricing" },
-        { name: "Terms & Conditions", url: "/terms" },
-        { name: "Privacy Policy", url: "/privacy" },
-        { name: "Portfolio", url: "/portfolio" }
+        { name: "Home", url: "https://lunexomedia.com/" },
+        { name: "About Us", url: "https://lunexomedia.com/about" },
+        { name: "Reviews", url: "https://lunexomedia.com/reviews" },
+        { name: "Contact Us", url: "https://lunexomedia.com/contact" },
+        { name: "Pricing", url: "https://lunexomedia.com/pricing" },
+        { name: "Terms & Conditions", url: "https://lunexomedia.com/terms" },
+        { name: "Privacy Policy", url: "https://lunexomedia.com/privacy" },
+        { name: "Portfolio", url: "https://lunexomedia.com/portfolio" }
       ]
     },
     {
       title: "Services",
       links: [
-        { name: "Website Design", url: "/website-design" },
-        { name: "Overview", url: "/services/website-design-learn-more" },
-        { name: "Why Choose Us", url: "/services/seo-friendly" },
-        { name: "Website Process", url: "/services/fast-loading" },
-        { name: "Portfolio", url: "/portfolio/website-design" },
-        { name: "Mobile Optimized", url: "/services/mobile-optimized" },
-        { name: "Website 101", url: "/services/conversion-focused" },
-        { name: "Our Guarantee", url: "/contact" }
+        { name: "Website Design", url: "https://lunexomedia.com/website-design" },
+        { name: "Overview", url: "https://lunexomedia.com/services/website-design-learn-more" },
+        { name: "Why Choose Us", url: "https://lunexomedia.com/services/seo-friendly" },
+        { name: "Website Process", url: "https://lunexomedia.com/services/fast-loading" },
+        { name: "Portfolio", url: "https://lunexomedia.com/portfolio/website-design" },
+        { name: "Mobile Optimized", url: "https://lunexomedia.com/services/mobile-optimized" },
+        { name: "Website 101", url: "https://lunexomedia.com/services/conversion-focused" },
+        { name: "Our Guarantee", url: "https://lunexomedia.com/contact" }
       ]
     },
     {
       title: "AI Automation",
       links: [
-        { name: "AI Automation", url: "/ai-automation" },
-        { name: "Overview", url: "/services/ai-automation-learn-more" },
-        { name: "AI Chatbots", url: "/services/ai-chatbots-learn-more" },
-        { name: "Voice Agents", url: "/services/voice-agents-learn-more" },
-        { name: "Email Automation", url: "/services/email-automation-learn-more" },
-        { name: "Workflow Automation", url: "/services/workflow-automation-learn-more" },
-        { name: "Portfolio", url: "/portfolio/ai-automation" },
-        { name: "AI 101", url: "/tutorials" }
+        { name: "AI Automation", url: "https://lunexomedia.com/ai-automation" },
+        { name: "Overview", url: "https://lunexomedia.com/services/ai-automation-learn-more" },
+        { name: "AI Chatbots", url: "https://lunexomedia.com/services/ai-chatbots-learn-more" },
+        { name: "Voice Agents", url: "https://lunexomedia.com/services/voice-agents-learn-more" },
+        { name: "Email Automation", url: "https://lunexomedia.com/services/email-automation-learn-more" },
+        { name: "Workflow Automation", url: "https://lunexomedia.com/services/workflow-automation-learn-more" },
+        { name: "Portfolio", url: "https://lunexomedia.com/portfolio/ai-automation" },
+        { name: "AI 101", url: "https://lunexomedia.com/tutorials" }
       ]
     },
     {
       title: "Ads Management",
       links: [
-        { name: "Ads Management", url: "/ads-management" },
-        { name: "Overview", url: "/services/ads-management-learn-more" },
-        { name: "Google Ads", url: "/ads-management" },
-        { name: "Facebook Ads", url: "/ads-management" },
-        { name: "Portfolio", url: "/portfolio/ads-management" },
-        { name: "Case Studies", url: "/case-study" },
-        { name: "Reviews", url: "/reviews" },
-        { name: "Our Guarantee", url: "/contact" }
+        { name: "Ads Management", url: "https://lunexomedia.com/ads-management" },
+        { name: "Overview", url: "https://lunexomedia.com/services/ads-management-learn-more" },
+        { name: "Google Ads", url: "https://lunexomedia.com/ads-management" },
+        { name: "Facebook Ads", url: "https://lunexomedia.com/ads-management" },
+        { name: "Portfolio", url: "https://lunexomedia.com/portfolio/ads-management" },
+        { name: "Case Studies", url: "https://lunexomedia.com/case-study" },
+        { name: "Reviews", url: "https://lunexomedia.com/reviews" },
+        { name: "Our Guarantee", url: "https://lunexomedia.com/contact" }
       ]
     },
     {
       title: "Resources",
       links: [
-        { name: "Blog", url: "/blog" },
-        { name: "Blog Categories", url: "/blog/categories" },
-        { name: "Tutorials", url: "/tutorials" },
-        { name: "Case Studies", url: "/case-study" },
-        { name: "Learn Platform", url: "/services/learn-platform" },
-        { name: "FAQs", url: "/contact" }
+        { name: "Blog", url: "https://lunexomedia.com/blog" },
+        { name: "Blog Categories", url: "https://lunexomedia.com/blog/categories" },
+        { name: "Tutorials", url: "https://lunexomedia.com/tutorials" },
+        { name: "Case Studies", url: "https://lunexomedia.com/case-study" },
+        { name: "Learn Platform", url: "https://lunexomedia.com/services/learn-platform" },
+        { name: "FAQs", url: "https://lunexomedia.com/contact" }
       ]
     }
   ];
@@ -136,12 +136,12 @@ const Sitemap = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" variant="secondary" asChild>
-                <a href="/contact">
+                <a href="https://lunexomedia.com/contact">
                   Get Started Today
                 </a>
               </Button>
               <Button size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10" asChild>
-                <a href="/pricing">
+                <a href="https://lunexomedia.com/pricing">
                   View Pricing
                 </a>
               </Button>
