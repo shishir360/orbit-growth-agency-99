@@ -65,7 +65,7 @@ const AdminWallet = () => {
   const [currencies, setCurrencies] = useState<Currency[]>([]);
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<'home' | 'history'>('home');
+  const [activeTab, setActiveTab] = useState<'home' | 'cards' | 'income' | 'savings' | 'history'>('home');
   const { toast } = useToast();
 
   const [form, setForm] = useState({
@@ -233,7 +233,13 @@ const AdminWallet = () => {
       {/* Header */}
       <div className="bg-[#f5f5f5] px-5 pt-6 pb-4">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-3xl font-bold text-gray-900">Money</h1>
+          <h1 className="text-3xl font-bold text-gray-900">
+            {activeTab === 'home' && 'Money'}
+            {activeTab === 'cards' && 'Cards'}
+            {activeTab === 'income' && 'Income'}
+            {activeTab === 'savings' && 'Savings'}
+            {activeTab === 'history' && 'History'}
+          </h1>
           <div className="flex items-center gap-3">
             <Button
               variant="ghost"
@@ -249,240 +255,390 @@ const AdminWallet = () => {
           </div>
         </div>
 
-        {/* Main Balance Card */}
-        <Card className="bg-white rounded-3xl shadow-sm border-0 mb-4">
-          <CardContent className="p-5">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-gray-600 text-base font-medium">Cash balance</span>
-              <button className="flex items-center gap-1 text-gray-400 text-sm">
-                Account & routing
-                <ChevronRight className="w-4 h-4" />
-              </button>
-            </div>
-            <div className="text-5xl font-bold text-gray-900 mb-6">
-              ${balanceUsd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </div>
+        {/* Home Tab Content */}
+        {activeTab === 'home' && (
+          <>
+            {/* Main Balance Card */}
+            <Card className="bg-white rounded-3xl shadow-sm border-0 mb-4">
+              <CardContent className="p-5">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-gray-600 text-base font-medium">Cash balance</span>
+                  <button className="flex items-center gap-1 text-gray-400 text-sm">
+                    Account & routing
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
+                <div className="text-5xl font-bold text-gray-900 mb-6">
+                  ${balanceUsd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </div>
 
-            {/* Action Buttons */}
-            <div className="grid grid-cols-2 gap-3">
-              <Dialog open={dialogOpen && form.type === 'income'} onOpenChange={(open) => {
-                setDialogOpen(open);
-                if (open) setForm(prev => ({ ...prev, type: 'income' }));
-              }}>
-                <DialogTrigger asChild>
-                  <Button 
-                    className="h-12 bg-[#f0f0f0] hover:bg-[#e5e5e5] text-gray-900 font-semibold border-0 rounded-full shadow-none"
-                  >
-                    Add Cash
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="bg-white border-gray-200 text-gray-900 max-w-md rounded-3xl">
-                  <DialogHeader>
-                    <DialogTitle className="flex items-center gap-2 text-gray-900">
-                      <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
-                        <ArrowDownLeft className="w-4 h-4 text-green-600" />
-                      </div>
-                      Add Income
-                    </DialogTitle>
-                  </DialogHeader>
-                  <TransactionForm 
-                    form={form} 
-                    setForm={setForm} 
-                    currencies={currencies}
-                    categories={categories.income}
-                    paymentMethods={paymentMethods}
-                    onSubmit={handleAddTransaction}
-                    onCancel={() => setDialogOpen(false)}
-                  />
-                </DialogContent>
-              </Dialog>
+                {/* Action Buttons */}
+                <div className="grid grid-cols-2 gap-3">
+                  <Dialog open={dialogOpen && form.type === 'income'} onOpenChange={(open) => {
+                    setDialogOpen(open);
+                    if (open) setForm(prev => ({ ...prev, type: 'income' }));
+                  }}>
+                    <DialogTrigger asChild>
+                      <Button 
+                        className="h-12 bg-[#f0f0f0] hover:bg-[#e5e5e5] text-gray-900 font-semibold border-0 rounded-full shadow-none"
+                      >
+                        Add Cash
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="bg-white border-gray-200 text-gray-900 max-w-md rounded-3xl">
+                      <DialogHeader>
+                        <DialogTitle className="flex items-center gap-2 text-gray-900">
+                          <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
+                            <ArrowDownLeft className="w-4 h-4 text-green-600" />
+                          </div>
+                          Add Income
+                        </DialogTitle>
+                      </DialogHeader>
+                      <TransactionForm 
+                        form={form} 
+                        setForm={setForm} 
+                        currencies={currencies}
+                        categories={categories.income}
+                        paymentMethods={paymentMethods}
+                        onSubmit={handleAddTransaction}
+                        onCancel={() => setDialogOpen(false)}
+                      />
+                    </DialogContent>
+                  </Dialog>
 
-              <Dialog open={dialogOpen && form.type === 'expense'} onOpenChange={(open) => {
-                setDialogOpen(open);
-                if (open) setForm(prev => ({ ...prev, type: 'expense' }));
-              }}>
-                <DialogTrigger asChild>
-                  <Button 
-                    className="h-12 bg-[#f0f0f0] hover:bg-[#e5e5e5] text-gray-900 font-semibold border-0 rounded-full shadow-none"
-                  >
-                    Cash Out
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="bg-white border-gray-200 text-gray-900 max-w-md rounded-3xl">
-                  <DialogHeader>
-                    <DialogTitle className="flex items-center gap-2 text-gray-900">
-                      <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center">
-                        <ArrowUpRight className="w-4 h-4 text-red-600" />
-                      </div>
-                      Add Expense
-                    </DialogTitle>
-                  </DialogHeader>
-                  <TransactionForm 
-                    form={form} 
-                    setForm={setForm} 
-                    currencies={currencies}
-                    categories={categories.expense}
-                    paymentMethods={paymentMethods}
-                    onSubmit={handleAddTransaction}
-                    onCancel={() => setDialogOpen(false)}
-                  />
-                </DialogContent>
-              </Dialog>
-            </div>
-          </CardContent>
-        </Card>
+                  <Dialog open={dialogOpen && form.type === 'expense'} onOpenChange={(open) => {
+                    setDialogOpen(open);
+                    if (open) setForm(prev => ({ ...prev, type: 'expense' }));
+                  }}>
+                    <DialogTrigger asChild>
+                      <Button 
+                        className="h-12 bg-[#f0f0f0] hover:bg-[#e5e5e5] text-gray-900 font-semibold border-0 rounded-full shadow-none"
+                      >
+                        Cash Out
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="bg-white border-gray-200 text-gray-900 max-w-md rounded-3xl">
+                      <DialogHeader>
+                        <DialogTitle className="flex items-center gap-2 text-gray-900">
+                          <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center">
+                            <ArrowUpRight className="w-4 h-4 text-red-600" />
+                          </div>
+                          Add Expense
+                        </DialogTitle>
+                      </DialogHeader>
+                      <TransactionForm 
+                        form={form} 
+                        setForm={setForm} 
+                        currencies={currencies}
+                        categories={categories.expense}
+                        paymentMethods={paymentMethods}
+                        onSubmit={handleAddTransaction}
+                        onCancel={() => setDialogOpen(false)}
+                      />
+                    </DialogContent>
+                  </Dialog>
+                </div>
+              </CardContent>
+            </Card>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-2 gap-3 mb-3">
-          {/* Income Card */}
-          <Card className="bg-white rounded-3xl shadow-sm border-0">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-gray-900 font-semibold">Income</span>
-                <ChevronRight className="w-4 h-4 text-gray-400" />
-              </div>
-              <div className="flex items-center gap-2 mb-3">
-                <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
-                  <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center">
-                    <Banknote className="w-3.5 h-3.5 text-white" />
+            {/* Stats Grid */}
+            <div className="grid grid-cols-2 gap-3 mb-3">
+              <Card className="bg-white rounded-3xl shadow-sm border-0 cursor-pointer hover:shadow-md transition-shadow" onClick={() => setActiveTab('income')}>
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-gray-900 font-semibold">Income</span>
+                    <ChevronRight className="w-4 h-4 text-gray-400" />
                   </div>
-                </div>
-              </div>
-              <div className="text-2xl font-bold text-gray-900">
-                ${totalIncomeUsd.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-              </div>
-              <p className="text-sm text-gray-500 mt-1">Total received</p>
-            </CardContent>
-          </Card>
-
-          {/* Expense Card */}
-          <Card className="bg-white rounded-3xl shadow-sm border-0">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-gray-900 font-semibold">Expense</span>
-                <ChevronRight className="w-4 h-4 text-gray-400" />
-              </div>
-              <div className="flex items-center gap-2 mb-3">
-                <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
-                  <Send className="w-5 h-5 text-blue-600" />
-                </div>
-              </div>
-              <div className="text-2xl font-bold text-gray-900">
-                ${totalExpenseUsd.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-              </div>
-              <p className="text-sm text-gray-500 mt-1">Total spent</p>
-            </CardContent>
-          </Card>
-        </div>
-
-        <div className="grid grid-cols-2 gap-3 mb-3">
-          {/* Monthly Income */}
-          <Card className="bg-white rounded-3xl shadow-sm border-0">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-gray-900 font-semibold">This Month</span>
-                <ChevronRight className="w-4 h-4 text-gray-400" />
-              </div>
-              <div className="flex items-center gap-2 mb-3">
-                <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center">
-                  <TrendingUp className="w-5 h-5 text-purple-600" />
-                </div>
-              </div>
-              <div className="text-2xl font-bold text-gray-900">
-                ${monthlyIncome.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-              </div>
-              <p className="text-sm text-green-600 mt-1">+{transactions.filter(t => t.type === 'income' && new Date(t.created_at).getMonth() === thisMonth).length} transactions</p>
-            </CardContent>
-          </Card>
-
-          {/* Currencies */}
-          <Card className="bg-white rounded-3xl shadow-sm border-0">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-gray-900 font-semibold">Currencies</span>
-                <ChevronRight className="w-4 h-4 text-gray-400" />
-              </div>
-              <div className="flex items-center gap-2 mb-3">
-                <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center">
-                  <Coins className="w-5 h-5 text-amber-600" />
-                </div>
-              </div>
-              <div className="text-2xl font-bold text-gray-900">
-                {currencies.length}
-              </div>
-              <p className="text-sm text-gray-500 mt-1">Supported</p>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Telegram Bot Card */}
-        <Card className="bg-white rounded-3xl shadow-sm border-0 mb-3">
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center">
-                  <Bot className="w-5 h-5 text-white" />
-                </div>
-                <div>
-                  <p className="text-gray-900 font-semibold">Telegram Bot</p>
-                  <p className="text-sm text-gray-500">Add transactions via chat</p>
-                </div>
-              </div>
-              <Badge className="bg-green-100 text-green-700 border-0">
-                Connected
-              </Badge>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Recent Transactions */}
-      <div className="px-5 pb-24">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-gray-900">Recent Activity</h2>
-          <span className="text-sm text-gray-500">{transactions.length} total</span>
-        </div>
-
-        <ScrollArea className="h-[350px]">
-          <div className="space-y-2">
-            {transactions.length === 0 ? (
-              <Card className="bg-white rounded-2xl shadow-sm border-0">
-                <CardContent className="py-12 text-center">
-                  <Wallet className="w-12 h-12 mx-auto mb-3 text-gray-300" />
-                  <p className="text-gray-500">No transactions yet</p>
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
+                      <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center">
+                        <Banknote className="w-3.5 h-3.5 text-white" />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="text-2xl font-bold text-gray-900">
+                    ${totalIncomeUsd.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                  </div>
+                  <p className="text-sm text-gray-500 mt-1">Total received</p>
                 </CardContent>
               </Card>
-            ) : (
-              transactions.slice(0, 10).map((transaction) => (
-                <TransactionItem
-                  key={transaction.id}
-                  transaction={transaction}
-                  getCurrencySymbol={getCurrencySymbol}
-                  onDelete={handleDeleteTransaction}
-                />
-              ))
-            )}
+
+              <Card className="bg-white rounded-3xl shadow-sm border-0 cursor-pointer hover:shadow-md transition-shadow" onClick={() => setActiveTab('history')}>
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-gray-900 font-semibold">Expense</span>
+                    <ChevronRight className="w-4 h-4 text-gray-400" />
+                  </div>
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+                      <Send className="w-5 h-5 text-blue-600" />
+                    </div>
+                  </div>
+                  <div className="text-2xl font-bold text-gray-900">
+                    ${totalExpenseUsd.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                  </div>
+                  <p className="text-sm text-gray-500 mt-1">Total spent</p>
+                </CardContent>
+              </Card>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3 mb-3">
+              <Card className="bg-white rounded-3xl shadow-sm border-0 cursor-pointer hover:shadow-md transition-shadow" onClick={() => setActiveTab('savings')}>
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-gray-900 font-semibold">This Month</span>
+                    <ChevronRight className="w-4 h-4 text-gray-400" />
+                  </div>
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center">
+                      <TrendingUp className="w-5 h-5 text-purple-600" />
+                    </div>
+                  </div>
+                  <div className="text-2xl font-bold text-gray-900">
+                    ${monthlyIncome.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                  </div>
+                  <p className="text-sm text-green-600 mt-1">+{transactions.filter(t => t.type === 'income' && new Date(t.created_at).getMonth() === thisMonth).length} transactions</p>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-white rounded-3xl shadow-sm border-0 cursor-pointer hover:shadow-md transition-shadow" onClick={() => setActiveTab('cards')}>
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-gray-900 font-semibold">Currencies</span>
+                    <ChevronRight className="w-4 h-4 text-gray-400" />
+                  </div>
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center">
+                      <Coins className="w-5 h-5 text-amber-600" />
+                    </div>
+                  </div>
+                  <div className="text-2xl font-bold text-gray-900">
+                    {currencies.length}
+                  </div>
+                  <p className="text-sm text-gray-500 mt-1">Supported</p>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Telegram Bot Card */}
+            <Card className="bg-white rounded-3xl shadow-sm border-0 mb-3">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center">
+                      <Bot className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <p className="text-gray-900 font-semibold">Telegram Bot</p>
+                      <p className="text-sm text-gray-500">Add transactions via chat</p>
+                    </div>
+                  </div>
+                  <Badge className="bg-green-100 text-green-700 border-0">
+                    Connected
+                  </Badge>
+                </div>
+              </CardContent>
+            </Card>
+          </>
+        )}
+
+        {/* Cards Tab - Currencies */}
+        {activeTab === 'cards' && (
+          <div className="space-y-3">
+            <Card className="bg-white rounded-3xl shadow-sm border-0 mb-4">
+              <CardContent className="p-5">
+                <p className="text-gray-600 text-sm mb-2">Supported Currencies</p>
+                <p className="text-3xl font-bold text-gray-900">{currencies.length}</p>
+              </CardContent>
+            </Card>
+            
+            <ScrollArea className="h-[500px]">
+              <div className="space-y-2">
+                {currencies.map((currency) => (
+                  <Card key={currency.id} className="bg-white rounded-2xl shadow-sm border-0">
+                    <CardContent className="p-4">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center text-xl font-bold text-gray-700">
+                            {currency.symbol}
+                          </div>
+                          <div>
+                            <p className="text-gray-900 font-semibold">{currency.code}</p>
+                            <p className="text-sm text-gray-500">{currency.name}</p>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-gray-900 font-medium">${currency.exchange_rate_to_usd.toFixed(4)}</p>
+                          <p className="text-xs text-gray-500">to USD</p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </ScrollArea>
           </div>
-        </ScrollArea>
+        )}
+
+        {/* Income Tab */}
+        {activeTab === 'income' && (
+          <div className="space-y-3">
+            <Card className="bg-white rounded-3xl shadow-sm border-0 mb-4">
+              <CardContent className="p-5">
+                <p className="text-gray-600 text-sm mb-2">Total Income</p>
+                <p className="text-4xl font-bold text-green-600">${totalIncomeUsd.toLocaleString('en-US', { minimumFractionDigits: 2 })}</p>
+                <p className="text-sm text-gray-500 mt-2">{transactions.filter(t => t.type === 'income').length} transactions</p>
+              </CardContent>
+            </Card>
+
+            <ScrollArea className="h-[450px]">
+              <div className="space-y-2">
+                {transactions.filter(t => t.type === 'income').length === 0 ? (
+                  <Card className="bg-white rounded-2xl shadow-sm border-0">
+                    <CardContent className="py-12 text-center">
+                      <ArrowDownLeft className="w-12 h-12 mx-auto mb-3 text-gray-300" />
+                      <p className="text-gray-500">No income yet</p>
+                    </CardContent>
+                  </Card>
+                ) : (
+                  transactions.filter(t => t.type === 'income').map((transaction) => (
+                    <TransactionItem
+                      key={transaction.id}
+                      transaction={transaction}
+                      getCurrencySymbol={getCurrencySymbol}
+                      onDelete={handleDeleteTransaction}
+                    />
+                  ))
+                )}
+              </div>
+            </ScrollArea>
+          </div>
+        )}
+
+        {/* Savings Tab - Monthly Stats */}
+        {activeTab === 'savings' && (
+          <div className="space-y-3">
+            <Card className="bg-white rounded-3xl shadow-sm border-0 mb-4">
+              <CardContent className="p-5">
+                <p className="text-gray-600 text-sm mb-2">Net Savings This Month</p>
+                <p className={cn(
+                  "text-4xl font-bold",
+                  (monthlyIncome - monthlyExpense) >= 0 ? "text-green-600" : "text-red-600"
+                )}>
+                  ${Math.abs(monthlyIncome - monthlyExpense).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                </p>
+                <p className="text-sm text-gray-500 mt-2">
+                  {(monthlyIncome - monthlyExpense) >= 0 ? 'You saved' : 'You overspent'}
+                </p>
+              </CardContent>
+            </Card>
+
+            <div className="grid grid-cols-2 gap-3">
+              <Card className="bg-green-50 rounded-2xl shadow-sm border-0">
+                <CardContent className="p-4 text-center">
+                  <ArrowDownLeft className="w-8 h-8 mx-auto mb-2 text-green-600" />
+                  <p className="text-2xl font-bold text-green-600">${monthlyIncome.toFixed(2)}</p>
+                  <p className="text-sm text-green-700">Income</p>
+                </CardContent>
+              </Card>
+              <Card className="bg-red-50 rounded-2xl shadow-sm border-0">
+                <CardContent className="p-4 text-center">
+                  <ArrowUpRight className="w-8 h-8 mx-auto mb-2 text-red-600" />
+                  <p className="text-2xl font-bold text-red-600">${monthlyExpense.toFixed(2)}</p>
+                  <p className="text-sm text-red-700">Expense</p>
+                </CardContent>
+              </Card>
+            </div>
+
+            <Card className="bg-white rounded-2xl shadow-sm border-0 mt-4">
+              <CardContent className="p-4">
+                <p className="text-gray-900 font-semibold mb-3">This Month's Activity</p>
+                <div className="space-y-2">
+                  {thisMonthTransactions.slice(0, 5).map((transaction) => (
+                    <TransactionItem
+                      key={transaction.id}
+                      transaction={transaction}
+                      getCurrencySymbol={getCurrencySymbol}
+                      onDelete={handleDeleteTransaction}
+                    />
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
+        {/* History Tab */}
+        {activeTab === 'history' && (
+          <div className="space-y-3">
+            <Card className="bg-white rounded-3xl shadow-sm border-0 mb-4">
+              <CardContent className="p-5">
+                <p className="text-gray-600 text-sm mb-2">All Transactions</p>
+                <p className="text-3xl font-bold text-gray-900">{transactions.length}</p>
+              </CardContent>
+            </Card>
+
+            <ScrollArea className="h-[500px]">
+              <div className="space-y-2">
+                {transactions.length === 0 ? (
+                  <Card className="bg-white rounded-2xl shadow-sm border-0">
+                    <CardContent className="py-12 text-center">
+                      <History className="w-12 h-12 mx-auto mb-3 text-gray-300" />
+                      <p className="text-gray-500">No history yet</p>
+                    </CardContent>
+                  </Card>
+                ) : (
+                  transactions.map((transaction) => (
+                    <TransactionItem
+                      key={transaction.id}
+                      transaction={transaction}
+                      getCurrencySymbol={getCurrencySymbol}
+                      onDelete={handleDeleteTransaction}
+                    />
+                  ))
+                )}
+              </div>
+            </ScrollArea>
+          </div>
+        )}
       </div>
 
       {/* Bottom Navigation */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 px-6 py-3 flex items-center justify-around">
-        <button className="flex flex-col items-center gap-1">
-          <DollarSign className="w-6 h-6 text-gray-900" />
-          <span className="text-xs text-gray-900 font-medium">${balanceUsd.toFixed(0)}</span>
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 px-6 py-3 flex items-center justify-around z-50">
+        <button 
+          onClick={() => setActiveTab('home')}
+          className={cn("flex flex-col items-center gap-1 transition-colors", activeTab === 'home' ? 'text-gray-900' : 'text-gray-400')}
+        >
+          <DollarSign className="w-6 h-6" />
+          <span className="text-xs font-medium">${balanceUsd.toFixed(0)}</span>
         </button>
-        <button className="flex flex-col items-center gap-1">
-          <CreditCard className="w-6 h-6 text-gray-400" />
+        <button 
+          onClick={() => setActiveTab('cards')}
+          className={cn("flex flex-col items-center gap-1 transition-colors", activeTab === 'cards' ? 'text-gray-900' : 'text-gray-400')}
+        >
+          <CreditCard className="w-6 h-6" />
+          <span className="text-xs">Cards</span>
         </button>
-        <button className="flex flex-col items-center gap-1">
-          <Banknote className="w-6 h-6 text-gray-400" />
+        <button 
+          onClick={() => setActiveTab('income')}
+          className={cn("flex flex-col items-center gap-1 transition-colors", activeTab === 'income' ? 'text-gray-900' : 'text-gray-400')}
+        >
+          <Banknote className="w-6 h-6" />
+          <span className="text-xs">Income</span>
         </button>
-        <button className="flex flex-col items-center gap-1">
-          <PiggyBank className="w-6 h-6 text-gray-400" />
+        <button 
+          onClick={() => setActiveTab('savings')}
+          className={cn("flex flex-col items-center gap-1 transition-colors", activeTab === 'savings' ? 'text-gray-900' : 'text-gray-400')}
+        >
+          <PiggyBank className="w-6 h-6" />
+          <span className="text-xs">Savings</span>
         </button>
-        <button className="flex flex-col items-center gap-1">
-          <History className="w-6 h-6 text-gray-400" />
+        <button 
+          onClick={() => setActiveTab('history')}
+          className={cn("flex flex-col items-center gap-1 transition-colors", activeTab === 'history' ? 'text-gray-900' : 'text-gray-400')}
+        >
+          <History className="w-6 h-6" />
+          <span className="text-xs">History</span>
         </button>
       </div>
     </div>
