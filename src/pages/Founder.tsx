@@ -106,13 +106,13 @@ const Founder = () => {
               {/* CTA */}
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
                 <Button asChild size="lg" className="group text-base px-10 py-7 bg-gradient-to-r from-blue-500 to-cyan-500 text-white hover:from-blue-600 hover:to-cyan-600 rounded-full transition-all duration-300 hover:scale-105 font-semibold shadow-lg shadow-blue-500/25">
-                  <a href="/book-appointment" className="flex items-center gap-2">
+                  <a href="https://lunexomedia.com/book-appointment" className="flex items-center gap-2">
                     Work With Me
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </a>
                 </Button>
                 <Button asChild variant="outline" size="lg" className="text-base px-10 py-7 border border-white/20 text-white bg-white/5 hover:bg-white/10 rounded-full transition-all duration-300 backdrop-blur-sm">
-                  <a href="/portfolio">
+                  <a href="https://lunexomedia.com/portfolio">
                     View My Work
                   </a>
                 </Button>
@@ -263,13 +263,13 @@ const Founder = () => {
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button asChild size="lg" className="group text-base px-10 py-7 bg-white text-black hover:bg-white/90 rounded-full transition-all duration-300 hover:scale-105 font-semibold">
-                <a href="/book-appointment" className="flex items-center gap-2">
+                <a href="https://lunexomedia.com/book-appointment" className="flex items-center gap-2">
                   Get In Touch
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </a>
               </Button>
               <Button asChild variant="outline" size="lg" className="text-base px-10 py-7 border border-white/20 text-white bg-white/5 hover:bg-white/10 rounded-full transition-all duration-300 backdrop-blur-sm">
-                <a href="/about">
+                <a href="https://lunexomedia.com/about">
                   About Lunexo Media
                 </a>
               </Button>

@@ -39,7 +39,7 @@ const ServiceCard = ({ title, description, icon, iconName, href, image }: Servic
         
         <div className="flex flex-col gap-2 sm:gap-3">
           <Button asChild size="sm" className="w-full justify-center text-xs sm:text-sm">
-            <a href="/contact" className="flex items-center">
+            <a href="https://lunexomedia.com/contact" className="flex items-center">
               <ShoppingCart className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
               Order Now
             </a>

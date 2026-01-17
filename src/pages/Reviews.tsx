@@ -152,13 +152,13 @@ const Reviews = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
-                href="/contact"
+                href="https://lunexomedia.com/contact"
                 className="inline-flex items-center justify-center px-8 py-4 bg-[#C5FF4A] text-black font-semibold rounded-full hover:bg-[#d4ff6a] transition-colors shadow-2xl shadow-[#C5FF4A]/30"
               >
                 Get Started Today
               </a>
               <a
-                href="/portfolio"
+                href="https://lunexomedia.com/portfolio"
                 className="inline-flex items-center justify-center px-8 py-4 border border-white/20 text-white font-medium rounded-full bg-white/5 hover:bg-white/10 transition-colors"
               >
                 View Our Work

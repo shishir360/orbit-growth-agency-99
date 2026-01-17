@@ -225,9 +225,9 @@ const Pricing = () => {
                           ? `bg-[#C5FF4A] text-black hover:bg-[#d4ff6a] font-semibold`
                           : 'bg-white/5 text-white hover:bg-white/10 border border-white/10'
                       }`}>
-                        <Link to="/contact">
+                        <a href="https://lunexomedia.com/contact">
                           Get Started <ArrowRight className="w-4 h-4 ml-2" />
-                        </Link>
+                        </a>
                       </Button>
                     </div>
                   </div>
@@ -281,9 +281,9 @@ const Pricing = () => {
               Let's discuss your specific requirements and create a tailored solution.
             </p>
             <Button asChild size="lg" className="bg-[#C5FF4A] hover:bg-[#d4ff6a] text-black rounded-full px-10 py-7 font-semibold shadow-2xl shadow-[#C5FF4A]/30">
-              <Link to="/contact">
+              <a href="https://lunexomedia.com/contact">
                 Get Custom Quote <ArrowRight className="w-4 h-4 ml-2" />
-              </Link>
+              </a>
             </Button>
           </div>
         </div>
