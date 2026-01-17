@@ -59,3 +59,18 @@ verify_jwt = true
 
 [functions.send-instagram-message]
 verify_jwt = true
+
+[functions.telegram-wallet-bot]
+verify_jwt = false
+
+[functions.post-to-social]
+verify_jwt = true
+
+[functions.send-welcome-email]
+verify_jwt = false
+
+[functions.send-admin-notification]
+verify_jwt = false
+
+[functions.telegram-setup]
+verify_jwt = true
