@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.75.0";
+import { Resend } from "npm:resend@2.0.0";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -8,8 +9,12 @@ const corsHeaders = {
 
 const TELEGRAM_BOT_TOKEN = Deno.env.get('TELEGRAM_BOT_TOKEN');
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL');
+const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
 const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
+const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY');
+const ADMIN_EMAIL = 'hello@lunexomedia.com';
 
+const resend = new Resend(RESEND_API_KEY);
 interface TelegramPhotoSize {
   file_id: string;
   file_unique_id: string;
@@ -415,6 +420,116 @@ async function saveTransaction(transaction: {
   return true;
 }
 
+async function sendInvoiceEmailNotification(invoiceData: {
+  type: 'income' | 'expense';
+  amount: number;
+  currency: string;
+  purpose: string;
+  details?: string;
+  amountInUsd: number;
+  source: 'image' | 'pdf';
+}): Promise<void> {
+  try {
+    const emoji = invoiceData.type === 'income' ? '📈' : '📉';
+    const typeColor = invoiceData.type === 'income' ? '#22c55e' : '#ef4444';
+    const currencySymbol = CURRENCY_PATTERNS[invoiceData.currency.toLowerCase()]?.symbol || '$';
+    
+    const emailHtml = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      </head>
+      <body style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; border-radius: 10px 10px 0 0;">
+          <h1 style="color: white; margin: 0; font-size: 24px;">${emoji} Invoice Processed via Telegram</h1>
+          <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0; font-size: 14px;">New ${invoiceData.source.toUpperCase()} invoice analyzed</p>
+        </div>
+        <div style="background: #ffffff; padding: 30px; border: 1px solid #e0e0e0; border-top: none; border-radius: 0 0 10px 10px;">
+          <table style="width: 100%; border-collapse: collapse;">
+            <tr>
+              <td style="padding: 12px 0; border-bottom: 1px solid #eee;">
+                <strong>Type:</strong>
+              </td>
+              <td style="padding: 12px 0; border-bottom: 1px solid #eee; text-align: right;">
+                <span style="background: ${typeColor}; color: white; padding: 4px 12px; border-radius: 12px; font-weight: bold;">
+                  ${invoiceData.type.toUpperCase()}
+                </span>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding: 12px 0; border-bottom: 1px solid #eee;">
+                <strong>Amount:</strong>
+              </td>
+              <td style="padding: 12px 0; border-bottom: 1px solid #eee; text-align: right; font-size: 18px; font-weight: bold;">
+                ${currencySymbol}${invoiceData.amount.toLocaleString()} ${invoiceData.currency}
+              </td>
+            </tr>
+            <tr>
+              <td style="padding: 12px 0; border-bottom: 1px solid #eee;">
+                <strong>USD Value:</strong>
+              </td>
+              <td style="padding: 12px 0; border-bottom: 1px solid #eee; text-align: right;">
+                ~$${invoiceData.amountInUsd.toFixed(2)}
+              </td>
+            </tr>
+            <tr>
+              <td style="padding: 12px 0; border-bottom: 1px solid #eee;">
+                <strong>Purpose:</strong>
+              </td>
+              <td style="padding: 12px 0; border-bottom: 1px solid #eee; text-align: right;">
+                ${invoiceData.purpose}
+              </td>
+            </tr>
+            ${invoiceData.details ? `
+            <tr>
+              <td style="padding: 12px 0; border-bottom: 1px solid #eee;">
+                <strong>Details:</strong>
+              </td>
+              <td style="padding: 12px 0; border-bottom: 1px solid #eee; text-align: right;">
+                ${invoiceData.details}
+              </td>
+            </tr>
+            ` : ''}
+            <tr>
+              <td style="padding: 12px 0;">
+                <strong>Source:</strong>
+              </td>
+              <td style="padding: 12px 0; text-align: right;">
+                Telegram ${invoiceData.source === 'pdf' ? '📄 PDF' : '📸 Photo'}
+              </td>
+            </tr>
+          </table>
+          
+          <div style="margin-top: 20px; padding: 15px; background: #f8fafc; border-radius: 8px; text-align: center;">
+            <p style="margin: 0; color: #64748b; font-size: 14px;">
+              ✅ This transaction has been automatically saved to your wallet.
+            </p>
+          </div>
+        </div>
+        <div style="text-align: center; padding: 20px; color: #888; font-size: 12px;">
+          <p>Lunexo Media Wallet Bot</p>
+          <p>Processed at: ${new Date().toLocaleString()}</p>
+        </div>
+      </body>
+      </html>
+    `;
+
+    await resend.emails.send({
+      from: 'Lunexo Media <hello@lunexomedia.com>',
+      to: [ADMIN_EMAIL],
+      subject: `${emoji} Invoice Processed: ${currencySymbol}${invoiceData.amount.toLocaleString()} ${invoiceData.currency} (${invoiceData.type})`,
+      html: emailHtml,
+    });
+
+    console.log('Invoice email notification sent successfully');
+  } catch (error) {
+    console.error('Error sending invoice email notification:', error);
+    // Don't throw - email failure shouldn't break the flow
+  }
+}
+
 async function getWalletSummary(): Promise<{ income: number; expense: number; balance: number }> {
   const supabase = createClient(SUPABASE_URL!, SUPABASE_SERVICE_ROLE_KEY!);
   
@@ -482,6 +597,9 @@ I couldn't read the invoice clearly. Please try:
     const exchangeRate = await getExchangeRate(invoiceData.currency);
     const amountInUsd = invoiceData.amount * exchangeRate;
     
+    // Get updated wallet summary
+    const summary = await getWalletSummary();
+    
     const emoji = invoiceData.type === 'income' ? '📈' : '📉';
     const color = invoiceData.type === 'income' ? '🟢' : '🔴';
     
@@ -494,9 +612,27 @@ ${color} Type: ${invoiceData.type.toUpperCase()}
 📝 Purpose: ${invoiceData.purpose}
 ${invoiceData.details ? `📋 Details: ${invoiceData.details}` : ''}
 
+━━━━━━━━━━━━━━━
+💰 <b>Wallet Summary</b>
+📈 Total Income: <code>$${summary.income.toFixed(2)}</code>
+📉 Total Expense: <code>$${summary.expense.toFixed(2)}</code>
+💵 Balance: <code>$${summary.balance.toFixed(2)}</code>
+
 ✅ Added to your wallet!
+📧 Email notification sent!
     `;
     await sendTelegramMessage(chatId, confirmText);
+    
+    // Send email notification
+    await sendInvoiceEmailNotification({
+      type: invoiceData.type,
+      amount: invoiceData.amount,
+      currency: invoiceData.currency,
+      purpose: invoiceData.purpose,
+      details: invoiceData.details,
+      amountInUsd,
+      source: 'image',
+    });
   } else {
     await sendTelegramMessage(chatId, '❌ Failed to save transaction. Please try again.');
   }
@@ -552,6 +688,9 @@ I couldn't read the PDF clearly. Please try:
     const exchangeRate = await getExchangeRate(invoiceData.currency);
     const amountInUsd = invoiceData.amount * exchangeRate;
     
+    // Get updated wallet summary
+    const summary = await getWalletSummary();
+    
     const emoji = invoiceData.type === 'income' ? '📈' : '📉';
     const color = invoiceData.type === 'income' ? '🟢' : '🔴';
     
@@ -564,9 +703,27 @@ ${color} Type: ${invoiceData.type.toUpperCase()}
 📝 Purpose: ${invoiceData.purpose}
 ${invoiceData.details ? `📋 Details: ${invoiceData.details}` : ''}
 
+━━━━━━━━━━━━━━━
+💰 <b>Wallet Summary</b>
+📈 Total Income: <code>$${summary.income.toFixed(2)}</code>
+📉 Total Expense: <code>$${summary.expense.toFixed(2)}</code>
+💵 Balance: <code>$${summary.balance.toFixed(2)}</code>
+
 ✅ Added to your wallet!
+📧 Email notification sent!
     `;
     await sendTelegramMessage(chatId, confirmText);
+    
+    // Send email notification
+    await sendInvoiceEmailNotification({
+      type: invoiceData.type,
+      amount: invoiceData.amount,
+      currency: invoiceData.currency,
+      purpose: invoiceData.purpose,
+      details: invoiceData.details,
+      amountInUsd,
+      source: 'pdf',
+    });
   } else {
     await sendTelegramMessage(chatId, '❌ Failed to save transaction. Please try again.');
   }
