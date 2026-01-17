@@ -65,7 +65,7 @@ const Index = () => {
     return () => clearInterval(interval);
   }, [portfolioProjects.length, imagesLoaded]);
   const visibleTestimonials = useMemo(() => content.testimonials.filter(testimonial => testimonial.visible).sort((a, b) => a.order - b.order), [content.testimonials]);
-  return <div className="min-h-screen bg-[#1c1c1c] text-white overflow-hidden">
+  return <div className="min-h-screen bg-[#0d0d0d] text-white overflow-hidden">
       <SEO title="Lunexo Media | Digital Marketing & Growth Solutions" description="Lunexo Media helps businesses grow with SEO, paid ads, web design, and AI automation. Get data-driven strategies to scale your brand." image="https://www.lunexomedia.com/og-image-new.jpg" url="https://www.lunexomedia.com" keywords="digital marketing, SEO services, Google ads, web design, AI automation, business growth, Lunexo Media" />
       
       <Navigation />
@@ -73,18 +73,18 @@ const Index = () => {
       {/* Ultra Modern Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
         {/* Animated gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#1c1c1c] via-[#11181C] to-[#1c1c1c]" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#0d0d0d] via-[#121212] to-[#0d0d0d]" />
         
         {/* Animated mesh gradient */}
         <div className="absolute inset-0 opacity-30" style={{
-        background: `radial-gradient(600px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(62, 207, 142, 0.15), transparent 40%)`
+        background: `radial-gradient(600px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(62, 207, 142, 0.12), transparent 40%)`
       }} />
         
         {/* Grid pattern */}
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-[size:60px_60px]" />
         
         {/* Floating orbs */}
-        <motion.div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-[#3ECF8E]/20 to-[#34B27B]/20 rounded-full blur-3xl" animate={{
+        <motion.div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-[#3ECF8E]/10 to-[#34B27B]/10 rounded-full blur-3xl" animate={{
         x: [0, 50, 0],
         y: [0, 30, 0],
         scale: [1, 1.1, 1]
@@ -93,7 +93,7 @@ const Index = () => {
         repeat: Infinity,
         ease: "easeInOut"
       }} />
-        <motion.div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gradient-to-r from-[#3ECF8E]/15 to-[#2E9B6B]/15 rounded-full blur-3xl" animate={{
+        <motion.div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gradient-to-r from-[#3ECF8E]/8 to-[#2E9B6B]/8 rounded-full blur-3xl" animate={{
         x: [0, -40, 0],
         y: [0, -50, 0],
         scale: [1, 1.2, 1]
@@ -356,7 +356,7 @@ const Index = () => {
       {/* Services Section - Ultra Modern */}
       <section className="py-36 relative overflow-hidden">
         {/* Background */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#1c1c1c] via-[#11181C] to-[#1c1c1c]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0d0d0d] via-[#121212] to-[#0d0d0d]" />
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.01)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.01)_1px,transparent_1px)] bg-[size:80px_80px]" />
         
         <div className="container-wide section-padding relative z-10">
@@ -441,9 +441,9 @@ const Index = () => {
           }} whileHover={{
             y: -4
           }}>
-                <div className="relative bg-[#1c1c1c] border border-[#2e2e2e] rounded-lg p-8 hover:border-[#3e3e3e] transition-all duration-300 h-full">
+                <div className="relative bg-[#161616] border border-[#262626] rounded-lg p-8 hover:border-[#333333] transition-all duration-300 h-full">
                   <div className="flex items-center gap-3 mb-6">
-                    <div className="w-10 h-10 rounded-lg bg-[#2e2e2e] flex items-center justify-center">
+                    <div className="w-10 h-10 rounded-lg bg-[#1e1e1e] flex items-center justify-center">
                       <service.icon className="w-5 h-5 text-[#3ECF8E]" />
                     </div>
                   </div>
@@ -466,7 +466,7 @@ const Index = () => {
 
       {/* Portfolio Showcase Section */}
       {portfolioProjects.length > 0 && imagesLoaded && <section className="py-32 relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-b from-[#11181C] via-[#1c1c1c] to-[#11181C]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a]" />
           
           <div className="container-wide section-padding relative z-10">
             <div className="text-center mb-16">
@@ -593,7 +593,7 @@ const Index = () => {
 
       {/* Stats Section */}
       <section className="py-24 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-[#3ECF8E]/10 via-[#1c1c1c] to-[#3ECF8E]/10" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#3ECF8E]/5 via-[#0d0d0d] to-[#3ECF8E]/5" />
         
         <div className="container-wide section-padding relative z-10">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
@@ -640,7 +640,7 @@ const Index = () => {
 
       {/* Why Choose Us */}
       <section className="py-32 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-[#1c1c1c] via-[#11181C] to-[#1c1c1c]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0d0d0d] via-[#121212] to-[#0d0d0d]" />
         
         <div className="container-wide section-padding relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -744,7 +744,7 @@ const Index = () => {
 
       {/* Testimonials - Infinite Scroll Animation */}
       {visibleTestimonials.length > 0 && <section className="py-32 relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-b from-[#11181C] via-[#1c1c1c] to-[#11181C]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a]" />
           
           {/* Gradient line top */}
           <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#3ECF8E]/30 to-transparent"></div>
@@ -787,8 +787,8 @@ const Index = () => {
             {/* Infinite Scroll Testimonials */}
             <div className="relative overflow-hidden">
               {/* Gradient masks for smooth fade */}
-              <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#1c1c1c] to-transparent z-10"></div>
-              <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#1c1c1c] to-transparent z-10"></div>
+              <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#0d0d0d] to-transparent z-10"></div>
+              <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#0d0d0d] to-transparent z-10"></div>
               
               <motion.div className="flex gap-8" animate={{
             x: [0, -400 * visibleTestimonials.length]
@@ -854,13 +854,13 @@ const Index = () => {
       {/* CTA Section - Premium Full Screen */}
       <section className="min-h-screen flex items-center justify-center relative overflow-hidden">
         {/* Premium gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#1c1c1c] via-[#11181C] to-[#1c1c1c]" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#0d0d0d] via-[#121212] to-[#0d0d0d]" />
         
         {/* Animated mesh gradient */}
         <div className="absolute inset-0">
-          <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top_left,rgba(62,207,142,0.15),transparent_50%)]" />
-          <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,rgba(52,178,123,0.12),transparent_50%)]" />
-          <div className="absolute bottom-0 left-1/2 w-full h-full bg-[radial-gradient(ellipse_at_bottom,rgba(62,207,142,0.08),transparent_50%)]" />
+          <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top_left,rgba(62,207,142,0.08),transparent_50%)]" />
+          <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,rgba(52,178,123,0.06),transparent_50%)]" />
+          <div className="absolute bottom-0 left-1/2 w-full h-full bg-[radial-gradient(ellipse_at_bottom,rgba(62,207,142,0.04),transparent_50%)]" />
         </div>
         
         {/* Premium grid pattern */}
@@ -1034,7 +1034,7 @@ const Index = () => {
         </div>
         
         {/* Bottom gradient fade */}
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#1c1c1c] to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#0d0d0d] to-transparent" />
       </section>
 
       {/* Completed Clients Section */}
