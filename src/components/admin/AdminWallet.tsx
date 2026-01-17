@@ -27,12 +27,15 @@ import {
   Trash2,
   Bot,
   Banknote,
-  Coins
+  Coins,
+  X,
+  Calendar
 } from 'lucide-react';
-import { format } from 'date-fns';
+import { format, startOfMonth, endOfMonth } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { useSearchParams } from 'react-router-dom';
 
 interface Transaction {
   id: string;
@@ -61,11 +64,14 @@ interface Currency {
 }
 
 const AdminWallet = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [filteredTransactions, setFilteredTransactions] = useState<Transaction[]>([]);
   const [currencies, setCurrencies] = useState<Currency[]>([]);
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<'home' | 'cards' | 'income' | 'savings' | 'history'>('home');
+  const [monthFilter, setMonthFilter] = useState<{ month: number; year: number } | null>(null);
   const { toast } = useToast();
 
   const [form, setForm] = useState({
@@ -85,6 +91,20 @@ const AdminWallet = () => {
   };
 
   const paymentMethods = ['Cash', 'Bank Transfer', 'Credit Card', 'PayPal', 'Crypto', 'bKash', 'Nagad', 'Wise'];
+
+  // Check URL params for month filter
+  useEffect(() => {
+    const monthParam = searchParams.get('month');
+    const yearParam = searchParams.get('year');
+    
+    if (monthParam !== null && yearParam !== null) {
+      setMonthFilter({
+        month: parseInt(monthParam),
+        year: parseInt(yearParam)
+      });
+      setActiveTab('history');
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     fetchData();
@@ -571,32 +591,78 @@ const AdminWallet = () => {
         {/* History Tab */}
         {activeTab === 'history' && (
           <div className="space-y-3">
+            {/* Month Filter Badge */}
+            {monthFilter && (
+              <div className="flex items-center justify-between bg-blue-50 p-3 rounded-2xl">
+                <div className="flex items-center gap-2">
+                  <Calendar className="w-5 h-5 text-blue-600" />
+                  <span className="text-blue-700 font-medium">
+                    Showing: {new Date(monthFilter.year, monthFilter.month).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+                  </span>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => {
+                    setMonthFilter(null);
+                    setSearchParams({});
+                  }}
+                  className="text-blue-600 hover:text-blue-800 hover:bg-blue-100 rounded-full"
+                >
+                  <X className="w-4 h-4 mr-1" />
+                  Clear
+                </Button>
+              </div>
+            )}
+
             <Card className="bg-white rounded-3xl shadow-sm border-0 mb-4">
               <CardContent className="p-5">
-                <p className="text-gray-600 text-sm mb-2">All Transactions</p>
-                <p className="text-3xl font-bold text-gray-900">{transactions.length}</p>
+                <p className="text-gray-600 text-sm mb-2">
+                  {monthFilter ? 'Filtered Transactions' : 'All Transactions'}
+                </p>
+                <p className="text-3xl font-bold text-gray-900">
+                  {monthFilter 
+                    ? transactions.filter(t => {
+                        const d = new Date(t.created_at);
+                        return d.getMonth() === monthFilter.month && d.getFullYear() === monthFilter.year;
+                      }).length
+                    : transactions.length}
+                </p>
               </CardContent>
             </Card>
 
             <ScrollArea className="h-[500px]">
               <div className="space-y-2">
-                {transactions.length === 0 ? (
-                  <Card className="bg-white rounded-2xl shadow-sm border-0">
-                    <CardContent className="py-12 text-center">
-                      <History className="w-12 h-12 mx-auto mb-3 text-gray-300" />
-                      <p className="text-gray-500">No history yet</p>
-                    </CardContent>
-                  </Card>
-                ) : (
-                  transactions.map((transaction) => (
+                {(() => {
+                  const displayTransactions = monthFilter 
+                    ? transactions.filter(t => {
+                        const d = new Date(t.created_at);
+                        return d.getMonth() === monthFilter.month && d.getFullYear() === monthFilter.year;
+                      })
+                    : transactions;
+                  
+                  if (displayTransactions.length === 0) {
+                    return (
+                      <Card className="bg-white rounded-2xl shadow-sm border-0">
+                        <CardContent className="py-12 text-center">
+                          <History className="w-12 h-12 mx-auto mb-3 text-gray-300" />
+                          <p className="text-gray-500">
+                            {monthFilter ? 'No transactions for this month' : 'No history yet'}
+                          </p>
+                        </CardContent>
+                      </Card>
+                    );
+                  }
+                  
+                  return displayTransactions.map((transaction) => (
                     <TransactionItem
                       key={transaction.id}
                       transaction={transaction}
                       getCurrencySymbol={getCurrencySymbol}
                       onDelete={handleDeleteTransaction}
                     />
-                  ))
-                )}
+                  ));
+                })()}
               </div>
             </ScrollArea>
           </div>

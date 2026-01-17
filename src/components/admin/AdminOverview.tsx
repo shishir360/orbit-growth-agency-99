@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { 
   BarChart3, 
   FileText, 
@@ -13,12 +14,16 @@ import {
   Wallet,
   ArrowUpRight,
   ArrowDownRight,
-  Clock
+  Clock,
+  Download,
+  ImageIcon
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { format, subMonths, startOfMonth, endOfMonth } from 'date-fns';
+import { useToast } from '@/hooks/use-toast';
+import html2canvas from 'html2canvas';
 
 interface Transaction {
   id: string;
@@ -32,12 +37,17 @@ interface Transaction {
 
 interface ChartData {
   month: string;
+  fullMonth: string;
+  monthIndex: number;
+  year: number;
   income: number;
   expenses: number;
 }
 
 const AdminOverview = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
+  const chartRef = useRef<HTMLDivElement>(null);
   const [walletData, setWalletData] = useState({
     totalBalance: 0,
     monthlyIncome: 0,
@@ -46,6 +56,7 @@ const AdminOverview = () => {
   });
   const [recentTransactions, setRecentTransactions] = useState<Transaction[]>([]);
   const [chartData, setChartData] = useState<ChartData[]>([]);
+  const [exporting, setExporting] = useState(false);
 
   useEffect(() => {
     fetchWalletData();
@@ -109,6 +120,9 @@ const AdminOverview = () => {
           
           monthlyData.push({
             month: format(monthDate, 'MMM'),
+            fullMonth: format(monthDate, 'MMMM yyyy'),
+            monthIndex: monthDate.getMonth(),
+            year: monthDate.getFullYear(),
             income: Math.round(monthIncome * 100) / 100,
             expenses: Math.round(monthExpense * 100) / 100
           });
@@ -126,6 +140,48 @@ const AdminOverview = () => {
     } catch (error) {
       console.error('Error fetching wallet data:', error);
       setWalletData(prev => ({ ...prev, loading: false }));
+    }
+  };
+
+  const handleChartClick = (data: any) => {
+    if (data && data.activePayload && data.activePayload.length > 0) {
+      const clickedData = data.activePayload[0].payload as ChartData;
+      navigate(`/admin-dashboard/wallet?month=${clickedData.monthIndex}&year=${clickedData.year}`);
+      toast({
+        title: "Filtering transactions",
+        description: `Showing transactions for ${clickedData.fullMonth}`,
+      });
+    }
+  };
+
+  const exportChartAsImage = async () => {
+    if (!chartRef.current) return;
+    
+    setExporting(true);
+    try {
+      const canvas = await html2canvas(chartRef.current, {
+        backgroundColor: '#1a1a1a',
+        scale: 2
+      });
+      
+      const link = document.createElement('a');
+      link.download = `financial-chart-${format(new Date(), 'yyyy-MM-dd')}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      
+      toast({
+        title: "Chart exported!",
+        description: "Chart saved as PNG image",
+      });
+    } catch (error) {
+      console.error('Export failed:', error);
+      toast({
+        title: "Export failed",
+        description: "Could not export chart",
+        variant: "destructive"
+      });
+    } finally {
+      setExporting(false);
     }
   };
 
@@ -239,17 +295,34 @@ const AdminOverview = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Monthly Financial Chart */}
         <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <BarChart3 className="h-5 w-5 text-emerald-500" />
-              Income vs Expenses
-            </CardTitle>
-            <CardDescription>Last 6 months financial trend</CardDescription>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <div>
+              <CardTitle className="flex items-center gap-2">
+                <BarChart3 className="h-5 w-5 text-emerald-500" />
+                Income vs Expenses
+              </CardTitle>
+              <CardDescription>Click a month to filter transactions</CardDescription>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={exportChartAsImage}
+              disabled={exporting}
+              className="gap-2"
+            >
+              <ImageIcon className="h-4 w-4" />
+              {exporting ? 'Exporting...' : 'Export'}
+            </Button>
           </CardHeader>
           <CardContent>
-            <div className="h-[250px]">
+            <div ref={chartRef} className="h-[250px] p-2 rounded-lg">
               <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                <AreaChart 
+                  data={chartData} 
+                  margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
+                  onClick={handleChartClick}
+                  style={{ cursor: 'pointer' }}
+                >
                   <defs>
                     <linearGradient id="incomeGradient" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="5%" stopColor="#10b981" stopOpacity={0.3}/>
@@ -270,6 +343,12 @@ const AdminOverview = () => {
                       borderRadius: '8px'
                     }}
                     formatter={(value: number) => [`$${value.toFixed(2)}`, '']}
+                    labelFormatter={(label, payload) => {
+                      if (payload && payload.length > 0) {
+                        return (payload[0].payload as ChartData).fullMonth;
+                      }
+                      return label;
+                    }}
                   />
                   <Legend />
                   <Area 
