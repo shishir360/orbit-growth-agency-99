@@ -1164,6 +1164,42 @@ export type Database = {
         }
         Relationships: []
       }
+      supported_currencies: {
+        Row: {
+          code: string
+          country: string | null
+          created_at: string
+          exchange_rate_to_usd: number | null
+          id: string
+          is_active: boolean | null
+          name: string
+          symbol: string
+          updated_at: string
+        }
+        Insert: {
+          code: string
+          country?: string | null
+          created_at?: string
+          exchange_rate_to_usd?: number | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+          symbol: string
+          updated_at?: string
+        }
+        Update: {
+          code?: string
+          country?: string | null
+          created_at?: string
+          exchange_rate_to_usd?: number | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          symbol?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       testimonials: {
         Row: {
           author: string
@@ -1314,6 +1350,63 @@ export type Database = {
           visitor_longitude?: number | null
           visitor_region?: string | null
           visitor_timezone?: string | null
+        }
+        Relationships: []
+      }
+      wallet_transactions: {
+        Row: {
+          amount: number
+          amount_in_usd: number | null
+          category: string | null
+          country: string | null
+          created_at: string
+          currency: string
+          description: string | null
+          exchange_rate: number | null
+          id: string
+          payment_method: string | null
+          purpose: string
+          receipt_url: string | null
+          source: string | null
+          telegram_message_id: string | null
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          amount_in_usd?: number | null
+          category?: string | null
+          country?: string | null
+          created_at?: string
+          currency?: string
+          description?: string | null
+          exchange_rate?: number | null
+          id?: string
+          payment_method?: string | null
+          purpose: string
+          receipt_url?: string | null
+          source?: string | null
+          telegram_message_id?: string | null
+          type: string
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          amount_in_usd?: number | null
+          category?: string | null
+          country?: string | null
+          created_at?: string
+          currency?: string
+          description?: string | null
+          exchange_rate?: number | null
+          id?: string
+          payment_method?: string | null
+          purpose?: string
+          receipt_url?: string | null
+          source?: string | null
+          telegram_message_id?: string | null
+          type?: string
+          updated_at?: string
         }
         Relationships: []
       }
