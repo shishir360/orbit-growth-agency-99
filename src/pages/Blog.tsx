@@ -134,13 +134,13 @@ const Blog = () => {
                     {post.category || 'Development'}
                   </Badge>
                   <h3 className="text-lg font-semibold mb-3 text-white group-hover:text-emerald-400 transition-colors">
-                    <a href={`/blog/${post.slug}`}>{post.title}</a>
+                    <a href={`https://lunexomedia.com/blog/${post.slug}`}>{post.title}</a>
                   </h3>
                   <p className="text-white/70 text-sm mb-4 line-clamp-3">
                     {post.excerpt}
                   </p>
                   <Button variant="ghost" size="sm" asChild className="p-0 h-auto text-emerald-400 hover:text-emerald-300">
-                    <a href={`/blog/${post.slug}`} className="flex items-center gap-1">
+                    <a href={`https://lunexomedia.com/blog/${post.slug}`} className="flex items-center gap-1">
                       Read more
                       <ArrowRight className="w-3 h-3" />
                     </a>

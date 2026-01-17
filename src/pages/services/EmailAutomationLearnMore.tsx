@@ -109,12 +109,12 @@ const EmailAutomationLearnMore = () => {
               Transform your email marketing with AI-powered automation that delivers the right message to the right person at the perfect time.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/contact">
+              <a href="https://lunexomedia.com/contact">
                 <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg">
                   Launch Email Automation
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
-              </Link>
+              </a>
               <Button size="lg" variant="outline">
                 <BarChart3 className="w-5 h-5 mr-2" />
                 View Performance Report
@@ -254,17 +254,17 @@ const EmailAutomationLearnMore = () => {
                 Join successful businesses that have increased their email ROI by over 400% with our automation solutions.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link to="/contact">
+                <a href="https://lunexomedia.com/contact">
                   <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white">
                     Start Email Automation
                     <ArrowRight className="w-5 h-5 ml-2" />
                   </Button>
-                </Link>
-                <Link to="/services/ai-automation-learn-more">
+                </a>
+                <a href="https://lunexomedia.com/services/ai-automation-learn-more">
                   <Button size="lg" variant="outline">
                     Explore AI Automation
                   </Button>
-                </Link>
+                </a>
               </div>
             </CardContent>
           </Card>

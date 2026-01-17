@@ -434,7 +434,7 @@ const Tutorials = () => {
               
               <p className="text-sm text-muted-foreground mb-8">
                 Need help with implementation?{" "}
-                <a href="/contact" className="text-primary hover:underline font-medium">
+                <a href="https://lunexomedia.com/contact" className="text-primary hover:underline font-medium">
                   Book a free consultation
                 </a>
               </p>
@@ -448,7 +448,7 @@ const Tutorials = () => {
                   <h3 className="font-bold mb-2">Free Consultation</h3>
                   <p className="text-muted-foreground text-sm mb-4">Get personalized advice for your project</p>
                   <Button variant="outline" size="sm" asChild>
-                    <a href="/book-apartment">Book Call</a>
+                    <a href="https://lunexomedia.com/book-apartment">Book Call</a>
                   </Button>
                 </div>
 
@@ -459,7 +459,7 @@ const Tutorials = () => {
                   <h3 className="font-bold mb-2">Custom Development</h3>
                   <p className="text-muted-foreground text-sm mb-4">We build it for you, done-for-you style</p>
                   <Button variant="outline" size="sm" asChild>
-                    <a href="/contact">Get Quote</a>
+                    <a href="https://lunexomedia.com/contact">Get Quote</a>
                   </Button>
                 </div>
 
@@ -470,7 +470,7 @@ const Tutorials = () => {
                   <h3 className="font-bold mb-2">Join Community</h3>
                   <p className="text-muted-foreground text-sm mb-4">Connect with fellow builders and creators</p>
                   <Button variant="outline" size="sm" asChild>
-                    <a href="/contact">Join Discord</a>
+                    <a href="https://lunexomedia.com/contact">Join Discord</a>
                   </Button>
                 </div>
               </div>

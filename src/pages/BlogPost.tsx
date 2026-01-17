@@ -180,7 +180,7 @@ const BlogPost = () => {
           />
           
           <Button variant="ghost" asChild className="mt-4">
-            <a href="/blog">
+            <a href="https://lunexomedia.com/blog">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Blog
             </a>
@@ -296,7 +296,7 @@ const BlogPost = () => {
                           size="lg" 
                           className="bg-gradient-primary text-white border-0 shadow-glow hover:shadow-elegant transition-all duration-300 hover:scale-105"
                         >
-                          <a href="/contact">
+                          <a href="https://lunexomedia.com/contact">
                             Get Expert Help Today
                             <ArrowRight className="w-5 h-5 ml-2" />
                           </a>

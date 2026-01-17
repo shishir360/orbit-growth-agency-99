@@ -305,7 +305,7 @@ const AdsManagement = () => {
                 className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white text-lg px-10 py-7 rounded-2xl font-semibold shadow-2xl shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all duration-300 hover:scale-105 group"
                 asChild
               >
-                <a href="/contact">
+                <a href="https://lunexomedia.com/contact">
                   Get Free Consultation
                   <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
                 </a>
@@ -317,7 +317,7 @@ const AdsManagement = () => {
                 className="text-lg px-10 py-7 rounded-2xl border-2 border-gray-600 text-white hover:bg-white hover:text-slate-900 transition-all duration-300 hover:scale-105"
                 asChild
               >
-                <a href="/portfolio">
+                <a href="https://lunexomedia.com/portfolio">
                   View Success Stories
                 </a>
               </Button>
@@ -651,7 +651,7 @@ const AdsManagement = () => {
                 className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white text-lg px-12 py-7 rounded-2xl font-semibold shadow-2xl shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all duration-300 hover:scale-105 group"
                 asChild
               >
-                <a href="/contact">
+                <a href="https://lunexomedia.com/contact">
                   Book Strategic Consultation
                   <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
                 </a>
@@ -663,7 +663,7 @@ const AdsManagement = () => {
                 className="text-lg px-12 py-7 rounded-2xl border-2 border-gray-600 text-white hover:bg-white hover:text-slate-900 transition-all duration-300 hover:scale-105"
                 asChild
               >
-                <a href="/portfolio">
+                <a href="https://lunexomedia.com/portfolio">
                   Explore Success Stories
                 </a>
               </Button>

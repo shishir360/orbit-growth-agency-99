@@ -113,12 +113,12 @@ const VoiceAgentsLearnMore = () => {
               Deploy intelligent voice assistants that handle phone calls, book appointments, and provide customer support with natural, human-like conversations 24/7.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/contact">
+              <a href="https://lunexomedia.com/contact">
                 <Button size="lg" className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white shadow-lg">
                   Deploy Voice Agent
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
-              </Link>
+              </a>
               <Button size="lg" variant="outline">
                 <Phone className="w-5 h-5 mr-2" />
                 Listen to Demo Call
@@ -263,17 +263,17 @@ const VoiceAgentsLearnMore = () => {
                 Transform your phone operations with AI voice agents that work around the clock.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link to="/contact">
+                <a href="https://lunexomedia.com/contact">
                   <Button size="lg" className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white">
                     Launch Voice Agent
                     <ArrowRight className="w-5 h-5 ml-2" />
                   </Button>
-                </Link>
-                <Link to="/services/ai-automation-learn-more">
+                </a>
+                <a href="https://lunexomedia.com/services/ai-automation-learn-more">
                   <Button size="lg" variant="outline">
                     View All AI Services
                   </Button>
-                </Link>
+                </a>
               </div>
             </CardContent>
           </Card>
