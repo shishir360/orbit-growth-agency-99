@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { 
@@ -9,10 +9,68 @@ import {
   Users, 
   TrendingUp,
   Eye,
-  Globe
+  Globe,
+  Wallet,
+  ArrowUpRight,
+  ArrowDownRight
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
 
 const AdminOverview = () => {
+  const navigate = useNavigate();
+  const [walletData, setWalletData] = useState({
+    totalBalance: 0,
+    monthlyIncome: 0,
+    monthlyExpenses: 0,
+    loading: true
+  });
+
+  useEffect(() => {
+    fetchWalletData();
+  }, []);
+
+  const fetchWalletData = async () => {
+    try {
+      const { data: transactions } = await supabase
+        .from('wallet_transactions')
+        .select('*');
+      
+      if (transactions) {
+        const now = new Date();
+        const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+        
+        let totalIncome = 0;
+        let totalExpenses = 0;
+        let monthlyIncome = 0;
+        let monthlyExpenses = 0;
+
+        transactions.forEach((t) => {
+          const amountUsd = t.amount_in_usd || t.amount;
+          const txDate = new Date(t.created_at);
+          
+          if (t.type === 'income') {
+            totalIncome += amountUsd;
+            if (txDate >= startOfMonth) monthlyIncome += amountUsd;
+          } else {
+            totalExpenses += amountUsd;
+            if (txDate >= startOfMonth) monthlyExpenses += amountUsd;
+          }
+        });
+
+        setWalletData({
+          totalBalance: totalIncome - totalExpenses,
+          monthlyIncome,
+          monthlyExpenses,
+          loading: false
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching wallet data:', error);
+      setWalletData(prev => ({ ...prev, loading: false }));
+    }
+  };
+
   // Mock data - in real app this would come from your backend
   const stats = [
     { title: 'Total Services', value: '12', icon: Settings, change: '+2', color: 'text-blue-600' },
@@ -56,6 +114,55 @@ const AdminOverview = () => {
           </Card>
         ))}
       </div>
+
+      {/* Wallet Quick Access Card */}
+      <Card 
+        className="cursor-pointer hover:shadow-lg transition-shadow border-2 border-emerald-500/20 bg-gradient-to-br from-emerald-500/5 to-transparent"
+        onClick={() => navigate('/admin-dashboard/wallet')}
+      >
+        <CardHeader className="flex flex-row items-center justify-between pb-2">
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-full bg-emerald-500/10">
+              <Wallet className="h-6 w-6 text-emerald-500" />
+            </div>
+            <div>
+              <CardTitle className="text-xl">Wallet</CardTitle>
+              <CardDescription>Financial overview</CardDescription>
+            </div>
+          </div>
+          <Badge variant="outline" className="text-emerald-500 border-emerald-500">
+            Quick Access
+          </Badge>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="p-4 rounded-lg bg-muted/50">
+              <p className="text-sm text-muted-foreground mb-1">Total Balance</p>
+              <p className="text-2xl font-bold text-foreground">
+                {walletData.loading ? '...' : `$${walletData.totalBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+              </p>
+            </div>
+            <div className="p-4 rounded-lg bg-emerald-500/10">
+              <div className="flex items-center gap-1 mb-1">
+                <ArrowUpRight className="h-4 w-4 text-emerald-500" />
+                <p className="text-sm text-muted-foreground">Monthly Income</p>
+              </div>
+              <p className="text-xl font-semibold text-emerald-500">
+                {walletData.loading ? '...' : `+$${walletData.monthlyIncome.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+              </p>
+            </div>
+            <div className="p-4 rounded-lg bg-red-500/10">
+              <div className="flex items-center gap-1 mb-1">
+                <ArrowDownRight className="h-4 w-4 text-red-500" />
+                <p className="text-sm text-muted-foreground">Monthly Expenses</p>
+              </div>
+              <p className="text-xl font-semibold text-red-500">
+                {walletData.loading ? '...' : `-$${walletData.monthlyExpenses.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Recent Activity */}
