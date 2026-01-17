@@ -68,7 +68,7 @@ const PortfolioItem = () => {
             <h1 className="text-5xl font-bold mb-4 text-white" style={{fontFamily: "'Playfair Display', serif"}}>Project Not Found</h1>
             <p className="text-white/70 mb-8 text-lg">The project you're looking for doesn't exist or has been removed.</p>
             <Button asChild className="bg-gradient-to-r from-red-500 to-orange-500 text-white hover:from-red-600 hover:to-orange-600 rounded-full px-8 py-6">
-              <Link to="/portfolio">Back to Portfolio</Link>
+              <a href="https://lunexomedia.com/portfolio">Back to Portfolio</a>
             </Button>
           </div>
         </section>
@@ -109,10 +109,10 @@ const PortfolioItem = () => {
         <div className="container-wide section-padding relative z-10 pt-28 pb-16">
           {/* Premium Back Button */}
           <Button variant="ghost" asChild className="mb-10 text-white/70 hover:text-white hover:bg-white/5 rounded-full border border-white/10 backdrop-blur-sm">
-            <Link to="/portfolio" className="flex items-center gap-2">
+            <a href="https://lunexomedia.com/portfolio" className="flex items-center gap-2">
               <ArrowLeft className="w-4 h-4" />
               Back to Portfolio
-            </Link>
+            </a>
           </Button>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
@@ -403,15 +403,15 @@ const PortfolioItem = () => {
             
             <div className="flex flex-col sm:flex-row gap-5 justify-center">
               <Button asChild size="lg" className="group text-base px-12 py-8 bg-gradient-to-r from-red-500 to-orange-500 text-white hover:from-red-600 hover:to-orange-600 rounded-full transition-all duration-300 hover:scale-105 font-semibold shadow-lg shadow-red-500/25">
-                <Link to="/contact" className="flex items-center gap-2">
+                <a href="https://lunexomedia.com/contact" className="flex items-center gap-2">
                   Schedule a Consultation
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </Link>
+                </a>
               </Button>
               <Button asChild variant="outline" size="lg" className="text-base px-12 py-8 border border-white/20 text-white bg-white/5 hover:bg-white/10 rounded-full transition-all duration-300 backdrop-blur-sm">
-                <Link to="/portfolio">
+                <a href="https://lunexomedia.com/portfolio">
                   View More Work
-                </Link>
+                </a>
               </Button>
             </div>
           </div>

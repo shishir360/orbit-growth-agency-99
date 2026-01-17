@@ -145,16 +145,16 @@ const PortfolioWebsiteDesign = () => {
             
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
               <Button size="lg" className="group text-base font-bold px-16 py-6 rounded-2xl hover:scale-105 transition-all duration-300 shadow-glow" asChild>
-                <Link to="/contact">
+                <a href="https://lunexomedia.com/contact">
                   Start Your Website
                   <ArrowRight className="w-6 h-6 ml-3 group-hover:translate-x-2 transition-transform" />
-                </Link>
+                </a>
               </Button>
               
               <Button size="lg" variant="outline" className="text-base font-bold px-16 py-6 rounded-2xl border-2 border-primary/30 hover:bg-primary hover:text-white hover:scale-105 transition-all duration-300" asChild>
-                <Link to="#featured-projects">
+                <a href="#featured-projects">
                   View Featured Work
-                </Link>
+                </a>
               </Button>
             </div>
           </div>
@@ -369,16 +369,16 @@ const PortfolioWebsiteDesign = () => {
             
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
               <Button size="lg" className="group text-base font-bold px-16 py-6 rounded-2xl hover:scale-105 transition-all duration-300 shadow-glow" asChild>
-                <Link to="/contact">
+                <a href="https://lunexomedia.com/contact">
                   Start My Website
                   <ArrowRight className="w-6 h-6 ml-3 group-hover:translate-x-2 transition-transform" />
-                </Link>
+                </a>
               </Button>
               
               <Button size="lg" variant="outline" className="text-base font-bold px-16 py-6 rounded-2xl border-2 border-primary/30 hover:bg-primary hover:text-white hover:scale-105 transition-all duration-300" asChild>
-                <Link to="/website-design">
+                <a href="https://lunexomedia.com/website-design">
                   Learn More
-                </Link>
+                </a>
               </Button>
             </div>
           </div>

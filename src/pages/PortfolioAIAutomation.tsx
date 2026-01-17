@@ -348,16 +348,16 @@ const PortfolioAIAutomation = () => {
             
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
               <Button size="lg" className="group text-base font-bold px-16 py-6 rounded-2xl hover:scale-105 transition-all duration-300 shadow-glow" asChild>
-                <Link to="/contact">
+                <a href="https://lunexomedia.com/contact">
                   Start AI Automation
                   <ArrowRight className="w-6 h-6 ml-3 group-hover:translate-x-2 transition-transform" />
-                </Link>
+                </a>
               </Button>
               
               <Button size="lg" variant="outline" className="text-base font-bold px-16 py-6 rounded-2xl border-2 border-primary/30 hover:bg-primary hover:text-white hover:scale-105 transition-all duration-300" asChild>
-                <Link to="/ai-automation">
+                <a href="https://lunexomedia.com/ai-automation">
                   Learn More
-                </Link>
+                </a>
               </Button>
             </div>
           </div>

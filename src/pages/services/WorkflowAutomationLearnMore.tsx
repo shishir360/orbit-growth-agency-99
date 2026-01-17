@@ -123,12 +123,12 @@ const WorkflowAutomationLearnMore = () => {
               Transform repetitive business processes into intelligent automated workflows that save time, reduce errors, and scale with your business growth.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/contact">
+              <a href="https://lunexomedia.com/contact">
                 <Button size="lg" className="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white shadow-lg">
                   Automate Your Workflows
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
-              </Link>
+              </a>
               <Button size="lg" variant="outline">
                 <Workflow className="w-5 h-5 mr-2" />
                 View Workflow Examples
@@ -282,17 +282,17 @@ const WorkflowAutomationLearnMore = () => {
                 Join thousands of businesses that have eliminated manual work and accelerated growth with intelligent automation.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link to="/contact">
+                <a href="https://lunexomedia.com/contact">
                   <Button size="lg" className="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white">
                     Start Workflow Automation
                     <ArrowRight className="w-5 h-5 ml-2" />
                   </Button>
-                </Link>
-                <Link to="/services/ai-automation-learn-more">
+                </a>
+                <a href="https://lunexomedia.com/services/ai-automation-learn-more">
                   <Button size="lg" variant="outline">
                     Explore AI Automation
                   </Button>
-                </Link>
+                </a>
               </div>
             </CardContent>
           </Card>

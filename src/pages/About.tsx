@@ -95,9 +95,9 @@ const About = () => {
               </div>
               
               <Button asChild size="lg" className="bg-[#C5FF4A] hover:bg-[#d4ff6a] text-black rounded-full px-8 font-semibold shadow-2xl shadow-[#C5FF4A]/30">
-                <Link to="/contact">
+                <a href="https://lunexomedia.com/contact">
                   Start Your Project <ArrowRight className="w-4 h-4 ml-2" />
-                </Link>
+                </a>
               </Button>
             </div>
             
@@ -220,9 +220,9 @@ const About = () => {
               </p>
               
               <Button asChild className="bg-[#C5FF4A] hover:bg-[#d4ff6a] text-black rounded-full px-8 font-semibold shadow-2xl shadow-[#C5FF4A]/30">
-                <Link to="/founder">
+                <a href="https://lunexomedia.com/founder">
                   Learn More <ArrowRight className="w-4 h-4 ml-2" />
-                </Link>
+                </a>
               </Button>
             </div>
           </div>
@@ -244,14 +244,14 @@ const About = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button asChild size="lg" className="bg-[#C5FF4A] hover:bg-[#d4ff6a] text-black rounded-full px-10 py-7 font-semibold shadow-2xl shadow-[#C5FF4A]/30">
-                <Link to="/contact">
+                <a href="https://lunexomedia.com/contact">
                   Start Your Project <ArrowRight className="w-4 h-4 ml-2" />
-                </Link>
+                </a>
               </Button>
               <Button asChild variant="outline" size="lg" className="border border-white/20 text-white bg-white/5 hover:bg-white/10 rounded-full px-10 py-7">
-                <Link to="/portfolio">
+                <a href="https://lunexomedia.com/portfolio">
                   View Our Work
-                </Link>
+                </a>
               </Button>
             </div>
           </div>

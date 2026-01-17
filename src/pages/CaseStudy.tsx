@@ -115,7 +115,7 @@ const CaseStudy = () => {
       <section className="pt-32 pb-8">
         <div className="container-wide section-padding">
           <Button variant="outline" className="mb-8" asChild>
-            <a href="/website-design">
+            <a href="https://lunexomedia.com/website-design">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Website Design
             </a>
@@ -278,14 +278,14 @@ const CaseStudy = () => {
             
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
               <Button size="lg" className="group text-base font-bold px-12 py-6 rounded-2xl hover:scale-105 transition-all duration-300 shadow-glow" asChild>
-                <a href="/book-appointment">
+                <a href="https://lunexomedia.com/book-appointment">
                   Start Your Project
                   <ArrowRight className="w-5 h-5 ml-3 group-hover:translate-x-2 transition-transform" />
                 </a>
               </Button>
               
               <Button size="lg" variant="outline" className="text-base font-bold px-12 py-6 rounded-2xl border-2 border-primary/30 hover:bg-primary hover:text-white hover:scale-105 transition-all duration-300" asChild>
-                <a href="/portfolio">
+                <a href="https://lunexomedia.com/portfolio">
                   View More Work
                 </a>
               </Button>

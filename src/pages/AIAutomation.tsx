@@ -423,7 +423,7 @@ const AIAutomation = () => {
                   className="bg-[#C5FF4A] hover:bg-[#d4ff6a] text-black text-lg px-10 py-7 rounded-full font-semibold shadow-2xl shadow-[#C5FF4A]/30 hover:shadow-[#C5FF4A]/50 transition-all duration-300 hover:scale-105 group"
                   asChild
                 >
-                  <a href="/contact">
+                  <a href="https://lunexomedia.com/contact">
                     Get Automated
                     <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
                   </a>
