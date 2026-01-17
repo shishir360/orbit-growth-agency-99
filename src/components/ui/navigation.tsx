@@ -70,7 +70,7 @@ const Navigation = () => {
       <div className="container-wide section-padding relative">
         <div className="flex justify-between items-center">
           {/* Premium Logo */}
-          <a href="/" className="flex items-center space-x-3 group">
+          <a href="https://lunexomedia.com" className="flex items-center space-x-3 group">
             <motion.div 
               className="relative"
               whileHover={{ scale: 1.05 }}
@@ -103,7 +103,7 @@ const Navigation = () => {
           <div className="hidden md:flex items-center space-x-1">
             {/* Home Link */}
             <motion.a
-              href="/"
+              href="https://lunexomedia.com"
               whileHover={{ scale: 1.05 }}
               className={`relative px-5 py-2.5 text-sm font-medium transition-all duration-300 rounded-xl group overflow-hidden ${
                 isActive("/")
@@ -140,7 +140,7 @@ const Navigation = () => {
                 {serviceItems.map((item, index) => (
                   <DropdownMenuItem key={item.id} asChild>
                     <motion.a 
-                      href={item.href}
+                      href={`https://lunexomedia.com${item.href}`}
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.05 }}
@@ -160,7 +160,7 @@ const Navigation = () => {
             
             {/* Portfolio Link */}
             <motion.a
-              href="/portfolio"
+              href="https://lunexomedia.com/portfolio"
               whileHover={{ scale: 1.05 }}
               className={`relative px-5 py-2.5 text-sm font-medium transition-all duration-300 rounded-xl group ${
                 isActive("/portfolio")
@@ -181,7 +181,7 @@ const Navigation = () => {
             {otherNavItems.map((item) => (
               <motion.a
                 key={item.id}
-                href={item.href}
+                href={`https://lunexomedia.com${item.href}`}
                 whileHover={{ scale: 1.05 }}
                 className={`relative px-5 py-2.5 text-sm font-medium transition-all duration-300 rounded-xl group ${
                   isActive(item.href)
@@ -201,7 +201,7 @@ const Navigation = () => {
             
             {/* CTA Button */}
             <motion.a 
-              href="/book-apartment" 
+              href="https://lunexomedia.com/book-apartment" 
               className="relative ml-6 group"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.98 }}
@@ -266,7 +266,7 @@ const Navigation = () => {
                 <div className="flex flex-col space-y-2">
                   {/* Home Link */}
                   <motion.a
-                    href="/"
+                    href="https://lunexomedia.com"
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.1 }}
@@ -313,7 +313,7 @@ const Navigation = () => {
                             {serviceItems.map((item, index) => (
                               <motion.a
                                 key={item.id}
-                                href={item.href}
+                                href={`https://lunexomedia.com${item.href}`}
                                 initial={{ opacity: 0, x: -10 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ delay: index * 0.05 }}
@@ -335,7 +335,7 @@ const Navigation = () => {
                   
                   {/* Portfolio Link */}
                   <motion.a
-                    href="/portfolio"
+                    href="https://lunexomedia.com/portfolio"
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.35 }}
@@ -352,7 +352,7 @@ const Navigation = () => {
                   {otherNavItems.map((item, index) => (
                     <motion.a
                       key={item.id}
-                      href={item.href}
+                      href={`https://lunexomedia.com${item.href}`}
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.4 + index * 0.05 }}
@@ -374,7 +374,7 @@ const Navigation = () => {
                     className="pt-4"
                   >
                     <a 
-                      href="/book-apartment" 
+                      href="https://lunexomedia.com/book-apartment" 
                       className="flex items-center justify-center gap-3 px-6 py-4 bg-[#3ECF8E] hover:bg-[#34B27B] text-[#0d0d0d] text-base font-semibold rounded-xl shadow-[0_0_20px_rgba(62,207,142,0.3)]"
                     >
                       <Sparkles className="w-5 h-5" />
