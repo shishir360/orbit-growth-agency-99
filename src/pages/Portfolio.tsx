@@ -156,7 +156,7 @@ const Portfolio = () => {
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" className="group text-base px-10 py-7 bg-[#C5FF4A] text-black hover:bg-[#d4ff6a] rounded-full transition-all duration-300 hover:scale-105 font-semibold shadow-lg shadow-[#C5FF4A]/25" asChild>
-                <a href="/book-appointment">
+                <a href="https://lunexomedia.com/book-appointment">
                   Start Your Project
                   <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                 </a>
@@ -282,7 +282,7 @@ const Portfolio = () => {
                     ))}
                   </div>
 
-                  <a href={`/portfolio/${project.id}`} className="inline-flex items-center gap-2 text-white font-medium text-sm group/link">
+                  <a href={`https://lunexomedia.com/portfolio/${project.id}`} className="inline-flex items-center gap-2 text-white font-medium text-sm group/link">
                     View Case Study
                     <ArrowRight className="w-4 h-4 group-hover/link:translate-x-1 transition-transform" />
                   </a>
@@ -357,7 +357,7 @@ const Portfolio = () => {
                     ))}
                   </div>
 
-                  <a href={`/portfolio/${project.id}`} className="inline-flex items-center gap-1.5 text-white/70 hover:text-white text-sm font-medium transition-colors">
+                  <a href={`https://lunexomedia.com/portfolio/${project.id}`} className="inline-flex items-center gap-1.5 text-white/70 hover:text-white text-sm font-medium transition-colors">
                     View Details
                     <ArrowRight className="w-3.5 h-3.5" />
                   </a>
@@ -390,14 +390,14 @@ const Portfolio = () => {
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" className="group text-base px-8 py-6 bg-white text-black hover:bg-white/90 rounded-full transition-all duration-300 hover:scale-105 font-semibold" asChild>
-                <a href="/book-appointment">
+                <a href="https://lunexomedia.com/book-appointment">
                   Start Your Project
                   <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                 </a>
               </Button>
               
               <Button size="lg" variant="outline" className="text-base px-8 py-6 border border-white/20 text-white bg-white/5 hover:bg-white/10 rounded-full transition-all duration-300 backdrop-blur-sm" asChild>
-                <a href="/pricing">
+                <a href="https://lunexomedia.com/pricing">
                   View Pricing
                 </a>
               </Button>

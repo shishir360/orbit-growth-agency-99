@@ -74,10 +74,10 @@ const Footer = () => {
             <h3 className="text-xs font-semibold text-[#1a1a1a] uppercase tracking-wider">Services</h3>
             <ul className="space-y-3">
               {[
-                { to: "/website-design", label: "Website Design" },
-                { to: "/ads-management", label: "Ads Management" },
-                { to: "/ai-automation", label: "AI Automation" },
-                { to: "/portfolio", label: "Portfolio" },
+                { to: "https://lunexomedia.com/website-design", label: "Website Design" },
+                { to: "https://lunexomedia.com/ads-management", label: "Ads Management" },
+                { to: "https://lunexomedia.com/ai-automation", label: "AI Automation" },
+                { to: "https://lunexomedia.com/portfolio", label: "Portfolio" },
               ].map((link) => (
                 <li key={link.to}>
                   <a 
@@ -97,10 +97,10 @@ const Footer = () => {
             <h3 className="text-xs font-semibold text-[#1a1a1a] uppercase tracking-wider">Resources</h3>
             <ul className="space-y-3">
               {[
-                { to: "/blog", label: "Blog" },
-                { to: "/tutorials", label: "Tutorials" },
-                { to: "/contact", label: "Contact" },
-                { to: "/reviews", label: "Reviews" },
+                { to: "https://lunexomedia.com/blog", label: "Blog" },
+                { to: "https://lunexomedia.com/tutorials", label: "Tutorials" },
+                { to: "https://lunexomedia.com/contact", label: "Contact" },
+                { to: "https://lunexomedia.com/reviews", label: "Reviews" },
               ].map((link) => (
                 <li key={link.to}>
                   <a 
@@ -120,9 +120,9 @@ const Footer = () => {
             <h3 className="text-xs font-semibold text-[#1a1a1a] uppercase tracking-wider">Company</h3>
             <ul className="space-y-3">
               {[
-                { to: "/about", label: "About Us" },
-                { to: "/founder", label: "Our Founder" },
-                { to: "/pricing", label: "Pricing" },
+                { to: "https://lunexomedia.com/about", label: "About Us" },
+                { to: "https://lunexomedia.com/founder", label: "Our Founder" },
+                { to: "https://lunexomedia.com/pricing", label: "Pricing" },
               ].map((link) => (
                 <li key={link.to}>
                   <a 
@@ -142,9 +142,9 @@ const Footer = () => {
             <h3 className="text-xs font-semibold text-[#1a1a1a] uppercase tracking-wider">Legal</h3>
             <ul className="space-y-3">
               {[
-                { to: "/privacy", label: "Privacy Policy" },
-                { to: "/terms", label: "Terms & Conditions" },
-                { to: "/sitemap", label: "Sitemap" },
+                { to: "https://lunexomedia.com/privacy", label: "Privacy Policy" },
+                { to: "https://lunexomedia.com/terms", label: "Terms & Conditions" },
+                { to: "https://lunexomedia.com/sitemap", label: "Sitemap" },
               ].map((link) => (
                 <li key={link.to}>
                   <a 

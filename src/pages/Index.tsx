@@ -173,17 +173,17 @@ const Index = () => {
               delay: 0.5
             }} className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-10">
                 <Button asChild size="lg" className="group relative text-base px-10 py-7 bg-[#3ECF8E] text-[#1c1c1c] hover:bg-[#34B27B] rounded-full transition-all duration-500 hover:scale-105 font-semibold shadow-[0_0_40px_rgba(62,207,142,0.4)] hover:shadow-[0_0_60px_rgba(62,207,142,0.6)]">
-                  <Link to="/contact" className="flex items-center gap-2">
+                  <a href="https://lunexomedia.com/contact" className="flex items-center gap-2">
                     <Rocket className="w-5 h-5" />
                     Start Your Project
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </Link>
+                  </a>
                 </Button>
                 <Button asChild variant="outline" size="lg" className="group text-base px-10 py-7 border border-white/20 text-white bg-white/5 hover:bg-white/10 backdrop-blur-xl rounded-full transition-all duration-300">
-                  <Link to="/portfolio" className="flex items-center gap-2">
+                  <a href="https://lunexomedia.com/portfolio" className="flex items-center gap-2">
                     <Play className="w-4 h-4" />
                     View Our Work
-                  </Link>
+                  </a>
                 </Button>
               </motion.div>
               
@@ -290,29 +290,29 @@ const Index = () => {
             icon: Globe,
             label: "Web Design",
             gradient: "from-emerald-500 to-green-600",
-            href: "/website-design"
+            href: "https://lunexomedia.com/website-design"
           }, {
             icon: Target,
             label: "Paid Ads",
             gradient: "from-blue-500 to-cyan-600",
-            href: "/ads-management"
+            href: "https://lunexomedia.com/ads-management"
           }, {
             icon: Bot,
             label: "AI Automation",
             gradient: "from-violet-500 to-purple-600",
-            href: "/ai-automation"
+            href: "https://lunexomedia.com/ai-automation"
           }, {
             icon: Sparkles,
             label: "Strategy",
             gradient: "from-amber-500 to-orange-600",
-            href: "/contact"
+            href: "https://lunexomedia.com/contact"
           }].map((service, i) => <motion.div key={i} whileHover={{
             scale: 1.05,
             y: -5
           }} whileTap={{
             scale: 0.98
           }}>
-                <Link to={service.href} className="group relative flex items-center gap-4 bg-white/5 hover:bg-white/10 backdrop-blur-xl border border-white/10 hover:border-white/20 rounded-2xl px-7 py-5 transition-all duration-500 cursor-pointer shadow-lg hover:shadow-[0_0_30px_rgba(255,255,255,0.1)]">
+                <a href={service.href} className="group relative flex items-center gap-4 bg-white/5 hover:bg-white/10 backdrop-blur-xl border border-white/10 hover:border-white/20 rounded-2xl px-7 py-5 transition-all duration-500 cursor-pointer shadow-lg hover:shadow-[0_0_30px_rgba(255,255,255,0.1)]">
                   <div className={`relative w-12 h-12 rounded-xl bg-gradient-to-br ${service.gradient} flex items-center justify-center shadow-lg`}>
                     <service.icon className="w-6 h-6 text-white" />
                   </div>
@@ -320,7 +320,7 @@ const Index = () => {
                     {service.label}
                   </span>
                   <ChevronRight className="w-5 h-5 text-white/40 group-hover:text-white group-hover:translate-x-1 transition-all duration-300" />
-                </Link>
+                </a>
               </motion.div>)}
           </motion.div>
         </div>
@@ -412,19 +412,19 @@ const Index = () => {
             title: "Website Design",
             description: "Stunning, SEO-optimized websites that convert visitors into customers.",
             features: ["Custom Design", "SEO Optimization", "Mobile Responsive", "Fast Loading"],
-            href: "/website-design"
+            href: "https://lunexomedia.com/website-design"
           }, {
             icon: Target,
             title: "Ads Management",
             description: "Data-driven campaigns on Google, Facebook & TikTok that maximize ROI.",
             features: ["Multi-Platform", "ROI Focused", "Advanced Targeting", "Analytics"],
-            href: "/ads-management"
+            href: "https://lunexomedia.com/ads-management"
           }, {
             icon: Bot,
             title: "AI Automation",
             description: "Intelligent automation and chatbots that streamline your operations.",
             features: ["Custom AI Solutions", "Workflow Automation", "Chatbots", "Integration"],
-            href: "/ai-automation"
+            href: "https://lunexomedia.com/ai-automation"
           }].map((service, i) => <motion.div key={i} className="group relative" initial={{
             opacity: 0,
             y: 40
@@ -455,9 +455,9 @@ const Index = () => {
                         <span>{feature}</span>
                       </li>)}
                   </ul>
-                  <Link to={service.href} className="inline-flex items-center gap-2 text-[#3ECF8E] text-sm font-medium hover:underline transition-all">
+                  <a href={service.href} className="inline-flex items-center gap-2 text-[#3ECF8E] text-sm font-medium hover:underline transition-all">
                     View Template <ArrowRight className="w-4 h-4" />
-                  </Link>
+                  </a>
                 </div>
               </motion.div>)}
           </div>
@@ -564,9 +564,9 @@ const Index = () => {
                         </p>
                         
                         <Button asChild className="bg-[#3ECF8E] text-[#1c1c1c] hover:bg-[#34B27B] rounded-xl px-8 py-6 text-lg font-semibold shadow-lg">
-                          <Link to={`/portfolio/${portfolioProjects[currentProjectIndex]?.slug}`}>
+                          <a href={`https://lunexomedia.com/portfolio/${portfolioProjects[currentProjectIndex]?.slug}`}>
                             View Project <ArrowRight className="w-5 h-5 ml-2" />
-                          </Link>
+                          </a>
                         </Button>
                       </motion.div>
                     </div>
@@ -582,9 +582,9 @@ const Index = () => {
               {/* View All Button */}
               <div className="text-center mt-12">
                 <Button asChild variant="outline" className="text-white hover:bg-white/10 rounded-xl px-8 py-6 text-lg backdrop-blur-xl border-secondary-foreground">
-                  <Link to="/portfolio">
+                  <a href="https://lunexomedia.com/portfolio">
                     View All Projects <ArrowRight className="w-5 h-5 ml-2" />
-                  </Link>
+                  </a>
                 </Button>
               </div>
             </div>
@@ -725,9 +725,9 @@ const Index = () => {
               </div>
               
               <Button asChild size="lg" className="bg-[#3ECF8E] text-[#1c1c1c] hover:bg-[#34B27B] rounded-full px-8 shadow-lg font-semibold">
-                <Link to="/contact">
+                <a href="https://lunexomedia.com/contact">
                   Get Started <ArrowRight className="w-4 h-4 ml-2" />
-                </Link>
+                </a>
               </Button>
             </motion.div>
             
@@ -1006,18 +1006,18 @@ const Index = () => {
             delay: 0.6
           }} className="flex flex-col sm:flex-row gap-5 justify-center">
               <Button asChild size="lg" className="group relative text-lg px-12 py-8 bg-[#3ECF8E] hover:bg-[#34B27B] text-[#1c1c1c] rounded-full transition-all duration-500 hover:scale-105 font-semibold shadow-[0_0_50px_rgba(62,207,142,0.4)] hover:shadow-[0_0_80px_rgba(62,207,142,0.6)] overflow-hidden">
-                <Link to="/contact" className="flex items-center gap-3">
+                <a href="https://lunexomedia.com/contact" className="flex items-center gap-3">
                   <span className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></span>
                   <Rocket className="w-6 h-6" />
                   Start Your Project
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform duration-300" />
-                </Link>
+                </a>
               </Button>
               <Button asChild variant="outline" size="lg" className="group text-lg px-12 py-8 border-2 border-white/20 text-white bg-white/5 hover:bg-white/10 hover:border-white/40 rounded-full transition-all duration-500 backdrop-blur-2xl">
-                <Link to="/book-apartment" className="flex items-center gap-3">
+                <a href="https://lunexomedia.com/book-apartment" className="flex items-center gap-3">
                   <Play className="w-5 h-5" />
                   Book a Call
-                </Link>
+                </a>
               </Button>
             </motion.div>
             
