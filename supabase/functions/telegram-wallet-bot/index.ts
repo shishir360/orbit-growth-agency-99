@@ -8,14 +8,21 @@ const corsHeaders = {
 
 const TELEGRAM_BOT_TOKEN = Deno.env.get('TELEGRAM_BOT_TOKEN');
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL');
-const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
-const OPENROUTER_API_KEY = Deno.env.get('OPENROUTER_API_KEY');
+const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
 
 interface TelegramPhotoSize {
   file_id: string;
   file_unique_id: string;
   width: number;
   height: number;
+  file_size?: number;
+}
+
+interface TelegramDocument {
+  file_id: string;
+  file_unique_id: string;
+  file_name?: string;
+  mime_type?: string;
   file_size?: number;
 }
 
@@ -32,6 +39,7 @@ interface TelegramMessage {
   };
   text?: string;
   photo?: TelegramPhotoSize[];
+  document?: TelegramDocument;
   caption?: string;
   date: number;
 }
@@ -117,6 +125,24 @@ async function getFileUrl(fileId: string): Promise<string | null> {
   }
 }
 
+const INVOICE_PROMPT = `Analyze this invoice/receipt and extract the following information. Return ONLY a valid JSON object with these fields:
+{
+  "type": "income" or "expense" (most receipts are expenses),
+  "amount": the total amount as a number (no currency symbols),
+  "currency": the currency code like "USD", "BDT", "EUR", "GBP", "INR" etc,
+  "purpose": a short description of what was purchased/paid (max 50 chars),
+  "details": additional details about the transaction (vendor name, items, date if visible)
+}
+
+If you cannot determine a value, use these defaults:
+- type: "expense"
+- amount: 0
+- currency: "USD"
+- purpose: "Invoice"
+- details: "Unable to extract details"
+
+Important: Return ONLY the JSON object, no markdown, no explanation.`;
+
 async function analyzeInvoiceImage(imageUrl: string): Promise<{
   type: 'income' | 'expense';
   amount: number;
@@ -133,44 +159,22 @@ async function analyzeInvoiceImage(imageUrl: string): Promise<{
     
     console.log('Analyzing invoice image...');
     
-    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
+        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
         'Content-Type': 'application/json',
-        'HTTP-Referer': 'https://lovable.dev',
       },
       body: JSON.stringify({
-        model: 'google/gemini-2.5-flash',
+        model: 'google/gemini-3-flash-preview',
         messages: [
           {
             role: 'user',
             content: [
-              {
-                type: 'text',
-                text: `Analyze this invoice/receipt image and extract the following information. Return ONLY a valid JSON object with these fields:
-{
-  "type": "income" or "expense" (most receipts are expenses),
-  "amount": the total amount as a number (no currency symbols),
-  "currency": the currency code like "USD", "BDT", "EUR", "GBP", "INR" etc,
-  "purpose": a short description of what was purchased/paid (max 50 chars),
-  "details": additional details about the transaction (vendor name, items, date if visible)
-}
-
-If you cannot determine a value, use these defaults:
-- type: "expense"
-- amount: 0
-- currency: "USD"
-- purpose: "Invoice"
-- details: "Unable to extract details"
-
-Important: Return ONLY the JSON object, no markdown, no explanation.`
-              },
+              { type: 'text', text: INVOICE_PROMPT },
               {
                 type: 'image_url',
-                image_url: {
-                  url: `data:${mimeType};base64,${base64Image}`
-                }
+                image_url: { url: `data:${mimeType};base64,${base64Image}` }
               }
             ]
           }
@@ -179,37 +183,104 @@ Important: Return ONLY the JSON object, no markdown, no explanation.`
       }),
     });
 
+    if (!response.ok) {
+      console.error('AI gateway error:', response.status);
+      return null;
+    }
+
     const result = await response.json();
     console.log('AI response:', JSON.stringify(result));
     
-    if (result.choices && result.choices[0]?.message?.content) {
-      let content = result.choices[0].message.content.trim();
-      
-      // Remove markdown code blocks if present
-      content = content.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
-      
-      try {
-        const parsed = JSON.parse(content);
-        
-        // Validate and sanitize the response
-        return {
-          type: parsed.type === 'income' ? 'income' : 'expense',
-          amount: typeof parsed.amount === 'number' ? parsed.amount : parseFloat(parsed.amount) || 0,
-          currency: parsed.currency?.toUpperCase() || 'USD',
-          purpose: String(parsed.purpose || 'Invoice').slice(0, 50),
-          details: String(parsed.details || '').slice(0, 200),
-        };
-      } catch (parseError) {
-        console.error('Error parsing AI response:', parseError, 'Content:', content);
-        return null;
-      }
-    }
-    
-    return null;
+    return parseAIResponse(result);
   } catch (error) {
-    console.error('Error analyzing invoice:', error);
+    console.error('Error analyzing invoice image:', error);
     return null;
   }
+}
+
+async function analyzeInvoicePDF(pdfUrl: string): Promise<{
+  type: 'income' | 'expense';
+  amount: number;
+  currency: string;
+  purpose: string;
+  details: string;
+} | null> {
+  try {
+    // Download the PDF and convert to base64
+    const pdfResponse = await fetch(pdfUrl);
+    const pdfBuffer = await pdfResponse.arrayBuffer();
+    const base64Pdf = btoa(String.fromCharCode(...new Uint8Array(pdfBuffer)));
+    
+    console.log('Analyzing invoice PDF...');
+    
+    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'google/gemini-3-flash-preview',
+        messages: [
+          {
+            role: 'user',
+            content: [
+              { type: 'text', text: INVOICE_PROMPT },
+              {
+                type: 'image_url',
+                image_url: { url: `data:application/pdf;base64,${base64Pdf}` }
+              }
+            ]
+          }
+        ],
+        max_tokens: 500,
+      }),
+    });
+
+    if (!response.ok) {
+      console.error('AI gateway error:', response.status);
+      return null;
+    }
+
+    const result = await response.json();
+    console.log('AI response:', JSON.stringify(result));
+    
+    return parseAIResponse(result);
+  } catch (error) {
+    console.error('Error analyzing invoice PDF:', error);
+    return null;
+  }
+}
+
+function parseAIResponse(result: any): {
+  type: 'income' | 'expense';
+  amount: number;
+  currency: string;
+  purpose: string;
+  details: string;
+} | null {
+  if (result.choices && result.choices[0]?.message?.content) {
+    let content = result.choices[0].message.content.trim();
+    
+    // Remove markdown code blocks if present
+    content = content.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+    
+    try {
+      const parsed = JSON.parse(content);
+      
+      return {
+        type: parsed.type === 'income' ? 'income' : 'expense',
+        amount: typeof parsed.amount === 'number' ? parsed.amount : parseFloat(parsed.amount) || 0,
+        currency: parsed.currency?.toUpperCase() || 'USD',
+        purpose: String(parsed.purpose || 'Invoice').slice(0, 50),
+        details: String(parsed.details || '').slice(0, 200),
+      };
+    } catch (parseError) {
+      console.error('Error parsing AI response:', parseError, 'Content:', content);
+      return null;
+    }
+  }
+  return null;
 }
 
 function parseTransaction(text: string): { type: 'income' | 'expense'; amount: number; currency: string; purpose: string } | null {
@@ -431,12 +502,88 @@ ${invoiceData.details ? `📋 Details: ${invoiceData.details}` : ''}
   }
 }
 
+async function handleDocumentMessage(message: TelegramMessage) {
+  const chatId = message.chat.id;
+  const doc = message.document!;
+  
+  // Check if it's a PDF
+  if (doc.mime_type !== 'application/pdf') {
+    await sendTelegramMessage(chatId, `
+❌ <b>Unsupported file type</b>
+
+Please send a PDF invoice or a photo/image.
+    `);
+    return;
+  }
+  
+  await sendTelegramMessage(chatId, '📄 Analyzing your PDF invoice...');
+  
+  const pdfUrl = await getFileUrl(doc.file_id);
+  
+  if (!pdfUrl) {
+    await sendTelegramMessage(chatId, '❌ Failed to download the PDF. Please try again.');
+    return;
+  }
+  
+  const invoiceData = await analyzeInvoicePDF(pdfUrl);
+  
+  if (!invoiceData || invoiceData.amount <= 0) {
+    await sendTelegramMessage(chatId, `
+❌ <b>Could not extract invoice data</b>
+
+I couldn't read the PDF clearly. Please try:
+• Sending a clearer PDF
+• Making sure the total amount is visible
+• Or manually type: <code>$50 description</code>
+    `);
+    return;
+  }
+  
+  const success = await saveTransaction({
+    type: invoiceData.type,
+    amount: invoiceData.amount,
+    currency: invoiceData.currency,
+    purpose: invoiceData.purpose,
+    description: invoiceData.details,
+    telegramMessageId: String(message.message_id),
+  });
+  
+  if (success) {
+    const exchangeRate = await getExchangeRate(invoiceData.currency);
+    const amountInUsd = invoiceData.amount * exchangeRate;
+    
+    const emoji = invoiceData.type === 'income' ? '📈' : '📉';
+    const color = invoiceData.type === 'income' ? '🟢' : '🔴';
+    
+    const confirmText = `
+${emoji} <b>PDF Invoice Analyzed & Saved!</b>
+
+${color} Type: ${invoiceData.type.toUpperCase()}
+💵 Amount: ${CURRENCY_PATTERNS[invoiceData.currency.toLowerCase()]?.symbol || '$'}${invoiceData.amount.toLocaleString()} ${invoiceData.currency}
+💱 USD: ~$${amountInUsd.toFixed(2)}
+📝 Purpose: ${invoiceData.purpose}
+${invoiceData.details ? `📋 Details: ${invoiceData.details}` : ''}
+
+✅ Added to your wallet!
+    `;
+    await sendTelegramMessage(chatId, confirmText);
+  } else {
+    await sendTelegramMessage(chatId, '❌ Failed to save transaction. Please try again.');
+  }
+}
+
 async function handleMessage(message: TelegramMessage) {
   const chatId = message.chat.id;
   
   // Handle photo messages
   if (message.photo && message.photo.length > 0) {
     await handlePhotoMessage(message);
+    return;
+  }
+  
+  // Handle document/PDF messages
+  if (message.document) {
+    await handleDocumentMessage(message);
     return;
   }
   
@@ -457,8 +604,8 @@ Just send a message like:
 • <code>income $100 client payment</code>
 • <code>expense €30 software</code>
 
-📸 <b>Invoice Photo:</b>
-Send an invoice/receipt photo and I'll analyze it automatically!
+📸 <b>Invoice Photo/PDF:</b>
+Send an invoice photo or PDF and I'll analyze it automatically!
 
 💱 <b>Supported Currencies:</b>
 $ (USD), ৳ (BDT), € (EUR), £ (GBP), ₹ (INR), ¥ (JPY/CNY), and more!
@@ -531,7 +678,7 @@ ${color} Type: ${transaction.type.toUpperCase()}
 • <code>$50 lunch</code>
 • <code>৳500 shopping</code>
 • <code>income $100 payment</code>
-• 📸 Send an invoice photo
+• 📸 Send an invoice photo or PDF
 
 Type /help for more info.
     `);
