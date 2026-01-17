@@ -9,6 +9,15 @@ const corsHeaders = {
 const TELEGRAM_BOT_TOKEN = Deno.env.get('TELEGRAM_BOT_TOKEN');
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL');
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+const OPENROUTER_API_KEY = Deno.env.get('OPENROUTER_API_KEY');
+
+interface TelegramPhotoSize {
+  file_id: string;
+  file_unique_id: string;
+  width: number;
+  height: number;
+  file_size?: number;
+}
 
 interface TelegramMessage {
   message_id: number;
@@ -22,6 +31,8 @@ interface TelegramMessage {
     type: string;
   };
   text?: string;
+  photo?: TelegramPhotoSize[];
+  caption?: string;
   date: number;
 }
 
@@ -89,6 +100,118 @@ async function sendTelegramMessage(chatId: number, text: string, parseMode: stri
   }
 }
 
+async function getFileUrl(fileId: string): Promise<string | null> {
+  const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getFile?file_id=${fileId}`;
+  
+  try {
+    const response = await fetch(url);
+    const result = await response.json();
+    
+    if (result.ok && result.result.file_path) {
+      return `https://api.telegram.org/file/bot${TELEGRAM_BOT_TOKEN}/${result.result.file_path}`;
+    }
+    return null;
+  } catch (error) {
+    console.error('Error getting file URL:', error);
+    return null;
+  }
+}
+
+async function analyzeInvoiceImage(imageUrl: string): Promise<{
+  type: 'income' | 'expense';
+  amount: number;
+  currency: string;
+  purpose: string;
+  details: string;
+} | null> {
+  try {
+    // Download the image and convert to base64
+    const imageResponse = await fetch(imageUrl);
+    const imageBuffer = await imageResponse.arrayBuffer();
+    const base64Image = btoa(String.fromCharCode(...new Uint8Array(imageBuffer)));
+    const mimeType = imageResponse.headers.get('content-type') || 'image/jpeg';
+    
+    console.log('Analyzing invoice image...');
+    
+    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
+        'Content-Type': 'application/json',
+        'HTTP-Referer': 'https://lovable.dev',
+      },
+      body: JSON.stringify({
+        model: 'google/gemini-2.5-flash',
+        messages: [
+          {
+            role: 'user',
+            content: [
+              {
+                type: 'text',
+                text: `Analyze this invoice/receipt image and extract the following information. Return ONLY a valid JSON object with these fields:
+{
+  "type": "income" or "expense" (most receipts are expenses),
+  "amount": the total amount as a number (no currency symbols),
+  "currency": the currency code like "USD", "BDT", "EUR", "GBP", "INR" etc,
+  "purpose": a short description of what was purchased/paid (max 50 chars),
+  "details": additional details about the transaction (vendor name, items, date if visible)
+}
+
+If you cannot determine a value, use these defaults:
+- type: "expense"
+- amount: 0
+- currency: "USD"
+- purpose: "Invoice"
+- details: "Unable to extract details"
+
+Important: Return ONLY the JSON object, no markdown, no explanation.`
+              },
+              {
+                type: 'image_url',
+                image_url: {
+                  url: `data:${mimeType};base64,${base64Image}`
+                }
+              }
+            ]
+          }
+        ],
+        max_tokens: 500,
+      }),
+    });
+
+    const result = await response.json();
+    console.log('AI response:', JSON.stringify(result));
+    
+    if (result.choices && result.choices[0]?.message?.content) {
+      let content = result.choices[0].message.content.trim();
+      
+      // Remove markdown code blocks if present
+      content = content.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+      
+      try {
+        const parsed = JSON.parse(content);
+        
+        // Validate and sanitize the response
+        return {
+          type: parsed.type === 'income' ? 'income' : 'expense',
+          amount: typeof parsed.amount === 'number' ? parsed.amount : parseFloat(parsed.amount) || 0,
+          currency: parsed.currency?.toUpperCase() || 'USD',
+          purpose: String(parsed.purpose || 'Invoice').slice(0, 50),
+          details: String(parsed.details || '').slice(0, 200),
+        };
+      } catch (parseError) {
+        console.error('Error parsing AI response:', parseError, 'Content:', content);
+        return null;
+      }
+    }
+    
+    return null;
+  } catch (error) {
+    console.error('Error analyzing invoice:', error);
+    return null;
+  }
+}
+
 function parseTransaction(text: string): { type: 'income' | 'expense'; amount: number; currency: string; purpose: string } | null {
   const lowerText = text.toLowerCase().trim();
   
@@ -112,13 +235,12 @@ function parseTransaction(text: string): { type: 'income' | 'expense'; amount: n
   }
 
   // Extract amount and currency
-  // Pattern: currency symbol/code + number OR number + currency symbol/code
   const amountPatterns = [
-    /([৳$€£₹¥₱₨])\s*(\d+(?:,\d{3})*(?:\.\d{1,2})?)/i,  // Symbol before: $100, ৳500
-    /(\d+(?:,\d{3})*(?:\.\d{1,2})?)\s*([৳$€£₹¥₱₨])/i,  // Symbol after: 100$, 500৳
+    /([৳$€£₹¥₱₨])\s*(\d+(?:,\d{3})*(?:\.\d{1,2})?)/i,
+    /(\d+(?:,\d{3})*(?:\.\d{1,2})?)\s*([৳$€£₹¥₱₨])/i,
     /(\d+(?:,\d{3})*(?:\.\d{1,2})?)\s*(usd|bdt|taka|tk|eur|euro|gbp|pound|inr|rupee|aed|dirham|sar|riyal|myr|ringgit|sgd|cad|aud|jpy|yen|cny|yuan|pkr|php|peso)/i,
     /(usd|bdt|taka|tk|eur|euro|gbp|pound|inr|rupee|aed|dirham|sar|riyal|myr|ringgit|sgd|cad|aud|jpy|yen|cny|yuan|pkr|php|peso)\s*(\d+(?:,\d{3})*(?:\.\d{1,2})?)/i,
-    /(\d+(?:,\d{3})*(?:\.\d{1,2})?)/,  // Just number, default to USD
+    /(\d+(?:,\d{3})*(?:\.\d{1,2})?)/,
   ];
 
   let amount = 0;
@@ -127,7 +249,6 @@ function parseTransaction(text: string): { type: 'income' | 'expense'; amount: n
   for (const pattern of amountPatterns) {
     const match = text.match(pattern);
     if (match) {
-      // Determine which group is amount and which is currency
       const group1 = match[1];
       const group2 = match[2];
       
@@ -157,7 +278,6 @@ function parseTransaction(text: string): { type: 'income' | 'expense'; amount: n
     return null;
   }
 
-  // Extract purpose - everything that's not the amount/currency
   let purpose = text
     .replace(/[৳$€£₹¥₱₨]\s*\d+(?:,\d{3})*(?:\.\d{1,2})?/gi, '')
     .replace(/\d+(?:,\d{3})*(?:\.\d{1,2})?\s*[৳$€£₹¥₱₨]/gi, '')
@@ -197,6 +317,7 @@ async function saveTransaction(transaction: {
   currency: string;
   purpose: string;
   telegramMessageId: string;
+  description?: string;
 }): Promise<boolean> {
   const supabase = createClient(SUPABASE_URL!, SUPABASE_SERVICE_ROLE_KEY!);
   
@@ -210,6 +331,7 @@ async function saveTransaction(transaction: {
     amount_in_usd: amountInUsd,
     exchange_rate: exchangeRate,
     purpose: transaction.purpose,
+    description: transaction.description || null,
     source: 'telegram',
     telegram_message_id: transaction.telegramMessageId,
   }]);
@@ -247,8 +369,77 @@ async function getWalletSummary(): Promise<{ income: number; expense: number; ba
   return { income, expense, balance: income - expense };
 }
 
+async function handlePhotoMessage(message: TelegramMessage) {
+  const chatId = message.chat.id;
+  
+  // Get the largest photo
+  const photo = message.photo![message.photo!.length - 1];
+  
+  await sendTelegramMessage(chatId, '🔍 Analyzing your invoice image...');
+  
+  const imageUrl = await getFileUrl(photo.file_id);
+  
+  if (!imageUrl) {
+    await sendTelegramMessage(chatId, '❌ Failed to download the image. Please try again.');
+    return;
+  }
+  
+  const invoiceData = await analyzeInvoiceImage(imageUrl);
+  
+  if (!invoiceData || invoiceData.amount <= 0) {
+    await sendTelegramMessage(chatId, `
+❌ <b>Could not extract invoice data</b>
+
+I couldn't read the invoice clearly. Please try:
+• Sending a clearer photo
+• Making sure the total amount is visible
+• Or manually type: <code>$50 description</code>
+    `);
+    return;
+  }
+  
+  const success = await saveTransaction({
+    type: invoiceData.type,
+    amount: invoiceData.amount,
+    currency: invoiceData.currency,
+    purpose: invoiceData.purpose,
+    description: invoiceData.details,
+    telegramMessageId: String(message.message_id),
+  });
+  
+  if (success) {
+    const exchangeRate = await getExchangeRate(invoiceData.currency);
+    const amountInUsd = invoiceData.amount * exchangeRate;
+    
+    const emoji = invoiceData.type === 'income' ? '📈' : '📉';
+    const color = invoiceData.type === 'income' ? '🟢' : '🔴';
+    
+    const confirmText = `
+${emoji} <b>Invoice Analyzed & Saved!</b>
+
+${color} Type: ${invoiceData.type.toUpperCase()}
+💵 Amount: ${CURRENCY_PATTERNS[invoiceData.currency.toLowerCase()]?.symbol || '$'}${invoiceData.amount.toLocaleString()} ${invoiceData.currency}
+💱 USD: ~$${amountInUsd.toFixed(2)}
+📝 Purpose: ${invoiceData.purpose}
+${invoiceData.details ? `📋 Details: ${invoiceData.details}` : ''}
+
+✅ Added to your wallet!
+    `;
+    await sendTelegramMessage(chatId, confirmText);
+  } else {
+    await sendTelegramMessage(chatId, '❌ Failed to save transaction. Please try again.');
+  }
+}
+
 async function handleMessage(message: TelegramMessage) {
   const chatId = message.chat.id;
+  
+  // Handle photo messages
+  if (message.photo && message.photo.length > 0) {
+    await handlePhotoMessage(message);
+    return;
+  }
+  
   const text = message.text || '';
   const lowerText = text.toLowerCase().trim();
   
@@ -265,7 +456,9 @@ Just send a message like:
 • <code>৳500 shopping</code>
 • <code>income $100 client payment</code>
 • <code>expense €30 software</code>
-• <code>1000 BDT food</code>
+
+📸 <b>Invoice Photo:</b>
+Send an invoice/receipt photo and I'll analyze it automatically!
 
 💱 <b>Supported Currencies:</b>
 $ (USD), ৳ (BDT), € (EUR), £ (GBP), ₹ (INR), ¥ (JPY/CNY), and more!
@@ -338,6 +531,7 @@ ${color} Type: ${transaction.type.toUpperCase()}
 • <code>$50 lunch</code>
 • <code>৳500 shopping</code>
 • <code>income $100 payment</code>
+• 📸 Send an invoice photo
 
 Type /help for more info.
     `);
