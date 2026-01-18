@@ -87,7 +87,9 @@ const Terms = () => {
       <SEO
         title="Terms & Conditions | Service Agreement | LUNEXO MEDIA"
         description="Read LUNEXO MEDIA's comprehensive terms and conditions for our digital marketing services. Important legal information about our service agreements."
+        image="https://www.lunexomedia.com/og-image-new.jpg"
         url="https://www.lunexomedia.com/terms"
+        keywords="terms and conditions, service agreement, legal terms, LUNEXO MEDIA policies"
       />
       
       <Navigation />

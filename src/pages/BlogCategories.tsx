@@ -45,8 +45,9 @@ const BlogCategories = () => {
       <SEO
         title="Blog Categories | LUNEXO MEDIA - Browse by Topic"
         description="Browse our blog posts by category. Find content on Website Design, SEO, Ads Management, AI Automation and more digital marketing topics."
-        image="https://www.lunexomedia.com/og-image.jpg"
+        image="https://www.lunexomedia.com/og-image-new.jpg"
         url="https://www.lunexomedia.com/blog/categories"
+        keywords="blog categories, digital marketing topics, SEO articles, web design blog, AI automation guides"
       />
       
       <Navigation />

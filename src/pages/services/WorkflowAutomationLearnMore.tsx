@@ -102,8 +102,9 @@ const WorkflowAutomationLearnMore = () => {
       <SEO
         title="Workflow Automation Services - Streamline Business Processes | LUNEXO MEDIA"
         description="Automate repetitive business processes with custom workflow solutions. Increase efficiency, reduce errors, and scale your operations."
-        image="https://www.lunexomedia.com/og-image.jpg"
+        image="https://www.lunexomedia.com/og-image-new.jpg"
         url="https://www.lunexomedia.com/services/workflow-automation-learn-more"
+        keywords="workflow automation, business process automation, task automation, efficiency tools"
       />
       
       <Navigation />

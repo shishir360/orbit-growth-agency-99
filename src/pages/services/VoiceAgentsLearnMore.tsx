@@ -92,8 +92,9 @@ const VoiceAgentsLearnMore = () => {
       <SEO
         title="AI Voice Agents - Intelligent Phone Automation | LUNEXO MEDIA"
         description="Deploy AI voice agents that handle calls, book appointments, and provide customer support with human-like conversations 24/7."
-        image="https://www.lunexomedia.com/og-image.jpg"
+        image="https://www.lunexomedia.com/og-image-new.jpg"
         url="https://www.lunexomedia.com/services/voice-agents-learn-more"
+        keywords="AI voice agents, phone automation, voice AI, automated calls, conversational AI"
       />
       
       <Navigation />

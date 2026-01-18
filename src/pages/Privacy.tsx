@@ -80,7 +80,9 @@ const Privacy = () => {
       <SEO
         title="Privacy Policy | Data Protection & Security | LUNEXO MEDIA"
         description="Learn how LUNEXO MEDIA protects your privacy and personal data. Comprehensive privacy policy covering data collection, usage, and your rights."
+        image="https://www.lunexomedia.com/og-image-new.jpg"
         url="https://www.lunexomedia.com/privacy"
+        keywords="privacy policy, data protection, GDPR, data security, LUNEXO MEDIA privacy"
       />
       
       <Navigation />

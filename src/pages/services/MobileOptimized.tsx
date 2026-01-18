@@ -40,8 +40,9 @@ const MobileOptimized = () => {
       <SEO
         title="Mobile Optimized Website Design | Lunexo Media"
         description="Get responsive, mobile-first website designs that work perfectly on all devices. Boost your mobile traffic and conversions with our expert optimization services."
-        image="https://www.lunexomedia.com/og-image.jpg"
+        image="https://www.lunexomedia.com/og-image-new.jpg"
         url="https://www.lunexomedia.com/services/mobile-optimized"
+        keywords="mobile optimized website, responsive design, mobile-first, mobile web design"
       />
       
       <Navigation />

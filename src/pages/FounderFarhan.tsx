@@ -60,6 +60,7 @@ const FounderFarhan = () => {
       <SEO
         title="Farhan Tanvier - Founder & CEO | Lunexo Media"
         description="Meet Farhan Tanvier, the visionary founder and CEO of Lunexo Media. Passionate about helping businesses thrive through innovative digital solutions."
+        image="https://www.lunexomedia.com/og-image-new.jpg"
         url="https://www.lunexomedia.com/farhan-tanvier"
         keywords="Farhan Tanvier, Lunexo Media founder, CEO, digital marketing expert, entrepreneur"
       />
