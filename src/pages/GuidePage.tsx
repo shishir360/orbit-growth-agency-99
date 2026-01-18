@@ -97,8 +97,11 @@ const GuidePage = () => {
   return (
     <>
       <SEO 
-        title={`${pdf.title} - Free Download`}
-        description={pdf.description || `Download our comprehensive guide: ${pdf.title}`}
+        title={`${pdf.title} - Free Download | Lunexo Media`}
+        description={pdf.description || `Download our comprehensive guide: ${pdf.title}. Free resource from Lunexo Media.`}
+        image="https://www.lunexomedia.com/og-image-new.jpg"
+        url={`https://www.lunexomedia.com/guide/${slug}`}
+        keywords={`${pdf.title}, free download, guide, PDF, Lunexo Media`}
       />
       
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50 py-12 px-4">

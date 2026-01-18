@@ -132,8 +132,9 @@ const ServicesExplore = () => {
       <SEO
         title="Explore All Services | LUNEXO MEDIA"
         description="Discover all LUNEXO MEDIA services: Website Design, Ads Management, and AI Automation. Find the perfect solution for your business growth."
-        image="https://www.lunexomedia.com/og-image.jpg"
-        url="https://www.lunexomedia.com/services"
+        image="https://www.lunexomedia.com/og-image-new.jpg"
+        url="https://www.lunexomedia.com/services-explore"
+        keywords="digital marketing services, website design, ads management, AI automation, business growth solutions"
       />
       
       <Navigation />
