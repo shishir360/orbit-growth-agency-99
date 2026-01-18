@@ -205,7 +205,8 @@ async function fetchDynamicMetadata(path) {
 export default async function handler(request) {
   const userAgent = request.headers.get('user-agent') || '';
   const url = new URL(request.url);
-  const path = url.pathname;
+  const path = url.searchParams.get('path') || url.pathname;
+
   
   // Only intercept for social media bots
   if (!isSocialBot(userAgent)) {
