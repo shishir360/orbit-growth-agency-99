@@ -33,5 +33,10 @@
         }
       ]
     }
-  ]
+  ],
+  "functions": {
+    "api/og-proxy.js": {
+      "runtime": "edge"
+    }
+  }
 }
