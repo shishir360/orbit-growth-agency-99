@@ -361,6 +361,29 @@ async function fetchDynamicMetadata(path) {
   }
 }
 
+// Fetch AI-generated OG image from database
+async function fetchGeneratedOgImage(path) {
+  try {
+    const response = await fetch(
+      `${SUPABASE_URL}/rest/v1/og_images?page_path=eq.${encodeURIComponent(path)}&select=image_url`,
+      {
+        headers: {
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+        }
+      }
+    );
+    const data = await response.json();
+    if (data && data[0]?.image_url) {
+      return data[0].image_url;
+    }
+    return null;
+  } catch (error) {
+    console.error('Error fetching generated OG image:', error);
+    return null;
+  }
+}
+
 export default async function middleware(request) {
   const userAgent = request.headers.get('user-agent') || '';
   const url = new URL(request.url);
@@ -389,6 +412,12 @@ export default async function middleware(request) {
   // Fallback to homepage metadata
   if (!metadata) {
     metadata = pageMetadata["/"];
+  }
+  
+  // Try to get AI-generated OG image
+  const generatedImage = await fetchGeneratedOgImage(path);
+  if (generatedImage) {
+    metadata = { ...metadata, image: generatedImage };
   }
   
   const html = generateMetaHtml(path, metadata);

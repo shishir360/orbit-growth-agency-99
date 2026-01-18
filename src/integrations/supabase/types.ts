@@ -618,6 +618,33 @@ export type Database = {
           },
         ]
       }
+      og_images: {
+        Row: {
+          generated_at: string
+          id: string
+          image_url: string
+          page_path: string
+          title: string | null
+          updated_at: string
+        }
+        Insert: {
+          generated_at?: string
+          id?: string
+          image_url: string
+          page_path: string
+          title?: string | null
+          updated_at?: string
+        }
+        Update: {
+          generated_at?: string
+          id?: string
+          image_url?: string
+          page_path?: string
+          title?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       pages: {
         Row: {
           content: string
