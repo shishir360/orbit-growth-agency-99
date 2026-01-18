@@ -3,45 +3,6 @@ import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
 import { VitePWA } from 'vite-plugin-pwa';
-import Prerender from 'vite-plugin-prerender';
-import { fileURLToPath } from 'url';
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
-// All routes to prerender for SEO/OG tags
-const routesToPrerender = [
-  '/',
-  '/about',
-  '/contact',
-  '/pricing',
-  '/portfolio',
-  '/blog',
-  '/reviews',
-  '/sitemap',
-  '/privacy',
-  '/terms',
-  '/founder',
-  '/founder-farhan',
-  '/tutorials',
-  '/services',
-  '/website-design',
-  '/ai-automation',
-  '/ads-management',
-  '/portfolio/website-design',
-  '/portfolio/ai-automation',
-  '/portfolio/ads-management',
-  '/services/website-design',
-  '/services/ai-automation',
-  '/services/ads-management',
-  '/services/ai-chatbots',
-  '/services/voice-agents',
-  '/services/workflow-automation',
-  '/services/email-automation',
-  '/services/seo-friendly',
-  '/services/mobile-optimized',
-  '/services/fast-loading',
-  '/services/conversion-focused',
-];
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
@@ -100,23 +61,7 @@ export default defineConfig(({ mode }) => ({
           }
         ]
       }
-    }),
-    // Prerender static pages for SEO/OG tags
-    mode === 'production' && Prerender({
-      staticDir: path.join(__dirname, 'dist'),
-      routes: routesToPrerender,
-      renderer: new Prerender.PuppeteerRenderer({
-        renderAfterTime: 5000,
-        headless: true,
-      }),
-      postProcess(renderedRoute) {
-        // Ensure proper HTML structure
-        renderedRoute.html = renderedRoute.html
-          .replace(/<script[^>]*type="module"[^>]*crossorigin[^>]*><\/script>/gi, '')
-          .replace(/<!--.*?-->/gs, '');
-        return renderedRoute;
-      }
-    }),
+    })
   ].filter(Boolean),
   resolve: {
     alias: {
