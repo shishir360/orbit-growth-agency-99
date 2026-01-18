@@ -80,8 +80,9 @@ const AIChatbotsLearnMore = () => {
       <SEO
         title="AI Chatbots - Intelligent Customer Support | LUNEXO MEDIA"
         description="Deploy smart AI chatbots that handle customer inquiries 24/7. Reduce support costs while improving customer satisfaction with intelligent automation."
-        image="https://www.lunexomedia.com/og-image.jpg"
+        image="https://www.lunexomedia.com/og-image-new.jpg"
         url="https://www.lunexomedia.com/services/ai-chatbots-learn-more"
+        keywords="AI chatbots, customer support automation, intelligent chatbot, 24/7 support, conversational AI"
       />
       
       <Navigation />

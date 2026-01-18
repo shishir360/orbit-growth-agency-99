@@ -350,8 +350,9 @@ const AIAutomationLearnMore = () => {
       <SEO
         title="AI Automation Services - Complete Guide | LUNEXO MEDIA"
         description="Complete guide to LUNEXO MEDIA AI automation services. Learn about chatbots, email automation, voice agents, and workflow optimization."
-        image="https://www.lunexomedia.com/og-image.jpg"
+        image="https://www.lunexomedia.com/og-image-new.jpg"
         url="https://www.lunexomedia.com/services/ai-automation-learn-more"
+        keywords="AI automation services, chatbots, email automation, voice agents, workflow optimization"
       />
       
       <Navigation />

@@ -263,8 +263,9 @@ const LearnPlatform = () => {
       <SEO
         title={`${currentPlatform.name} Advertising Guide | LUNEXO MEDIA`}
         description={`Complete guide to ${currentPlatform.name} advertising. Learn strategies, targeting options, and how we help businesses succeed on this platform.`}
-        image="https://www.lunexomedia.com/og-image.jpg"
+        image="https://www.lunexomedia.com/og-image-new.jpg"
         url={`https://www.lunexomedia.com/services/learn-platform?platform=${platformParam}`}
+        keywords={`${currentPlatform.name} advertising, ${currentPlatform.name} marketing, PPC guide, ad strategy`}
       />
       
       <Navigation />

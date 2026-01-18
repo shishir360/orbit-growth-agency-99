@@ -380,8 +380,9 @@ const WebsiteDesignLearnMore = () => {
       <SEO
         title="Website Design & Development Services - Complete Guide | LUNEXO MEDIA"
         description="Complete guide to LUNEXO MEDIA website design and development services. Learn about our process, pricing, and how we create conversion-focused websites."
-        image="https://www.lunexomedia.com/og-image.jpg"
+        image="https://www.lunexomedia.com/og-image-new.jpg"
         url="https://www.lunexomedia.com/services/website-design-learn-more"
+        keywords="website design services, web development, responsive design, custom websites, UI/UX design"
       />
       
       <Navigation />

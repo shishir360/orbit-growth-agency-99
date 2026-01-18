@@ -269,8 +269,9 @@ const AdsManagementLearnMore = () => {
       <SEO
         title="Ads Management Services - Complete Guide | LUNEXO MEDIA"
         description="Complete guide to LUNEXO MEDIA ads management services. Learn about platforms, strategies, pricing, and results we deliver for businesses."
-        image="https://www.lunexomedia.com/og-image.jpg"
+        image="https://www.lunexomedia.com/og-image-new.jpg"
         url="https://www.lunexomedia.com/services/ads-management-learn-more"
+        keywords="ads management, Google Ads, Facebook Ads, PPC management, digital advertising"
       />
       
       <Navigation />

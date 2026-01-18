@@ -93,8 +93,9 @@ const PortfolioWebsiteDesign = () => {
       <SEO
         title="Website Design Portfolio | Premium Web Development | LUNEXO MEDIA"
         description="Explore our website design portfolio featuring award-winning e-commerce platforms, business websites, and web applications that drive exceptional results."
-        image="https://www.lunexomedia.com/og-image.jpg"
+        image="https://www.lunexomedia.com/og-image-new.jpg"
         url="https://www.lunexomedia.com/portfolio/website-design"
+        keywords="website portfolio, web design examples, e-commerce websites, business website showcase"
       />
       <Navigation />
       

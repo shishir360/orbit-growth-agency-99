@@ -77,7 +77,8 @@ const Sitemap = () => {
       <SEO
         title="Sitemap | LUNEXO MEDIA - Website Structure & Navigation"
         description="Browse our complete sitemap to find all pages and services offered by LUNEXO MEDIA. Easy navigation to website design, AI automation, ads management, and more."
-        url="https://lunexomedia.com/sitemap"
+        image="https://www.lunexomedia.com/og-image-new.jpg"
+        url="https://www.lunexomedia.com/sitemap"
         keywords="sitemap, navigation, website structure, LUNEXO MEDIA pages, services directory"
       />
       <Navigation />

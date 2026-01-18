@@ -81,8 +81,9 @@ const ConversionFocused = () => {
       <SEO
         title="Conversion Focused Website Design | Lunexo Media"
         description="Increase your website conversions with psychology-driven design. Our conversion optimization strategies turn more visitors into customers and boost your revenue."
-        image="https://www.lunexomedia.com/og-image.jpg"
+        image="https://www.lunexomedia.com/og-image-new.jpg"
         url="https://www.lunexomedia.com/services/conversion-focused"
+        keywords="conversion focused website, conversion optimization, CRO, increase conversions"
       />
       
       <Navigation />

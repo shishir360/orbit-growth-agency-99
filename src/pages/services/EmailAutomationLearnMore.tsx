@@ -88,8 +88,9 @@ const EmailAutomationLearnMore = () => {
       <SEO
         title="Email Automation Services - AI-Powered Email Marketing | LUNEXO MEDIA"
         description="Boost email performance with AI-driven automation. Personalized sequences, behavioral triggers, and advanced segmentation that convert."
-        image="https://www.lunexomedia.com/og-image.jpg"
+        image="https://www.lunexomedia.com/og-image-new.jpg"
         url="https://www.lunexomedia.com/services/email-automation-learn-more"
+        keywords="email automation, email marketing, AI email, personalized emails, automated sequences"
       />
       
       <Navigation />

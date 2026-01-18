@@ -69,8 +69,9 @@ const FastLoading = () => {
       <SEO
         title="Fast Loading Website Optimization | Lunexo Media"
         description="Boost your website speed with our performance optimization services. Get faster loading times, better SEO rankings, and higher conversion rates."
-        image="https://www.lunexomedia.com/og-image.jpg"
+        image="https://www.lunexomedia.com/og-image-new.jpg"
         url="https://www.lunexomedia.com/services/fast-loading"
+        keywords="fast loading website, speed optimization, website performance, page speed"
       />
       
       <Navigation />

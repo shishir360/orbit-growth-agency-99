@@ -69,8 +69,9 @@ const SEOFriendly = () => {
       <SEO
         title="SEO Friendly Website Design | Lunexo Media"
         description="Build SEO-optimized websites that rank higher in search results. Our SEO-friendly designs drive organic traffic and improve search engine visibility."
-        image="https://www.lunexomedia.com/og-image.jpg"
+        image="https://www.lunexomedia.com/og-image-new.jpg"
         url="https://www.lunexomedia.com/services/seo-friendly"
+        keywords="SEO friendly website, SEO optimized design, search engine optimization, organic traffic"
       />
       
       <Navigation />
