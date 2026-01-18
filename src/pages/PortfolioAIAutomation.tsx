@@ -90,7 +90,7 @@ const PortfolioAIAutomation = () => {
       <SEO
         title="AI Automation Portfolio | Intelligent Business Solutions | LUNEXO MEDIA"
         description="Explore our AI automation portfolio featuring chatbots, workflow automation, and intelligent systems that transform business operations."
-        image="https://www.lunexomedia.com/og-image-new.jpg"
+        image="https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1200&q=80"
         url="https://www.lunexomedia.com/portfolio/ai-automation"
         keywords="AI automation portfolio, chatbot projects, workflow automation examples, AI case studies"
       />

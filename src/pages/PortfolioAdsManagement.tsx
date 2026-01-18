@@ -90,7 +90,7 @@ const PortfolioAdsManagement = () => {
       <SEO
         title="Ads Management Portfolio | ROI-Driven Campaigns | LUNEXO MEDIA"
         description="Explore our ads management portfolio featuring high-converting Google Ads, Facebook campaigns, and multi-platform strategies that deliver exceptional ROI."
-        image="https://www.lunexomedia.com/og-image-new.jpg"
+        image="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80"
         url="https://www.lunexomedia.com/portfolio/ads-management"
         keywords="ads portfolio, Google Ads campaigns, Facebook advertising, PPC case studies, ROI results"
       />
