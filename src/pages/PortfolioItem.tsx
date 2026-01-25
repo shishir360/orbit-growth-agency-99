@@ -5,10 +5,11 @@ import Navigation from "@/components/ui/navigation";
 import Footer from "@/components/ui/footer";
 import SEO from "@/components/ui/seo";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ExternalLink, Calendar, TrendingUp, Award, Globe, Layers, Code, Zap, ArrowRight, Star, CheckCircle, Sparkles, Target, Clock, Shield } from "lucide-react";
+import { ArrowLeft, ExternalLink, Calendar, TrendingUp, Award, Globe, Layers, Code, Zap, ArrowRight, Star, CheckCircle, Sparkles, Target, Clock, Shield, BookOpen, Users, BarChart3, Rocket, Play } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import DOMPurify from 'isomorphic-dompurify';
 import { Helmet } from 'react-helmet-async';
+import { motion } from "framer-motion";
 
 // Structured Data Component for SEO
 const PortfolioStructuredData = ({ project }: { project: any }) => {
@@ -353,109 +354,237 @@ const PortfolioItem = () => {
         </section>
       )}
 
-      {/* Project Content - Premium */}
+      {/* Project Content - Ultra Premium */}
       {project.content && (
-        <section className="py-24 relative overflow-hidden">
-          <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-r from-red-600/10 to-orange-500/10 rounded-full blur-[150px]"></div>
+        <section className="py-32 relative overflow-hidden">
+          {/* Premium Background Effects */}
+          <div className="absolute inset-0">
+            <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-gradient-to-r from-red-600/15 to-orange-500/10 rounded-full blur-[180px]"></div>
+            <div className="absolute top-20 right-0 w-[500px] h-[500px] bg-gradient-to-r from-purple-600/10 to-pink-500/10 rounded-full blur-[150px]"></div>
+          </div>
           
           <div className="container-wide section-padding relative z-10">
-            <div className="max-w-4xl mx-auto">
-              {/* Section Header */}
-              <div className="text-center mb-12">
-                <div className="inline-flex items-center gap-2 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/20 text-yellow-400 px-5 py-2.5 rounded-full text-sm font-medium backdrop-blur-xl mb-6">
-                  <Award className="w-4 h-4" />
+            <div className="max-w-5xl mx-auto">
+              {/* Premium Section Header */}
+              <motion.div 
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                viewport={{ once: true }}
+                className="text-center mb-16"
+              >
+                <div className="inline-flex items-center gap-3 bg-gradient-to-r from-yellow-500/10 via-orange-500/10 to-red-500/10 border border-yellow-500/20 text-yellow-400 px-6 py-3 rounded-full text-sm font-medium backdrop-blur-xl mb-8">
+                  <BookOpen className="w-5 h-5" />
                   Case Study
+                  <span className="w-1.5 h-1.5 bg-yellow-400 rounded-full animate-pulse"></span>
                 </div>
-                <h2 className="text-4xl lg:text-5xl font-bold text-white mb-4" style={{fontFamily: "'Playfair Display', serif"}}>
+                <h2 className="text-4xl lg:text-6xl font-bold text-white mb-6" style={{fontFamily: "'Playfair Display', serif"}}>
                   Project <span className="bg-gradient-to-r from-red-500 via-orange-400 to-yellow-400 bg-clip-text text-transparent">Details</span>
                 </h2>
-                <p className="text-white/70 text-lg">Full breakdown of strategy, execution, and results</p>
-              </div>
+                <p className="text-white/70 text-lg lg:text-xl max-w-2xl mx-auto">Full breakdown of strategy, execution, and results</p>
+              </motion.div>
+
+              {/* Premium Stats Row */}
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                viewport={{ once: true }}
+                className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-12"
+              >
+                {[
+                  { icon: Users, value: "50K+", label: "Users Reached", color: "from-blue-500 to-cyan-500" },
+                  { icon: BarChart3, value: "300%", label: "ROI Increase", color: "from-green-500 to-emerald-500" },
+                  { icon: Rocket, value: "2 Weeks", label: "Launch Time", color: "from-purple-500 to-pink-500" },
+                  { icon: Star, value: "100%", label: "Client Satisfaction", color: "from-yellow-500 to-orange-500" }
+                ].map((stat, i) => (
+                  <div key={i} className="group relative">
+                    <div className={`absolute inset-0 bg-gradient-to-r ${stat.color} rounded-2xl blur-xl opacity-0 group-hover:opacity-30 transition-opacity duration-500`}></div>
+                    <div className="relative bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-sm hover:bg-white/8 hover:border-white/20 transition-all duration-300 text-center">
+                      <div className={`w-12 h-12 mx-auto rounded-xl bg-gradient-to-r ${stat.color} flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform`}>
+                        <stat.icon className="w-6 h-6 text-white" />
+                      </div>
+                      <div className="text-2xl lg:text-3xl font-bold text-white mb-1">{stat.value}</div>
+                      <div className="text-sm text-white/60 uppercase tracking-wider">{stat.label}</div>
+                    </div>
+                  </div>
+                ))}
+              </motion.div>
               
-              {/* Content Card */}
-              <div className="bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 rounded-3xl p-8 lg:p-12 backdrop-blur-sm">
-                <div className="prose prose-lg prose-invert max-w-none 
-                  prose-headings:text-white prose-headings:font-bold prose-headings:mb-4 prose-headings:mt-8
-                  prose-h2:text-2xl prose-h3:text-xl
-                  prose-p:text-white/80 prose-p:leading-relaxed prose-p:mb-6
-                  prose-a:text-red-400 prose-a:no-underline hover:prose-a:underline
-                  prose-strong:text-white prose-strong:font-semibold
-                  prose-ul:text-white/80 prose-ol:text-white/80 prose-ul:my-6 prose-ol:my-6
-                  prose-li:marker:text-red-400 prose-li:mb-2
-                  prose-blockquote:border-l-red-500 prose-blockquote:border-l-4 prose-blockquote:pl-6 prose-blockquote:text-white/70 prose-blockquote:italic
-                  prose-code:bg-white/10 prose-code:px-2 prose-code:py-1 prose-code:rounded prose-code:text-red-400
-                  prose-pre:bg-white/5 prose-pre:border prose-pre:border-white/10
-                  prose-hr:border-white/10 prose-hr:my-8
-                  [&>*]:text-white/80
-                ">
-                  <div dangerouslySetInnerHTML={{ 
-                    __html: DOMPurify.sanitize(project.content, {
-                      ALLOWED_TAGS: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'ul', 'ol', 'li', 'a', 'strong', 'em', 'img', 'blockquote', 'code', 'pre', 'br', 'hr'],
-                      ALLOWED_ATTR: ['href', 'src', 'alt', 'title', 'class', 'target', 'rel'],
-                      ALLOW_DATA_ATTR: false
-                    })
-                  }} />
+              {/* Premium Content Card */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                viewport={{ once: true }}
+                className="relative"
+              >
+                <div className="absolute -inset-1 bg-gradient-to-r from-red-500/20 via-orange-500/15 to-yellow-500/10 rounded-3xl blur-xl"></div>
+                <div className="relative bg-gradient-to-br from-white/8 to-white/[0.02] border border-white/15 rounded-3xl p-8 lg:p-14 backdrop-blur-xl">
+                  {/* Decorative Corner */}
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-red-500/10 to-transparent rounded-bl-[100px]"></div>
+                  <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-orange-500/10 to-transparent rounded-tr-[80px]"></div>
+                  
+                  <div className="prose prose-lg prose-invert max-w-none 
+                    prose-headings:text-white prose-headings:font-bold prose-headings:mb-6 prose-headings:mt-10
+                    prose-h2:text-3xl prose-h2:bg-gradient-to-r prose-h2:from-white prose-h2:to-white/80 prose-h2:bg-clip-text
+                    prose-h3:text-2xl prose-h3:text-white/90
+                    prose-p:text-white/75 prose-p:leading-relaxed prose-p:mb-6 prose-p:text-lg
+                    prose-a:text-red-400 prose-a:no-underline hover:prose-a:underline prose-a:font-medium
+                    prose-strong:text-white prose-strong:font-semibold
+                    prose-ul:text-white/75 prose-ol:text-white/75 prose-ul:my-6 prose-ol:my-6
+                    prose-li:marker:text-red-400 prose-li:mb-3 prose-li:text-lg
+                    prose-blockquote:border-l-red-500 prose-blockquote:border-l-4 prose-blockquote:pl-8 prose-blockquote:text-white/60 prose-blockquote:italic prose-blockquote:bg-white/5 prose-blockquote:py-4 prose-blockquote:rounded-r-xl
+                    prose-code:bg-red-500/10 prose-code:px-3 prose-code:py-1 prose-code:rounded-lg prose-code:text-red-400 prose-code:font-medium
+                    prose-pre:bg-[#0a0a0f] prose-pre:border prose-pre:border-white/10 prose-pre:rounded-xl
+                    prose-hr:border-white/10 prose-hr:my-10
+                    prose-img:rounded-xl prose-img:shadow-2xl
+                    [&>*]:text-white/75
+                  ">
+                    <div dangerouslySetInnerHTML={{ 
+                      __html: DOMPurify.sanitize(project.content, {
+                        ALLOWED_TAGS: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'ul', 'ol', 'li', 'a', 'strong', 'em', 'img', 'blockquote', 'code', 'pre', 'br', 'hr'],
+                        ALLOWED_ATTR: ['href', 'src', 'alt', 'title', 'class', 'target', 'rel'],
+                        ALLOW_DATA_ATTR: false
+                      })
+                    }} />
+                  </div>
                 </div>
-              </div>
+              </motion.div>
             </div>
           </div>
         </section>
       )}
 
-      {/* Related Projects - Premium */}
+      {/* Related Projects - Premium Auto-Scroll Carousel */}
       {relatedProjects.length > 0 && (
-        <section className="py-24 relative overflow-hidden">
+        <section className="py-32 relative overflow-hidden">
+          {/* Background Effects */}
           <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+          <div className="absolute top-1/2 left-0 w-[500px] h-[500px] bg-gradient-to-r from-purple-600/15 to-pink-500/10 rounded-full blur-[180px] -translate-y-1/2"></div>
+          <div className="absolute top-1/2 right-0 w-[400px] h-[400px] bg-gradient-to-r from-blue-600/10 to-cyan-500/10 rounded-full blur-[150px] -translate-y-1/2"></div>
           
-          <div className="container-wide section-padding">
-            <div className="text-center mb-16">
-              <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 text-white/70 px-5 py-2.5 rounded-full text-sm font-medium backdrop-blur-xl mb-6">
-                <Sparkles className="w-4 h-4 text-purple-400" />
-                More Projects
-              </div>
-              <h2 className="text-4xl lg:text-5xl font-bold text-white mb-4" style={{fontFamily: "'Playfair Display', serif"}}>
-                Related <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">Work</span>
-              </h2>
-              <p className="text-white/70 text-lg">More projects in {project.category}</p>
+          <div className="relative z-10">
+            {/* Section Header */}
+            <div className="container-wide section-padding">
+              <motion.div 
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                viewport={{ once: true }}
+                className="text-center mb-16"
+              >
+                <div className="inline-flex items-center gap-3 bg-gradient-to-r from-purple-500/10 via-pink-500/10 to-blue-500/10 border border-purple-500/20 text-purple-400 px-6 py-3 rounded-full text-sm font-medium backdrop-blur-xl mb-8">
+                  <Sparkles className="w-5 h-5" />
+                  More Projects
+                  <span className="w-1.5 h-1.5 bg-purple-400 rounded-full animate-pulse"></span>
+                </div>
+                <h2 className="text-4xl lg:text-6xl font-bold text-white mb-6" style={{fontFamily: "'Playfair Display', serif"}}>
+                  Related <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent">Work</span>
+                </h2>
+                <p className="text-white/70 text-lg lg:text-xl">More projects in {project.category}</p>
+              </motion.div>
             </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {relatedProjects.map((related, index) => (
-                <Link 
-                  key={index} 
-                  to={`/portfolio/${related.slug}`}
-                  className="group relative"
+
+            {/* Auto-Scrolling Carousel */}
+            <div className="relative">
+              {/* Left Gradient Mask */}
+              <div className="absolute left-0 top-0 bottom-0 w-32 lg:w-64 bg-gradient-to-r from-[#0a0a0f] to-transparent z-10 pointer-events-none"></div>
+              {/* Right Gradient Mask */}
+              <div className="absolute right-0 top-0 bottom-0 w-32 lg:w-64 bg-gradient-to-l from-[#0a0a0f] to-transparent z-10 pointer-events-none"></div>
+              
+              {/* Carousel Container */}
+              <div className="overflow-hidden py-4">
+                <motion.div
+                  className="flex gap-8"
+                  animate={{
+                    x: ["0%", "-50%"]
+                  }}
+                  transition={{
+                    x: {
+                      duration: 25,
+                      repeat: Infinity,
+                      ease: "linear"
+                    }
+                  }}
+                  style={{ width: "fit-content" }}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-red-500/20 to-orange-500/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                  <div className="relative bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:border-white/20 transition-all duration-500 hover:-translate-y-2">
-                    <div className="relative h-56 overflow-hidden">
-                      <img 
-                        src={related.image_url || "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80"} 
-                        alt={related.title}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0f] via-[#0a0a0f]/50 to-transparent"></div>
-                      
-                      <div className="absolute top-4 left-4">
-                        <span className="text-xs px-3 py-1.5 bg-red-500/20 border border-red-500/30 text-red-400 rounded-full font-medium backdrop-blur-sm">
-                          {related.category}
-                        </span>
+                  {/* Duplicate projects for seamless loop */}
+                  {[...relatedProjects, ...relatedProjects, ...relatedProjects, ...relatedProjects].map((related, index) => (
+                    <Link 
+                      key={index} 
+                      to={`/portfolio/${related.slug}`}
+                      className="group flex-shrink-0 w-[380px] lg:w-[420px]"
+                    >
+                      <div className="relative h-full">
+                        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/25 to-pink-500/25 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        <div className="relative bg-gradient-to-br from-white/8 to-white/[0.02] border border-white/10 rounded-3xl overflow-hidden hover:border-white/25 transition-all duration-500 hover:-translate-y-3 hover:shadow-2xl hover:shadow-purple-500/10">
+                          {/* Image Container */}
+                          <div className="relative h-56 lg:h-64 overflow-hidden">
+                            <img 
+                              src={related.image_url || "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80"} 
+                              alt={related.title}
+                              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0f] via-[#0a0a0f]/60 to-transparent"></div>
+                            
+                            {/* Category Badge */}
+                            <div className="absolute top-4 left-4">
+                              <span className="text-xs px-4 py-2 bg-gradient-to-r from-purple-500/30 to-pink-500/30 border border-purple-500/30 text-white rounded-full font-medium backdrop-blur-xl">
+                                {related.category}
+                              </span>
+                            </div>
+
+                            {/* Play Icon on Hover */}
+                            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                              <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-xl flex items-center justify-center border border-white/30">
+                                <Play className="w-6 h-6 text-white ml-1" />
+                              </div>
+                            </div>
+                          </div>
+                          
+                          {/* Content */}
+                          <div className="p-6 lg:p-8">
+                            <h3 className="text-xl lg:text-2xl font-bold text-white mb-3 group-hover:bg-gradient-to-r group-hover:from-purple-400 group-hover:to-pink-400 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-300">
+                              {related.title}
+                            </h3>
+                            <p className="text-white/60 text-sm lg:text-base line-clamp-2 mb-6">{related.description}</p>
+                            
+                            {/* CTA */}
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-2 text-white/50 text-sm group-hover:text-purple-400 transition-colors">
+                                View Project <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
+                              </div>
+                              <div className="flex items-center gap-1">
+                                {[1,2,3,4,5].map((star) => (
+                                  <Star key={star} className="w-3 h-3 text-yellow-500 fill-yellow-500" />
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                    
-                    <div className="p-6">
-                      <h3 className="text-xl font-bold text-white mb-2 group-hover:text-red-400 transition-colors">
-                        {related.title}
-                      </h3>
-                      <p className="text-white/70 text-sm line-clamp-2 mb-4">{related.description}</p>
-                      <div className="flex items-center gap-2 text-white/60 text-sm group-hover:text-white transition-colors">
-                        View Project <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              ))}
+                    </Link>
+                  ))}
+                </motion.div>
+              </div>
             </div>
+
+            {/* View All Button */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              viewport={{ once: true }}
+              className="text-center mt-12"
+            >
+              <Button asChild size="lg" className="group text-base px-10 py-7 bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600 rounded-full transition-all duration-300 hover:scale-105 font-semibold shadow-lg shadow-purple-500/25">
+                <Link to="/portfolio" className="flex items-center gap-2">
+                  View All Projects
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </Button>
+            </motion.div>
           </div>
         </section>
       )}
