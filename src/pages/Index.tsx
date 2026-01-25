@@ -464,129 +464,190 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Portfolio Showcase Section */}
+      {/* Portfolio Showcase Section - Auto-scrolling Carousel */}
       {portfolioProjects.length > 0 && imagesLoaded && <section className="py-32 relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a]" />
           
-          <div className="container-wide section-padding relative z-10">
-            <div className="text-center mb-16">
-              <motion.div initial={{
-            opacity: 0,
-            y: 20
-          }} whileInView={{
-            opacity: 1,
-            y: 0
-          }} viewport={{
-            once: true
-          }} className="inline-flex items-center gap-3 bg-gradient-to-r from-[#3ECF8E]/20 to-[#34B27B]/20 backdrop-blur-xl border border-[#3ECF8E]/30 text-[#3ECF8E] px-6 py-3 rounded-full text-sm font-semibold mb-10">
-                <Award className="w-5 h-5" />
-                Our Portfolio
-                <span className="w-2 h-2 bg-[#3ECF8E] rounded-full animate-pulse"></span>
-              </motion.div>
-              
-              <motion.h2 initial={{
-            opacity: 0,
-            y: 20
-          }} whileInView={{
-            opacity: 1,
-            y: 0
-          }} viewport={{
-            once: true
-          }} className="text-5xl lg:text-7xl font-bold mb-8" style={{
-            fontFamily: "'Playfair Display', serif"
-          }}>
-                <span className="bg-gradient-to-r from-white to-white/60 bg-clip-text text-transparent">Success </span>
-                <span className="bg-gradient-to-r from-[#3ECF8E] to-[#34B27B] bg-clip-text text-transparent">Stories</span>
-              </motion.h2>
-              
-              <motion.p initial={{
-            opacity: 0,
-            y: 20
-          }} whileInView={{
-            opacity: 1,
-            y: 0
-          }} viewport={{
-            once: true
-          }} className="text-xl lg:text-2xl text-white/50 max-w-3xl mx-auto font-light leading-relaxed">
-                Discover how we've transformed businesses with stunning digital solutions
-              </motion.p>
+          <div className="relative z-10">
+            <div className="container-wide section-padding">
+              <div className="text-center mb-16">
+                <motion.div initial={{
+              opacity: 0,
+              y: 20
+            }} whileInView={{
+              opacity: 1,
+              y: 0
+            }} viewport={{
+              once: true
+            }} className="inline-flex items-center gap-3 bg-gradient-to-r from-[#3ECF8E]/20 to-[#34B27B]/20 backdrop-blur-xl border border-[#3ECF8E]/30 text-[#3ECF8E] px-6 py-3 rounded-full text-sm font-semibold mb-10">
+                  <Award className="w-5 h-5" />
+                  Our Portfolio
+                  <span className="w-2 h-2 bg-[#3ECF8E] rounded-full animate-pulse"></span>
+                </motion.div>
+                
+                <motion.h2 initial={{
+              opacity: 0,
+              y: 20
+            }} whileInView={{
+              opacity: 1,
+              y: 0
+            }} viewport={{
+              once: true
+            }} className="text-5xl lg:text-7xl font-bold mb-8" style={{
+              fontFamily: "'Playfair Display', serif"
+            }}>
+                  <span className="bg-gradient-to-r from-white to-white/60 bg-clip-text text-transparent">Success </span>
+                  <span className="bg-gradient-to-r from-[#3ECF8E] to-[#34B27B] bg-clip-text text-transparent">Stories</span>
+                </motion.h2>
+                
+                <motion.p initial={{
+              opacity: 0,
+              y: 20
+            }} whileInView={{
+              opacity: 1,
+              y: 0
+            }} viewport={{
+              once: true
+            }} className="text-xl lg:text-2xl text-white/50 max-w-3xl mx-auto font-light leading-relaxed">
+                  Discover how we've transformed businesses with stunning digital solutions
+                </motion.p>
+              </div>
             </div>
 
-            {/* Main Showcase */}
-            <div className="relative max-w-5xl mx-auto">
-              <div className="relative h-[500px] lg:h-[600px] rounded-3xl overflow-hidden border border-white/10 shadow-2xl bg-white/5 backdrop-blur-xl">
-                <AnimatePresence mode="wait">
-                  <motion.div key={currentProjectIndex} initial={{
-                opacity: 0,
-                scale: 1.1,
-                filter: "blur(10px)"
-              }} animate={{
-                opacity: 1,
-                scale: 1,
-                filter: "blur(0px)"
-              }} exit={{
-                opacity: 0,
-                scale: 0.95,
-                filter: "blur(10px)"
-              }} transition={{
-                duration: 0.8,
-                ease: [0.22, 1, 0.36, 1]
-              }} className="absolute inset-0">
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#3ECF8E]/20 to-[#1c1c1c]/30">
-                      {portfolioProjects[currentProjectIndex]?.image_url && <img src={portfolioProjects[currentProjectIndex].image_url} alt={portfolioProjects[currentProjectIndex].title} className="w-full h-full object-cover" />}
-                    </div>
-                    
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
-                    
-                    <div className="absolute bottom-0 left-0 right-0 p-8 lg:p-12">
-                      <motion.div initial={{
-                    opacity: 0,
-                    y: 30
-                  }} animate={{
-                    opacity: 1,
-                    y: 0
-                  }} transition={{
-                    duration: 0.6,
-                    delay: 0.3
-                  }}>
-                        <div className="inline-flex items-center gap-2 bg-[#3ECF8E] px-4 py-2 rounded-full text-sm text-[#1c1c1c] font-medium mb-4">
-                          {portfolioProjects[currentProjectIndex]?.category}
+            {/* Auto-scrolling Portfolio Carousel */}
+            <div className="relative w-full overflow-hidden group">
+              {/* Gradient fade edges */}
+              <div className="absolute left-0 top-0 bottom-0 w-32 z-10 bg-gradient-to-r from-[#0a0a0a] to-transparent pointer-events-none" />
+              <div className="absolute right-0 top-0 bottom-0 w-32 z-10 bg-gradient-to-l from-[#0a0a0a] to-transparent pointer-events-none" />
+              
+              {/* Scrolling container */}
+              <motion.div 
+                className="flex gap-6 py-4"
+                animate={{
+                  x: [0, -((portfolioProjects.length * 340) + (portfolioProjects.length * 24))]
+                }}
+                transition={{
+                  x: {
+                    duration: portfolioProjects.length * 5,
+                    repeat: Infinity,
+                    ease: "linear"
+                  }
+                }}
+                style={{ width: 'fit-content' }}
+              >
+                {/* First set of projects */}
+                {portfolioProjects.map((project, index) => (
+                  <motion.a
+                    key={`first-${project.id}`}
+                    href={`https://lunexomedia.com/portfolio/${project.slug}`}
+                    className="relative flex-shrink-0 w-[320px] group/card cursor-pointer"
+                    whileHover={{ y: -8, scale: 1.02 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    {/* Card with gradient border */}
+                    <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-white/10 to-white/5 p-[1px]">
+                      <div className="rounded-2xl overflow-hidden bg-[#1a1a1a]">
+                        {/* Image container */}
+                        <div className="relative h-[220px] overflow-hidden">
+                          {project.image_url ? (
+                            <img 
+                              src={project.image_url} 
+                              alt={project.title}
+                              className="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-110"
+                            />
+                          ) : (
+                            <div className="w-full h-full bg-gradient-to-br from-[#3ECF8E]/20 to-[#1c1c1c]/50" />
+                          )}
+                          <div className="absolute inset-0 bg-gradient-to-t from-[#1a1a1a] via-transparent to-transparent opacity-60" />
+                          
+                          {/* Category badge */}
+                          <div className="absolute top-4 left-4">
+                            <span className="inline-flex items-center gap-1.5 bg-[#3ECF8E]/90 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs text-[#0d0d0d] font-semibold">
+                              {project.category}
+                            </span>
+                          </div>
                         </div>
                         
-                        <h3 className="text-3xl lg:text-5xl font-bold text-white mb-4" style={{
-                      fontFamily: "'Playfair Display', serif"
-                    }}>
-                          {portfolioProjects[currentProjectIndex]?.title?.split('—')[0]}
-                        </h3>
-                        
-                        <p className="text-lg text-white/70 max-w-2xl mb-6 line-clamp-2">
-                          {portfolioProjects[currentProjectIndex]?.description}
-                        </p>
-                        
-                        <Button asChild className="bg-[#3ECF8E] text-[#1c1c1c] hover:bg-[#34B27B] rounded-xl px-8 py-6 text-lg font-semibold shadow-lg">
-                          <a href={`https://lunexomedia.com/portfolio/${portfolioProjects[currentProjectIndex]?.slug}`}>
-                            View Project <ArrowRight className="w-5 h-5 ml-2" />
-                          </a>
-                        </Button>
-                      </motion.div>
+                        {/* Content */}
+                        <div className="p-5">
+                          <h3 className="text-lg font-bold text-white mb-2 line-clamp-1 group-hover/card:text-[#3ECF8E] transition-colors">
+                            {project.title?.split('—')[0]}
+                          </h3>
+                          <p className="text-sm text-white/50 line-clamp-2 leading-relaxed">
+                            {project.description}
+                          </p>
+                          
+                          {/* View Project link */}
+                          <div className="mt-4 flex items-center gap-2 text-[#3ECF8E] text-sm font-medium opacity-0 group-hover/card:opacity-100 transition-opacity">
+                            View Project <ArrowRight className="w-4 h-4" />
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                  </motion.div>
-                </AnimatePresence>
-              </div>
+                  </motion.a>
+                ))}
+                
+                {/* Duplicate set for seamless loop */}
+                {portfolioProjects.map((project, index) => (
+                  <motion.a
+                    key={`second-${project.id}`}
+                    href={`https://lunexomedia.com/portfolio/${project.slug}`}
+                    className="relative flex-shrink-0 w-[320px] group/card cursor-pointer"
+                    whileHover={{ y: -8, scale: 1.02 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    {/* Card with gradient border */}
+                    <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-white/10 to-white/5 p-[1px]">
+                      <div className="rounded-2xl overflow-hidden bg-[#1a1a1a]">
+                        {/* Image container */}
+                        <div className="relative h-[220px] overflow-hidden">
+                          {project.image_url ? (
+                            <img 
+                              src={project.image_url} 
+                              alt={project.title}
+                              className="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-110"
+                            />
+                          ) : (
+                            <div className="w-full h-full bg-gradient-to-br from-[#3ECF8E]/20 to-[#1c1c1c]/50" />
+                          )}
+                          <div className="absolute inset-0 bg-gradient-to-t from-[#1a1a1a] via-transparent to-transparent opacity-60" />
+                          
+                          {/* Category badge */}
+                          <div className="absolute top-4 left-4">
+                            <span className="inline-flex items-center gap-1.5 bg-[#3ECF8E]/90 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs text-[#0d0d0d] font-semibold">
+                              {project.category}
+                            </span>
+                          </div>
+                        </div>
+                        
+                        {/* Content */}
+                        <div className="p-5">
+                          <h3 className="text-lg font-bold text-white mb-2 line-clamp-1 group-hover/card:text-[#3ECF8E] transition-colors">
+                            {project.title?.split('—')[0]}
+                          </h3>
+                          <p className="text-sm text-white/50 line-clamp-2 leading-relaxed">
+                            {project.description}
+                          </p>
+                          
+                          {/* View Project link */}
+                          <div className="mt-4 flex items-center gap-2 text-[#3ECF8E] text-sm font-medium opacity-0 group-hover/card:opacity-100 transition-opacity">
+                            View Project <ArrowRight className="w-4 h-4" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.a>
+                ))}
+              </motion.div>
+            </div>
 
-              {/* Project Indicators */}
-              <div className="flex justify-center gap-3 mt-8">
-                {portfolioProjects.map((_, i) => <button key={i} onClick={() => setCurrentProjectIndex(i)} className={`h-2 rounded-full transition-all duration-500 ${i === currentProjectIndex ? 'w-12 bg-[#3ECF8E]' : 'w-2 bg-white/20 hover:bg-white/40'}`} />)}
-              </div>
-
-              {/* View All Button */}
-              <div className="text-center mt-12">
-                <Button asChild variant="outline" className="text-white hover:bg-white/10 rounded-xl px-8 py-6 text-lg backdrop-blur-xl border-secondary-foreground">
-                  <a href="https://lunexomedia.com/portfolio">
-                    View All Projects <ArrowRight className="w-5 h-5 ml-2" />
-                  </a>
-                </Button>
-              </div>
+            {/* View All Button */}
+            <div className="text-center mt-12">
+              <Button asChild variant="outline" className="text-white hover:bg-white/10 rounded-xl px-8 py-6 text-lg backdrop-blur-xl border-secondary-foreground">
+                <a href="https://lunexomedia.com/portfolio">
+                  View All Projects <ArrowRight className="w-5 h-5 ml-2" />
+                </a>
+              </Button>
             </div>
           </div>
         </section>}
