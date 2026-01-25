@@ -8,12 +8,82 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, ExternalLink, Calendar, TrendingUp, Award, Globe, Layers, Code, Zap, ArrowRight, Star, CheckCircle, Sparkles, Target, Clock, Shield } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import DOMPurify from 'isomorphic-dompurify';
+import { Helmet } from 'react-helmet-async';
+
+// Structured Data Component for SEO
+const PortfolioStructuredData = ({ project }: { project: any }) => {
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    "name": project.title,
+    "description": project.description,
+    "url": `https://www.lunexomedia.com/portfolio/${project.slug}`,
+    "image": project.image_url || "https://www.lunexomedia.com/og-image-new.jpg",
+    "dateCreated": project.created_at,
+    "dateModified": project.updated_at,
+    "creator": {
+      "@type": "Organization",
+      "name": "Lunexo Media",
+      "url": "https://www.lunexomedia.com",
+      "logo": "https://www.lunexomedia.com/logo.png"
+    },
+    "genre": project.category,
+    "keywords": project.technologies?.join(", ") || project.category,
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": `https://www.lunexomedia.com/portfolio/${project.slug}`
+    },
+    "provider": {
+      "@type": "Organization",
+      "name": "Lunexo Media",
+      "url": "https://www.lunexomedia.com"
+    }
+  };
+
+  // Add breadcrumb structured data
+  const breadcrumbData = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://www.lunexomedia.com"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Portfolio",
+        "item": "https://www.lunexomedia.com/portfolio"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": project.title,
+        "item": `https://www.lunexomedia.com/portfolio/${project.slug}`
+      }
+    ]
+  };
+
+  return (
+    <Helmet>
+      <script type="application/ld+json">
+        {JSON.stringify(structuredData)}
+      </script>
+      <script type="application/ld+json">
+        {JSON.stringify(breadcrumbData)}
+      </script>
+    </Helmet>
+  );
+};
 
 const PortfolioItem = () => {
   const { id } = useParams();
   const [project, setProject] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [relatedProjects, setRelatedProjects] = useState<any[]>([]);
+  const [ogImageUrl, setOgImageUrl] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -27,6 +97,17 @@ const PortfolioItem = () => {
 
       if (!error && data) {
         setProject(data);
+        
+        // Fetch AI-generated OG image if available
+        const { data: ogData } = await supabase
+          .from('og_images')
+          .select('image_url')
+          .eq('page_path', `/portfolio/${id}`)
+          .single();
+        
+        if (ogData?.image_url) {
+          setOgImageUrl(ogData.image_url);
+        }
         
         const { data: related } = await supabase
           .from('portfolio')
@@ -77,15 +158,19 @@ const PortfolioItem = () => {
     );
   }
 
+  // Use AI-generated OG image if available, otherwise fall back to project image
+  const seoImage = ogImageUrl || project.image_url || "https://www.lunexomedia.com/og-image-new.jpg";
+
   return (
     <div className="min-h-screen bg-[#0a0a0f]">
       <SEO
         title={`${project.title} | Portfolio Case Study | LUNEXO MEDIA`}
         description={project.description}
         url={`https://www.lunexomedia.com/portfolio/${id}`}
-        image={project.image_url || "https://www.lunexomedia.com/og-image-new.jpg"}
-        keywords={`${project.category}, portfolio, case study, ${project.title}, web design, digital marketing`}
+        image={seoImage}
+        keywords={`${project.category}, portfolio, case study, ${project.title}, ${project.technologies?.join(', ') || 'web design, digital marketing'}`}
       />
+      <PortfolioStructuredData project={project} />
       <Navigation />
       
       {/* Ultra Premium Hero Section */}

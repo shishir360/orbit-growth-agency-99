@@ -100,6 +100,35 @@ const pageConfigs: Record<string, { title: string; subtitle: string; theme: stri
   }
 };
 
+// Helper to get portfolio project config from database
+async function getPortfolioConfig(supabase: any, slug: string): Promise<{ title: string; subtitle: string; theme: string; icon: string } | null> {
+  const { data: project, error } = await supabase
+    .from("portfolio")
+    .select("title, description, category")
+    .eq("slug", slug)
+    .single();
+
+  if (error || !project) return null;
+
+  const categoryThemes: Record<string, { theme: string; icon: string }> = {
+    "Website Design": { theme: "blue and cyan gradient with website mockup elements", icon: "globe" },
+    "AI Automation": { theme: "purple and violet gradient with neural network patterns", icon: "cpu" },
+    "Ads Management": { theme: "orange and amber gradient with analytics elements", icon: "target" }
+  };
+
+  const categoryConfig = categoryThemes[project.category] || { 
+    theme: "emerald gradient professional", 
+    icon: "briefcase" 
+  };
+
+  return {
+    title: project.title,
+    subtitle: project.description?.substring(0, 80) || project.category,
+    theme: categoryConfig.theme,
+    icon: categoryConfig.icon
+  };
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -137,13 +166,28 @@ serve(async (req) => {
       }
     }
     
-    // Get page config
-    const config = pageConfigs[pagePath] || {
-      title: "LUNEXO MEDIA",
-      subtitle: pagePath.replace(/\//g, " ").trim() || "Digital Agency",
-      theme: "emerald gradient professional",
-      icon: "star"
-    };
+    // Get page config - check for dynamic portfolio pages first
+    let config = pageConfigs[pagePath];
+    
+    if (!config && pagePath.startsWith("/portfolio/")) {
+      const slug = pagePath.replace("/portfolio/", "");
+      // Skip category pages as they have static configs
+      if (!["website-design", "ai-automation", "ads-management"].includes(slug)) {
+        const portfolioConfig = await getPortfolioConfig(supabase, slug);
+        if (portfolioConfig) {
+          config = portfolioConfig;
+        }
+      }
+    }
+    
+    if (!config) {
+      config = {
+        title: "LUNEXO MEDIA",
+        subtitle: pagePath.replace(/\//g, " ").trim() || "Digital Agency",
+        theme: "emerald gradient professional",
+        icon: "star"
+      };
+    }
     
     // Generate image using Lovable AI
     const prompt = `Create a professional Open Graph social media preview image (1200x630 pixels, 16:9 aspect ratio) for a digital marketing agency page.
