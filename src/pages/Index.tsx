@@ -643,7 +643,7 @@ const Index = () => {
 
             {/* View All Button */}
             <div className="text-center mt-12">
-              <Button asChild variant="outline" className="text-white hover:bg-white/10 rounded-xl px-8 py-6 text-lg backdrop-blur-xl border-secondary-foreground">
+              <Button asChild className="bg-[#C5FF4A] text-[#0d0d0d] hover:bg-[#b8f03d] rounded-xl px-8 py-6 text-lg font-semibold shadow-lg shadow-[#C5FF4A]/20">
                 <a href="https://lunexomedia.com/portfolio">
                   View All Projects <ArrowRight className="w-5 h-5 ml-2" />
                 </a>
