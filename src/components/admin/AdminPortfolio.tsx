@@ -7,7 +7,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Briefcase, Plus, Edit, Trash2, Eye, Upload, ExternalLink } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Briefcase, Plus, Edit, Trash2, Eye, Upload, ExternalLink, Image, Sparkles, TrendingUp, Star, Globe, Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
@@ -37,6 +38,7 @@ const AdminPortfolio = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingProject, setEditingProject] = useState<PortfolioItem | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [generatingOg, setGeneratingOg] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     title: '',
     slug: '',
@@ -120,6 +122,28 @@ const AdminPortfolio = () => {
     return data.publicUrl;
   };
 
+  const generateOgImage = async (slug: string) => {
+    setGeneratingOg(slug);
+    try {
+      const { data, error } = await supabase.functions.invoke('generate-og-image', {
+        body: { pagePath: `/portfolio/${slug}`, forceRegenerate: true }
+      });
+      
+      if (error) throw error;
+      
+      if (data?.imageUrl) {
+        toast.success('OG image generated successfully!');
+      } else if (data?.error) {
+        toast.error(data.error);
+      }
+    } catch (err: any) {
+      console.error('OG generation error:', err);
+      toast.error('Failed to generate OG image');
+    } finally {
+      setGeneratingOg(null);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -171,10 +195,10 @@ const AdminPortfolio = () => {
       const validData = schema.parse(projectData);
 
       if (editingProject) {
-      const { error } = await supabase
-        .from('portfolio')
-        .update(validData as any)
-        .eq('id', editingProject.id);
+        const { error } = await supabase
+          .from('portfolio')
+          .update(validData as any)
+          .eq('id', editingProject.id);
 
         if (error) throw error;
         toast.success('Project updated successfully');
@@ -185,6 +209,11 @@ const AdminPortfolio = () => {
 
         if (error) throw error;
         toast.success('Project created successfully');
+        
+        // Auto-generate OG image for new published projects
+        if (formData.published) {
+          setTimeout(() => generateOgImage(normalizedSlug), 1000);
+        }
       }
 
       setIsDialogOpen(false);
@@ -227,6 +256,12 @@ const AdminPortfolio = () => {
     }
 
     toast.success(project.published ? 'Project unpublished' : 'Project published');
+    
+    // Auto-generate OG image when publishing
+    if (!project.published) {
+      setTimeout(() => generateOgImage(project.slug), 1000);
+    }
+    
     fetchProjects();
   };
 
@@ -246,228 +281,312 @@ const AdminPortfolio = () => {
     fetchProjects();
   };
 
+  const publishedCount = projects.filter(p => p.published).length;
+  const featuredCount = projects.filter(p => p.featured).length;
+
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Portfolio Management</h1>
-          <p className="text-gray-600 mt-2">Showcase your best work and projects</p>
+      {/* Premium Header */}
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-600 via-teal-600 to-cyan-600 p-8">
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.05)_1px,transparent_1px)] bg-[size:32px_32px]" />
+        <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl" />
+        
+        <div className="relative flex justify-between items-start">
+          <div>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                <Briefcase className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h1 className="text-3xl font-bold text-white">Portfolio Management</h1>
+                <p className="text-white/80">Showcase your premium work</p>
+              </div>
+            </div>
+            
+            <div className="flex gap-6 mt-6">
+              <div className="bg-white/10 backdrop-blur-sm rounded-xl px-5 py-3">
+                <div className="text-2xl font-bold text-white">{projects.length}</div>
+                <div className="text-xs text-white/70 uppercase tracking-wider">Total Projects</div>
+              </div>
+              <div className="bg-white/10 backdrop-blur-sm rounded-xl px-5 py-3">
+                <div className="text-2xl font-bold text-white">{publishedCount}</div>
+                <div className="text-xs text-white/70 uppercase tracking-wider">Published</div>
+              </div>
+              <div className="bg-white/10 backdrop-blur-sm rounded-xl px-5 py-3">
+                <div className="text-2xl font-bold text-white">{featuredCount}</div>
+                <div className="text-xs text-white/70 uppercase tracking-wider">Featured</div>
+              </div>
+            </div>
+          </div>
+          
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogTrigger asChild>
+              <Button onClick={handleAdd} className="bg-white text-emerald-700 hover:bg-white/90 shadow-lg">
+                <Plus className="w-4 h-4 mr-2" />
+                Add Project
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle className="flex items-center gap-2">
+                  <Sparkles className="w-5 h-5 text-emerald-500" />
+                  {editingProject ? 'Edit Project' : 'Create New Project'}
+                </DialogTitle>
+              </DialogHeader>
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="title">Title</Label>
+                    <Input
+                      id="title"
+                      value={formData.title}
+                      onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                      placeholder="My Awesome Project"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="slug">URL Slug</Label>
+                    <Input
+                      id="slug"
+                      value={formData.slug}
+                      onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+                      placeholder="my-awesome-project"
+                      required
+                    />
+                  </div>
+                </div>
+                
+                <div>
+                  <Label htmlFor="category">Category</Label>
+                  <select
+                    id="category"
+                    value={formData.category}
+                    onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    required
+                  >
+                    <option value="">Select category...</option>
+                    <option value="Website Design">Website Design</option>
+                    <option value="AI Automation">AI Automation</option>
+                    <option value="Ads Management">Ads Management</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <Label htmlFor="description">Short Description (for SEO & cards)</Label>
+                  <Textarea
+                    id="description"
+                    value={formData.description}
+                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                    placeholder="Brief description that appears in previews and search results..."
+                    rows={3}
+                    required
+                  />
+                  <p className="text-xs text-gray-500 mt-1">{formData.description.length}/500 characters</p>
+                </div>
+                
+                <div>
+                  <Label htmlFor="content">Full Case Study Content (HTML supported)</Label>
+                  <Textarea
+                    id="content"
+                    value={formData.content}
+                    onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                    placeholder="<h2>The Challenge</h2><p>Describe the problem...</p>"
+                    rows={8}
+                  />
+                </div>
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="project_url">Live Project URL</Label>
+                    <Input
+                      id="project_url"
+                      type="url"
+                      value={formData.project_url}
+                      onChange={(e) => setFormData({ ...formData, project_url: e.target.value })}
+                      placeholder="https://client-website.com"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="technologies">Technologies (comma-separated)</Label>
+                    <Input
+                      id="technologies"
+                      value={formData.technologies}
+                      onChange={(e) => setFormData({ ...formData, technologies: e.target.value })}
+                      placeholder="React, Node.js, AI"
+                    />
+                  </div>
+                </div>
+                
+                <div>
+                  <Label htmlFor="image">Featured Image</Label>
+                  <Input
+                    id="image"
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => setImageFile(e.target.files?.[0] || null)}
+                  />
+                  {editingProject?.image_url && !imageFile && (
+                    <div className="mt-2 flex items-center gap-2">
+                      <img src={editingProject.image_url} alt="" className="w-16 h-16 object-cover rounded" />
+                      <span className="text-sm text-gray-500">Current image will be kept</span>
+                    </div>
+                  )}
+                </div>
+                
+                <div className="flex items-center gap-6 pt-2">
+                  <div className="flex items-center space-x-2">
+                    <Switch
+                      id="published"
+                      checked={formData.published}
+                      onCheckedChange={(checked) => setFormData({ ...formData, published: checked })}
+                    />
+                    <Label htmlFor="published" className="flex items-center gap-2">
+                      <Eye className="w-4 h-4" />
+                      Publish immediately
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Switch
+                      id="featured"
+                      checked={formData.featured}
+                      onCheckedChange={(checked) => setFormData({ ...formData, featured: checked })}
+                    />
+                    <Label htmlFor="featured" className="flex items-center gap-2">
+                      <Star className="w-4 h-4" />
+                      Mark as featured
+                    </Label>
+                  </div>
+                </div>
+                
+                <div className="flex justify-end gap-2 pt-4 border-t">
+                  <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
+                    Cancel
+                  </Button>
+                  <Button type="submit" className="bg-emerald-600 hover:bg-emerald-700">
+                    {editingProject ? 'Update' : 'Create'} Project
+                  </Button>
+                </div>
+              </form>
+            </DialogContent>
+          </Dialog>
         </div>
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button onClick={handleAdd}>
-              <Plus className="w-4 h-4 mr-2" />
-              Add Project
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle>{editingProject ? 'Edit Project' : 'Add New Project'}</DialogTitle>
-            </DialogHeader>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <Label htmlFor="title">Title</Label>
-                <Input
-                  id="title"
-                  value={formData.title}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  required
-                />
-              </div>
-              <div>
-                <Label htmlFor="slug">Slug (URL)</Label>
-                <Input
-                  id="slug"
-                  value={formData.slug}
-                  onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-                  placeholder="e-commerce-website"
-                  required
-                />
-              </div>
-              <div>
-                <Label htmlFor="category">Category</Label>
-                <Input
-                  id="category"
-                  value={formData.category}
-                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                  placeholder="Website Design, AI Automation, Ads Management"
-                  required
-                />
-              </div>
-              <div>
-                <Label htmlFor="description">Short Description</Label>
-                <Textarea
-                  id="description"
-                  value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  required
-                />
-              </div>
-              <div>
-                <Label htmlFor="content">Full Content (optional)</Label>
-                <Textarea
-                  id="content"
-                  value={formData.content}
-                  onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                  rows={6}
-                />
-              </div>
-              <div>
-                <Label htmlFor="project_url">Project URL (optional)</Label>
-                <Input
-                  id="project_url"
-                  type="url"
-                  value={formData.project_url}
-                  onChange={(e) => setFormData({ ...formData, project_url: e.target.value })}
-                  placeholder="https://example.com"
-                />
-              </div>
-              <div>
-                <Label htmlFor="technologies">Technologies (comma-separated)</Label>
-                <Input
-                  id="technologies"
-                  value={formData.technologies}
-                  onChange={(e) => setFormData({ ...formData, technologies: e.target.value })}
-                  placeholder="React, TypeScript, Tailwind CSS"
-                />
-              </div>
-              <div>
-                <Label htmlFor="image">Featured Image</Label>
-                <Input
-                  id="image"
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => setImageFile(e.target.files?.[0] || null)}
-                />
-                {editingProject?.image_url && !imageFile && (
-                  <p className="text-sm text-gray-500 mt-1">Current image will be kept</p>
-                )}
-              </div>
-              <div className="flex items-center space-x-2">
-                <Switch
-                  id="published"
-                  checked={formData.published}
-                  onCheckedChange={(checked) => setFormData({ ...formData, published: checked })}
-                />
-                <Label htmlFor="published">Publish immediately</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Switch
-                  id="featured"
-                  checked={formData.featured}
-                  onCheckedChange={(checked) => setFormData({ ...formData, featured: checked })}
-                />
-                <Label htmlFor="featured">Mark as featured</Label>
-              </div>
-              <div className="flex justify-end gap-2">
-                <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
-                  Cancel
-                </Button>
-                <Button type="submit">
-                  {editingProject ? 'Update' : 'Create'} Project
-                </Button>
-              </div>
-            </form>
-          </DialogContent>
-        </Dialog>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center gap-2">
-              <Briefcase className="w-5 h-5 text-blue-600" />
-              <div>
-                <p className="text-2xl font-bold">{projects.length}</p>
-                <p className="text-sm text-gray-600">Total Projects</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center gap-2">
-              <Eye className="w-5 h-5 text-green-600" />
-              <div>
-                <p className="text-2xl font-bold">{projects.filter(p => p.published).length}</p>
-                <p className="text-sm text-gray-600">Published</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center gap-2">
-              <Briefcase className="w-5 h-5 text-purple-600" />
-              <div>
-                <p className="text-2xl font-bold">{projects.filter(p => p.featured).length}</p>
-                <p className="text-sm text-gray-600">Featured</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
+      {/* Projects Grid */}
       <Card>
         <CardHeader>
-          <CardTitle>Portfolio Projects</CardTitle>
-          <CardDescription>Manage your portfolio showcase</CardDescription>
+          <CardTitle className="flex items-center gap-2">
+            <Briefcase className="w-5 h-5 text-emerald-600" />
+            All Projects
+          </CardTitle>
+          <CardDescription>Manage your portfolio showcase with premium presentation</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
+          <div className="grid gap-4">
             {projects.map((project) => (
-              <div key={project.id} className="flex items-center justify-between p-4 border rounded-lg">
-                <div className="flex-1">
-                  <h3 className="font-medium">
-                    <a 
-                      href={`/portfolio/${project.slug}`} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="hover:text-primary hover:underline"
-                    >
-                      {project.title}
-                    </a>
-                  </h3>
-                  <p className="text-sm text-gray-500">{project.category}</p>
-                  <p className="text-xs text-gray-400 mt-1">{project.description.substring(0, 80)}...</p>
+              <div 
+                key={project.id} 
+                className="group relative flex items-center gap-4 p-4 border rounded-xl hover:border-emerald-200 hover:bg-emerald-50/50 transition-all duration-300"
+              >
+                {/* Thumbnail */}
+                <div className="relative w-24 h-16 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
+                  {project.image_url ? (
+                    <img 
+                      src={project.image_url} 
+                      alt={project.title}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-emerald-100 to-teal-100">
+                      <Image className="w-6 h-6 text-emerald-400" />
+                    </div>
+                  )}
                 </div>
-                <div className="flex items-center gap-2">
-                  <Badge variant={project.published ? "default" : "secondary"}>
-                    {project.published ? 'Published' : 'Draft'}
-                  </Badge>
-                  {project.featured && <Badge variant="outline">Featured</Badge>}
+                
+                {/* Content */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-1">
+                    <h3 className="font-semibold text-gray-900 truncate">
+                      {project.title}
+                    </h3>
+                    {project.featured && (
+                      <Badge variant="outline" className="bg-amber-50 border-amber-200 text-amber-700">
+                        <Star className="w-3 h-3 mr-1" /> Featured
+                      </Badge>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-3 text-sm text-gray-500">
+                    <span className="bg-gray-100 px-2 py-0.5 rounded">{project.category}</span>
+                    <span>•</span>
+                    <span>{new Date(project.created_at).toLocaleDateString()}</span>
+                  </div>
+                </div>
+                
+                {/* Status Badge */}
+                <Badge 
+                  variant={project.published ? "default" : "secondary"}
+                  className={project.published ? "bg-green-100 text-green-700 hover:bg-green-100" : ""}
+                >
+                  {project.published ? 'Published' : 'Draft'}
+                </Badge>
+                
+                {/* Actions */}
+                <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <Button 
+                    variant="ghost" 
+                    size="sm"
+                    onClick={() => generateOgImage(project.slug)}
+                    disabled={generatingOg === project.slug}
+                    title="Generate OG Image"
+                  >
+                    {generatingOg === project.slug ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <Sparkles className="w-4 h-4 text-purple-500" />
+                    )}
+                  </Button>
                   <Link to={`/portfolio/${project.slug}`} target="_blank">
-                    <Button variant="outline" size="sm">
-                      <ExternalLink className="w-4 h-4 mr-1" />
-                      View Now
+                    <Button variant="ghost" size="sm" title="Preview">
+                      <ExternalLink className="w-4 h-4 text-blue-500" />
                     </Button>
                   </Link>
                   <Button 
                     variant="ghost" 
                     size="sm"
                     onClick={() => togglePublished(project)}
+                    title={project.published ? 'Unpublish' : 'Publish'}
                   >
-                    {project.published ? 'Unpublish' : 'Publish'}
+                    <Eye className={`w-4 h-4 ${project.published ? 'text-green-500' : 'text-gray-400'}`} />
                   </Button>
                   <Button 
                     variant="ghost" 
                     size="sm"
                     onClick={() => toggleFeatured(project)}
+                    title={project.featured ? 'Remove from featured' : 'Add to featured'}
                   >
-                    {project.featured ? 'Unfeature' : 'Feature'}
+                    <Star className={`w-4 h-4 ${project.featured ? 'text-amber-500 fill-amber-500' : 'text-gray-400'}`} />
                   </Button>
-                  <Button variant="ghost" size="icon" onClick={() => handleEdit(project)}>
-                    <Edit className="w-4 h-4" />
+                  <Button variant="ghost" size="sm" onClick={() => handleEdit(project)} title="Edit">
+                    <Edit className="w-4 h-4 text-gray-500" />
                   </Button>
-                  <Button variant="ghost" size="icon" onClick={() => handleDelete(project.id)}>
-                    <Trash2 className="w-4 h-4" />
+                  <Button variant="ghost" size="sm" onClick={() => handleDelete(project.id)} title="Delete">
+                    <Trash2 className="w-4 h-4 text-red-500" />
                   </Button>
                 </div>
               </div>
             ))}
+            
             {projects.length === 0 && (
-              <div className="text-center py-8 text-gray-500">
-                No projects yet. Click "Add Project" to create your first portfolio item.
+              <div className="text-center py-16 bg-gray-50 rounded-xl">
+                <Briefcase className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-gray-900 mb-2">No projects yet</h3>
+                <p className="text-gray-500 mb-4">Create your first portfolio item to showcase your work</p>
+                <Button onClick={handleAdd}>
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add Your First Project
+                </Button>
               </div>
             )}
           </div>
