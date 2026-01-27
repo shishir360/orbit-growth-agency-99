@@ -196,7 +196,7 @@ const TutorialPost = () => {
           Our team can help you build and launch your project in 30 days or less.
           </p>
           <Button size="lg" variant="secondary" asChild>
-            <a href="https://lunexomedia.com/book-appointment">Book Appointment</a>
+            <a href="https://lunexomedia.com/book-apartment">Book Appointment</a>
           </Button>
         </div>
       </section>

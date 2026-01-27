@@ -156,7 +156,7 @@ const Portfolio = () => {
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" className="group text-base px-10 py-7 bg-[#C5FF4A] text-black hover:bg-[#d4ff6a] rounded-full transition-all duration-300 hover:scale-105 font-semibold shadow-lg shadow-[#C5FF4A]/25" asChild>
-                <a href="https://lunexomedia.com/book-appointment">
+                <a href="https://lunexomedia.com/book-apartment">
                   Start Your Project
                   <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                 </a>
@@ -390,7 +390,7 @@ const Portfolio = () => {
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" className="group text-base px-8 py-6 bg-white text-black hover:bg-white/90 rounded-full transition-all duration-300 hover:scale-105 font-semibold" asChild>
-                <a href="https://lunexomedia.com/book-appointment">
+                <a href="https://lunexomedia.com/book-apartment">
                   Start Your Project
                   <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                 </a>
