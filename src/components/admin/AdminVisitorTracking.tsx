@@ -153,6 +153,9 @@ export default function AdminVisitorTracking() {
   const [activeTab, setActiveTab] = useState('visitors');
   const [activityByHour, setActivityByHour] = useState<any[]>([]);
   const [activityByType, setActivityByType] = useState<any[]>([]);
+  const [funnelData, setFunnelData] = useState<any[]>([]);
+  const [clickHeatmapData, setClickHeatmapData] = useState<any[]>([]);
+  const [topPages, setTopPages] = useState<any[]>([]);
   const [stats, setStats] = useState({
     total: 0,
     uniqueVisitors: 0,
@@ -162,6 +165,9 @@ export default function AdminVisitorTracking() {
     pdf_downloads: 0,
     messages: 0,
     countries: 0,
+    scroll_depths: 0,
+    button_clicks: 0,
+    link_clicks: 0,
   });
 
   useEffect(() => {
@@ -206,6 +212,15 @@ export default function AdminVisitorTracking() {
       // Build activity by type
       buildActivityByType(data || []);
 
+      // Build funnel data
+      buildFunnelData(data || []);
+
+      // Build click heatmap
+      buildClickHeatmap(data || []);
+
+      // Build top pages
+      buildTopPages(data || []);
+
       // Calculate stats
       const uniqueIPs = new Set(data?.filter(a => a.visitor_ip).map(a => a.visitor_ip));
       const uniqueCountryCount = new Set(data?.filter(a => a.visitor_country).map(a => a.visitor_country));
@@ -219,6 +234,9 @@ export default function AdminVisitorTracking() {
         pdf_downloads: data?.filter(a => a.activity_type === 'pdf_download').length || 0,
         messages: data?.filter(a => a.activity_type.includes('message')).length || 0,
         countries: uniqueCountryCount.size,
+        scroll_depths: data?.filter(a => a.activity_type === 'scroll_depth').length || 0,
+        button_clicks: data?.filter(a => a.activity_type === 'button_click').length || 0,
+        link_clicks: data?.filter(a => a.activity_type === 'link_click').length || 0,
       });
     } catch (error: any) {
       toast({
@@ -311,6 +329,104 @@ export default function AdminVisitorTracking() {
       .sort((a, b) => b.count - a.count);
 
     setActivityByType(typeData);
+  };
+
+  const buildFunnelData = (data: VisitorActivity[]) => {
+    const pageViewIPs = new Set(data.filter(a => a.activity_type === 'page_view').map(a => a.visitor_ip).filter(Boolean));
+    const scrollIPs = new Set(data.filter(a => a.activity_type === 'scroll_depth').map(a => a.visitor_ip).filter(Boolean));
+    const clickIPs = new Set(data.filter(a => a.activity_type === 'button_click' || a.activity_type === 'link_click').map(a => a.visitor_ip).filter(Boolean));
+    const formInteractionIPs = new Set(data.filter(a => a.activity_type === 'form_interaction').map(a => a.visitor_ip).filter(Boolean));
+    const contactFormIPs = new Set(data.filter(a => a.activity_type === 'contact_form').map(a => a.visitor_ip).filter(Boolean));
+    const bookingIPs = new Set(data.filter(a => a.activity_type === 'booking').map(a => a.visitor_ip).filter(Boolean));
+
+    const totalVisitors = pageViewIPs.size || 1;
+
+    const funnel = [
+      { stage: 'Page Views', count: pageViewIPs.size, percentage: 100, color: '#C5FF4A' },
+      { stage: 'Engaged (Scrolled)', count: scrollIPs.size, percentage: Math.round((scrollIPs.size / totalVisitors) * 100), color: '#10b981' },
+      { stage: 'Clicked', count: clickIPs.size, percentage: Math.round((clickIPs.size / totalVisitors) * 100), color: '#f97316' },
+      { stage: 'Form Started', count: formInteractionIPs.size, percentage: Math.round((formInteractionIPs.size / totalVisitors) * 100), color: '#3b82f6' },
+      { stage: 'Contact Submitted', count: contactFormIPs.size, percentage: Math.round((contactFormIPs.size / totalVisitors) * 100), color: '#6366f1' },
+      { stage: 'Booking Made', count: bookingIPs.size, percentage: Math.round((bookingIPs.size / totalVisitors) * 100), color: '#8b5cf6' },
+    ];
+
+    setFunnelData(funnel);
+  };
+
+  const buildClickHeatmap = (data: VisitorActivity[]) => {
+    const clickMap = new Map<string, { count: number; type: string; pages: Set<string> }>();
+
+    data.filter(a => a.activity_type === 'button_click' || a.activity_type === 'link_click').forEach(activity => {
+      const metadata = activity.metadata as any;
+      const text = metadata?.button_text || metadata?.link_text || 'Unknown';
+      const type = activity.activity_type;
+      const page = activity.page_url || '';
+
+      if (!clickMap.has(text)) {
+        clickMap.set(text, { count: 0, type, pages: new Set() });
+      }
+      
+      const entry = clickMap.get(text)!;
+      entry.count++;
+      if (page) entry.pages.add(page);
+    });
+
+    const clickData = Array.from(clickMap.entries())
+      .map(([text, mapData]) => ({
+        text: text.substring(0, 50),
+        count: mapData.count,
+        type: mapData.type === 'button_click' ? 'Button' : 'Link',
+        pages: Array.from(mapData.pages).length,
+        heat: 0,
+      }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 20);
+
+    const maxClicks = clickData[0]?.count || 1;
+    clickData.forEach(item => {
+      item.heat = Math.round((item.count / maxClicks) * 100);
+    });
+
+    setClickHeatmapData(clickData);
+  };
+
+  const buildTopPages = (data: VisitorActivity[]) => {
+    const pageMap = new Map<string, { views: number; clicks: number; scrolls: number; forms: number }>();
+
+    data.forEach(activity => {
+      const page = activity.page_url || '';
+      if (!page) return;
+
+      try {
+        const pagePath = new URL(page).pathname;
+
+        if (!pageMap.has(pagePath)) {
+          pageMap.set(pagePath, { views: 0, clicks: 0, scrolls: 0, forms: 0 });
+        }
+
+        const entry = pageMap.get(pagePath)!;
+        if (activity.activity_type === 'page_view') entry.views++;
+        if (activity.activity_type === 'button_click' || activity.activity_type === 'link_click') entry.clicks++;
+        if (activity.activity_type === 'scroll_depth') entry.scrolls++;
+        if (activity.activity_type === 'form_interaction' || activity.activity_type === 'contact_form') entry.forms++;
+      } catch (e) {
+        // Invalid URL, skip
+      }
+    });
+
+    const pageData = Array.from(pageMap.entries())
+      .map(([path, pageStats]) => ({
+        page: path,
+        views: pageStats.views,
+        clicks: pageStats.clicks,
+        scrolls: pageStats.scrolls,
+        forms: pageStats.forms,
+        engagement: pageStats.views > 0 ? Math.round(((pageStats.clicks + pageStats.scrolls) / pageStats.views) * 100) : 0,
+      }))
+      .sort((a, b) => b.views - a.views)
+      .slice(0, 15);
+
+    setTopPages(pageData);
   };
 
   const parseDevice = (userAgent: string | null): string => {
@@ -511,6 +627,14 @@ export default function AdminVisitorTracking() {
           <TabsTrigger value="charts" className="data-[state=active]:bg-[#C5FF4A] data-[state=active]:text-black">
             <TrendingUp className="h-4 w-4 mr-2" />
             Charts
+          </TabsTrigger>
+          <TabsTrigger value="funnel" className="data-[state=active]:bg-[#C5FF4A] data-[state=active]:text-black">
+            <Target className="h-4 w-4 mr-2" />
+            Funnel
+          </TabsTrigger>
+          <TabsTrigger value="heatmap" className="data-[state=active]:bg-[#C5FF4A] data-[state=active]:text-black">
+            <Zap className="h-4 w-4 mr-2" />
+            Click Heatmap
           </TabsTrigger>
         </TabsList>
 
@@ -920,6 +1044,334 @@ export default function AdminVisitorTracking() {
               </CardContent>
             </Card>
           </div>
+        </TabsContent>
+
+        {/* Funnel Analysis Tab */}
+        <TabsContent value="funnel" className="space-y-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Conversion Funnel */}
+            <Card className="bg-gradient-to-br from-gray-900 to-gray-950 border-white/10">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center gap-2">
+                  <Target className="h-5 w-5 text-[#C5FF4A]" />
+                  Conversion Funnel
+                </CardTitle>
+                <CardDescription>Visitor journey from page view to conversion</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  {funnelData.map((stage, index) => (
+                    <motion.div
+                      key={stage.stage}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                      className="relative"
+                    >
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-sm text-gray-300">{stage.stage}</span>
+                        <span className="text-sm font-medium text-white">
+                          {stage.count.toLocaleString()} ({stage.percentage}%)
+                        </span>
+                      </div>
+                      <div className="h-8 bg-gray-800 rounded-lg overflow-hidden relative">
+                        <motion.div
+                          initial={{ width: 0 }}
+                          animate={{ width: `${stage.percentage}%` }}
+                          transition={{ duration: 0.8, delay: index * 0.1 }}
+                          className="h-full rounded-lg"
+                          style={{ backgroundColor: stage.color }}
+                        />
+                        <div className="absolute inset-0 flex items-center px-3">
+                          <span className="text-xs font-medium text-white drop-shadow-md">
+                            {stage.stage}
+                          </span>
+                        </div>
+                      </div>
+                      {index < funnelData.length - 1 && (
+                        <div className="flex justify-center my-1">
+                          <ArrowRight className="h-4 w-4 text-gray-500 rotate-90" />
+                        </div>
+                      )}
+                    </motion.div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Top Pages by Engagement */}
+            <Card className="bg-gradient-to-br from-gray-900 to-gray-950 border-white/10">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center gap-2">
+                  <Eye className="h-5 w-5 text-purple-500" />
+                  Top Pages by Engagement
+                </CardTitle>
+                <CardDescription>Pages with highest user interaction</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ScrollArea className="h-[400px]">
+                  <div className="space-y-3">
+                    {topPages.map((page, index) => (
+                      <motion.div
+                        key={page.page}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.05 }}
+                        className="p-3 rounded-lg bg-white/5 border border-white/10"
+                      >
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-sm font-medium text-white truncate max-w-[200px]">
+                            {page.page}
+                          </span>
+                          <Badge className="bg-[#C5FF4A]/20 text-[#C5FF4A]">
+                            {page.engagement}% engaged
+                          </Badge>
+                        </div>
+                        <div className="grid grid-cols-4 gap-2 text-xs">
+                          <div className="text-center p-2 rounded bg-purple-500/20">
+                            <div className="text-purple-400 font-medium">{page.views}</div>
+                            <div className="text-gray-500">Views</div>
+                          </div>
+                          <div className="text-center p-2 rounded bg-orange-500/20">
+                            <div className="text-orange-400 font-medium">{page.clicks}</div>
+                            <div className="text-gray-500">Clicks</div>
+                          </div>
+                          <div className="text-center p-2 rounded bg-green-500/20">
+                            <div className="text-green-400 font-medium">{page.scrolls}</div>
+                            <div className="text-gray-500">Scrolls</div>
+                          </div>
+                          <div className="text-center p-2 rounded bg-blue-500/20">
+                            <div className="text-blue-400 font-medium">{page.forms}</div>
+                            <div className="text-gray-500">Forms</div>
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))}
+                    {topPages.length === 0 && (
+                      <div className="text-center py-8 text-gray-500">
+                        No page data available yet
+                      </div>
+                    )}
+                  </div>
+                </ScrollArea>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Funnel Conversion Rates */}
+          <Card className="bg-gradient-to-br from-gray-900 to-gray-950 border-white/10">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center gap-2">
+                <TrendingUp className="h-5 w-5 text-[#C5FF4A]" />
+                Stage-to-Stage Conversion Rates
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                {funnelData.slice(1).map((stage, index) => {
+                  const prevStage = funnelData[index];
+                  const conversionRate = prevStage.count > 0 
+                    ? Math.round((stage.count / prevStage.count) * 100) 
+                    : 0;
+                  return (
+                    <motion.div
+                      key={stage.stage}
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: index * 0.1 }}
+                      className="text-center p-4 rounded-xl bg-white/5 border border-white/10"
+                    >
+                      <div className="text-xs text-gray-500 mb-1">
+                        {prevStage.stage} → {stage.stage}
+                      </div>
+                      <div 
+                        className="text-2xl font-bold"
+                        style={{ color: stage.color }}
+                      >
+                        {conversionRate}%
+                      </div>
+                      <div className="text-xs text-gray-400 mt-1">
+                        {prevStage.count} → {stage.count}
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Click Heatmap Tab */}
+        <TabsContent value="heatmap" className="space-y-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Click Heatmap */}
+            <Card className="bg-gradient-to-br from-gray-900 to-gray-950 border-white/10">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center gap-2">
+                  <MousePointer className="h-5 w-5 text-orange-500" />
+                  Most Clicked Elements
+                </CardTitle>
+                <CardDescription>Buttons and links ranked by click frequency</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ScrollArea className="h-[500px]">
+                  <div className="space-y-2">
+                    {clickHeatmapData.map((item, index) => (
+                      <motion.div
+                        key={`${item.text}-${index}`}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.03 }}
+                        className="relative p-3 rounded-lg overflow-hidden"
+                        style={{
+                          background: `linear-gradient(90deg, 
+                            rgba(249, 115, 22, ${item.heat / 200}) 0%, 
+                            rgba(239, 68, 68, ${item.heat / 200}) ${item.heat}%, 
+                            rgba(17, 24, 39, 0.5) ${item.heat}%)`
+                        }}
+                      >
+                        <div className="relative z-10 flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <div className="flex items-center justify-center w-8 h-8 rounded-full bg-white/10 text-white font-bold text-sm">
+                              {index + 1}
+                            </div>
+                            <div>
+                              <div className="text-sm font-medium text-white truncate max-w-[200px]">
+                                {item.text}
+                              </div>
+                              <div className="flex items-center gap-2 text-xs text-gray-400">
+                                <Badge variant="outline" className="text-xs px-1.5 py-0">
+                                  {item.type}
+                                </Badge>
+                                <span>{item.pages} page{item.pages !== 1 ? 's' : ''}</span>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <div className="text-lg font-bold text-white">{item.count}</div>
+                            <div className="text-xs text-gray-400">clicks</div>
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))}
+                    {clickHeatmapData.length === 0 && (
+                      <div className="text-center py-8 text-gray-500">
+                        <MousePointer className="h-12 w-12 mx-auto mb-2 opacity-30" />
+                        <p>No click data available yet</p>
+                        <p className="text-xs mt-1">Clicks will be tracked automatically</p>
+                      </div>
+                    )}
+                  </div>
+                </ScrollArea>
+              </CardContent>
+            </Card>
+
+            {/* Click Statistics */}
+            <Card className="bg-gradient-to-br from-gray-900 to-gray-950 border-white/10">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center gap-2">
+                  <Activity className="h-5 w-5 text-[#C5FF4A]" />
+                  Click Statistics
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-2 gap-4 mb-6">
+                  <div className="p-4 rounded-xl bg-orange-500/10 border border-orange-500/20 text-center">
+                    <MousePointer className="h-8 w-8 mx-auto mb-2 text-orange-500" />
+                    <div className="text-2xl font-bold text-white">{stats.button_clicks}</div>
+                    <div className="text-sm text-gray-400">Button Clicks</div>
+                  </div>
+                  <div className="p-4 rounded-xl bg-purple-500/10 border border-purple-500/20 text-center">
+                    <ExternalLink className="h-8 w-8 mx-auto mb-2 text-purple-500" />
+                    <div className="text-2xl font-bold text-white">{stats.link_clicks}</div>
+                    <div className="text-sm text-gray-400">Link Clicks</div>
+                  </div>
+                </div>
+
+                {/* Click Distribution Chart */}
+                <div className="h-[300px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={clickHeatmapData.slice(0, 10)} layout="vertical">
+                      <CartesianGrid strokeDasharray="3 3" stroke="#333" />
+                      <XAxis type="number" tick={{ fill: '#999' }} />
+                      <YAxis 
+                        type="category" 
+                        dataKey="text" 
+                        tick={{ fill: '#999', fontSize: 10 }} 
+                        width={100}
+                      />
+                      <Tooltip 
+                        contentStyle={{ 
+                          backgroundColor: '#1a1a2e', 
+                          border: '1px solid #333',
+                          borderRadius: '8px',
+                          color: '#fff'
+                        }} 
+                      />
+                      <Bar dataKey="count" radius={[0, 4, 4, 0]}>
+                        {clickHeatmapData.slice(0, 10).map((entry, index) => (
+                          <Cell 
+                            key={`cell-${index}`} 
+                            fill={`rgba(249, 115, 22, ${0.4 + (entry.heat / 166)})`} 
+                          />
+                        ))}
+                      </Bar>
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Scroll Depth Analysis */}
+          <Card className="bg-gradient-to-br from-gray-900 to-gray-950 border-white/10">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center gap-2">
+                <ArrowRight className="h-5 w-5 text-green-500 rotate-90" />
+                Scroll Depth Distribution
+              </CardTitle>
+              <CardDescription>How far visitors scroll on your pages</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-4 gap-4">
+                {[25, 50, 75, 100].map((depth, index) => {
+                  const scrollActivities = activities.filter(
+                    a => a.activity_type === 'scroll_depth' && 
+                    (a.metadata as any)?.depth_percent === depth
+                  );
+                  const count = scrollActivities.length;
+                  const maxCount = Math.max(...[25, 50, 75, 100].map(d => 
+                    activities.filter(a => a.activity_type === 'scroll_depth' && (a.metadata as any)?.depth_percent === d).length
+                  ), 1);
+                  const height = Math.max((count / maxCount) * 150, 20);
+                  
+                  return (
+                    <motion.div
+                      key={depth}
+                      initial={{ opacity: 0, scaleY: 0 }}
+                      animate={{ opacity: 1, scaleY: 1 }}
+                      transition={{ delay: index * 0.1 }}
+                      className="text-center"
+                    >
+                      <div className="flex flex-col items-center justify-end h-[180px]">
+                        <div 
+                          className="w-full max-w-[60px] rounded-t-lg transition-all duration-500"
+                          style={{ 
+                            height: `${height}px`,
+                            background: `linear-gradient(to top, #10b981, #34d399)`
+                          }}
+                        />
+                      </div>
+                      <div className="mt-2">
+                        <div className="text-lg font-bold text-white">{count}</div>
+                        <div className="text-xs text-gray-400">{depth}% scroll</div>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
     </div>
