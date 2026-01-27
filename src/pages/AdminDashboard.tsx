@@ -45,6 +45,7 @@ import AdminSocialAutomation from '@/components/admin/AdminSocialAutomation';
 import AdminTrustedLogos from '@/components/admin/AdminTrustedLogos';
 import AdminCompletedClients from '@/components/admin/AdminCompletedClients';
 import AdminWallet from '@/components/admin/AdminWallet';
+import AdminFeedbackScreenshots from '@/components/admin/AdminFeedbackScreenshots';
 
 const AdminDashboard = () => {
   const { isAdmin, loading } = useAdminAuth();
@@ -124,6 +125,7 @@ const AdminDashboard = () => {
               <Route path="trusted-logos" element={<AdminTrustedLogos />} />
               <Route path="completed-clients" element={<AdminCompletedClients />} />
               <Route path="wallet" element={<AdminWallet />} />
+              <Route path="feedback-screenshots" element={<AdminFeedbackScreenshots />} />
             </Routes>
           </main>
         </SidebarInset>

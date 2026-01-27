@@ -5,6 +5,7 @@ import Navigation from "@/components/ui/navigation";
 import Footer from "@/components/ui/footer";
 import TrustedBy from "@/components/ui/trusted-by";
 import CompletedClients from "@/components/ui/completed-clients";
+import ClientFeedbackCarousel from "@/components/ui/client-feedback-carousel";
 import ChatVoiceWidget from "@/components/ui/chat-voice-widget";
 import SEO from "@/components/ui/seo";
 import { useContent } from "@/contexts/ContentContext";
@@ -352,6 +353,9 @@ const Index = () => {
 
       {/* Trusted By */}
       <TrustedBy />
+
+      {/* Client Feedback Screenshots - Auto Scroll */}
+      <ClientFeedbackCarousel />
 
       {/* Services Section - Ultra Modern */}
       <section className="py-36 relative overflow-hidden">
