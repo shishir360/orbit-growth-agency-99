@@ -122,6 +122,12 @@ const ACTIVITY_COLORS: { [key: string]: string } = {
   booking: '#8b5cf6',
   pdf_download: '#ec4899',
   review_submission: '#f59e0b',
+  scroll_depth: '#10b981',
+  time_on_page: '#06b6d4',
+  button_click: '#f97316',
+  link_click: '#8b5cf6',
+  form_interaction: '#3b82f6',
+  exit_intent: '#ef4444',
   whatsapp_message_sent: '#25D366',
   whatsapp_message_received: '#128C7E',
   messenger_message_sent: '#0084FF',
@@ -366,6 +372,12 @@ export default function AdminVisitorTracking() {
       case 'booking': return <Calendar className="h-4 w-4" />;
       case 'pdf_download': return <FileText className="h-4 w-4" />;
       case 'review_submission': return <MessageSquare className="h-4 w-4" />;
+      case 'scroll_depth': return <ArrowRight className="h-4 w-4 rotate-90" />;
+      case 'time_on_page': return <Clock className="h-4 w-4" />;
+      case 'button_click': return <MousePointer className="h-4 w-4" />;
+      case 'link_click': return <ExternalLink className="h-4 w-4" />;
+      case 'form_interaction': return <FileText className="h-4 w-4" />;
+      case 'exit_intent': return <ArrowRight className="h-4 w-4" />;
       default: 
         if (type.includes('whatsapp')) return <Phone className="h-4 w-4" />;
         if (type.includes('messenger')) return <MessageSquare className="h-4 w-4" />;
