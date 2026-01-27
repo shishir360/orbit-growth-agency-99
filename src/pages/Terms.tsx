@@ -248,7 +248,7 @@ const Terms = () => {
             
             <div className="text-center">
               <Button size="lg" asChild className="text-xl font-bold px-12 py-6 rounded-2xl mr-4">
-                <a href="https://lunexomedia.com/book-appointment">Book Appointment</a>
+                <a href="https://lunexomedia.com/book-apartment">Book Appointment</a>
               </Button>
               <Button size="lg" variant="outline" asChild className="text-xl font-bold px-12 py-6 rounded-2xl border-2 border-primary/30">
                 <a href="https://lunexomedia.com/privacy">View Privacy Policy</a>

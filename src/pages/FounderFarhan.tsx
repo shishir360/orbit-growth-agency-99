@@ -136,7 +136,7 @@ const FounderFarhan = () => {
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-fade-in" style={{animationDelay: '0.8s'}}>
                 <Button asChild size="lg" className="group text-lg px-12 py-8 bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white hover:from-violet-600 hover:to-fuchsia-600 rounded-full transition-all duration-300 hover:scale-105 font-semibold shadow-2xl shadow-violet-500/30">
-                  <a href="https://lunexomedia.com/book-appointment" className="flex items-center gap-3">
+                  <a href="https://lunexomedia.com/book-apartment" className="flex items-center gap-3">
                     Let's Work Together
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </a>
@@ -334,7 +334,7 @@ const FounderFarhan = () => {
             
             <div className="flex flex-col sm:flex-row gap-5 justify-center">
               <Button asChild size="lg" className="group text-lg px-14 py-8 bg-white text-black hover:bg-white/90 rounded-full transition-all duration-300 hover:scale-105 font-semibold shadow-2xl">
-                <a href="https://lunexomedia.com/book-appointment" className="flex items-center gap-3">
+                <a href="https://lunexomedia.com/book-apartment" className="flex items-center gap-3">
                   Get In Touch
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </a>
