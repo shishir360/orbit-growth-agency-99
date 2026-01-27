@@ -158,6 +158,42 @@ export type Database = {
         }
         Relationships: []
       }
+      client_feedback_screenshots: {
+        Row: {
+          category: string | null
+          client_name: string | null
+          created_at: string
+          display_order: number | null
+          id: string
+          image_url: string
+          title: string
+          updated_at: string
+          visible: boolean | null
+        }
+        Insert: {
+          category?: string | null
+          client_name?: string | null
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          image_url: string
+          title: string
+          updated_at?: string
+          visible?: boolean | null
+        }
+        Update: {
+          category?: string | null
+          client_name?: string | null
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          image_url?: string
+          title?: string
+          updated_at?: string
+          visible?: boolean | null
+        }
+        Relationships: []
+      }
       clients: {
         Row: {
           address: string | null
