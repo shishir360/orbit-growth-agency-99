@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Cookie, X, Shield, Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
 
 const COOKIE_CONSENT_KEY = 'cookie-consent';
 const COOKIE_PREFERENCES_KEY = 'cookie-preferences';
@@ -112,10 +111,10 @@ export function CookieConsent() {
                         </h3>
                         <p className="text-muted-foreground text-sm leading-relaxed">
                           We use cookies to enhance your browsing experience, analyze site traffic, and personalize content. 
-                          By clicking "Accept All", you consent to our use of cookies. 
-                          <Link to="/privacy" className="text-primary hover:underline ml-1">
+                        By clicking "Accept All", you consent to our use of cookies. 
+                          <a href="https://lunexomedia.com/privacy" className="text-primary hover:underline ml-1">
                             Learn more
-                          </Link>
+                          </a>
                         </p>
                       </div>
                     </div>
