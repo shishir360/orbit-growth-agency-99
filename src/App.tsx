@@ -56,6 +56,7 @@ import PDFLandingPage from "./pages/PDFLandingPage";
 import Founder from "./pages/Founder";
 import FounderFarhan from "./pages/FounderFarhan";
 import VapiVoiceWidget from "./components/ui/vapi-voice-widget";
+import { CookieConsent } from "./components/ui/cookie-consent";
 
 const queryClient = new QueryClient();
 
@@ -70,6 +71,7 @@ const App = () => (
               <Sonner />
               <NotificationService />
               <VapiVoiceWidget />
+              <CookieConsent />
               <BrowserRouter>
                 <Routes>
                   <Route path="/" element={<Index />} />
