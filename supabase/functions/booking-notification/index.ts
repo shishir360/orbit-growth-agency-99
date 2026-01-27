@@ -248,36 +248,35 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log("Emails sent successfully");
 
-    // Send WhatsApp notification using TEMPLATE messages (required by WhatsApp 24-hour rule)
+    // Send WhatsApp notification to admin (direct text message with notes)
     try {
       const PHONE_ID = Deno.env.get("META_WHATSAPP_PHONE_ID");
       const ACCESS_TOKEN = Deno.env.get("META_WHATSAPP_ACCESS_TOKEN");
       const ADMIN_NUMBER = Deno.env.get("ADMIN_WHATSAPP_NUMBER");
 
       if (PHONE_ID && ACCESS_TOKEN && ADMIN_NUMBER) {
-        // Admin notification using TEMPLATE (required when outside 24-hour window)
-        // Template name: admin_booking_alert
-        // Parameters: customer_name, date, time, platform, phone
-        const adminTemplatePayload = {
+        // Build admin message with notes included
+        const adminMessage = `🔔 *New Booking Alert!*
+
+👤 *Name:* ${name}
+📧 *Email:* ${email}
+📱 *Phone:* ${phone}
+📅 *Date:* ${date}
+🕐 *Time:* ${time}${tz ? ` (${tz})` : ''}
+💻 *Platform:* ${meeting_platform}${notes ? `
+
+📝 *Additional Information:*
+${notes}` : ''}
+
+🔗 *Booking ID:* ${booking.id}`;
+
+        // Send direct text message to admin
+        const adminTextPayload = {
           messaging_product: "whatsapp",
+          recipient_type: "individual",
           to: ADMIN_NUMBER,
-          type: "template",
-          template: {
-            name: "admin_booking_alert",
-            language: { code: "en" },
-            components: [
-              {
-                type: "body",
-                parameters: [
-                  { type: "text", text: name || "Customer" },
-                  { type: "text", text: date || "TBD" },
-                  { type: "text", text: time || "TBD" },
-                  { type: "text", text: meeting_platform || "Video Call" },
-                  { type: "text", text: phone || "Not provided" },
-                ],
-              },
-            ],
-          },
+          type: "text",
+          text: { body: adminMessage },
         };
 
         const adminRes = await fetch(`https://graph.facebook.com/v18.0/${PHONE_ID}/messages`, {
@@ -286,12 +285,12 @@ const handler = async (req: Request): Promise<Response> => {
             "Authorization": `Bearer ${ACCESS_TOKEN}`,
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(adminTemplatePayload),
+          body: JSON.stringify(adminTextPayload),
         });
         const adminResult = await adminRes.json();
-        console.log("WhatsApp Admin template result:", JSON.stringify(adminResult));
+        console.log("WhatsApp Admin message result:", JSON.stringify(adminResult));
 
-        // Send to Customer using TEMPLATE
+        // Send to Customer using TEMPLATE (required for customers outside 24-hour window)
         if (phone && phone.length >= 10) {
           let customerPhone = phone.replace(/[\s\-\(\)]/g, "");
           if (!customerPhone.startsWith("+") && !customerPhone.startsWith("1")) {
