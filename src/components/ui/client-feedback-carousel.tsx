@@ -38,7 +38,7 @@ const ClientFeedbackCarousel: React.FC = () => {
 
   if (loading) {
     return (
-      <section className="py-20 bg-gradient-to-b from-background to-background/50 overflow-hidden">
+      <section className="py-20 bg-black overflow-hidden">
         <div className="container mx-auto px-4 text-center">
           <div className="animate-pulse h-64 bg-muted/20 rounded-xl"></div>
         </div>
@@ -54,11 +54,11 @@ const ClientFeedbackCarousel: React.FC = () => {
   const duplicatedScreenshots = [...screenshots, ...screenshots, ...screenshots];
 
   return (
-    <section className="py-20 bg-gradient-to-b from-background via-purple-950/10 to-background overflow-hidden relative">
+    <section className="py-20 bg-black overflow-hidden relative">
       {/* Background effects */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-pink-500/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl" />
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-lime-500/5 rounded-full blur-3xl" />
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
@@ -86,8 +86,8 @@ const ClientFeedbackCarousel: React.FC = () => {
         {/* Auto-scrolling Carousel - Row 1 (Left to Right) */}
         <div className="relative mb-6">
           {/* Gradient masks */}
-          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
-          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
+          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none" />
           
           <div className="overflow-hidden">
             <motion.div
@@ -153,8 +153,8 @@ const ClientFeedbackCarousel: React.FC = () => {
         {screenshots.length > 3 && (
           <div className="relative">
             {/* Gradient masks */}
-            <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
-            <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
+            <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none" />
+            <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none" />
             
             <div className="overflow-hidden">
               <motion.div
