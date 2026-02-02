@@ -33,6 +33,46 @@ interface PortfolioItem {
 
 const slugify = (v: string) => v.toLowerCase().trim().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-');
 
+const normalizeUrl = (v: string) => {
+  const s = (v || '').trim();
+  if (!s) return '';
+  // Accept http(s) only; auto-prefix if user typed domain without scheme
+  if (/^https?:\/\//i.test(s)) return s;
+  return `https://${s}`;
+};
+
+const ensureUniqueSlug = async (baseSlug: string, currentId?: string | null) => {
+  const base = slugify(baseSlug);
+  if (!base) return base;
+
+  // Exact match first
+  const { data: exact, error: exactErr } = await supabase
+    .from('portfolio')
+    .select('id,slug')
+    .eq('slug', base)
+    .maybeSingle();
+
+  if (exactErr) throw exactErr;
+  if (!exact || (currentId && exact.id === currentId)) return base;
+
+  // Find existing slugs that start with base-
+  const { data: similar, error: similarErr } = await supabase
+    .from('portfolio')
+    .select('slug')
+    .like('slug', `${base}-%`)
+    .limit(50);
+
+  if (similarErr) throw similarErr;
+
+  const used = new Set<string>([base, ...(similar || []).map((r: any) => r.slug)]);
+  for (let i = 2; i < 200; i++) {
+    const candidate = `${base}-${i}`;
+    if (!used.has(candidate)) return candidate;
+  }
+  // Fallback: timestamp
+  return `${base}-${Date.now()}`;
+};
+
 const AdminPortfolio = () => {
   const [projects, setProjects] = useState<PortfolioItem[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -159,7 +199,8 @@ const AdminPortfolio = () => {
     e.preventDefault();
 
     try {
-      const normalizedSlug = slugify(formData.slug || formData.title);
+      const baseSlug = slugify(formData.slug || formData.title);
+      const normalizedSlug = await ensureUniqueSlug(baseSlug, editingProject?.id);
 
       let imageUrl = editingProject?.image_url || undefined;
       if (imageFile) {
@@ -182,7 +223,7 @@ const AdminPortfolio = () => {
         content: formData.content?.trim() || null,
         category: formData.category.trim(),
         image_url: imageUrl || null,
-        project_url: formData.project_url?.trim() || null,
+        project_url: normalizeUrl(formData.project_url) || null,
         technologies: techArray,
         published: formData.published,
         blocked: false,
@@ -232,7 +273,17 @@ const AdminPortfolio = () => {
       fetchProjects();
     } catch (err: any) {
       console.error('Save failed:', err);
-      toast.error(err?.message || 'Failed to save project');
+      // Friendlier messages for common cases
+      const msg = String(err?.message || 'Failed to save project');
+      if (/row level security|RLS|permission|not authorized/i.test(msg)) {
+        toast.error('Admin permission required. Please login as admin then try again.');
+      } else if (/duplicate key value|portfolio_slug_key/i.test(msg)) {
+        toast.error('This URL slug already exists. Please change the slug and try again.');
+      } else if (/url/i.test(msg) && /project_url|image_url/i.test(msg)) {
+        toast.error('Please enter a valid URL (example: https://example.com).');
+      } else {
+        toast.error(msg);
+      }
     }
   };
 
