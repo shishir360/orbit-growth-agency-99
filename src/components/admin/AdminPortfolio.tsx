@@ -103,23 +103,34 @@ const AdminPortfolio = () => {
   };
 
   const uploadImage = async (file: File): Promise<string | null> => {
-    const fileExt = file.name.split('.').pop();
-    const fileName = `${Math.random()}.${fileExt}`;
-    
-    const { error: uploadError } = await supabase.storage
-      .from('blog-images')
-      .upload(fileName, file);
+    try {
+      const fileExt = file.name.split('.').pop()?.toLowerCase() || 'png';
+      const fileName = `portfolio-${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+      
+      // Use portfolio-images bucket for portfolio uploads
+      const { error: uploadError } = await supabase.storage
+        .from('portfolio-images')
+        .upload(fileName, file, {
+          cacheControl: '3600',
+          upsert: false
+        });
 
-    if (uploadError) {
-      console.error('Error uploading image:', uploadError);
+      if (uploadError) {
+        console.error('Error uploading image:', uploadError);
+        toast.error(`Upload failed: ${uploadError.message}`);
+        return null;
+      }
+
+      const { data } = supabase.storage
+        .from('portfolio-images')
+        .getPublicUrl(fileName);
+
+      return data.publicUrl;
+    } catch (err: any) {
+      console.error('Upload error:', err);
+      toast.error('Failed to upload image');
       return null;
     }
-
-    const { data } = supabase.storage
-      .from('blog-images')
-      .getPublicUrl(fileName);
-
-    return data.publicUrl;
   };
 
   const generateOgImage = async (slug: string) => {
