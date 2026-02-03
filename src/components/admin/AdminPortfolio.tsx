@@ -33,6 +33,17 @@ interface PortfolioItem {
 
 const slugify = (v: string) => v.toLowerCase().trim().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-');
 
+const getZodErrorMessage = (err: unknown) => {
+  if (err instanceof z.ZodError) {
+    // Return first field error in a compact way
+    const first = err.issues?.[0];
+    if (!first) return 'Invalid form data.';
+    const field = (first.path?.[0] as string) || 'field';
+    return `${field}: ${first.message}`;
+  }
+  return null;
+};
+
 const normalizeUrl = (v: string) => {
   const s = (v || '').trim();
   if (!s) return '';
@@ -199,7 +210,10 @@ const AdminPortfolio = () => {
     e.preventDefault();
 
     try {
-      const baseSlug = slugify(formData.slug || formData.title);
+      let baseSlug = slugify(formData.slug || formData.title);
+      // If title/slug contains non-latin chars (e.g. বাংলা), slugify() may become empty.
+      // Ensure we always have a valid slug so admin can save projects.
+      if (!baseSlug) baseSlug = `project-${Date.now()}`;
       const normalizedSlug = await ensureUniqueSlug(baseSlug, editingProject?.id);
 
       let imageUrl = editingProject?.image_url || undefined;
@@ -273,6 +287,13 @@ const AdminPortfolio = () => {
       fetchProjects();
     } catch (err: any) {
       console.error('Save failed:', err);
+
+      const zodMsg = getZodErrorMessage(err);
+      if (zodMsg) {
+        toast.error(zodMsg);
+        return;
+      }
+
       // Friendlier messages for common cases
       const msg = String(err?.message || 'Failed to save project');
       if (/row level security|RLS|permission|not authorized/i.test(msg)) {
