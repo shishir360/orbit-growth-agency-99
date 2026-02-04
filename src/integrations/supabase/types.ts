@@ -1473,6 +1473,42 @@ export type Database = {
         }
         Relationships: []
       }
+      website_templates: {
+        Row: {
+          category: string
+          created_at: string
+          display_order: number
+          id: string
+          image_url: string
+          link: string
+          title: string
+          updated_at: string
+          visible: boolean
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          display_order?: number
+          id?: string
+          image_url: string
+          link: string
+          title: string
+          updated_at?: string
+          visible?: boolean
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          display_order?: number
+          id?: string
+          image_url?: string
+          link?: string
+          title?: string
+          updated_at?: string
+          visible?: boolean
+        }
+        Relationships: []
+      }
       work_types: {
         Row: {
           created_at: string
