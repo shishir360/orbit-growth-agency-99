@@ -47,6 +47,7 @@ import AdminCompletedClients from '@/components/admin/AdminCompletedClients';
 import AdminWallet from '@/components/admin/AdminWallet';
 import AdminFeedbackScreenshots from '@/components/admin/AdminFeedbackScreenshots';
 import AdminTemplates from '@/components/admin/AdminTemplates';
+import AdminVideoReviews from '@/components/admin/AdminVideoReviews';
 
 const AdminDashboard = () => {
   const { isAdmin, loading } = useAdminAuth();
@@ -128,6 +129,7 @@ const AdminDashboard = () => {
               <Route path="wallet" element={<AdminWallet />} />
               <Route path="feedback-screenshots" element={<AdminFeedbackScreenshots />} />
               <Route path="templates" element={<AdminTemplates />} />
+              <Route path="video-reviews" element={<AdminVideoReviews />} />
             </Routes>
           </main>
         </SidebarInset>

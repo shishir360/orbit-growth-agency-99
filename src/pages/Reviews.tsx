@@ -1,41 +1,48 @@
 import Navigation from "@/components/ui/navigation";
 import Footer from "@/components/ui/footer";
 import ReviewSubmission from "@/components/ui/review-submission";
+import VideoReviewsCarousel from "@/components/ui/video-reviews-carousel";
 import SEO from "@/components/ui/seo";
 import { Star, Quote } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+
+interface Review {
+  id: string;
+  name: string;
+  email: string;
+  rating: number;
+  comment: string;
+  source: string;
+  visible: boolean;
+  created_at: string;
+}
 
 const Reviews = () => {
-  // Sample existing reviews - replace with actual data
-  const existingReviews = [
-    {
-      id: 1,
-      name: "Sarah Johnson",
-      company: "TechStart Inc.",
-      service: "Website Design",
-      rating: 5,
-      review: "LUNEXO MEDIA transformed our online presence completely. The website they built is not only beautiful but also highly functional. Our conversion rate increased by 40% within the first month!",
-      date: "2024-01-15"
-    },
-    {
-      id: 2,
-      name: "Mike Chen",
-      company: "Digital Solutions",
-      service: "Ads Management",
-      rating: 5,
-      review: "Outstanding ad management service! They helped us scale our campaigns from $5K to $50K monthly spend while maintaining excellent ROAS. Highly professional team.",
-      date: "2024-01-10"
-    },
-    {
-      id: 3,
-      name: "Emily Rodriguez",
-      company: "E-Commerce Plus",
-      service: "AI Automation",
-      rating: 4,
-      review: "The AI automation solutions they implemented saved us countless hours. Customer support response time improved dramatically with their chatbot integration.",
-      date: "2024-01-05"
-    }
-  ];
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('reviews')
+          .select('*')
+          .eq('visible', true)
+          .order('created_at', { ascending: false });
+
+        if (error) throw error;
+        setReviews(data || []);
+      } catch (err) {
+        console.error('Error fetching reviews:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchReviews();
+  }, []);
 
   const renderStars = (rating: number) => {
     return Array.from({ length: 5 }, (_, i) => (
@@ -84,6 +91,9 @@ const Reviews = () => {
           </div>
         </section>
 
+        {/* Video Reviews Section */}
+        <VideoReviewsCarousel showOnHomepage={false} />
+
         {/* Review Submission Section */}
         <section className="py-20 bg-black relative">
           <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-r from-emerald-600/15 to-cyan-500/15 rounded-full blur-[150px]"></div>
@@ -100,7 +110,7 @@ const Reviews = () => {
           </div>
         </section>
 
-        {/* Existing Reviews */}
+        {/* Existing Reviews from Database */}
         <section className="py-20 bg-black relative">
           <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-r from-cyan-600/15 to-teal-500/15 rounded-full blur-[150px]"></div>
           <div className="container-wide section-padding relative z-10">
@@ -113,28 +123,35 @@ const Reviews = () => {
               </p>
             </div>
             
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-              {existingReviews.map((review) => (
-                <Card key={review.id} className="h-full bg-white/5 border-white/10 backdrop-blur-sm">
-                  <CardContent className="p-6">
-                    <div className="flex items-center mb-4 text-emerald-400">
-                      <Quote className="w-8 h-8 text-emerald-400 mr-3" />
-                      <div className="flex">{renderStars(review.rating)}</div>
-                    </div>
-                    
-                    <p className="text-white/70 mb-6 leading-relaxed">
-                      "{review.review}"
-                    </p>
-                    
-                    <div className="border-t border-white/10 pt-4">
-                      <div className="font-semibold text-white">{review.name}</div>
-                      <div className="text-sm text-white/60">{review.company}</div>
-                      <div className="text-xs text-emerald-400 mt-1">{review.service}</div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+            {loading ? (
+              <div className="flex justify-center py-12">
+                <div className="w-8 h-8 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin"></div>
+              </div>
+            ) : reviews.length === 0 ? (
+              <p className="text-center text-white/50">No reviews yet. Be the first to share your experience!</p>
+            ) : (
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+                {reviews.map((review) => (
+                  <Card key={review.id} className="h-full bg-white/5 border-white/10 backdrop-blur-sm">
+                    <CardContent className="p-6">
+                      <div className="flex items-center mb-4 text-emerald-400">
+                        <Quote className="w-8 h-8 text-emerald-400 mr-3" />
+                        <div className="flex">{renderStars(review.rating)}</div>
+                      </div>
+                      
+                      <p className="text-white/70 mb-6 leading-relaxed">
+                        "{review.comment}"
+                      </p>
+                      
+                      <div className="border-t border-white/10 pt-4">
+                        <div className="font-semibold text-white">{review.name}</div>
+                        <div className="text-xs text-emerald-400 mt-1">{review.source}</div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
           </div>
         </section>
 
