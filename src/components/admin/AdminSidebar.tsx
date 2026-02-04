@@ -49,6 +49,7 @@ import {
   Share2,
   Award,
   Wallet,
+  Layout,
 } from 'lucide-react';
 
 export function AdminSidebar() {
@@ -102,6 +103,7 @@ const collapsed = state === 'collapsed';
     { to: '/admin-dashboard/categories', icon: Folder, label: 'Categories & Tags', section: 'resources' },
     { to: '/admin-dashboard/tutorials', icon: PlayCircle, label: 'Tutorials', section: 'resources' },
     { to: '/admin-dashboard/portfolio', icon: Briefcase, label: 'Portfolio', section: 'resources' },
+    { to: '/admin-dashboard/templates', icon: Layout, label: 'Templates', section: 'resources' },
     
     // Company & Contact
     { to: '/admin-dashboard/company', icon: Building2, label: 'Company Info', section: 'company' },
