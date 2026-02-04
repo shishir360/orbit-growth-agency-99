@@ -113,6 +113,39 @@ export type Database = {
         }
         Relationships: []
       }
+      blog_categories: {
+        Row: {
+          color: string
+          created_at: string
+          description: string | null
+          display_order: number
+          id: string
+          name: string
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          color?: string
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          id?: string
+          name: string
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          color?: string
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          id?: string
+          name?: string
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       blog_posts: {
         Row: {
           author: string
@@ -1352,6 +1385,71 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      video_reviews: {
+        Row: {
+          client_company: string | null
+          client_name: string | null
+          created_at: string
+          description: string | null
+          display_order: number
+          id: string
+          portfolio_project_id: string | null
+          show_on_homepage: boolean
+          show_on_reviews: boolean
+          thumbnail_url: string | null
+          title: string
+          updated_at: string
+          video_type: string
+          video_url: string | null
+          visible: boolean
+          youtube_video_id: string | null
+        }
+        Insert: {
+          client_company?: string | null
+          client_name?: string | null
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          id?: string
+          portfolio_project_id?: string | null
+          show_on_homepage?: boolean
+          show_on_reviews?: boolean
+          thumbnail_url?: string | null
+          title: string
+          updated_at?: string
+          video_type?: string
+          video_url?: string | null
+          visible?: boolean
+          youtube_video_id?: string | null
+        }
+        Update: {
+          client_company?: string | null
+          client_name?: string | null
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          id?: string
+          portfolio_project_id?: string | null
+          show_on_homepage?: boolean
+          show_on_reviews?: boolean
+          thumbnail_url?: string | null
+          title?: string
+          updated_at?: string
+          video_type?: string
+          video_url?: string | null
+          visible?: boolean
+          youtube_video_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "video_reviews_portfolio_project_id_fkey"
+            columns: ["portfolio_project_id"]
+            isOneToOne: false
+            referencedRelation: "portfolio"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       visitor_activities: {
         Row: {

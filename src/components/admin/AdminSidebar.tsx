@@ -50,6 +50,7 @@ import {
   Award,
   Wallet,
   Layout,
+  Video,
 } from 'lucide-react';
 
 export function AdminSidebar() {
@@ -109,6 +110,7 @@ const collapsed = state === 'collapsed';
     { to: '/admin-dashboard/company', icon: Building2, label: 'Company Info', section: 'company' },
     { to: '/admin-dashboard/clients', icon: Users, label: 'Clients', section: 'company' },
     { to: '/admin-dashboard/testimonials', icon: Star, label: 'Testimonials', section: 'company' },
+    { to: '/admin-dashboard/video-reviews', icon: Video, label: 'Video Reviews', section: 'company' },
     { to: '/admin-dashboard/feedback-screenshots', icon: MessageSquare, label: 'Client Feedback', section: 'company' },
     { to: '/admin-dashboard/trusted-logos', icon: Award, label: 'Trusted Logos', section: 'company' },
     { to: '/admin-dashboard/completed-clients', icon: Users, label: 'Completed Clients', section: 'company' },
