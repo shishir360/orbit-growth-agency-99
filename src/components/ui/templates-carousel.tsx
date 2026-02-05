@@ -42,16 +42,16 @@ const TemplatesCarousel: React.FC = () => {
   const duplicatedTemplates = [...templates, ...templates, ...templates];
 
   return (
-    <section className="py-16 md:py-24 bg-muted/30 overflow-hidden">
+    <section className="py-16 md:py-24 bg-black overflow-hidden">
       <div className="container mx-auto px-4 mb-10">
         <div className="text-center max-w-3xl mx-auto">
           <span className="inline-block px-4 py-1.5 mb-4 text-sm font-medium bg-primary/10 text-primary rounded-full">
             Template Gallery
           </span>
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
             Premium Website Templates
           </h2>
-          <p className="text-muted-foreground text-lg">
+          <p className="text-gray-300 text-lg">
             Browse our collection of professionally designed templates that convert visitors into customers
           </p>
         </div>
@@ -59,10 +59,10 @@ const TemplatesCarousel: React.FC = () => {
 
       <div className="relative">
         {/* Left gradient mask */}
-        <div className="absolute left-0 top-0 bottom-0 w-20 md:w-40 bg-gradient-to-r from-muted/30 to-transparent z-10 pointer-events-none" />
+        <div className="absolute left-0 top-0 bottom-0 w-20 md:w-40 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none" />
         
         {/* Right gradient mask */}
-        <div className="absolute right-0 top-0 bottom-0 w-20 md:w-40 bg-gradient-to-l from-muted/30 to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-20 md:w-40 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none" />
 
         <motion.div
           className="flex gap-6"

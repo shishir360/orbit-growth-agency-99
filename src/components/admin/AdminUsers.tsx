@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -12,53 +12,67 @@ import {
   TableHeader, 
   TableRow 
 } from '@/components/ui/table';
-import { Users, Search, UserPlus, Mail, Shield } from 'lucide-react';
+import { Users, Search, UserPlus, Mail, Shield, Loader2 } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 
 interface User {
   id: string;
-  name: string;
+  full_name: string | null;
   email: string;
-  role: 'admin' | 'editor' | 'subscriber';
-  lastLogin: string;
-  status: 'active' | 'inactive';
-  joinDate: string;
+  role: string;
+  avatar_url: string | null;
+  created_at: string;
 }
 
 const AdminUsers = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [users] = useState<User[]>([
-    {
-      id: '1',
-      name: 'John Admin',
-      email: 'admin@lunexomedia.com',
-      role: 'admin',
-      lastLogin: '2024-01-20',
-      status: 'active',
-      joinDate: '2023-01-01'
-    },
-    {
-      id: '2',
-      name: 'Sarah Editor',
-      email: 'sarah@lunexomedia.com',
-      role: 'editor',
-      lastLogin: '2024-01-19',
-      status: 'active',
-      joinDate: '2023-06-15'
-    },
-    {
-      id: '3',
-      name: 'Mike Subscriber',
-      email: 'mike@example.com',
-      role: 'subscriber',
-      lastLogin: '2024-01-15',
-      status: 'inactive',
-      joinDate: '2023-12-01'
+  const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const fetchUsers = async () => {
+    setLoading(true);
+    try {
+      // First get profiles
+      const { data: profiles, error: profilesError } = await supabase
+        .from('profiles')
+        .select('id, full_name, email, avatar_url, created_at');
+
+      if (profilesError) throw profilesError;
+
+      // Get roles
+      const { data: roles, error: rolesError } = await supabase
+        .from('user_roles')
+        .select('user_id, role');
+
+      if (rolesError) throw rolesError;
+
+      // Combine data
+      const usersWithRoles = (profiles || []).map(profile => ({
+        id: profile.id,
+        full_name: profile.full_name,
+        email: profile.email || '',
+        avatar_url: profile.avatar_url,
+        created_at: profile.created_at,
+        role: roles?.find(r => r.user_id === profile.id)?.role || 'user'
+      }));
+
+      setUsers(usersWithRoles);
+    } catch (error) {
+      console.error('Error fetching users:', error);
+      toast.error('Failed to load users');
+    } finally {
+      setLoading(false);
     }
-  ]);
+  };
 
   const filteredUsers = users.filter(user => 
-    user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user.email.toLowerCase().includes(searchTerm.toLowerCase())
+    (user.full_name?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+    (user.email?.toLowerCase() || '').includes(searchTerm.toLowerCase())
   );
 
   const getRoleBadge = (role: string) => {
@@ -101,31 +115,13 @@ const AdminUsers = () => {
             </div>
           </CardContent>
         </Card>
-        
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center gap-2">
-              <Shield className="w-5 h-5 text-green-600" />
-              <div>
-                <p className="text-2xl font-bold">{users.filter(u => u.status === 'active').length}</p>
-                <p className="text-sm text-gray-600">Active Users</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center gap-2">
-              <Mail className="w-5 h-5 text-purple-600" />
-              <div>
-                <p className="text-2xl font-bold">{users.filter(u => u.role === 'admin').length}</p>
-                <p className="text-sm text-gray-600">Administrators</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
       </div>
+
+      {loading && (
+        <div className="flex items-center justify-center py-12">
+          <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        </div>
+      )}
 
       <Card>
         <CardHeader>
@@ -151,23 +147,20 @@ const AdminUsers = () => {
               <TableRow>
                 <TableHead>User</TableHead>
                 <TableHead>Role</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Last Login</TableHead>
                 <TableHead>Join Date</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredUsers.map((user) => (
+              {!loading && filteredUsers.map((user) => (
                 <TableRow key={user.id}>
                   <TableCell>
                     <div className="flex items-center gap-3">
                       <Avatar>
-                        <AvatarImage src={`https://api.dicebear.com/7.x/initials/svg?seed=${user.name}`} />
-                        <AvatarFallback>{user.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                        <AvatarImage src={user.avatar_url || `https://api.dicebear.com/7.x/initials/svg?seed=${user.full_name || user.email}`} />
+                        <AvatarFallback>{(user.full_name || user.email || 'U').split(' ').map(n => n[0]).join('').slice(0, 2)}</AvatarFallback>
                       </Avatar>
                       <div>
-                        <div className="font-medium">{user.name}</div>
+                        <div className="font-medium">{user.full_name || 'Unnamed User'}</div>
                         <div className="text-sm text-gray-500">{user.email}</div>
                       </div>
                     </div>
@@ -178,28 +171,17 @@ const AdminUsers = () => {
                     </Badge>
                   </TableCell>
                   <TableCell>
-                    <Badge className={getStatusBadge(user.status)}>
-                      {user.status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="text-sm text-gray-500">
-                    {user.lastLogin}
-                  </TableCell>
-                  <TableCell className="text-sm text-gray-500">
-                    {user.joinDate}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex items-center justify-end gap-2">
-                      <Button variant="outline" size="sm">
-                        Edit
-                      </Button>
-                      <Button variant="outline" size="sm" className="text-red-600 hover:text-red-700">
-                        Remove
-                      </Button>
-                    </div>
+                    {new Date(user.created_at).toLocaleDateString()}
                   </TableCell>
                 </TableRow>
               ))}
+              {!loading && filteredUsers.length === 0 && (
+                <TableRow>
+                  <TableCell colSpan={3} className="text-center py-8 text-muted-foreground">
+                    No users found
+                  </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </CardContent>
