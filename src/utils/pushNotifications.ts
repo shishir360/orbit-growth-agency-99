@@ -23,7 +23,7 @@ export async function setupPushNotifications() {
     }
 
     // Subscribe to push notifications
-    const subscription = await registration.pushManager.subscribe({
+    const subscription = await (registration as any).pushManager.subscribe({
       userVisibleOnly: true,
       applicationServerKey: urlBase64ToUint8Array(
         // This is a dummy key - we'll use endpoint-only push
