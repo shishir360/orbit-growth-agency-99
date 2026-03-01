@@ -4,17 +4,20 @@ import { Resend } from "npm:resend@4.0.0";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 const ADMIN_EMAIL = "shishirmd681@gmail.com";
-const ADMIN_PHONE = "+8801339731664"; // WhatsApp number
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-interface NotificationRequest {
-  type: 'booking' | 'contact';
-  data: any;
-}
+const escapeHtml = (str: string) =>
+  str.replace(/&/g, '&amp;')
+     .replace(/</g, '&lt;')
+     .replace(/>/g, '&gt;')
+     .replace(/"/g, '&quot;')
+     .replace(/'/g, '&#039;');
+
+const VALID_TYPES = ['booking', 'contact'] as const;
 
 const handler = async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
@@ -22,26 +25,45 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const { type, data }: NotificationRequest = await req.json();
+    const body = await req.json();
+    const { type, data } = body;
 
-    console.log(`Processing ${type} notification:`, data);
+    // Input validation
+    if (!type || !VALID_TYPES.includes(type)) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid notification type. Must be "booking" or "contact".' }),
+        { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
+    if (!data || typeof data !== 'object') {
+      return new Response(
+        JSON.stringify({ error: 'Invalid data object' }),
+        { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
+
+    // Validate and sanitize individual fields
+    const safeData: Record<string, string> = {};
+    const allowedFields = ['name', 'email', 'phone', 'date', 'time', 'meeting_platform', 'notes', 'source', 'message', 'company'];
+    for (const field of allowedFields) {
+      if (data[field] !== undefined && data[field] !== null) {
+        if (typeof data[field] !== 'string' || data[field].length > 2000) {
+          return new Response(
+            JSON.stringify({ error: `Invalid ${field}` }),
+            { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } }
+          );
+        }
+        safeData[field] = escapeHtml(data[field]);
+      }
+    }
+
+    console.log(`Processing ${type} notification`);
 
     let emailSubject = "";
     let emailHtml = "";
-    let whatsappMessage = "";
 
     if (type === 'booking') {
-      emailSubject = `🔔 নতুন বুকিং: ${data.name}`;
-      whatsappMessage = `🔔 *নতুন অ্যাপার্টমেন্ট বুকিং!*\n\n` +
-        `👤 নাম: ${data.name}\n` +
-        `📧 ইমেইল: ${data.email}\n` +
-        `📱 ফোন: ${data.phone}\n` +
-        `📅 তারিখ: ${data.date}\n` +
-        `🕐 সময়: ${data.time}\n` +
-        `💻 প্ল্যাটফর্ম: ${data.meeting_platform}\n` +
-        (data.notes ? `📝 নোট: ${data.notes}\n` : '') +
-        `\n✅ এখনই চেক করুন: https://www.lunexomedia.com/admin-dashboard/bookings`;
-
+      emailSubject = `🔔 নতুন বুকিং: ${safeData.name || 'Unknown'}`;
       emailHtml = `
         <!DOCTYPE html>
         <html>
@@ -67,50 +89,29 @@ const handler = async (req: Request): Promise<Response> => {
                 <h1>নতুন অ্যাপার্টমেন্ট বুকিং রিকোয়েস্ট!</h1>
               </div>
               <div class="content">
-                <p style="font-size: 18px; color: #ef4444; font-weight: bold;">একটি নতুন বুকিং এসেছে যা আপনার অবিলম্বে মনোযোগ প্রয়োজন।</p>
-                
                 <div class="info-box">
                   <h2 style="color: #991b1b; margin-top: 0;">বুকিং বিস্তারিত:</h2>
-                  <div class="info-item"><strong>👤 নাম:</strong> ${data.name}</div>
-                  <div class="info-item"><strong>📧 ইমেইল:</strong> <a href="mailto:${data.email}">${data.email}</a></div>
-                  <div class="info-item"><strong>📱 ফোন:</strong> <a href="tel:${data.phone}">${data.phone}</a></div>
-                  <div class="info-item"><strong>📅 তারিখ:</strong> ${data.date}</div>
-                  <div class="info-item"><strong>🕐 সময়:</strong> ${data.time}</div>
-                  <div class="info-item"><strong>💻 মিটিং প্ল্যাটফর্ম:</strong> ${data.meeting_platform}</div>
-                  ${data.notes ? `<div class="info-item"><strong>📝 নোট:</strong> ${data.notes}</div>` : ''}
-                  <div class="info-item"><strong>⏰ সাবমিট করা হয়েছে:</strong> ${new Date().toLocaleString('bn-BD')}</div>
+                  <div class="info-item"><strong>👤 নাম:</strong> ${safeData.name || 'N/A'}</div>
+                  <div class="info-item"><strong>📧 ইমেইল:</strong> ${safeData.email || 'N/A'}</div>
+                  <div class="info-item"><strong>📱 ফোন:</strong> ${safeData.phone || 'N/A'}</div>
+                  <div class="info-item"><strong>📅 তারিখ:</strong> ${safeData.date || 'N/A'}</div>
+                  <div class="info-item"><strong>🕐 সময়:</strong> ${safeData.time || 'N/A'}</div>
+                  <div class="info-item"><strong>💻 মিটিং প্ল্যাটফর্ম:</strong> ${safeData.meeting_platform || 'N/A'}</div>
+                  ${safeData.notes ? `<div class="info-item"><strong>📝 নোট:</strong> ${safeData.notes}</div>` : ''}
                 </div>
-
-                <p><strong>পরবর্তী পদক্ষেপ:</strong></p>
-                <ul>
-                  <li>অ্যাডমিন প্যানেলে বিস্তারিত দেখুন</li>
-                  <li>মিটিং লিংক প্রস্তুত করুন</li>
-                  <li>গ্রাহককে যথাসময়ে যোগাযোগ করুন</li>
-                </ul>
-
                 <center>
                   <a href="https://www.lunexomedia.com/admin-dashboard/bookings" class="cta-button">
                     এখনই অ্যাডমিন প্যানেলে যান →
                   </a>
                 </center>
               </div>
-              <div class="footer">
-                এটি একটি স্বয়ংক্রিয় নোটিফিকেশন ইমেইল | Lunexo Media
-              </div>
+              <div class="footer">এটি একটি স্বয়ংক্রিয় নোটিফিকেশন ইমেইল | Lunexo Media</div>
             </div>
           </body>
         </html>
       `;
     } else if (type === 'contact') {
-      emailSubject = `🔔 নতুন কন্টাক্ট: ${data.name}`;
-      whatsappMessage = `🔔 *নতুন কন্টাক্ট ফর্ম সাবমিশন!*\n\n` +
-        `👤 নাম: ${data.name}\n` +
-        `📧 ইমেইল: ${data.email}\n` +
-        (data.phone ? `📱 ফোন: ${data.phone}\n` : '') +
-        (data.company ? `🏢 কোম্পানি: ${data.company}\n` : '') +
-        `💬 মেসেজ: ${data.message}\n` +
-        `\n✅ এখনই চেক করুন: https://www.lunexomedia.com/admin-dashboard/contact-submissions`;
-
+      emailSubject = `🔔 নতুন কন্টাক্ট: ${safeData.name || 'Unknown'}`;
       emailHtml = `
         <!DOCTYPE html>
         <html>
@@ -137,38 +138,26 @@ const handler = async (req: Request): Promise<Response> => {
                 <h1>নতুন কন্টাক্ট ফর্ম সাবমিশন!</h1>
               </div>
               <div class="content">
-                <p style="font-size: 18px; color: #3b82f6; font-weight: bold;">একজন নতুন গ্রাহক আপনার সাথে যোগাযোগ করতে চাচ্ছেন।</p>
-                
                 <div class="info-box">
                   <h2 style="color: #1e40af; margin-top: 0;">যোগাযোগ বিস্তারিত:</h2>
-                  <div class="info-item"><strong>👤 নাম:</strong> ${data.name}</div>
-                  <div class="info-item"><strong>📧 ইমেইল:</strong> <a href="mailto:${data.email}">${data.email}</a></div>
-                  ${data.phone ? `<div class="info-item"><strong>📱 ফোন:</strong> <a href="tel:${data.phone}">${data.phone}</a></div>` : ''}
-                  ${data.company ? `<div class="info-item"><strong>🏢 কোম্পানি:</strong> ${data.company}</div>` : ''}
-                  <div class="info-item"><strong>⏰ সাবমিট করা হয়েছে:</strong> ${new Date().toLocaleString('bn-BD')}</div>
+                  <div class="info-item"><strong>👤 নাম:</strong> ${safeData.name || 'N/A'}</div>
+                  <div class="info-item"><strong>📧 ইমেইল:</strong> ${safeData.email || 'N/A'}</div>
+                  ${safeData.phone ? `<div class="info-item"><strong>📱 ফোন:</strong> ${safeData.phone}</div>` : ''}
+                  ${safeData.company ? `<div class="info-item"><strong>🏢 কোম্পানি:</strong> ${safeData.company}</div>` : ''}
                 </div>
-
+                ${safeData.message ? `
                 <div class="message-box">
                   <h3 style="margin-top: 0; color: #374151;">💬 মেসেজ:</h3>
-                  <p style="margin: 0; line-height: 1.6;">${data.message}</p>
+                  <p style="margin: 0; line-height: 1.6;">${safeData.message}</p>
                 </div>
-
-                <p><strong>পরবর্তী পদক্ষেপ:</strong></p>
-                <ul>
-                  <li>২৪ ঘণ্টার মধ্যে উত্তর দিন</li>
-                  <li>অ্যাডমিন প্যানেলে স্ট্যাটাস আপডেট করুন</li>
-                  <li>গ্রাহক সম্পর্ক ব্যবস্থাপনা করুন</li>
-                </ul>
-
+                ` : ''}
                 <center>
                   <a href="https://www.lunexomedia.com/admin-dashboard/contact-submissions" class="cta-button">
                     এখনই অ্যাডমিন প্যানেলে যান →
                   </a>
                 </center>
               </div>
-              <div class="footer">
-                এটি একটি স্বয়ংক্রিয় নোটিফিকেশন ইমেইল | Lunexo Media
-              </div>
+              <div class="footer">এটি একটি স্বয়ংক্রিয় নোটিফিকেশন ইমেইল | Lunexo Media</div>
             </div>
           </body>
         </html>
@@ -193,16 +182,10 @@ const handler = async (req: Request): Promise<Response> => {
       console.error("Failed to send email:", emailErr);
     }
 
-    // Send WhatsApp notification via Twilio or direct link
-    // For now, we'll just log it - you can integrate Twilio for actual WhatsApp sending
-    const whatsappLink = `https://wa.me/${ADMIN_PHONE}?text=${encodeURIComponent(whatsappMessage)}`;
-    console.log("WhatsApp notification prepared:", whatsappLink);
-
     return new Response(
       JSON.stringify({
         success: true,
         message: "Notification sent successfully",
-        whatsappLink
       }),
       {
         status: 200,
@@ -212,7 +195,7 @@ const handler = async (req: Request): Promise<Response> => {
   } catch (error: any) {
     console.error("Error sending notification:", error);
     return new Response(
-      JSON.stringify({ error: error.message || "Internal server error" }),
+      JSON.stringify({ error: "Internal server error" }),
       {
         status: 500,
         headers: { "Content-Type": "application/json", ...corsHeaders },
