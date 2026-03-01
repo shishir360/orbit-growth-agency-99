@@ -23,6 +23,19 @@ Allow: /
 User-agent: Baiduspider
 Allow: /
 
+# AI Crawlers
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
 # Social media bots
 User-agent: Twitterbot
 Allow: /
