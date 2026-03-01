@@ -2,32 +2,22 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-interface WhatsAppRequest {
-  type: "booking" | "contact" | "test";
-  sendToCustomer?: boolean;
-  data: {
-    name?: string;
-    email?: string;
-    phone?: string;
-    date?: string;
-    time?: string;
-    meeting_platform?: string;
-    notes?: string;
-    source?: string;
-    message?: string;
-    company?: string;
-  };
-}
+const VALID_TYPES = ['booking', 'contact', 'test'] as const;
 
 // Helper to clean phone number for WhatsApp
 function cleanPhoneNumber(phone: string): string {
   let cleaned = phone.replace(/[\s\-\(\)\+]/g, "");
-  // If it doesn't start with a country code, assume it needs one
-  // The number should be just digits, WhatsApp API handles the rest
   return cleaned;
+}
+
+// Validate and truncate string fields
+function validateString(value: any, maxLength: number): string | null {
+  if (value === undefined || value === null) return null;
+  if (typeof value !== 'string') return null;
+  return value.substring(0, maxLength);
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -44,14 +34,43 @@ const handler = async (req: Request): Promise<Response> => {
       throw new Error("WhatsApp API credentials not configured");
     }
 
-    const { type, data, sendToCustomer = true }: WhatsAppRequest = await req.json();
+    const body = await req.json();
+    const { type, sendToCustomer = true } = body;
+    const data = body.data || {};
+
+    // Input validation
+    if (!type || !VALID_TYPES.includes(type)) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid type. Must be "booking", "contact", or "test".' }),
+        { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
+    if (typeof data !== 'object') {
+      return new Response(
+        JSON.stringify({ error: 'Invalid data' }),
+        { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
+
+    // Sanitize all fields
+    const safeName = validateString(data.name, 200) || 'Unknown';
+    const safeEmail = validateString(data.email, 255) || 'Not provided';
+    const safePhone = validateString(data.phone, 30);
+    const safeDate = validateString(data.date, 50);
+    const safeTime = validateString(data.time, 50);
+    const safePlatform = validateString(data.meeting_platform, 100);
+    const safeNotes = validateString(data.notes, 2000);
+    const safeSource = validateString(data.source, 100);
+    const safeMessage = validateString(data.message, 2000);
+    const safeCompany = validateString(data.company, 200);
+
     const results: any[] = [];
 
-    // === SEND TO ADMIN (always uses text message - admin has messaged first) ===
+    // === SEND TO ADMIN ===
     let adminMessage = "";
     
     if (type === "test") {
-      adminMessage = data.message || `👋 *Hello Admin!*
+      adminMessage = safeMessage || `👋 *Hello Admin!*
 
 This is Farhan AI - your WhatsApp AI Agent is now active! 🚀
 
@@ -62,25 +81,25 @@ _Lunexo Media AI System_`;
     } else if (type === "booking") {
       adminMessage = `🗓️ *New Booking Received!*
 
-👤 *Name:* ${data.name}
-📧 *Email:* ${data.email || "Not provided"}
-📱 *Phone:* ${data.phone || "Not provided"}
-📅 *Date:* ${data.date || "Not specified"}
-⏰ *Time:* ${data.time || "Not specified"}
-💻 *Platform:* ${data.meeting_platform || "Not specified"}
-📝 *Notes:* ${data.notes || "None"}
-🔗 *Source:* ${data.source || "Website"}
+👤 *Name:* ${safeName}
+📧 *Email:* ${safeEmail}
+📱 *Phone:* ${safePhone || "Not provided"}
+📅 *Date:* ${safeDate || "Not specified"}
+⏰ *Time:* ${safeTime || "Not specified"}
+💻 *Platform:* ${safePlatform || "Not specified"}
+📝 *Notes:* ${safeNotes || "None"}
+🔗 *Source:* ${safeSource || "Website"}
 
 ---
 _Lunexo Media Booking System_`;
     } else if (type === "contact") {
       adminMessage = `📩 *New Contact Form Submission!*
 
-👤 *Name:* ${data.name}
-📧 *Email:* ${data.email || "Not provided"}
-📱 *Phone:* ${data.phone || "Not provided"}
-🏢 *Company:* ${data.company || "Not provided"}
-💬 *Message:* ${data.message || "No message"}
+👤 *Name:* ${safeName}
+📧 *Email:* ${safeEmail}
+📱 *Phone:* ${safePhone || "Not provided"}
+🏢 *Company:* ${safeCompany || "Not provided"}
+💬 *Message:* ${safeMessage || "No message"}
 
 ---
 _Lunexo Media Contact System_`;
@@ -109,26 +128,24 @@ _Lunexo Media Contact System_`;
     results.push({ recipient: "admin", result: adminResult });
 
     // === SEND TO CUSTOMER (uses template message for first-time contact) ===
-    if (sendToCustomer && data.phone && data.phone.length >= 10 && type === "booking") {
-      const customerPhone = cleanPhoneNumber(data.phone);
+    if (sendToCustomer && safePhone && safePhone.length >= 10 && type === "booking") {
+      const customerPhone = cleanPhoneNumber(safePhone);
       
-      // Use template message for customers who haven't messaged first
-      // Template: booking_confirmation with parameters: name, date, time, platform
       const templatePayload = {
         messaging_product: "whatsapp",
         to: customerPhone,
         type: "template",
         template: {
-          name: "booking_confirmation", // Create this template in Meta Business Manager
+          name: "booking_confirmation",
           language: { code: "en" },
           components: [
             {
               type: "body",
               parameters: [
-                { type: "text", text: data.name || "Customer" },
-                { type: "text", text: data.date || "To be confirmed" },
-                { type: "text", text: data.time || "To be confirmed" },
-                { type: "text", text: data.meeting_platform || "Video Call" },
+                { type: "text", text: safeName },
+                { type: "text", text: safeDate || "To be confirmed" },
+                { type: "text", text: safeTime || "To be confirmed" },
+                { type: "text", text: safePlatform || "Video Call" },
               ],
             },
           ],
@@ -151,10 +168,8 @@ _Lunexo Media Contact System_`;
       console.log("Customer WhatsApp template result:", customerResult);
       results.push({ recipient: "customer", phone: customerPhone, result: customerResult });
 
-      // If template fails, log the error but don't fail the whole request
       if (!customerResponse.ok) {
         console.error("Customer template message failed:", customerResult);
-        // Template might not be approved yet - this is expected initially
       }
     }
 
@@ -172,7 +187,7 @@ _Lunexo Media Contact System_`;
   } catch (error: any) {
     console.error("Error sending WhatsApp notification:", error);
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ error: "Failed to send notification" }),
       {
         status: 500,
         headers: { "Content-Type": "application/json", ...corsHeaders },

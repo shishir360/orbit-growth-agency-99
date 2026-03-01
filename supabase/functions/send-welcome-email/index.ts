@@ -1,21 +1,20 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { Resend } from "npm:resend@4.0.0";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-interface WelcomeEmailRequest {
-  clientName: string;
-  clientEmail: string;
-  clientPhone?: string;
-  clientCompany?: string;
-  workTypes?: string[];
-  notes?: string;
-}
+const escapeHtml = (str: string) =>
+  str.replace(/&/g, '&amp;')
+     .replace(/</g, '&lt;')
+     .replace(/>/g, '&gt;')
+     .replace(/"/g, '&quot;')
+     .replace(/'/g, '&#039;');
 
 const handler = async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
@@ -23,184 +22,107 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const { clientName, clientEmail, clientPhone, clientCompany, workTypes, notes }: WelcomeEmailRequest = await req.json();
+    // Verify authentication - only admins send welcome emails
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader?.startsWith('Bearer ')) {
+      return new Response(
+        JSON.stringify({ error: 'Unauthorized' }),
+        { status: 401, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
+
+    const anonClient = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_ANON_KEY') ?? '',
+      { global: { headers: { Authorization: authHeader } } }
+    );
+
+    const token = authHeader.replace('Bearer ', '');
+    const { data: claimsData, error: claimsError } = await anonClient.auth.getClaims(token);
+    if (claimsError || !claimsData?.claims) {
+      return new Response(
+        JSON.stringify({ error: 'Unauthorized' }),
+        { status: 401, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
+
+    const { clientName, clientEmail, clientPhone, clientCompany, workTypes, notes } = await req.json();
+
+    // Input validation
+    if (!clientName || typeof clientName !== 'string' || clientName.length > 200) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid client name' }),
+        { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
+    if (!clientEmail || typeof clientEmail !== 'string' || clientEmail.length > 255 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clientEmail)) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid client email' }),
+        { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
+    if (clientPhone && (typeof clientPhone !== 'string' || clientPhone.length > 30)) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid phone' }),
+        { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
+    if (clientCompany && (typeof clientCompany !== 'string' || clientCompany.length > 200)) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid company' }),
+        { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
+    if (workTypes && (!Array.isArray(workTypes) || workTypes.length > 20 || workTypes.some((t: any) => typeof t !== 'string' || t.length > 100))) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid work types' }),
+        { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
+    if (notes && (typeof notes !== 'string' || notes.length > 2000)) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid notes' }),
+        { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
+
+    // Escape all user data for HTML
+    const safeName = escapeHtml(clientName);
+    const safeEmail = escapeHtml(clientEmail);
+    const safePhone = clientPhone ? escapeHtml(clientPhone) : null;
+    const safeCompany = clientCompany ? escapeHtml(clientCompany) : null;
+    const safeNotes = notes ? escapeHtml(notes) : null;
+    const safeWorkTypes = workTypes ? workTypes.map((t: string) => escapeHtml(t)) : null;
 
     const welcomeEmailHtml = `
       <!DOCTYPE html>
       <html>
         <head>
           <style>
-            body { 
-              font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-              line-height: 1.8; 
-              color: #333; 
-              margin: 0; 
-              padding: 0; 
-              background-color: #f4f4f4;
-            }
-            .container { 
-              max-width: 650px; 
-              margin: 40px auto; 
-              background: white;
-              border-radius: 16px;
-              overflow: hidden;
-              box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            }
-            .header { 
-              background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-              color: white; 
-              padding: 50px 40px; 
-              text-align: center; 
-            }
-            .header h1 { 
-              margin: 0; 
-              font-size: 32px; 
-              font-weight: 700;
-              text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            }
-            .header p { 
-              margin: 10px 0 0 0; 
-              font-size: 16px; 
-              opacity: 0.95;
-            }
-            .content { 
-              padding: 50px 40px; 
-              background: #ffffff;
-            }
-            .greeting { 
-              font-size: 24px; 
-              font-weight: 600; 
-              color: #667eea; 
-              margin-bottom: 20px;
-            }
-            .message { 
-              font-size: 16px; 
-              line-height: 1.8; 
-              color: #555; 
-              margin-bottom: 25px;
-            }
-            .info-box { 
-              background: linear-gradient(135deg, #f6f8ff 0%, #f0f4ff 100%); 
-              padding: 30px; 
-              margin: 30px 0; 
-              border-left: 5px solid #667eea; 
-              border-radius: 8px;
-            }
-            .info-box h2 { 
-              color: #667eea; 
-              margin-top: 0; 
-              font-size: 20px;
-              font-weight: 600;
-            }
-            .info-item { 
-              display: flex; 
-              align-items: center; 
-              margin: 12px 0; 
-              font-size: 15px;
-            }
-            .info-item strong { 
-              min-width: 120px; 
-              color: #667eea; 
-            }
-            .work-types-box {
-              background: #fff7ed;
-              border-left: 5px solid #f97316;
-              padding: 20px;
-              margin: 20px 0;
-              border-radius: 8px;
-            }
-            .work-types-box h3 {
-              color: #f97316;
-              margin-top: 0;
-              font-size: 18px;
-              font-weight: 600;
-            }
-            .work-type-tag {
-              display: inline-block;
-              background: #fff;
-              color: #f97316;
-              padding: 8px 16px;
-              margin: 6px 6px 6px 0;
-              border-radius: 20px;
-              font-size: 14px;
-              font-weight: 500;
-              border: 2px solid #fed7aa;
-            }
-            .notes-box {
-              background: #f0fdf4;
-              border-left: 5px solid #22c55e;
-              padding: 20px;
-              margin: 20px 0;
-              border-radius: 8px;
-            }
-            .notes-box h3 {
-              color: #22c55e;
-              margin-top: 0;
-              font-size: 18px;
-              font-weight: 600;
-            }
-            .notes-box p {
-              color: #166534;
-              line-height: 1.6;
-              margin: 0;
-            }
-            .cta-button { 
-              display: inline-block; 
-              background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-              color: white; 
-              padding: 16px 40px; 
-              text-decoration: none; 
-              border-radius: 50px; 
-              font-weight: 600; 
-              margin: 30px 0;
-              box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-              transition: transform 0.2s;
-            }
-            .cta-button:hover {
-              transform: translateY(-2px);
-            }
-            .benefits { 
-              background: #f9fafb; 
-              padding: 25px; 
-              border-radius: 8px; 
-              margin: 25px 0;
-            }
-            .benefits ul { 
-              list-style: none; 
-              padding: 0; 
-              margin: 0;
-            }
-            .benefits li { 
-              padding: 10px 0; 
-              padding-left: 30px;
-              position: relative;
-            }
-            .benefits li:before { 
-              content: "✓"; 
-              position: absolute; 
-              left: 0; 
-              color: #10b981; 
-              font-weight: bold; 
-              font-size: 18px;
-            }
-            .footer { 
-              text-align: center; 
-              padding: 30px 40px; 
-              background: #f9fafb;
-              color: #6b7280; 
-              font-size: 14px; 
-              border-top: 1px solid #e5e7eb;
-            }
+            body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.8; color: #333; margin: 0; padding: 0; background-color: #f4f4f4; }
+            .container { max-width: 650px; margin: 40px auto; background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
+            .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 50px 40px; text-align: center; }
+            .header h1 { margin: 0; font-size: 32px; font-weight: 700; }
+            .header p { margin: 10px 0 0 0; font-size: 16px; opacity: 0.95; }
+            .content { padding: 50px 40px; background: #ffffff; }
+            .greeting { font-size: 24px; font-weight: 600; color: #667eea; margin-bottom: 20px; }
+            .message { font-size: 16px; line-height: 1.8; color: #555; margin-bottom: 25px; }
+            .info-box { background: linear-gradient(135deg, #f6f8ff 0%, #f0f4ff 100%); padding: 30px; margin: 30px 0; border-left: 5px solid #667eea; border-radius: 8px; }
+            .info-box h2 { color: #667eea; margin-top: 0; font-size: 20px; font-weight: 600; }
+            .info-item { display: flex; align-items: center; margin: 12px 0; font-size: 15px; }
+            .info-item strong { min-width: 120px; color: #667eea; }
+            .work-types-box { background: #fff7ed; border-left: 5px solid #f97316; padding: 20px; margin: 20px 0; border-radius: 8px; }
+            .work-types-box h3 { color: #f97316; margin-top: 0; font-size: 18px; font-weight: 600; }
+            .work-type-tag { display: inline-block; background: #fff; color: #f97316; padding: 8px 16px; margin: 6px 6px 6px 0; border-radius: 20px; font-size: 14px; font-weight: 500; border: 2px solid #fed7aa; }
+            .notes-box { background: #f0fdf4; border-left: 5px solid #22c55e; padding: 20px; margin: 20px 0; border-radius: 8px; }
+            .notes-box h3 { color: #22c55e; margin-top: 0; font-size: 18px; font-weight: 600; }
+            .notes-box p { color: #166534; line-height: 1.6; margin: 0; }
+            .benefits { background: #f9fafb; padding: 25px; border-radius: 8px; margin: 25px 0; }
+            .benefits ul { list-style: none; padding: 0; margin: 0; }
+            .benefits li { padding: 10px 0; padding-left: 30px; position: relative; }
+            .benefits li:before { content: "✓"; position: absolute; left: 0; color: #10b981; font-weight: bold; font-size: 18px; }
+            .footer { text-align: center; padding: 30px 40px; background: #f9fafb; color: #6b7280; font-size: 14px; border-top: 1px solid #e5e7eb; }
             .footer p { margin: 5px 0; }
-            .social-links { 
-              margin: 20px 0; 
-            }
-            .social-links a { 
-              display: inline-block; 
-              margin: 0 8px; 
-              color: #667eea; 
-              text-decoration: none;
-            }
           </style>
         </head>
         <body>
@@ -211,7 +133,7 @@ const handler = async (req: Request): Promise<Response> => {
             </div>
             
             <div class="content">
-              <div class="greeting">Welcome to Luxeno Media, ${clientName}!</div>
+              <div class="greeting">Welcome to Luxeno Media, ${safeName}!</div>
               <p class="message">
                 We're thrilled to welcome you to Luxeno Media! Thank you for trusting us with your business needs. 
                 We're committed to delivering exceptional results and providing you with outstanding service every step of the way.
@@ -219,24 +141,24 @@ const handler = async (req: Request): Promise<Response> => {
               
               <div class="info-box">
                 <h2>📋 Your Account Details</h2>
-                ${clientCompany ? `<div class="info-item"><strong>Company:</strong> ${clientCompany}</div>` : ''}
-                ${clientPhone ? `<div class="info-item"><strong>Phone:</strong> ${clientPhone}</div>` : ''}
-                <div class="info-item"><strong>Email:</strong> ${clientEmail}</div>
+                ${safeCompany ? `<div class="info-item"><strong>Company:</strong> ${safeCompany}</div>` : ''}
+                ${safePhone ? `<div class="info-item"><strong>Phone:</strong> ${safePhone}</div>` : ''}
+                <div class="info-item"><strong>Email:</strong> ${safeEmail}</div>
               </div>
 
-              ${workTypes && workTypes.length > 0 ? `
+              ${safeWorkTypes && safeWorkTypes.length > 0 ? `
               <div class="work-types-box">
                 <h3>🎯 Services We'll Provide</h3>
                 <div>
-                  ${workTypes.map(type => `<span class="work-type-tag">${type}</span>`).join('')}
+                  ${safeWorkTypes.map((type: string) => `<span class="work-type-tag">${type}</span>`).join('')}
                 </div>
               </div>
               ` : ''}
 
-              ${notes ? `
+              ${safeNotes ? `
               <div class="notes-box">
                 <h3>📝 Project Notes</h3>
-                <p>${notes}</p>
+                <p>${safeNotes}</p>
               </div>
               ` : ''}
 
@@ -292,7 +214,7 @@ const handler = async (req: Request): Promise<Response> => {
     const { error: emailError } = await resend.emails.send({
       from: "Lunexo Media <hello@lunexomedia.com>",
       to: [clientEmail],
-      subject: `🎉 Welcome ${clientName}! - Lunexo Media`,
+      subject: `🎉 Welcome ${safeName}! - Lunexo Media`,
       html: welcomeEmailHtml,
     });
 
@@ -316,7 +238,7 @@ const handler = async (req: Request): Promise<Response> => {
   } catch (error: any) {
     console.error("Error in send-welcome-email function:", error);
     return new Response(
-      JSON.stringify({ error: error.message || "Failed to send welcome email" }),
+      JSON.stringify({ error: "Failed to send welcome email" }),
       {
         status: 500,
         headers: { "Content-Type": "application/json", ...corsHeaders },
