@@ -69,7 +69,30 @@ const Index = () => {
   }, [portfolioProjects.length, imagesLoaded]);
   const visibleTestimonials = useMemo(() => content.testimonials.filter(testimonial => testimonial.visible).sort((a, b) => a.order - b.order), [content.testimonials]);
   return <div className="min-h-screen bg-[#0d0d0d] text-white overflow-hidden">
-      <SEO title="Lunexo Media | Digital Marketing & Growth Solutions" description="Lunexo Media helps businesses grow with SEO, paid ads, web design, and AI automation. Get data-driven strategies to scale your brand." image="https://www.lunexomedia.com/og-image-new.jpg" url="https://www.lunexomedia.com" keywords="digital marketing, SEO services, Google ads, web design, AI automation, business growth, Lunexo Media" />
+      <SEO title="Lunexo Media | Digital Marketing & Growth Solutions" description="Lunexo Media helps businesses grow with SEO, paid ads, web design, and AI automation. Get data-driven strategies to scale your brand." image="https://www.lunexomedia.com/og-image-new.jpg" url="https://www.lunexomedia.com" keywords="digital marketing, SEO services, Google ads, web design, AI automation, business growth, Lunexo Media" structuredData={{
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Lunexo Media",
+        "url": "https://www.lunexomedia.com",
+        "logo": "https://www.lunexomedia.com/logo.png",
+        "description": "Digital marketing agency offering web development, SEO, Google Ads, Facebook Ads, and AI automation services.",
+        "foundingLocation": {
+          "@type": "Place",
+          "name": "Bangladesh"
+        },
+        "sameAs": [
+          "https://www.facebook.com/lunexomedia",
+          "https://www.linkedin.com/company/lunexomedia",
+          "https://www.instagram.com/lunexomedia"
+        ],
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "customer service",
+          "telephone": "+1-702-483-0749",
+          "email": "hello@lunexomedia.com",
+          "url": "https://www.lunexomedia.com/contact"
+        }
+      }} />
       
       <Navigation />
       
