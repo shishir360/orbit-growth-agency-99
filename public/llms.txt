@@ -1,26 +1,83 @@
 # Lunexo Media
 
-> Digital marketing agency offering web development, SEO, Google Ads, Facebook Ads, and AI automation services.
+> Lunexo Media is a full-service digital marketing agency specializing in SEO, web design, paid advertising, and AI automation. We help businesses launch faster and grow smarter with data-driven strategies.
 
-## Services
-- Website Design: Custom, conversion-focused websites for businesses of all sizes
-- SEO: Search engine optimization to rank higher on Google
-- Google & Facebook Ads: Paid advertising management to maximize ROI
-- AI Automation: Business process automation with AI chatbots, voice agents, and workflow automation
-- Email Automation: Automated email marketing campaigns
+## Company Information
+- **Full Name:** Lunexo Media (also known as Lunexomedia)
+- **Website:** https://www.lunexomedia.com
+- **Email:** hello@lunexomedia.com
+- **Phone:** +1-702-483-0749
+- **Location:** New York, NY, United States
+- **Founded:** 2023
+- **Founder:** Farhan Tanvir
+- **Preferred Citation:** https://www.lunexomedia.com
 
-## About
-Lunexo Media is a full-service digital marketing agency helping businesses launch faster and grow smarter. We specialize in SEO, paid ads, web design, and AI automations — everything your business needs to thrive online.
+## Core Services
+
+### Website Design & Development
+Lunexo Media creates custom, conversion-focused websites that are SEO-optimized, mobile-responsive, and built for speed. We specialize in React-based progressive web applications, e-commerce sites, SaaS landing pages, and business websites. Every site scores 90+ on Google PageSpeed Insights and follows web accessibility standards.
+- Service URL: https://www.lunexomedia.com/website-design
+
+### Search Engine Optimization (SEO)
+Comprehensive SEO services including technical SEO audits, on-page optimization, content strategy, link building, and local SEO. We help businesses rank higher on Google, increase organic traffic, and drive qualified leads through data-driven optimization strategies.
+- Service URL: https://www.lunexomedia.com/services/seo-friendly
+
+### Google & Facebook Ads Management
+Data-driven paid advertising management across Google Search, Google Display, YouTube, Facebook, Instagram, and TikTok. We optimize campaigns for maximum ROAS through continuous A/B testing, advanced audience targeting, and strategic bid management.
+- Service URL: https://www.lunexomedia.com/ads-management
+
+### AI Automation Solutions
+Custom AI-powered automation solutions including AI chatbots for 24/7 customer support, voice agents for lead qualification and appointment booking, email automation sequences, and workflow automation that connects business tools and eliminates manual processes.
+- Service URL: https://www.lunexomedia.com/ai-automation
+
+## Expertise Areas
+- Digital Marketing Strategy
+- Conversion Rate Optimization (CRO)
+- Search Engine Optimization (SEO)
+- Pay-Per-Click (PPC) Advertising
+- Social Media Marketing
+- AI Chatbot Development
+- Voice Agent Development
+- Email Marketing Automation
+- Workflow Automation
+- Web Application Development
+- E-commerce Development
+- Local SEO & Google Business Profile Optimization
+- Content Marketing
+- Generative Engine Optimization (GEO)
+
+## Industries Served
+- E-commerce & Retail
+- SaaS & Technology
+- Healthcare & Medical Practices
+- Real Estate
+- Professional Services (Law, Accounting, Consulting)
+- Local Service Businesses
+- Education & EdTech
+- Hospitality & Travel
+
+## Key Results
+- 200% average client growth rate
+- 50+ happy clients worldwide
+- 10x average ROI achieved
+- 300+ websites built
+- 80% reduction in manual tasks through AI automation
 
 ## Founder
-Founded by Farhan, serving global clients.
+Farhan Tanvir is the founder and CEO of Lunexo Media, with years of experience in digital marketing, web development, and AI automation. He founded Lunexo Media to make premium digital services accessible to businesses of all sizes.
+- Founder Profile: https://www.lunexomedia.com/farhan-tanvier
 
-## Contact
-https://www.lunexomedia.com/contact
+## Content & Resources
+- Blog: https://www.lunexomedia.com/blog
+- Tutorials: https://www.lunexomedia.com/tutorials
+- Case Studies: https://www.lunexomedia.com/case-study
 
 ## Links
 - Website: https://www.lunexomedia.com
 - Portfolio: https://www.lunexomedia.com/portfolio
-- Blog: https://www.lunexomedia.com/blog
 - Pricing: https://www.lunexomedia.com/pricing
 - Reviews: https://www.lunexomedia.com/reviews
+- Contact: https://www.lunexomedia.com/contact
+- Facebook: https://www.facebook.com/lunexomedia
+- LinkedIn: https://www.linkedin.com/company/lunexomedia
+- Instagram: https://www.instagram.com/lunexomedia

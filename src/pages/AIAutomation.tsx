@@ -8,6 +8,7 @@ import Footer from "@/components/ui/footer";
 import SEO from "@/components/ui/seo";
 import ServiceSchema from "@/components/ui/service-schema";
 import BreadcrumbSEO from "@/components/ui/breadcrumb-seo";
+import FAQSchema from "@/components/ui/faq-schema";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { 
@@ -1357,6 +1358,42 @@ const AIAutomation = () => {
               </Button>
             </div>
           </motion.div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-24 relative overflow-hidden bg-black">
+        <div className="container-wide section-padding relative z-10">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-3xl lg:text-5xl font-bold mb-12 text-white text-center">
+              AI Automation <span className="text-[#C5FF4A]">FAQ</span>
+            </h2>
+            <FAQSchema
+              className="space-y-4"
+              faqs={[
+                {
+                  question: "What is AI automation for business?",
+                  answer: "AI automation uses artificial intelligence to handle repetitive business tasks without human intervention. This includes AI chatbots for customer support, voice agents for lead qualification and appointment scheduling, email automation for nurturing leads, and workflow automation that connects your business tools. AI automation saves time, reduces costs, and improves customer experience by providing instant, 24/7 responses."
+                },
+                {
+                  question: "How much does AI automation cost?",
+                  answer: "AI automation pricing varies based on the complexity and scope of your needs. Simple chatbot implementations start at around $997, while comprehensive automation systems with voice agents, email sequences, and workflow integrations can range from $2,500 to $10,000+. We provide custom quotes based on your specific requirements during a free consultation."
+                },
+                {
+                  question: "How long does it take to implement AI automation?",
+                  answer: "Basic AI chatbot implementations can be completed in 1-2 weeks. More complex systems involving voice agents, multi-channel automation, and custom integrations typically take 4-8 weeks. Our goal is to have your automation fully operational within 90 days, including testing, optimization, and team training."
+                },
+                {
+                  question: "Will AI automation replace my employees?",
+                  answer: "No, AI automation is designed to augment your team, not replace them. It handles repetitive, time-consuming tasks so your employees can focus on high-value work that requires human creativity, empathy, and strategic thinking. Most businesses find that AI automation makes their existing team more productive and effective."
+                },
+                {
+                  question: "What tools and platforms do you use for AI automation?",
+                  answer: "We use a variety of cutting-edge AI tools and platforms depending on your needs, including custom-built solutions powered by OpenAI and Google AI, Make.com and Zapier for workflow automation, custom voice agents using VAPI technology, and email automation through platforms like ActiveCampaign and Mailchimp. We always recommend the best tool for your specific use case."
+                }
+              ]}
+            />
+          </div>
         </div>
       </section>
 

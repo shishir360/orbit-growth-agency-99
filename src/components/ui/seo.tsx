@@ -18,7 +18,7 @@ interface SEOProps {
     section?: string;
     tags?: string[];
   };
-  structuredData?: any;
+  structuredData?: any | any[];
 }
 
 const SEO: React.FC<SEOProps> = ({
@@ -135,9 +135,17 @@ const SEO: React.FC<SEOProps> = ({
       <meta name="format-detection" content="telephone=no" />
       
       {/* Structured Data */}
-      <script type="application/ld+json">
-        {JSON.stringify(structuredData)}
-      </script>
+      {Array.isArray(structuredData) ? (
+        structuredData.map((sd: any, i: number) => (
+          <script key={i} type="application/ld+json">
+            {JSON.stringify(sd)}
+          </script>
+        ))
+      ) : (
+        <script type="application/ld+json">
+          {JSON.stringify(structuredData)}
+        </script>
+      )}
     </Helmet>
   );
 };
