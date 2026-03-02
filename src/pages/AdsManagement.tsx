@@ -8,6 +8,7 @@ import Footer from "@/components/ui/footer";
 import SEO from "@/components/ui/seo";
 import ServiceSchema from "@/components/ui/service-schema";
 import BreadcrumbSEO from "@/components/ui/breadcrumb-seo";
+import FAQSchema from "@/components/ui/faq-schema";
 import { 
   Target, 
   BarChart3, 
@@ -669,6 +670,42 @@ const AdsManagement = () => {
               </Button>
             </div>
           </motion.div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-24 relative overflow-hidden bg-[#0a0a1a]">
+        <div className="container-wide section-padding relative z-10">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-3xl lg:text-5xl font-bold mb-12 text-white text-center">
+              Ads Management <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">FAQ</span>
+            </h2>
+            <FAQSchema
+              className="space-y-4"
+              faqs={[
+                {
+                  question: "How much should I spend on Google and Facebook Ads?",
+                  answer: "Your ideal ad budget depends on your industry, competition, and goals. We recommend starting with at least $500-$1,000 per month per platform to gather enough data for optimization. Our management fee starts at $299/month. We'll help you determine the optimal budget during your free consultation based on your target cost-per-acquisition and growth goals."
+                },
+                {
+                  question: "How long does it take to see results from paid advertising?",
+                  answer: "You can start seeing traffic and leads within the first few days of launching a campaign. However, it typically takes 2-4 weeks to gather enough data for meaningful optimization. Most clients see strong, consistent results within 60-90 days as we refine targeting, ad creatives, and bidding strategies based on performance data."
+                },
+                {
+                  question: "Which advertising platforms do you manage?",
+                  answer: "We manage campaigns across Google Search Ads, Google Display Network, YouTube Ads, Facebook Ads, Instagram Ads, and TikTok Ads. We'll recommend the best platform mix based on your target audience, industry, and goals. Most B2B businesses perform well on Google and LinkedIn, while B2C brands often see great results on Facebook, Instagram, and TikTok."
+                },
+                {
+                  question: "Do you provide monthly reporting on ad performance?",
+                  answer: "Yes, we provide detailed monthly performance reports that cover key metrics including impressions, clicks, conversions, cost-per-click (CPC), cost-per-acquisition (CPA), return on ad spend (ROAS), and more. We also schedule monthly strategy calls to review results and discuss optimization opportunities."
+                },
+                {
+                  question: "Can you help with ad creative and copywriting?",
+                  answer: "Absolutely. Our team creates high-converting ad copy, designs eye-catching visuals, and produces video ads when needed. We continuously A/B test different creatives to identify what resonates best with your target audience and drives the highest conversion rates."
+                }
+              ]}
+            />
+          </div>
         </div>
       </section>
 
