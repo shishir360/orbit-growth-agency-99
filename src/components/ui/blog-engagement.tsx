@@ -34,7 +34,7 @@ export const BlogEngagement = ({ postId, title, category, readTime }: BlogEngage
     };
 
     // Throttle scroll events for better performance
-    let timeoutId: NodeJS.Timeout;
+    let timeoutId: ReturnType<typeof setTimeout>;
     const throttledUpdateProgress = () => {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(updateReadingProgress, 16); // ~60fps

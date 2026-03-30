@@ -28,6 +28,9 @@ import {
   MessageSquare,
   MessageCircle,
   Users,
+  Crosshair,
+  ListChecks,
+  BarChart3,
   BookOpen,
   Briefcase,
   Mail,
@@ -135,6 +138,17 @@ const collapsed = state === 'collapsed';
     { to: '/admin-dashboard/messaging', icon: MessageCircle, label: 'Messaging Hub', section: 'technical' },
     { to: '/admin-dashboard/email', icon: Mail, label: 'Email Management', section: 'technical' },
     { to: '/admin-dashboard/social-automation', icon: Share2, label: 'Social Automation', section: 'technical' },
+    
+    // Outreach HQ
+    { to: '/admin-dashboard/outreach', icon: Crosshair, label: 'Outreach Dashboard', section: 'outreach' },
+    { to: '/admin-dashboard/outreach/tasks', icon: ListChecks, label: 'Daily Tasks', section: 'outreach' },
+    { to: '/admin-dashboard/outreach/tracker', icon: BarChart3, label: 'Daily Tracker', section: 'outreach' },
+    { to: '/admin-dashboard/outreach/leads', icon: Users, label: 'Leads CRM', section: 'outreach' },
+    { to: '/admin-dashboard/outreach/emails', icon: Mail, label: 'Email Log', section: 'outreach' },
+    { to: '/admin-dashboard/outreach/dms', icon: MessageCircle, label: 'DM Log', section: 'outreach' },
+    { to: '/admin-dashboard/outreach/calendar', icon: Calendar, label: 'Content Calendar', section: 'outreach' },
+    { to: '/admin-dashboard/outreach/posts', icon: FileText, label: 'Post Log', section: 'outreach' },
+    { to: '/admin-dashboard/outreach/deals', icon: DollarSign, label: 'Revenue', section: 'outreach' },
   ];
 
   const getNavCls = (path: string) => {
@@ -144,6 +158,7 @@ const collapsed = state === 'collapsed';
 
   const sections = [
     { id: 'core', label: 'Dashboard' },
+    { id: 'outreach', label: 'Outreach HQ' },
     { id: 'content', label: 'Content' },
     { id: 'services', label: 'Services' },
     { id: 'resources', label: 'Resources' },

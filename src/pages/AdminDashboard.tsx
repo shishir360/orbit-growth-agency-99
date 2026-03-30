@@ -48,6 +48,15 @@ import AdminWallet from '@/components/admin/AdminWallet';
 import AdminFeedbackScreenshots from '@/components/admin/AdminFeedbackScreenshots';
 import AdminTemplates from '@/components/admin/AdminTemplates';
 import AdminVideoReviews from '@/components/admin/AdminVideoReviews';
+import AdminOutreachDashboard from '@/components/admin/AdminOutreachDashboard';
+import AdminOutreachLeads from '@/components/admin/AdminOutreachLeads';
+import AdminOutreachEmails from '@/components/admin/AdminOutreachEmails';
+import AdminOutreachDMs from '@/components/admin/AdminOutreachDMs';
+import AdminOutreachPosts from '@/components/admin/AdminOutreachPosts';
+import AdminOutreachTracker from '@/components/admin/AdminOutreachTracker';
+import AdminOutreachDeals from '@/components/admin/AdminOutreachDeals';
+import AdminOutreachTasks from '@/components/admin/AdminOutreachTasks';
+import AdminOutreachCalendar from '@/components/admin/AdminOutreachCalendar';
 
 const AdminDashboard = () => {
   const { isAdmin, loading } = useAdminAuth();
@@ -130,6 +139,15 @@ const AdminDashboard = () => {
               <Route path="feedback-screenshots" element={<AdminFeedbackScreenshots />} />
               <Route path="templates" element={<AdminTemplates />} />
               <Route path="video-reviews" element={<AdminVideoReviews />} />
+              <Route path="outreach" element={<AdminOutreachDashboard />} />
+              <Route path="outreach/leads" element={<AdminOutreachLeads />} />
+              <Route path="outreach/emails" element={<AdminOutreachEmails />} />
+              <Route path="outreach/dms" element={<AdminOutreachDMs />} />
+              <Route path="outreach/posts" element={<AdminOutreachPosts />} />
+              <Route path="outreach/tracker" element={<AdminOutreachTracker />} />
+              <Route path="outreach/deals" element={<AdminOutreachDeals />} />
+              <Route path="outreach/tasks" element={<AdminOutreachTasks />} />
+              <Route path="outreach/calendar" element={<AdminOutreachCalendar />} />
             </Routes>
           </main>
         </SidebarInset>
