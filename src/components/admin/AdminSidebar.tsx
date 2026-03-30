@@ -158,6 +158,7 @@ const collapsed = state === 'collapsed';
 
   const sections = [
     { id: 'core', label: 'Dashboard' },
+    { id: 'outreach', label: 'Outreach HQ' },
     { id: 'content', label: 'Content' },
     { id: 'services', label: 'Services' },
     { id: 'resources', label: 'Resources' },

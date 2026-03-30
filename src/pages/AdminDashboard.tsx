@@ -139,6 +139,15 @@ const AdminDashboard = () => {
               <Route path="feedback-screenshots" element={<AdminFeedbackScreenshots />} />
               <Route path="templates" element={<AdminTemplates />} />
               <Route path="video-reviews" element={<AdminVideoReviews />} />
+              <Route path="outreach" element={<AdminOutreachDashboard />} />
+              <Route path="outreach/leads" element={<AdminOutreachLeads />} />
+              <Route path="outreach/emails" element={<AdminOutreachEmails />} />
+              <Route path="outreach/dms" element={<AdminOutreachDMs />} />
+              <Route path="outreach/posts" element={<AdminOutreachPosts />} />
+              <Route path="outreach/tracker" element={<AdminOutreachTracker />} />
+              <Route path="outreach/deals" element={<AdminOutreachDeals />} />
+              <Route path="outreach/tasks" element={<AdminOutreachTasks />} />
+              <Route path="outreach/calendar" element={<AdminOutreachCalendar />} />
             </Routes>
           </main>
         </SidebarInset>
