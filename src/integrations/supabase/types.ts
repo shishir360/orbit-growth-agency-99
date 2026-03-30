@@ -714,6 +714,267 @@ export type Database = {
         }
         Relationships: []
       }
+      outreach_daily_logs: {
+        Row: {
+          calls_count: number | null
+          closes_count: number | null
+          created_at: string
+          dms_count: number | null
+          emails_count: number | null
+          id: string
+          log_date: string
+          proposals_count: number | null
+          sms_count: number | null
+          updated_at: string
+        }
+        Insert: {
+          calls_count?: number | null
+          closes_count?: number | null
+          created_at?: string
+          dms_count?: number | null
+          emails_count?: number | null
+          id?: string
+          log_date?: string
+          proposals_count?: number | null
+          sms_count?: number | null
+          updated_at?: string
+        }
+        Update: {
+          calls_count?: number | null
+          closes_count?: number | null
+          created_at?: string
+          dms_count?: number | null
+          emails_count?: number | null
+          id?: string
+          log_date?: string
+          proposals_count?: number | null
+          sms_count?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      outreach_deals: {
+        Row: {
+          amount: number
+          business: string
+          client_name: string
+          created_at: string
+          deal_date: string
+          id: string
+          notes: string | null
+          payment_status: string
+          service: string
+        }
+        Insert: {
+          amount?: number
+          business?: string
+          client_name: string
+          created_at?: string
+          deal_date?: string
+          id?: string
+          notes?: string | null
+          payment_status?: string
+          service?: string
+        }
+        Update: {
+          amount?: number
+          business?: string
+          client_name?: string
+          created_at?: string
+          deal_date?: string
+          id?: string
+          notes?: string | null
+          payment_status?: string
+          service?: string
+        }
+        Relationships: []
+      }
+      outreach_dms: {
+        Row: {
+          business: string
+          created_at: string
+          id: string
+          notes: string | null
+          platform: string
+          reply: string | null
+          sent_to: string
+          status: string
+        }
+        Insert: {
+          business?: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          platform?: string
+          reply?: string | null
+          sent_to: string
+          status?: string
+        }
+        Update: {
+          business?: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          platform?: string
+          reply?: string | null
+          sent_to?: string
+          status?: string
+        }
+        Relationships: []
+      }
+      outreach_emails: {
+        Row: {
+          business: string
+          created_at: string
+          email_address: string | null
+          followup_date: string | null
+          id: string
+          notes: string | null
+          sent_to: string
+          status: string
+          subject: string
+        }
+        Insert: {
+          business?: string
+          created_at?: string
+          email_address?: string | null
+          followup_date?: string | null
+          id?: string
+          notes?: string | null
+          sent_to: string
+          status?: string
+          subject?: string
+        }
+        Update: {
+          business?: string
+          created_at?: string
+          email_address?: string | null
+          followup_date?: string | null
+          id?: string
+          notes?: string | null
+          sent_to?: string
+          status?: string
+          subject?: string
+        }
+        Relationships: []
+      }
+      outreach_leads: {
+        Row: {
+          business: string
+          country: string
+          created_at: string
+          email: string
+          id: string
+          name: string
+          niche: string
+          notes: string | null
+          phone: string | null
+          platform: string
+          status: string
+          updated_at: string
+          website: string | null
+        }
+        Insert: {
+          business?: string
+          country?: string
+          created_at?: string
+          email?: string
+          id?: string
+          name: string
+          niche?: string
+          notes?: string | null
+          phone?: string | null
+          platform?: string
+          status?: string
+          updated_at?: string
+          website?: string | null
+        }
+        Update: {
+          business?: string
+          country?: string
+          created_at?: string
+          email?: string
+          id?: string
+          name?: string
+          niche?: string
+          notes?: string | null
+          phone?: string | null
+          platform?: string
+          status?: string
+          updated_at?: string
+          website?: string | null
+        }
+        Relationships: []
+      }
+      outreach_posts: {
+        Row: {
+          comments: number | null
+          content: string | null
+          created_at: string
+          id: string
+          likes: number | null
+          platform: string
+          post_date: string
+          post_type: string
+          status: string
+        }
+        Insert: {
+          comments?: number | null
+          content?: string | null
+          created_at?: string
+          id?: string
+          likes?: number | null
+          platform?: string
+          post_date?: string
+          post_type?: string
+          status?: string
+        }
+        Update: {
+          comments?: number | null
+          content?: string | null
+          created_at?: string
+          id?: string
+          likes?: number | null
+          platform?: string
+          post_date?: string
+          post_type?: string
+          status?: string
+        }
+        Relationships: []
+      }
+      outreach_tasks: {
+        Row: {
+          category: string
+          created_at: string
+          description: string | null
+          id: string
+          is_checked: boolean | null
+          task_date: string
+          time_slot: string | null
+          title: string
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_checked?: boolean | null
+          task_date?: string
+          time_slot?: string | null
+          title: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_checked?: boolean | null
+          task_date?: string
+          time_slot?: string | null
+          title?: string
+        }
+        Relationships: []
+      }
       pages: {
         Row: {
           content: string
