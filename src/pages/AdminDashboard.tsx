@@ -48,6 +48,15 @@ import AdminWallet from '@/components/admin/AdminWallet';
 import AdminFeedbackScreenshots from '@/components/admin/AdminFeedbackScreenshots';
 import AdminTemplates from '@/components/admin/AdminTemplates';
 import AdminVideoReviews from '@/components/admin/AdminVideoReviews';
+import AdminOutreachDashboard from '@/components/admin/AdminOutreachDashboard';
+import AdminOutreachLeads from '@/components/admin/AdminOutreachLeads';
+import AdminOutreachEmails from '@/components/admin/AdminOutreachEmails';
+import AdminOutreachDMs from '@/components/admin/AdminOutreachDMs';
+import AdminOutreachPosts from '@/components/admin/AdminOutreachPosts';
+import AdminOutreachTracker from '@/components/admin/AdminOutreachTracker';
+import AdminOutreachDeals from '@/components/admin/AdminOutreachDeals';
+import AdminOutreachTasks from '@/components/admin/AdminOutreachTasks';
+import AdminOutreachCalendar from '@/components/admin/AdminOutreachCalendar';
 
 const AdminDashboard = () => {
   const { isAdmin, loading } = useAdminAuth();
