@@ -343,7 +343,7 @@ if (typeof window !== 'undefined') {
   }, 1500);
 
   // Track scroll depth (debounced)
-  let scrollTimeout: NodeJS.Timeout;
+  let scrollTimeout: ReturnType<typeof setTimeout>;
   window.addEventListener('scroll', () => {
     clearTimeout(scrollTimeout);
     scrollTimeout = setTimeout(trackScrollDepth, 500);
