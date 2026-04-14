@@ -14,6 +14,81 @@ export type Database = {
   }
   public: {
     Tables: {
+      affiliate_landing_pages: {
+        Row: {
+          accent_color: string | null
+          badge_text: string | null
+          bg_color: string | null
+          created_at: string
+          cta_link: string
+          cta_text: string
+          description: string | null
+          features: string[] | null
+          footer_text: string | null
+          headline: string
+          hero_image_url: string | null
+          id: string
+          is_active: boolean
+          slug: string
+          social_proof_avatars: string[] | null
+          social_proof_text: string | null
+          steps: Json | null
+          subheadline: string | null
+          title: string
+          updated_at: string
+          video_thumbnail_url: string | null
+          video_url: string | null
+        }
+        Insert: {
+          accent_color?: string | null
+          badge_text?: string | null
+          bg_color?: string | null
+          created_at?: string
+          cta_link?: string
+          cta_text?: string
+          description?: string | null
+          features?: string[] | null
+          footer_text?: string | null
+          headline?: string
+          hero_image_url?: string | null
+          id?: string
+          is_active?: boolean
+          slug: string
+          social_proof_avatars?: string[] | null
+          social_proof_text?: string | null
+          steps?: Json | null
+          subheadline?: string | null
+          title: string
+          updated_at?: string
+          video_thumbnail_url?: string | null
+          video_url?: string | null
+        }
+        Update: {
+          accent_color?: string | null
+          badge_text?: string | null
+          bg_color?: string | null
+          created_at?: string
+          cta_link?: string
+          cta_text?: string
+          description?: string | null
+          features?: string[] | null
+          footer_text?: string | null
+          headline?: string
+          hero_image_url?: string | null
+          id?: string
+          is_active?: boolean
+          slug?: string
+          social_proof_avatars?: string[] | null
+          social_proof_text?: string | null
+          steps?: Json | null
+          subheadline?: string | null
+          title?: string
+          updated_at?: string
+          video_thumbnail_url?: string | null
+          video_url?: string | null
+        }
+        Relationships: []
+      }
       apartment_bookings: {
         Row: {
           created_at: string
