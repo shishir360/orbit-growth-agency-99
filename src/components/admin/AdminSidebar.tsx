@@ -54,6 +54,7 @@ import {
   Wallet,
   Layout,
   Video,
+  Link,
 } from 'lucide-react';
 
 export function AdminSidebar() {
@@ -149,6 +150,9 @@ const collapsed = state === 'collapsed';
     { to: '/admin-dashboard/outreach/calendar', icon: Calendar, label: 'Content Calendar', section: 'outreach' },
     { to: '/admin-dashboard/outreach/posts', icon: FileText, label: 'Post Log', section: 'outreach' },
     { to: '/admin-dashboard/outreach/deals', icon: DollarSign, label: 'Revenue', section: 'outreach' },
+    
+    // Affiliate
+    { to: '/admin-dashboard/affiliate-pages', icon: Link, label: 'Affiliate Pages', section: 'affiliate' },
   ];
 
   const getNavCls = (path: string) => {
@@ -163,6 +167,7 @@ const collapsed = state === 'collapsed';
     { id: 'services', label: 'Services' },
     { id: 'resources', label: 'Resources' },
     { id: 'company', label: 'Company' },
+    { id: 'affiliate', label: 'Affiliate' },
     { id: 'technical', label: 'Technical' },
   ];
 

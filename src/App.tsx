@@ -55,6 +55,7 @@ import GuidePage from "./pages/GuidePage";
 import PDFLandingPage from "./pages/PDFLandingPage";
 import Founder from "./pages/Founder";
 import FounderFarhan from "./pages/FounderFarhan";
+import AffiliateLandingPage from "./pages/AffiliateLandingPage";
 import VapiVoiceWidget from "./components/ui/vapi-voice-widget";
 import { CookieConsent } from "./components/ui/cookie-consent";
 
@@ -118,6 +119,7 @@ const App = () => (
                   <Route path="/page/:slug" element={<DynamicPage />} />
                   <Route path="/guide/:slug" element={<GuidePage />} />
                   <Route path="/pdf/:slug" element={<PDFLandingPage />} />
+                  <Route path="/promo/:slug" element={<AffiliateLandingPage />} />
                   {/* Catch-all to resolve dynamic admin-created pages by slug, else 404 */}
                   <Route path="*" element={<CatchAllPage />} />
                 </Routes>
