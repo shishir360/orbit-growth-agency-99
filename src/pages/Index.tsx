@@ -15,6 +15,7 @@ import { Globe, Target, Bot, Sparkles, ArrowRight, Zap, Check, Star, Users, Awar
 import FAQSchema from "@/components/ui/faq-schema";
 import { useEffect, useState, useMemo } from "react";
 import heroDashboard from "@/assets/hero-dashboard-optimized.webp";
+import nexoriGlobe from "@/assets/nexori-globe.jpg";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { AnimatePresence } from "framer-motion";
