@@ -156,284 +156,210 @@ const Index = () => {
       
       <Navigation />
       
-      {/* Ultra Modern Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Animated gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0d0d0d] via-[#121212] to-[#0d0d0d]" />
-        
-        {/* Animated mesh gradient */}
-        <div className="absolute inset-0 opacity-30" style={{
-        background: `radial-gradient(600px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(62, 207, 142, 0.12), transparent 40%)`
-      }} />
-        
-        {/* Grid pattern */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-[size:60px_60px]" />
-        
-        {/* Floating orbs */}
-        <motion.div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-[#3ECF8E]/10 to-[#34B27B]/10 rounded-full blur-3xl" animate={{
-        x: [0, 50, 0],
-        y: [0, 30, 0],
-        scale: [1, 1.1, 1]
-      }} transition={{
-        duration: 8,
-        repeat: Infinity,
-        ease: "easeInOut"
-      }} />
-        <motion.div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gradient-to-r from-[#3ECF8E]/8 to-[#2E9B6B]/8 rounded-full blur-3xl" animate={{
-        x: [0, -40, 0],
-        y: [0, -50, 0],
-        scale: [1, 1.2, 1]
-      }} transition={{
-        duration: 10,
-        repeat: Infinity,
-        ease: "easeInOut"
-      }} />
-        
-        <div className="container-wide section-padding relative z-10 pt-24">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-            {/* Content */}
-            <div className="text-center lg:text-left">
-              {/* Premium badge with glow */}
-              <motion.div initial={{
-              opacity: 0,
-              y: 20
-            }} animate={{
-              opacity: 1,
-              y: 0
-            }} transition={{
-              duration: 0.6
-            }} className="inline-flex items-center gap-3 bg-white/5 backdrop-blur-xl border border-white/10 text-white/90 px-6 py-3 rounded-full text-sm font-medium mb-8 shadow-[0_0_30px_rgba(62,207,142,0.3)]">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                </span>
-                <span className="bg-gradient-to-r from-white to-white/70 bg-clip-text">Trusted by 50+ businesses worldwide</span>
-                <Sparkles className="w-4 h-4 text-amber-400" />
-              </motion.div>
-              
-              {/* Main headline with gradient */}
-              <motion.h1 initial={{
-              opacity: 0,
-              y: 30
-            }} animate={{
-              opacity: 1,
-              y: 0
-            }} transition={{
-              duration: 0.8,
-              delay: 0.2
-            }} className="text-4xl sm:text-5xl lg:text-7xl xl:text-[5.5rem] font-bold leading-[0.95] tracking-tight mb-8" style={{
-              fontFamily: "'Playfair Display', serif"
-            }}>
-                <span className="bg-gradient-to-r from-white via-white to-white/60 bg-clip-text text-transparent">
-                  <TypeWriter text="We Build" delay={80} />
-                </span>
-                <br />
-                <span className="bg-gradient-to-r from-[#3ECF8E] via-[#34B27B] to-[#2E9B6B] bg-clip-text text-transparent">
-                  <TypeWriter text="Digital Empires" delay={80} />
-                </span>
-              </motion.h1>
-              
-              <motion.p initial={{
-              opacity: 0,
-              y: 20
-            }} animate={{
-              opacity: 1,
-              y: 0
-            }} transition={{
-              duration: 0.6,
-              delay: 0.4
-            }} className="text-lg lg:text-xl text-white/60 leading-relaxed max-w-xl mx-auto lg:mx-0 mb-10 font-light">
-                Premium website design, performance ads & AI automation — 
-                <span className="text-white/90"> crafted for brands that demand excellence.</span>
-              </motion.p>
-              
-              {/* CTAs with glassmorphism */}
-              <motion.div initial={{
-              opacity: 0,
-              y: 20
-            }} animate={{
-              opacity: 1,
-              y: 0
-            }} transition={{
-              duration: 0.6,
-              delay: 0.5
-            }} className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-10">
-                <Button asChild size="lg" className="group relative text-base px-10 py-7 bg-[#3ECF8E] text-[#1c1c1c] hover:bg-[#34B27B] rounded-full transition-all duration-500 hover:scale-105 font-semibold shadow-[0_0_40px_rgba(62,207,142,0.4)] hover:shadow-[0_0_60px_rgba(62,207,142,0.6)]">
-                  <a href="https://lunexomedia.com/contact" className="flex items-center gap-2">
-                    <Rocket className="w-5 h-5" />
-                    Start Your Project
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </a>
-                </Button>
-                <Button asChild variant="outline" size="lg" className="group text-base px-10 py-7 border border-white/20 text-white bg-white/5 hover:bg-white/10 backdrop-blur-xl rounded-full transition-all duration-300">
-                  <a href="https://lunexomedia.com/portfolio" className="flex items-center gap-2">
-                    <Play className="w-4 h-4" />
-                    View Our Work
-                  </a>
-                </Button>
-              </motion.div>
-              
-              {/* Stats with glow effects */}
-              <motion.div initial={{
-              opacity: 0,
-              y: 30
-            }} animate={{
-              opacity: 1,
-              y: 0
-            }} transition={{
-              duration: 0.6,
-              delay: 0.6
-            }} className="flex items-center justify-center lg:justify-start gap-8 lg:gap-12 pt-8 border-t border-white/10">
-                {[{
-                value: "200%",
-                label: "Avg. Growth",
-                icon: TrendingUp,
-                color: "from-emerald-400 to-green-500"
-              }, {
-                value: "50+",
-                label: "Happy Clients",
-                icon: Users,
-                color: "from-violet-400 to-indigo-500"
-              }, {
-                value: "10x",
-                label: "ROI Achieved",
-                icon: BarChart3,
-                color: "from-amber-400 to-orange-500"
-              }].map((stat, i) => <motion.div key={i} initial={{
-                opacity: 0,
-                scale: 0.8
-              }} animate={{
-                opacity: 1,
-                scale: 1
-              }} transition={{
-                duration: 0.5,
-                delay: 0.7 + i * 0.1
-              }} className="text-center group">
-                    <div className={`text-3xl lg:text-4xl font-bold bg-gradient-to-r ${stat.color} bg-clip-text text-transparent mb-1`}>
-                      {stat.value}
-                    </div>
-                    <div className="text-xs text-white/40 uppercase tracking-wider flex items-center justify-center gap-2">
-                      <stat.icon className="w-3 h-3" />
-                      {stat.label}
-                    </div>
-                  </motion.div>)}
-              </motion.div>
+      {/* Nexori-style Light Hero Section */}
+      <section className="relative min-h-screen flex flex-col items-center justify-start overflow-hidden bg-gradient-to-b from-white via-slate-50 to-white text-slate-900 pt-28 pb-16">
+        {/* Soft background gradients */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(180,200,255,0.25),transparent_60%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,.025)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,.025)_1px,transparent_1px)] bg-[size:80px_80px] [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_75%)]" />
+
+        <div className="container-wide section-padding relative z-10 w-full">
+          {/* Headline */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center max-w-4xl mx-auto"
+          >
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold leading-[1.05] tracking-tight text-slate-900 mb-6">
+              Welcome to a smarter
+              <br />
+              digital world
+            </h1>
+            <p className="text-base sm:text-lg text-slate-500 max-w-xl mx-auto mb-10 leading-relaxed">
+              Use Lunexo Media to build digital experiences that are{" "}
+              <span className="text-slate-700">fast, beautiful, and intelligent.</span>
+            </p>
+
+            {/* CTAs */}
+            <div className="flex flex-col sm:flex-row gap-3 justify-center mb-4">
+              <Button
+                asChild
+                size="lg"
+                className="rounded-full px-8 py-6 bg-slate-900 text-white hover:bg-slate-800 text-base font-medium shadow-lg"
+              >
+                <a href="https://lunexomedia.com/contact" className="flex items-center gap-2">
+                  Begin building
+                  <ArrowRight className="w-4 h-4" />
+                </a>
+              </Button>
+              <Button
+                asChild
+                variant="outline"
+                size="lg"
+                className="rounded-full px-8 py-6 border-slate-200 bg-white text-slate-900 hover:bg-slate-50 text-base font-medium"
+              >
+                <a href="https://lunexomedia.com/contact">Contact a team</a>
+              </Button>
+            </div>
+          </motion.div>
+
+          {/* Globe + Floating Cards */}
+          <div className="relative mt-16 lg:mt-20 mx-auto max-w-5xl h-[420px] sm:h-[480px] lg:h-[560px]">
+            {/* Globe image */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.85 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1, delay: 0.3 }}
+              className="absolute inset-0 flex items-center justify-center"
+            >
+              <motion.img
+                src="/src/assets/nexori-globe.jpg"
+                alt="Global digital network"
+                width={700}
+                height={700}
+                className="w-[85%] sm:w-[70%] lg:w-[60%] h-auto object-contain mix-blend-multiply select-none pointer-events-none"
+                animate={{ y: [0, -12, 0] }}
+                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+              />
+            </motion.div>
+
+            {/* Orbital rings */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div className="w-[90%] h-[55%] border border-slate-200/80 rounded-[50%] rotate-[-12deg]" />
+            </div>
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div className="w-[110%] h-[45%] border border-slate-200/60 rounded-[50%] rotate-[8deg]" />
             </div>
 
-            {/* Video Section */}
-            <motion.div initial={{
-            opacity: 0,
-            x: 50,
-            scale: 0.95
-          }} animate={{
-            opacity: 1,
-            x: 0,
-            scale: 1
-          }} transition={{
-            duration: 0.8,
-            delay: 0.3
-          }} className="relative">
-              <div className="relative bg-white/5 backdrop-blur-xl p-3 rounded-3xl border border-white/10 shadow-2xl shadow-violet-500/10">
-                <YouTubeFacade videoId="jQJqW8JAWWU" title="YouTube video player" width="100%" height="315" autoplay={true} loop={true} mute={false} loading="eager" className="relative w-full aspect-video rounded-2xl shadow-lg" />
+            {/* Floating Card: Activity (top-left) */}
+            <motion.div
+              initial={{ opacity: 0, x: -30, y: 20 }}
+              animate={{ opacity: 1, x: 0, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
+              className="absolute top-4 left-2 sm:top-8 sm:left-6 lg:left-0 bg-white rounded-2xl shadow-xl border border-slate-100 p-4 w-[230px] sm:w-[260px]"
+            >
+              <div className="flex items-start gap-3 mb-3">
+                <div className="w-8 h-8 rounded-lg bg-amber-100 flex items-center justify-center flex-shrink-0">
+                  <Globe className="w-4 h-4 text-amber-600" />
+                </div>
+                <div className="text-sm">
+                  <span className="font-semibold text-slate-900">Website</span>
+                  <span className="text-slate-500"> launched successfully</span>
+                </div>
               </div>
-              
-              {/* Floating badges */}
-              <motion.div animate={{
-              y: [0, -8, 0]
-            }} transition={{
-              duration: 3,
-              repeat: Infinity
-            }} className="absolute -bottom-4 -left-4 bg-[#3ECF8E] text-[#1c1c1c] px-4 py-2 rounded-xl text-sm font-semibold shadow-lg flex items-center gap-2">
-                <TrendingUp className="w-4 h-4" />
-                Live Results
-              </motion.div>
-              
-              <motion.div animate={{
-              y: [0, -6, 0]
-            }} transition={{
-              duration: 4,
-              repeat: Infinity,
-              delay: 1
-            }} className="absolute -top-4 -right-4 bg-[#3ECF8E] text-[#1c1c1c] px-4 py-2 rounded-xl text-sm font-semibold shadow-lg flex items-center gap-2">
-                <Award className="w-4 h-4" />
-                Premium Quality
-              </motion.div>
+              <div className="flex items-start gap-3 mb-3">
+                <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center flex-shrink-0">
+                  <Users className="w-4 h-4 text-blue-600" />
+                </div>
+                <div className="text-sm">
+                  <span className="font-semibold text-slate-900">Client</span>
+                  <span className="text-slate-500"> profile updated</span>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center flex-shrink-0">
+                  <Check className="w-4 h-4 text-emerald-600" />
+                </div>
+                <div className="text-sm">
+                  <span className="font-semibold text-slate-900">Campaign</span>
+                  <span className="text-slate-500"> confirmed live</span>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Floating Card: Analytics (top-right) */}
+            <motion.div
+              initial={{ opacity: 0, x: 30, y: 20 }}
+              animate={{ opacity: 1, x: 0, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.7 }}
+              className="absolute top-2 right-2 sm:top-6 sm:right-6 lg:right-0 bg-white rounded-2xl shadow-xl border border-slate-100 p-4 w-[170px]"
+            >
+              <div className="text-xs text-slate-500 mb-2">Performance</div>
+              <div className="flex items-end gap-1.5 h-16">
+                {[40, 60, 35, 75, 50, 90].map((h, i) => (
+                  <div key={i} className="flex-1 flex flex-col items-center gap-1">
+                    <div className="text-[9px] text-slate-400 font-medium">{h}%</div>
+                    <div className="w-full bg-amber-400 rounded-sm" style={{ height: `${h}%` }} />
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+
+            {/* Floating Card: Users (bottom-left) */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.8 }}
+              className="absolute bottom-16 left-4 sm:bottom-24 sm:left-12 lg:left-8 bg-white rounded-2xl shadow-xl border border-slate-100 p-4 w-[150px]"
+            >
+              <div className="text-xs text-slate-500 mb-1">Clients</div>
+              <div className="flex items-center justify-between">
+                <div className="text-2xl font-bold text-slate-900">50+</div>
+                <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-xs font-bold">
+                  ↗
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Floating Card: Revenue (center) */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.9 }}
+              className="absolute bottom-32 left-1/2 -translate-x-1/2 bg-white rounded-2xl shadow-xl border border-slate-100 p-4 w-[220px]"
+            >
+              <div className="flex items-center gap-2 mb-1">
+                <div className="w-7 h-7 rounded-full bg-blue-500 flex items-center justify-center">
+                  <TrendingUp className="w-3.5 h-3.5 text-white" />
+                </div>
+                <div className="text-xs text-slate-500">Avg. client growth</div>
+              </div>
+              <div className="text-2xl font-bold text-slate-900">+264%</div>
+            </motion.div>
+
+            {/* Floating Card: Stats (bottom-center small) */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 1.0 }}
+              className="absolute bottom-12 left-1/2 -translate-x-[10%] bg-white rounded-xl shadow-lg border border-slate-100 px-3 py-2"
+            >
+              <div className="text-base font-bold text-slate-900">$10K+</div>
+              <div className="text-[10px] text-slate-500">Past 30 days</div>
+            </motion.div>
+
+            {/* Floating Card: ROI (bottom-right) */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.85 }}
+              className="absolute bottom-20 right-2 sm:bottom-28 sm:right-8 lg:right-4 bg-white rounded-2xl shadow-xl border border-slate-100 p-4 w-[170px] -rotate-6"
+            >
+              <div className="text-[10px] text-slate-500 mb-1">You gained</div>
+              <div className="text-lg font-bold text-slate-900">$ 24,345.00</div>
+              <div className="text-[10px] text-slate-400">Profitability value</div>
             </motion.div>
           </div>
 
-          {/* Service Pills with hover effects */}
-          <motion.div initial={{
-          opacity: 0,
-          y: 40
-        }} animate={{
-          opacity: 1,
-          y: 0
-        }} transition={{
-          duration: 0.8,
-          delay: 0.8
-        }} className="flex flex-wrap justify-center gap-5 mt-20 lg:mt-28">
-            {[{
-            icon: Globe,
-            label: "Web Design",
-            gradient: "from-emerald-500 to-green-600",
-            href: "https://lunexomedia.com/website-design"
-          }, {
-            icon: Target,
-            label: "Paid Ads",
-            gradient: "from-blue-500 to-cyan-600",
-            href: "https://lunexomedia.com/ads-management"
-          }, {
-            icon: Bot,
-            label: "AI Automation",
-            gradient: "from-violet-500 to-purple-600",
-            href: "https://lunexomedia.com/ai-automation"
-          }, {
-            icon: Sparkles,
-            label: "Strategy",
-            gradient: "from-amber-500 to-orange-600",
-            href: "https://lunexomedia.com/contact"
-          }].map((service, i) => <motion.div key={i} whileHover={{
-            scale: 1.05,
-            y: -5
-          }} whileTap={{
-            scale: 0.98
-          }}>
-                <a href={service.href} className="group relative flex items-center gap-4 bg-white/5 hover:bg-white/10 backdrop-blur-xl border border-white/10 hover:border-white/20 rounded-2xl px-7 py-5 transition-all duration-500 cursor-pointer shadow-lg hover:shadow-[0_0_30px_rgba(255,255,255,0.1)]">
-                  <div className={`relative w-12 h-12 rounded-xl bg-gradient-to-br ${service.gradient} flex items-center justify-center shadow-lg`}>
-                    <service.icon className="w-6 h-6 text-white" />
-                  </div>
-                  <span className="text-lg text-white font-semibold tracking-tight">
-                    {service.label}
-                  </span>
-                  <ChevronRight className="w-5 h-5 text-white/40 group-hover:text-white group-hover:translate-x-1 transition-all duration-300" />
-                </a>
-              </motion.div>)}
+          {/* Trusted Logos Bar */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1.1 }}
+            className="mt-8 lg:mt-4 mx-auto max-w-4xl bg-white rounded-2xl shadow-lg border border-slate-100 px-6 py-4 flex flex-wrap items-center justify-around gap-4"
+          >
+            {["Web Design", "SEO & Ads", "AI Automation", "Branding", "Strategy", "Support"].map(
+              (item, i) => (
+                <div
+                  key={i}
+                  className="text-sm font-semibold text-slate-700 tracking-tight"
+                >
+                  {item}
+                </div>
+              )
+            )}
           </motion.div>
         </div>
-        
-        {/* Scroll indicator */}
-        <motion.div initial={{
-        opacity: 0
-      }} animate={{
-        opacity: 1
-      }} transition={{
-        delay: 1.5
-      }} className="absolute bottom-10 left-1/2 -translate-x-1/2">
-          <motion.div animate={{
-          y: [0, 10, 0]
-        }} transition={{
-          duration: 2,
-          repeat: Infinity
-        }} className="w-6 h-10 rounded-full border-2 border-white/20 flex items-start justify-center p-2">
-            <motion.div animate={{
-            opacity: [1, 0, 1],
-            y: [0, 8, 0]
-          }} transition={{
-            duration: 2,
-            repeat: Infinity
-          }} className="w-1 h-2 bg-white/50 rounded-full" />
-          </motion.div>
-        </motion.div>
       </section>
 
       {/* Trusted By */}
