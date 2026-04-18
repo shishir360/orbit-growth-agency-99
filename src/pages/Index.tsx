@@ -214,7 +214,7 @@ const Index = () => {
               className="absolute inset-0 flex items-center justify-center"
             >
               <motion.img
-                src="/src/assets/nexori-globe.jpg"
+                src={nexoriGlobe}
                 alt="Global digital network"
                 width={700}
                 height={700}
