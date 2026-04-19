@@ -329,8 +329,6 @@ const AIAutomation = () => {
         serviceType="AI Automation, Chatbots, Workflow Automation, Voice AI"
         url="https://www.lunexomedia.com/ai-automation"
         image="https://www.lunexomedia.com/og-image-new.jpg"
-        priceRange="$$"
-        aggregateRating={{ ratingValue: 5.0, reviewCount: 84 }}
       />
       
       <Navigation />

@@ -205,8 +205,6 @@ const AdsManagement = () => {
         serviceType="PPC Management, Google Ads, Facebook Ads, Social Media Advertising"
         url="https://www.lunexomedia.com/ads-management"
         image="https://www.lunexomedia.com/og-image-new.jpg"
-        priceRange="$$"
-        aggregateRating={{ ratingValue: 4.9, reviewCount: 98 }}
       />
       
       <Navigation />

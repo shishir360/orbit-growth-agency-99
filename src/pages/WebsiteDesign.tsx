@@ -216,11 +216,6 @@ const WebsiteDesign = () => {
         serviceType="Web Design, Web Development, UI/UX Design"
         url="https://www.lunexomedia.com/website-design"
         image="https://www.lunexomedia.com/og-image-new.jpg"
-        priceRange="$$"
-        aggregateRating={{
-          ratingValue: 4.9,
-          reviewCount: 127
-        }}
       />
       
       <Navigation />

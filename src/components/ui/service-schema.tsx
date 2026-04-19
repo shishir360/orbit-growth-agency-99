@@ -9,11 +9,6 @@ interface ServiceSchemaProps {
   serviceType: string;
   url: string;
   image?: string;
-  priceRange?: string;
-  aggregateRating?: {
-    ratingValue: number;
-    reviewCount: number;
-  };
 }
 
 const ServiceSchema: React.FC<ServiceSchemaProps> = ({
@@ -23,9 +18,7 @@ const ServiceSchema: React.FC<ServiceSchemaProps> = ({
   areaServed,
   serviceType,
   url,
-  image,
-  priceRange,
-  aggregateRating
+  image
 }) => {
   const serviceSchema = {
     "@context": "https://schema.org",

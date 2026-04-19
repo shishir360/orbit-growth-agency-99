@@ -8,14 +8,13 @@ import { ArrowRight, CheckCircle2, TrendingUp, MapPin, Search } from "lucide-rea
 const LocalSEO = () => {
   return (
     <div className="min-h-screen bg-black">
-      <SEO 
+      <SEO
         title="Local SEO Services for Small Businesses | Lunexo Media"
         description="Dominate your local market with our expert Local SEO services. We help service-based businesses rank higher on Google Maps and search results to attract more customers."
         url="https://lunexomedia.com/services/local-seo"
-        image="https://lunexomedia.com/og-local-seo.jpg"
       />
       <Navigation />
-      
+
       <section className="pt-32 pb-20 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-emerald-900/20 to-black z-0"></div>
         <div className="container-wide section-padding relative z-10 text-center">
