@@ -181,6 +181,66 @@ function isValidEmail(email: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
 }
 
+// AI-powered field validation. Returns { valid, normalized, reason }
+async function validateBookingField(
+  field: "name" | "date" | "time" | "platform" | "service",
+  userInput: string
+): Promise<{ valid: boolean; normalized: string; reason: string }> {
+  const rules: Record<string, string> = {
+    name: `A real human full name. At least 2 characters. Reject gibberish, random letters, sentences, questions, or non-name text like "ok how are you". Accept names in any language/script.`,
+    date: `A real future-friendly date hint. Accept: "today", "tomorrow", weekday names ("monday"), or formats like "Dec 15", "15/12", "2025-12-15", "next friday". Reject random text, single letters, or unrelated words. Normalize to a clean date string (keep user's wording if natural).`,
+    time: `A real time of day. Accept "3pm", "3:00 PM EST", "15:00", "morning", "afternoon", "evening". Must include a number OR a clear time word. Reject random text.`,
+    platform: `Must clearly indicate one of: Zoom, Google Meet, or Phone Call. Accept synonyms ("meet","gmeet","call","phone","zoom"). Normalize to exactly "Zoom", "Google Meet", or "Phone Call".`,
+    service: `Should indicate a service interest: Website Design, SEO, Google/Facebook Ads, AI Automation, or Other. Accept free-form descriptions of business needs. Normalize to a short clean label.`,
+  };
+
+  try {
+    const resp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${LOVABLE_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "google/gemini-2.5-flash-lite",
+        messages: [
+          {
+            role: "system",
+            content: `You validate a single booking-form field. Field: "${field}". Rule: ${rules[field]}
+Respond ONLY with strict JSON: {"valid": boolean, "normalized": string, "reason": string}
+- "valid": true only if input clearly satisfies the rule.
+- "normalized": cleaned/standardized version of the input (or "" if invalid).
+- "reason": short friendly reason (used only if invalid). Match user's language if obvious.`,
+          },
+          { role: "user", content: userInput },
+        ],
+        max_tokens: 150,
+      }),
+    });
+
+    if (!resp.ok) {
+      // Fallback: accept anything non-empty (don't block user)
+      return { valid: userInput.trim().length >= 2, normalized: userInput.trim(), reason: "" };
+    }
+
+    const data = await resp.json();
+    const raw = data.choices?.[0]?.message?.content || "";
+    const jsonMatch = raw.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) {
+      return { valid: userInput.trim().length >= 2, normalized: userInput.trim(), reason: "" };
+    }
+    const parsed = JSON.parse(jsonMatch[0]);
+    return {
+      valid: !!parsed.valid,
+      normalized: parsed.normalized || userInput.trim(),
+      reason: parsed.reason || "That doesn't look right. Please try again.",
+    };
+  } catch (e) {
+    console.error(`validateBookingField(${field}) error:`, e);
+    return { valid: userInput.trim().length >= 2, normalized: userInput.trim(), reason: "" };
+  }
+}
+
 // Get booking step question
 function getBookingQuestion(step: number, state: BookingState): string {
   switch(step) {
@@ -650,60 +710,72 @@ const handler = async (req: Request): Promise<Response> => {
             const answer = messageText.trim();
             
             switch(state.step) {
-              case 1: // Waiting for name
-                if (answer.length >= 2) {
-                  state.name = answer;
+              case 1: { // Waiting for name
+                const v = await validateBookingField("name", answer);
+                if (v.valid) {
+                  state.name = v.normalized;
                   state.step = 2;
                   aiResponse = getBookingQuestion(2, state);
                 } else {
-                  aiResponse = "Please enter your full name:";
+                  aiResponse = `${v.reason}\n\nPlease enter your *full name* (e.g. "John Smith"):`;
                 }
                 break;
-                
+              }
+
               case 2: // Waiting for email
                 if (isValidEmail(answer)) {
-                  state.email = answer.toLowerCase();
+                  state.email = answer.toLowerCase().trim();
                   state.step = 3;
                   aiResponse = getBookingQuestion(3, state);
                 } else {
-                  aiResponse = "Please enter a valid email address (example: yourname@email.com):";
+                  aiResponse = "That email doesn't look valid. Please send a real email like *yourname@example.com*:";
                 }
                 break;
-                
-              case 3: // Waiting for date
-                if (answer.length >= 2) {
-                  state.date = answer;
+
+              case 3: { // Waiting for date
+                const v = await validateBookingField("date", answer);
+                if (v.valid) {
+                  state.date = v.normalized;
                   state.step = 4;
                   aiResponse = getBookingQuestion(4, state);
                 } else {
-                  aiResponse = "Please enter a date for your call:";
+                  aiResponse = `${v.reason}\n\nPlease send a *date* (e.g. "tomorrow", "Monday", "Dec 15"):`;
                 }
                 break;
-                
-              case 4: // Waiting for time
-                if (answer.length >= 2) {
-                  state.time = answer;
+              }
+
+              case 4: { // Waiting for time
+                const v = await validateBookingField("time", answer);
+                if (v.valid) {
+                  state.time = v.normalized;
                   state.step = 5;
                   aiResponse = getBookingQuestion(5, state);
                 } else {
-                  aiResponse = "Please enter a time for your call:";
+                  aiResponse = `${v.reason}\n\nPlease send a *time* (e.g. "3pm EST", "10:30 AM"):`;
                 }
                 break;
-                
-              case 5: // Waiting for platform
-                let platform = answer;
-                if (answer.toLowerCase().includes("zoom")) platform = "Zoom";
-                else if (answer.toLowerCase().includes("meet") || answer.toLowerCase().includes("google")) platform = "Google Meet";
-                else if (answer.toLowerCase().includes("phone") || answer.toLowerCase().includes("call")) platform = "Phone Call";
-                
-                state.platform = platform;
-                state.step = 6;
-                aiResponse = getBookingQuestion(6, state);
+              }
+
+              case 5: { // Waiting for platform
+                const v = await validateBookingField("platform", answer);
+                if (v.valid) {
+                  state.platform = v.normalized;
+                  state.step = 6;
+                  aiResponse = getBookingQuestion(6, state);
+                } else {
+                  aiResponse = `${v.reason}\n\nPlease pick one: *Zoom*, *Google Meet*, or *Phone Call*:`;
+                }
                 break;
-                
-              case 6: // Waiting for service
-                state.service = answer;
-                
+              }
+
+              case 6: { // Waiting for service
+                const v = await validateBookingField("service", answer);
+                if (!v.valid) {
+                  aiResponse = `${v.reason}\n\nWhich service interests you? (Website Design / SEO / Ads / AI Automation / Other)`;
+                  break;
+                }
+                state.service = v.normalized;
+
                 // Create booking!
                 const created = await createBooking(supabaseClient, state, from);
                 if (created) {
@@ -723,11 +795,12 @@ We look forward to speaking with you! 🚀`;
                 } else {
                   aiResponse = "Sorry, there was an error. Please call +1 (702) 483-0749";
                 }
-                
+
                 // Clear state after booking
                 await clearBookingState(supabaseClient, from);
                 state.step = 0;
                 break;
+              }
             }
             
             // Save updated state if still in flow
