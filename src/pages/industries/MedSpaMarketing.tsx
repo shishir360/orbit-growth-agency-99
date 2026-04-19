@@ -12,6 +12,7 @@ const MedSpaMarketing = () => {
         title="Med Spa Marketing Agency | High-End Client Acquisition"
         description="Elevate your Med Spa with premium digital marketing. We specialize in aesthetic clinic SEO, Instagram/Meta Ads, and high-converting websites."
         url="https://lunexomedia.com/med-spa-marketing"
+        image="https://lunexomedia.com/og-med-spa.jpg"
       />
       <Navigation />
       

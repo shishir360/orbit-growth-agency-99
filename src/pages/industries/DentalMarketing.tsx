@@ -12,6 +12,7 @@ const DentalMarketing = () => {
         title="Dental Marketing Agency | High-Converting SEO & Ads for Dentists"
         description="Grow your dental practice with Lunexo Media. We specialize in local SEO, Google Ads, and patient-converting website designs tailored for dentists."
         url="https://lunexomedia.com/dental-marketing"
+        image="https://lunexomedia.com/og-dental-marketing.jpg"
       />
       <Navigation />
       

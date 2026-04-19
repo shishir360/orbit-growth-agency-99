@@ -12,6 +12,7 @@ const LocalSEO = () => {
         title="Local SEO Services for Small Businesses | Lunexo Media"
         description="Dominate your local market with our expert Local SEO services. We help service-based businesses rank higher on Google Maps and search results to attract more customers."
         url="https://lunexomedia.com/services/local-seo"
+        image="https://lunexomedia.com/og-local-seo.jpg"
       />
       <Navigation />
       
