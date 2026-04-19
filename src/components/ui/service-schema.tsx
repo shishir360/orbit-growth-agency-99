@@ -53,14 +53,6 @@ const ServiceSchema: React.FC<ServiceSchemaProps> = ({
     },
     "url": url,
     ...(image && { "image": image }),
-    ...(priceRange && { "priceRange": priceRange }),
-    ...(aggregateRating && {
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": aggregateRating.ratingValue,
-        "reviewCount": aggregateRating.reviewCount
-      }
-    }),
     "hasOfferCatalog": {
       "@type": "OfferCatalog",
       "name": `${name} Services`,
