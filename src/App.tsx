@@ -59,6 +59,9 @@ import AffiliateLandingPage from "./pages/AffiliateLandingPage";
 import VapiVoiceWidget from "./components/ui/vapi-voice-widget";
 import { CookieConsent } from "./components/ui/cookie-consent";
 import ChatVoiceWidget from "./components/ui/chat-voice-widget";
+import LocalSEO from "./pages/services/LocalSEO";
+import DentalMarketing from "./pages/industries/DentalMarketing";
+import MedSpaMarketing from "./pages/industries/MedSpaMarketing";
 
 const queryClient = new QueryClient();
 
@@ -80,6 +83,9 @@ const App = () => (
                   <Route path="/" element={<Index />} />
                   <Route path="/website-design" element={<WebsiteDesign />} />
                   <Route path="/services" element={<ServicesExplore />} />
+                  <Route path="/services/local-seo" element={<LocalSEO />} />
+                  <Route path="/dental-marketing" element={<DentalMarketing />} />
+                  <Route path="/med-spa-marketing" element={<MedSpaMarketing />} />
                   <Route path="/services/mobile-optimized" element={<MobileOptimized />} />
                   <Route path="/services/fast-loading" element={<FastLoading />} />
                   <Route path="/services/seo-friendly" element={<SEOFriendly />} />
