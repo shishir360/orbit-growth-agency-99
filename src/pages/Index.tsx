@@ -8,7 +8,6 @@ import CompletedClients from "@/components/ui/completed-clients";
 import ClientFeedbackCarousel from "@/components/ui/client-feedback-carousel";
 import TemplatesCarousel from "@/components/ui/templates-carousel";
 import VideoReviewsCarousel from "@/components/ui/video-reviews-carousel";
-import ChatVoiceWidget from "@/components/ui/chat-voice-widget";
 import SEO from "@/components/ui/seo";
 import { useContent } from "@/contexts/ContentContext";
 import { Globe, Target, Bot, Sparkles, ArrowRight, Zap, Check, Star, Users, Award, TrendingUp, Play, ChevronRight, Clock, Shield, Rocket, MousePointer, BarChart3, Layers, Heart, HelpCircle } from "lucide-react";
@@ -1266,9 +1265,6 @@ const Index = () => {
       </section>
 
       <Footer />
-      
-      {/* Chat & Voice Widget */}
-      <ChatVoiceWidget />
     </div>;
 };
 export default Index;

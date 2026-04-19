@@ -58,6 +58,7 @@ import FounderFarhan from "./pages/FounderFarhan";
 import AffiliateLandingPage from "./pages/AffiliateLandingPage";
 import VapiVoiceWidget from "./components/ui/vapi-voice-widget";
 import { CookieConsent } from "./components/ui/cookie-consent";
+import ChatVoiceWidget from "./components/ui/chat-voice-widget";
 
 const queryClient = new QueryClient();
 
@@ -72,6 +73,7 @@ const App = () => (
               <Sonner />
               <NotificationService />
               <VapiVoiceWidget />
+              <ChatVoiceWidget />
               <CookieConsent />
               <BrowserRouter>
                 <Routes>
