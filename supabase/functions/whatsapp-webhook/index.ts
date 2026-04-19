@@ -77,35 +77,104 @@ async function clearBookingState(supabaseClient: any, phone: string): Promise<vo
   }
 }
 
-// Lunexo Media Knowledge Base for Farhan AI
-const FARHAN_AI_SYSTEM_PROMPT = `You are Farhan AI, the friendly AI assistant for Lunexo Media, a digital marketing agency in New York.
+// Build dynamic Lunexo Media knowledge base from live database
+async function buildKnowledgeBase(supabaseClient: any): Promise<string> {
+  try {
+    const [pricingRes, servicesRes, portfolioRes, blogRes, companyRes] = await Promise.all([
+      supabaseClient.from("pricing").select("service_name, price, currency, billing_period, features").eq("visible", true).order("display_order"),
+      supabaseClient.from("services").select("title, description, page_url").eq("visible", true).order("display_order"),
+      supabaseClient.from("portfolio").select("title, category, description, slug").eq("published", true).eq("blocked", false).limit(8),
+      supabaseClient.from("blog_posts").select("title, excerpt, slug").eq("published", true).eq("blocked", false).order("publish_date", { ascending: false }).limit(5),
+      supabaseClient.from("company_info").select("*").limit(1).maybeSingle(),
+    ]);
 
-About Lunexo Media:
-- Location: New York, NY
-- Phone: +1 (702) 483-0749
-- Email: hello@lunexomedia.com
-- Website: www.lunexomedia.com
-- Contact Page: www.lunexomedia.com/contact
-- 50+ projects completed
+    const company = companyRes?.data;
+    const pricing = pricingRes?.data || [];
+    const services = servicesRes?.data || [];
+    const portfolio = portfolioRes?.data || [];
+    const blog = blogRes?.data || [];
 
-Services & Pricing:
-- Website Design: $500-$5000
-- SEO: $300-$1500/month
-- Google Ads: $500-$2000/month
-- Facebook/Instagram Ads: $400-$1500/month
-- AI Automation: $500-$3000
-- AI Chatbots: $300-$1000
-- Voice AI: $500-$2000
-- Email Automation: $200-$800
+    let kb = `=== LUNEXO MEDIA — LIVE COMPANY DATA ===\n`;
+    kb += `Name: ${company?.company_name || "Lunexo Media"}\n`;
+    kb += `Tagline: ${company?.tagline || "Premium Web, Ads & AI Automation Agency"}\n`;
+    kb += `Location: ${company?.address || "New York, NY"}\n`;
+    kb += `Phone: ${company?.phone || "+1 (702) 483-0749"}\n`;
+    kb += `Email: ${company?.email || "hello@lunexomedia.com"}\n`;
+    kb += `Website: lunexomedia.com\n`;
+    kb += `Booking link: lunexomedia.com/book-apartment\n`;
+    kb += `Founded: ${company?.founded_year || "2023"} | Team: ${company?.team_size || "5-10"} | 50+ projects done\n\n`;
 
-IMPORTANT FORMATTING RULES:
-- Keep responses short (under 200 words) for WhatsApp
-- Be friendly and helpful
-- When sharing links, write them as plain text WITHOUT markdown formatting
-- CORRECT: Visit www.lunexomedia.com/contact
-- WRONG: [lunexomedia.com/contact](https://www.lunexomedia.com/contact)
-- Never use markdown link syntax like [text](url)
-- Just write the URL directly`;
+    if (services.length) {
+      kb += `=== SERVICES ===\n`;
+      services.forEach((s: any) => { kb += `• ${s.title}: ${s.description}\n`; });
+      kb += `\n`;
+    }
+
+    if (pricing.length) {
+      kb += `=== LIVE PRICING ===\n`;
+      pricing.forEach((p: any) => {
+        const period = p.billing_period ? `/${p.billing_period}` : "";
+        kb += `• ${p.service_name}: ${p.currency || "$"}${p.price}${period}\n`;
+        if (p.features?.length) kb += `   Includes: ${p.features.slice(0, 3).join(", ")}\n`;
+      });
+      kb += `\n`;
+    }
+
+    if (portfolio.length) {
+      kb += `=== RECENT PORTFOLIO PROJECTS ===\n`;
+      portfolio.forEach((p: any) => { kb += `• ${p.title} (${p.category}): ${p.description?.substring(0, 100)} → lunexomedia.com/portfolio/${p.slug}\n`; });
+      kb += `\n`;
+    }
+
+    if (blog.length) {
+      kb += `=== LATEST BLOG POSTS ===\n`;
+      blog.forEach((b: any) => { kb += `• ${b.title} → lunexomedia.com/blog/${b.slug}\n`; });
+      kb += `\n`;
+    }
+
+    return kb;
+  } catch (e) {
+    console.error("KB build error:", e);
+    return "Lunexo Media — NYC digital agency. Phone: +1 (702) 483-0749. Email: hello@lunexomedia.com";
+  }
+}
+
+// Build Farhan AI system prompt with live data
+function buildSystemPrompt(knowledgeBase: string, customerName: string): string {
+  return `You are Farhan AI — the brilliant, friendly, super-intelligent assistant of Lunexo Media (digital marketing agency in New York). You are talking to ${customerName} on WhatsApp.
+
+${knowledgeBase}
+
+=== YOUR PERSONALITY ===
+- Warm, confident, genuinely helpful — like a smart friend who happens to be an expert
+- Remember EVERYTHING the user said earlier in this conversation (it's in the history)
+- Use the customer's name naturally when it feels right
+- Match the user's language: if they write Bengali/Banglish → reply Bengali/Banglish; English → English; Hinglish → Hinglish
+- Use emojis sparingly but warmly (1-2 per message max) ✨
+
+=== YOUR INTELLIGENCE ===
+You can answer ANY question — not just about Lunexo:
+1. Lunexo services, pricing, portfolio, blog → use the LIVE DATA above
+2. General knowledge: tech, business, marketing, life advice, coding, anything → answer it
+3. Industry expertise: SEO, web design, ads, AI, automation → give pro-level insights
+4. Casual chat / jokes / emotional support → be human and warm
+5. If the question is about a competitor or sensitive topic → be neutral and pivot back to how Lunexo can help
+
+=== SALES INSTINCT (subtle, never pushy) ===
+- If the user shows ANY business intent (their site, their ads, their growth), naturally suggest a free discovery call
+- To start booking, the user just needs to type "book a call" or click the button
+- Never invent prices not in the LIVE PRICING above — if asked about something not listed, say "Custom quote — let's hop on a quick call"
+
+=== FORMATTING (WhatsApp) ===
+- Keep replies SHORT: 2-4 sentences ideally, max 200 words
+- Use *bold* (single asterisks) for emphasis — that's WhatsApp markdown
+- Plain URLs only: write "lunexomedia.com/contact" — NEVER [text](url)
+- Use line breaks for readability
+- Bullet points with • when listing 3+ items
+
+=== MEMORY ===
+The conversation history below shows everything ${customerName} has said before. Reference it naturally. If they told you their business name, their problem, their budget — REMEMBER it and use it.`;
+}
 
 // Simple email regex
 function isValidEmail(email: string): boolean {
@@ -308,21 +377,23 @@ async function createBooking(supabaseClient: any, state: BookingState, phoneNumb
   }
 }
 
-// Get conversation history
+// Get conversation history (deep memory: last 50 messages)
 async function getConversationHistory(supabaseClient: any, phoneNumber: string): Promise<Array<{ role: string; content: string }>> {
   try {
     const { data, error } = await supabaseClient
       .from("visitor_activities")
-      .select("activity_type, metadata")
+      .select("activity_type, metadata, created_at")
       .in("activity_type", ["whatsapp_message_received", "whatsapp_message_sent"])
       .or(`metadata->>from.eq.${phoneNumber},metadata->>to.eq.${phoneNumber}`)
-      .order("created_at", { ascending: true })
-      .limit(10);
+      .order("created_at", { ascending: false })
+      .limit(50);
 
     if (error || !data) return [];
 
+    // Reverse to chronological order
+    const ordered = data.reverse();
     const history: Array<{ role: string; content: string }> = [];
-    for (const msg of data) {
+    for (const msg of ordered) {
       if (msg.activity_type === "whatsapp_message_received") {
         const content = msg.metadata?.message || "";
         if (content) history.push({ role: "user", content });
@@ -384,8 +455,12 @@ async function analyzeImage(mediaId: string): Promise<string> {
   }
 }
 
-// Generate AI response
-async function generateAIResponse(userMessage: string, history: Array<{ role: string; content: string }>): Promise<string> {
+// Generate AI response with live knowledge + deep memory
+async function generateAIResponse(
+  userMessage: string,
+  history: Array<{ role: string; content: string }>,
+  systemPrompt: string,
+): Promise<string> {
   try {
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -396,17 +471,23 @@ async function generateAIResponse(userMessage: string, history: Array<{ role: st
       body: JSON.stringify({
         model: "google/gemini-2.5-flash",
         messages: [
-          { role: "system", content: FARHAN_AI_SYSTEM_PROMPT },
+          { role: "system", content: systemPrompt },
           ...history,
           { role: "user", content: userMessage }
         ],
-        max_tokens: 500,
+        max_tokens: 700,
       }),
     });
 
-    if (!response.ok) return "Sorry, I'm having issues. Call +1 (702) 483-0749 📞";
+    if (response.status === 429) return "I'm getting too many messages right now 😅 Please try again in a moment!";
+    if (response.status === 402) return "Hey! I'm temporarily offline. Please call +1 (702) 483-0749 📞";
+    if (!response.ok) {
+      const errText = await response.text();
+      console.error("AI gateway error:", response.status, errText);
+      return "Sorry, I'm having a small hiccup. Call +1 (702) 483-0749 📞 or email hello@lunexomedia.com";
+    }
     const data = await response.json();
-    return data.choices?.[0]?.message?.content || "Please contact hello@lunexomedia.com";
+    return data.choices?.[0]?.message?.content || "Could you rephrase that? I want to help! 🙏";
   } catch (error) {
     console.error("Error generating response:", error);
     return "Sorry, technical issues. Call +1 (702) 483-0749 🙏";
@@ -660,14 +741,20 @@ We look forward to speaking with you! 🚀`;
             await saveBookingState(supabaseClient, from, state);
             aiResponse = getBookingQuestion(1, state);
           }
-          // Handle image
+          // Handle image — let AI respond intelligently using analysis
           else if (isImageMessage && imageAnalysis) {
-            aiResponse = `📸 *Image Analysis*\n\n${imageAnalysis}\n\nNeed help with your project? Let me know! 🚀`;
+            const history = await getConversationHistory(supabaseClient, from);
+            const knowledgeBase = await buildKnowledgeBase(supabaseClient);
+            const systemPrompt = buildSystemPrompt(knowledgeBase, customerName);
+            const imageContext = `[User sent an image. Image analysis: ${imageAnalysis}]\n\nUser's caption/message: ${messageText}`;
+            aiResponse = await generateAIResponse(imageContext, history, systemPrompt);
           }
-          // Regular AI chat
+          // Regular AI chat — full memory + live knowledge
           else {
             const history = await getConversationHistory(supabaseClient, from);
-            aiResponse = await generateAIResponse(messageText, history);
+            const knowledgeBase = await buildKnowledgeBase(supabaseClient);
+            const systemPrompt = buildSystemPrompt(knowledgeBase, customerName);
+            aiResponse = await generateAIResponse(messageText, history, systemPrompt);
           }
 
           // Send response
