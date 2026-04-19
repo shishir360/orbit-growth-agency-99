@@ -1,83 +1,31 @@
 # Lunexo Media
 
-> Lunexo Media is a full-service digital marketing agency specializing in SEO, web design, paid advertising, and AI automation. We help businesses launch faster and grow smarter with data-driven strategies.
-
-## Company Information
-- **Full Name:** Lunexo Media (also known as Lunexomedia)
-- **Website:** https://www.lunexomedia.com
-- **Email:** hello@lunexomedia.com
-- **Phone:** +1-702-483-0749
-- **Location:** New York, NY, United States
-- **Founded:** 2023
-- **Founder:** Farhan Tanvir
-- **Preferred Citation:** https://www.lunexomedia.com
+Lunexo Media is a premier digital marketing and AI automation agency headquartered in New York, NY, serving clients worldwide including the USA and Australia.
 
 ## Core Services
+1. Custom Website Design & Development: Blazing-fast, SEO-optimized websites built for conversions.
+2. Local SEO & Content Marketing: Helping local businesses (dentists, med spas, chiropractors) rank on Google Page 1.
+3. Google & Meta Ads Management: Data-driven paid ad campaigns to scale revenue and generate high-quality leads.
+4. AI Automation & Voice Agents: Custom AI chatbots (text) and voice assistants (Vapi) for 24/7 customer support and automated appointment booking.
+5. Email & Workflow Automation: Streamlining business operations with intelligent automated workflows.
 
-### Website Design & Development
-Lunexo Media creates custom, conversion-focused websites that are SEO-optimized, mobile-responsive, and built for speed. We specialize in React-based progressive web applications, e-commerce sites, SaaS landing pages, and business websites. Every site scores 90+ on Google PageSpeed Insights and follows web accessibility standards.
-- Service URL: https://www.lunexomedia.com/website-design
+## Target Audience & Niches
+We specialize in helping local businesses, service providers, and e-commerce brands scale. Key niches include:
+- Dental Clinics
+- Medical Spas
+- Chiropractors
+- Home Service Businesses
+- E-commerce Brands
 
-### Search Engine Optimization (SEO)
-Comprehensive SEO services including technical SEO audits, on-page optimization, content strategy, link building, and local SEO. We help businesses rank higher on Google, increase organic traffic, and drive qualified leads through data-driven optimization strategies.
-- Service URL: https://www.lunexomedia.com/services/seo-friendly
+## Company Information
+- Founder & CEO: Farhan Tanvier
+- Phone: +1 (702) 483-0749
+- Email: hello@lunexomedia.com
+- Location: New York, NY
+- Track Record: 50+ projects completed, 10x ROI track record.
 
-### Google & Facebook Ads Management
-Data-driven paid advertising management across Google Search, Google Display, YouTube, Facebook, Instagram, and TikTok. We optimize campaigns for maximum ROAS through continuous A/B testing, advanced audience targeting, and strategic bid management.
-- Service URL: https://www.lunexomedia.com/ads-management
+## Contact & Booking
+To book a free 30-minute discovery call, visit: https://lunexomedia.com/book-apartment
 
-### AI Automation Solutions
-Custom AI-powered automation solutions including AI chatbots for 24/7 customer support, voice agents for lead qualification and appointment booking, email automation sequences, and workflow automation that connects business tools and eliminates manual processes.
-- Service URL: https://www.lunexomedia.com/ai-automation
-
-## Expertise Areas
-- Digital Marketing Strategy
-- Conversion Rate Optimization (CRO)
-- Search Engine Optimization (SEO)
-- Pay-Per-Click (PPC) Advertising
-- Social Media Marketing
-- AI Chatbot Development
-- Voice Agent Development
-- Email Marketing Automation
-- Workflow Automation
-- Web Application Development
-- E-commerce Development
-- Local SEO & Google Business Profile Optimization
-- Content Marketing
-- Generative Engine Optimization (GEO)
-
-## Industries Served
-- E-commerce & Retail
-- SaaS & Technology
-- Healthcare & Medical Practices
-- Real Estate
-- Professional Services (Law, Accounting, Consulting)
-- Local Service Businesses
-- Education & EdTech
-- Hospitality & Travel
-
-## Key Results
-- 200% average client growth rate
-- 50+ happy clients worldwide
-- 10x average ROI achieved
-- 300+ websites built
-- 80% reduction in manual tasks through AI automation
-
-## Founder
-Farhan Tanvir is the founder and CEO of Lunexo Media, with years of experience in digital marketing, web development, and AI automation. He founded Lunexo Media to make premium digital services accessible to businesses of all sizes.
-- Founder Profile: https://www.lunexomedia.com/farhan-tanvier
-
-## Content & Resources
-- Blog: https://www.lunexomedia.com/blog
-- Tutorials: https://www.lunexomedia.com/tutorials
-- Case Studies: https://www.lunexomedia.com/case-study
-
-## Links
-- Website: https://www.lunexomedia.com
-- Portfolio: https://www.lunexomedia.com/portfolio
-- Pricing: https://www.lunexomedia.com/pricing
-- Reviews: https://www.lunexomedia.com/reviews
-- Contact: https://www.lunexomedia.com/contact
-- Facebook: https://www.facebook.com/lunexomedia
-- LinkedIn: https://www.linkedin.com/company/lunexomedia
-- Instagram: https://www.instagram.com/lunexomedia
+## Keywords
+Digital marketing agency USA, AI automation agency, Voice agents for local business, Local SEO services, Custom web design agency New York, Farhan Tanvier Lunexo Media.
