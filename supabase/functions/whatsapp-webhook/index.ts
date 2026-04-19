@@ -455,8 +455,12 @@ async function analyzeImage(mediaId: string): Promise<string> {
   }
 }
 
-// Generate AI response
-async function generateAIResponse(userMessage: string, history: Array<{ role: string; content: string }>): Promise<string> {
+// Generate AI response with live knowledge + deep memory
+async function generateAIResponse(
+  userMessage: string,
+  history: Array<{ role: string; content: string }>,
+  systemPrompt: string,
+): Promise<string> {
   try {
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -467,17 +471,23 @@ async function generateAIResponse(userMessage: string, history: Array<{ role: st
       body: JSON.stringify({
         model: "google/gemini-2.5-flash",
         messages: [
-          { role: "system", content: FARHAN_AI_SYSTEM_PROMPT },
+          { role: "system", content: systemPrompt },
           ...history,
           { role: "user", content: userMessage }
         ],
-        max_tokens: 500,
+        max_tokens: 700,
       }),
     });
 
-    if (!response.ok) return "Sorry, I'm having issues. Call +1 (702) 483-0749 📞";
+    if (response.status === 429) return "I'm getting too many messages right now 😅 Please try again in a moment!";
+    if (response.status === 402) return "Hey! I'm temporarily offline. Please call +1 (702) 483-0749 📞";
+    if (!response.ok) {
+      const errText = await response.text();
+      console.error("AI gateway error:", response.status, errText);
+      return "Sorry, I'm having a small hiccup. Call +1 (702) 483-0749 📞 or email hello@lunexomedia.com";
+    }
     const data = await response.json();
-    return data.choices?.[0]?.message?.content || "Please contact hello@lunexomedia.com";
+    return data.choices?.[0]?.message?.content || "Could you rephrase that? I want to help! 🙏";
   } catch (error) {
     console.error("Error generating response:", error);
     return "Sorry, technical issues. Call +1 (702) 483-0749 🙏";
