@@ -377,21 +377,23 @@ async function createBooking(supabaseClient: any, state: BookingState, phoneNumb
   }
 }
 
-// Get conversation history
+// Get conversation history (deep memory: last 50 messages)
 async function getConversationHistory(supabaseClient: any, phoneNumber: string): Promise<Array<{ role: string; content: string }>> {
   try {
     const { data, error } = await supabaseClient
       .from("visitor_activities")
-      .select("activity_type, metadata")
+      .select("activity_type, metadata, created_at")
       .in("activity_type", ["whatsapp_message_received", "whatsapp_message_sent"])
       .or(`metadata->>from.eq.${phoneNumber},metadata->>to.eq.${phoneNumber}`)
-      .order("created_at", { ascending: true })
-      .limit(10);
+      .order("created_at", { ascending: false })
+      .limit(50);
 
     if (error || !data) return [];
 
+    // Reverse to chronological order
+    const ordered = data.reverse();
     const history: Array<{ role: string; content: string }> = [];
-    for (const msg of data) {
+    for (const msg of ordered) {
       if (msg.activity_type === "whatsapp_message_received") {
         const content = msg.metadata?.message || "";
         if (content) history.push({ role: "user", content });
