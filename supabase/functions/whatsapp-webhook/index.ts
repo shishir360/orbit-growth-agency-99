@@ -181,6 +181,66 @@ function isValidEmail(email: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
 }
 
+// AI-powered field validation. Returns { valid, normalized, reason }
+async function validateBookingField(
+  field: "name" | "date" | "time" | "platform" | "service",
+  userInput: string
+): Promise<{ valid: boolean; normalized: string; reason: string }> {
+  const rules: Record<string, string> = {
+    name: `A real human full name. At least 2 characters. Reject gibberish, random letters, sentences, questions, or non-name text like "ok how are you". Accept names in any language/script.`,
+    date: `A real future-friendly date hint. Accept: "today", "tomorrow", weekday names ("monday"), or formats like "Dec 15", "15/12", "2025-12-15", "next friday". Reject random text, single letters, or unrelated words. Normalize to a clean date string (keep user's wording if natural).`,
+    time: `A real time of day. Accept "3pm", "3:00 PM EST", "15:00", "morning", "afternoon", "evening". Must include a number OR a clear time word. Reject random text.`,
+    platform: `Must clearly indicate one of: Zoom, Google Meet, or Phone Call. Accept synonyms ("meet","gmeet","call","phone","zoom"). Normalize to exactly "Zoom", "Google Meet", or "Phone Call".`,
+    service: `Should indicate a service interest: Website Design, SEO, Google/Facebook Ads, AI Automation, or Other. Accept free-form descriptions of business needs. Normalize to a short clean label.`,
+  };
+
+  try {
+    const resp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${LOVABLE_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "google/gemini-2.5-flash-lite",
+        messages: [
+          {
+            role: "system",
+            content: `You validate a single booking-form field. Field: "${field}". Rule: ${rules[field]}
+Respond ONLY with strict JSON: {"valid": boolean, "normalized": string, "reason": string}
+- "valid": true only if input clearly satisfies the rule.
+- "normalized": cleaned/standardized version of the input (or "" if invalid).
+- "reason": short friendly reason (used only if invalid). Match user's language if obvious.`,
+          },
+          { role: "user", content: userInput },
+        ],
+        max_tokens: 150,
+      }),
+    });
+
+    if (!resp.ok) {
+      // Fallback: accept anything non-empty (don't block user)
+      return { valid: userInput.trim().length >= 2, normalized: userInput.trim(), reason: "" };
+    }
+
+    const data = await resp.json();
+    const raw = data.choices?.[0]?.message?.content || "";
+    const jsonMatch = raw.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) {
+      return { valid: userInput.trim().length >= 2, normalized: userInput.trim(), reason: "" };
+    }
+    const parsed = JSON.parse(jsonMatch[0]);
+    return {
+      valid: !!parsed.valid,
+      normalized: parsed.normalized || userInput.trim(),
+      reason: parsed.reason || "That doesn't look right. Please try again.",
+    };
+  } catch (e) {
+    console.error(`validateBookingField(${field}) error:`, e);
+    return { valid: userInput.trim().length >= 2, normalized: userInput.trim(), reason: "" };
+  }
+}
+
 // Get booking step question
 function getBookingQuestion(step: number, state: BookingState): string {
   switch(step) {
