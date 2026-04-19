@@ -741,14 +741,20 @@ We look forward to speaking with you! 🚀`;
             await saveBookingState(supabaseClient, from, state);
             aiResponse = getBookingQuestion(1, state);
           }
-          // Handle image
+          // Handle image — let AI respond intelligently using analysis
           else if (isImageMessage && imageAnalysis) {
-            aiResponse = `📸 *Image Analysis*\n\n${imageAnalysis}\n\nNeed help with your project? Let me know! 🚀`;
+            const history = await getConversationHistory(supabaseClient, from);
+            const knowledgeBase = await buildKnowledgeBase(supabaseClient);
+            const systemPrompt = buildSystemPrompt(knowledgeBase, customerName);
+            const imageContext = `[User sent an image. Image analysis: ${imageAnalysis}]\n\nUser's caption/message: ${messageText}`;
+            aiResponse = await generateAIResponse(imageContext, history, systemPrompt);
           }
-          // Regular AI chat
+          // Regular AI chat — full memory + live knowledge
           else {
             const history = await getConversationHistory(supabaseClient, from);
-            aiResponse = await generateAIResponse(messageText, history);
+            const knowledgeBase = await buildKnowledgeBase(supabaseClient);
+            const systemPrompt = buildSystemPrompt(knowledgeBase, customerName);
+            aiResponse = await generateAIResponse(messageText, history, systemPrompt);
           }
 
           // Send response
