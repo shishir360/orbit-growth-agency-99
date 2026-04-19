@@ -24,6 +24,9 @@ const Sitemap = () => {
       title: "Services",
       links: [
         { name: "Website Design", url: "https://lunexomedia.com/website-design" },
+        { name: "Local SEO", url: "https://lunexomedia.com/services/local-seo" },
+        { name: "Dental Marketing", url: "https://lunexomedia.com/dental-marketing" },
+        { name: "Med Spa Marketing", url: "https://lunexomedia.com/med-spa-marketing" },
         { name: "Overview", url: "https://lunexomedia.com/services/website-design-learn-more" },
         { name: "Why Choose Us", url: "https://lunexomedia.com/services/seo-friendly" },
         { name: "Website Process", url: "https://lunexomedia.com/services/fast-loading" },
