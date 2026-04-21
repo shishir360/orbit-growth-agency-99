@@ -139,6 +139,7 @@ const collapsed = state === 'collapsed';
     { to: '/admin-dashboard/messaging', icon: MessageCircle, label: 'Messaging Hub', section: 'technical' },
     { to: '/admin-dashboard/email', icon: Mail, label: 'Email Management', section: 'technical' },
     { to: '/admin-dashboard/social-automation', icon: Share2, label: 'Social Automation', section: 'technical' },
+    { to: '/admin-dashboard/ai-bot-settings', icon: Bot, label: 'AI Bot Settings', section: 'technical' },
     
     // Outreach HQ
     { to: '/admin-dashboard/outreach', icon: Crosshair, label: 'Outreach Dashboard', section: 'outreach' },
