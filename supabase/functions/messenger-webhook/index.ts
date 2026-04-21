@@ -143,7 +143,7 @@ async function generateAIResponse(
 async function sendTypingIndicator(recipientId: string, action: "typing_on" | "typing_off"): Promise<void> {
   try {
     await fetch(
-      `https://graph.facebook.com/v18.0/${META_FACEBOOK_PAGE_ID}/messages?access_token=${META_PAGE_ACCESS_TOKEN}`,
+      `https://graph.facebook.com/v18.0/me/messages?access_token=${META_PAGE_ACCESS_TOKEN}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -164,7 +164,7 @@ async function sendMessengerMessage(recipientId: string, message: string): Promi
     console.log(`Sending Messenger to ${recipientId}: ${message.substring(0, 50)}...`);
     
     const response = await fetch(
-      `https://graph.facebook.com/v18.0/${META_FACEBOOK_PAGE_ID}/messages?access_token=${META_PAGE_ACCESS_TOKEN}`,
+      `https://graph.facebook.com/v18.0/me/messages?access_token=${META_PAGE_ACCESS_TOKEN}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
