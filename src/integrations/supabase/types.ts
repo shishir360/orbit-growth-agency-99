@@ -89,6 +89,30 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_bot_settings: {
+        Row: {
+          created_at: string
+          id: string
+          is_enabled: boolean
+          platform: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_enabled?: boolean
+          platform: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_enabled?: boolean
+          platform?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       apartment_bookings: {
         Row: {
           created_at: string
