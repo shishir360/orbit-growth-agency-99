@@ -58,6 +58,7 @@ import AdminOutreachDeals from '@/components/admin/AdminOutreachDeals';
 import AdminOutreachTasks from '@/components/admin/AdminOutreachTasks';
 import AdminOutreachCalendar from '@/components/admin/AdminOutreachCalendar';
 import AdminAffiliatePages from '@/components/admin/AdminAffiliatePages';
+import AdminAIBotSettings from '@/components/admin/AdminAIBotSettings';
 
 const AdminDashboard = () => {
   const { isAdmin, loading } = useAdminAuth();
@@ -150,6 +151,7 @@ const AdminDashboard = () => {
               <Route path="outreach/tasks" element={<AdminOutreachTasks />} />
               <Route path="outreach/calendar" element={<AdminOutreachCalendar />} />
               <Route path="affiliate-pages" element={<AdminAffiliatePages />} />
+              <Route path="ai-bot-settings" element={<AdminAIBotSettings />} />
             </Routes>
           </main>
         </SidebarInset>

@@ -697,6 +697,17 @@ const handler = async (req: Request): Promise<Response> => {
 
           if (!messageText) continue;
 
+          // Check if WhatsApp AI bot is enabled (admin toggle)
+          const { data: botSetting } = await supabaseClient
+            .from("ai_bot_settings")
+            .select("is_enabled")
+            .eq("platform", "whatsapp")
+            .maybeSingle();
+          if (botSetting && botSetting.is_enabled === false) {
+            console.log("WhatsApp AI bot is DISABLED — skipping auto-reply");
+            continue;
+          }
+
           // Get current booking state from database
           let state = await getBookingState(supabaseClient, from);
           let aiResponse = "";
