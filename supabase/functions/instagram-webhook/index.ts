@@ -284,7 +284,21 @@ const handler = async (req: Request): Promise<Response> => {
             const history = await getConversationHistory(supabaseClient, senderId);
             const aiResponse = await generateAIResponse(messageText, imageUrl, history);
 
-            await sendInstagramMessage(senderId, aiResponse);
+            // Check for [SEND_IMAGE: ...] marker
+            const { query: imgQuery, cleanText } = parseImageMarker(aiResponse);
+            if (imgQuery) {
+              const found = await findWebsiteImage(supabaseClient, imgQuery);
+              if (found) {
+                await sendInstagramImage(senderId, found.url);
+                if (cleanText) await sendInstagramMessage(senderId, cleanText);
+                else await sendInstagramMessage(senderId, found.caption);
+                aiResponse = (cleanText || found.caption) + ` [image:${found.url}]`;
+              } else {
+                await sendInstagramMessage(senderId, cleanText || "Sorry, I couldn't find that image on lunexomedia.com 🙏");
+              }
+            } else {
+              await sendInstagramMessage(senderId, aiResponse);
+            }
 
             await supabaseClient.from("visitor_activities").insert({
               activity_type: "instagram_message_sent",
