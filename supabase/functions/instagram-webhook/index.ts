@@ -1,4 +1,3 @@
-import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const VERIFY_TOKEN = "lunexo_instagram_verify_2024";
@@ -221,4 +220,4 @@ const handler = async (req: Request): Promise<Response> => {
   return new Response("Method not allowed", { status: 405, headers: corsHeaders });
 };
 
-serve(handler);
+Deno.serve(handler);
