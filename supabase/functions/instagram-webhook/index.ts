@@ -31,7 +31,95 @@ Services & Pricing:
 IMPORTANT:
 - Keep responses short for Instagram DM (under 200 words). Be friendly and helpful.
 - If a user sends an image, describe what you see and relate it to our services if relevant.
-- Auto-detect language and reply in the same language.`;
+- Auto-detect language and reply in the same language.
+
+=== SENDING IMAGES FROM lunexomedia.com ===
+You can send images from the lunexomedia.com website (portfolio, blog, founder photo, logos, screenshots).
+WHEN user explicitly asks for a picture/photo/logo (e.g. "show your logo", "Farhan er chobi dao", "send portfolio sample"), respond with this marker FIRST, then your caption:
+[SEND_IMAGE: <2-4 search keywords>]
+Your friendly caption.
+
+Examples:
+- "show logo" → [SEND_IMAGE: lunexo logo]\nHere's our logo! ✨
+- "Farhan chobi" → [SEND_IMAGE: farhan tanvier founder]\nThis is Farhan, our CEO! 😊
+
+ONLY use [SEND_IMAGE: ...] when user EXPLICITLY asks for an image. Never invent.`;
+
+// ============= WEBSITE IMAGE LIBRARY =============
+async function findWebsiteImage(
+  supabaseClient: any,
+  query: string
+): Promise<{ url: string; caption: string } | null> {
+  const q = query.toLowerCase().trim();
+  if (!q) return null;
+  const tokens = q.split(/\s+/).filter((t) => t.length > 1);
+  const ilikeAny = (col: string) => tokens.map((t) => `${col}.ilike.%${t}%`).join(",");
+  try {
+    const { data: portfolio } = await supabaseClient
+      .from("portfolio").select("title, image_url, description").eq("published", true)
+      .not("image_url", "is", null)
+      .or(`${ilikeAny("title")},${ilikeAny("description")},${ilikeAny("category")}`).limit(1);
+    if (portfolio?.[0]?.image_url) return { url: portfolio[0].image_url, caption: portfolio[0].title };
+
+    const { data: blog } = await supabaseClient
+      .from("blog_posts").select("title, image_url").eq("published", true)
+      .not("image_url", "is", null)
+      .or(`${ilikeAny("title")},${ilikeAny("excerpt")}`).limit(1);
+    if (blog?.[0]?.image_url) return { url: blog[0].image_url, caption: blog[0].title };
+
+    const { data: testimonials } = await supabaseClient
+      .from("testimonials").select("author, company, image_url")
+      .not("image_url", "is", null)
+      .or(`${ilikeAny("author")},${ilikeAny("company")}`).limit(1);
+    if (testimonials?.[0]?.image_url)
+      return { url: testimonials[0].image_url, caption: `${testimonials[0].author} — ${testimonials[0].company}` };
+
+    const { data: clients } = await supabaseClient
+      .from("completed_clients").select("name, logo_url").or(ilikeAny("name")).limit(1);
+    if (clients?.[0]?.logo_url) return { url: clients[0].logo_url, caption: clients[0].name };
+
+    const { data: feedback } = await supabaseClient
+      .from("client_feedback_screenshots").select("title, image_url, client_name").eq("visible", true)
+      .or(`${ilikeAny("title")},${ilikeAny("client_name")},${ilikeAny("category")}`).limit(1);
+    if (feedback?.[0]?.image_url) return { url: feedback[0].image_url, caption: feedback[0].title };
+
+    const { data: images } = await supabaseClient
+      .from("images").select("name, url").or(ilikeAny("name")).limit(1);
+    if (images?.[0]?.url) return { url: images[0].url, caption: images[0].name };
+
+    if (q.includes("logo") || q.includes("lunexo")) {
+      const { data: company } = await supabaseClient.from("company_info").select("logo, company_name").maybeSingle();
+      if (company?.logo) return { url: company.logo, caption: company.company_name || "Lunexo Media" };
+    }
+  } catch (e) { console.error("Image search error:", e); }
+  return null;
+}
+
+function parseImageMarker(text: string): { query: string | null; cleanText: string } {
+  const m = text.match(/\[SEND_IMAGE:\s*([^\]]+)\]/i);
+  if (!m) return { query: null, cleanText: text };
+  return { query: m[1].trim(), cleanText: text.replace(m[0], "").trim() };
+}
+
+async function sendInstagramImage(recipientId: string, imageUrl: string): Promise<boolean> {
+  try {
+    const response = await fetch(
+      `https://graph.facebook.com/v18.0/me/messages?access_token=${META_PAGE_ACCESS_TOKEN}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          recipient: { id: recipientId },
+          message: { attachment: { type: "image", payload: { url: imageUrl, is_reusable: true } } },
+          messaging_type: "RESPONSE",
+        }),
+      }
+    );
+    const r = await response.json();
+    if (r.error) console.error("Instagram image error:", r.error);
+    return response.ok && !r.error;
+  } catch (e) { console.error("Send IG image error:", e); return false; }
+}
 
 async function isBotEnabled(supabaseClient: any): Promise<boolean> {
   try {
@@ -196,7 +284,21 @@ const handler = async (req: Request): Promise<Response> => {
             const history = await getConversationHistory(supabaseClient, senderId);
             const aiResponse = await generateAIResponse(messageText, imageUrl, history);
 
-            await sendInstagramMessage(senderId, aiResponse);
+            // Check for [SEND_IMAGE: ...] marker
+            const { query: imgQuery, cleanText } = parseImageMarker(aiResponse);
+            if (imgQuery) {
+              const found = await findWebsiteImage(supabaseClient, imgQuery);
+              if (found) {
+                await sendInstagramImage(senderId, found.url);
+                if (cleanText) await sendInstagramMessage(senderId, cleanText);
+                else await sendInstagramMessage(senderId, found.caption);
+                aiResponse = (cleanText || found.caption) + ` [image:${found.url}]`;
+              } else {
+                await sendInstagramMessage(senderId, cleanText || "Sorry, I couldn't find that image on lunexomedia.com 🙏");
+              }
+            } else {
+              await sendInstagramMessage(senderId, aiResponse);
+            }
 
             await supabaseClient.from("visitor_activities").insert({
               activity_type: "instagram_message_sent",

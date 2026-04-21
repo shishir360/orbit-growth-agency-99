@@ -174,6 +174,19 @@ You can answer ANY question — not just about Lunexo:
 - Use line breaks for readability
 - Bullet points with • when listing 3+ items
 
+=== SENDING IMAGES FROM lunexomedia.com ===
+You can send images that exist on the lunexomedia.com website (portfolio screenshots, blog covers, team/founder photos, client logos, feedback screenshots, company logo).
+WHEN the user asks for an image (e.g. "show me Farhan's photo", "send your logo", "show portfolio of [project]", "amer chobi dekhao"), respond with a special marker on its OWN line FIRST, then your text caption:
+[SEND_IMAGE: <2-4 search keywords>]
+Your friendly caption text here.
+
+Examples:
+- User: "show me your logo" → [SEND_IMAGE: lunexo logo]\nHere's our official logo! ✨
+- User: "Farhan er chobi dao" → [SEND_IMAGE: farhan tanvier founder]\nThis is Farhan, our founder & CEO! 😊
+- User: "show me a portfolio sample" → [SEND_IMAGE: portfolio website]\nHere's one of our recent projects!
+
+ONLY use [SEND_IMAGE: ...] if the user EXPLICITLY asks for a picture/photo/image/logo/screenshot. Never invent images. If no relevant image exists, just reply with text and apologize.
+
 === MEMORY ===
 The conversation history below shows everything ${customerName} has said before. Reference it naturally. If they told you their business name, their problem, their budget — REMEMBER it and use it.`;
 }
@@ -556,6 +569,114 @@ async function generateAIResponse(
   }
 }
 
+// ============= WEBSITE IMAGE LIBRARY =============
+// Search images across all lunexomedia.com tables
+async function findWebsiteImage(
+  supabaseClient: any,
+  query: string
+): Promise<{ url: string; caption: string } | null> {
+  const q = query.toLowerCase().trim();
+  if (!q) return null;
+  const tokens = q.split(/\s+/).filter((t) => t.length > 1);
+  const ilikeAny = (col: string) => tokens.map((t) => `${col}.ilike.%${t}%`).join(",");
+
+  try {
+    // 1. Portfolio (project images)
+    const { data: portfolio } = await supabaseClient
+      .from("portfolio")
+      .select("title, image_url, description")
+      .eq("published", true)
+      .not("image_url", "is", null)
+      .or(`${ilikeAny("title")},${ilikeAny("description")},${ilikeAny("category")}`)
+      .limit(1);
+    if (portfolio?.[0]?.image_url) return { url: portfolio[0].image_url, caption: portfolio[0].title };
+
+    // 2. Blog posts
+    const { data: blog } = await supabaseClient
+      .from("blog_posts")
+      .select("title, image_url")
+      .eq("published", true)
+      .not("image_url", "is", null)
+      .or(`${ilikeAny("title")},${ilikeAny("excerpt")}`)
+      .limit(1);
+    if (blog?.[0]?.image_url) return { url: blog[0].image_url, caption: blog[0].title };
+
+    // 3. Testimonials (people/avatars)
+    const { data: testimonials } = await supabaseClient
+      .from("testimonials")
+      .select("author, company, image_url")
+      .not("image_url", "is", null)
+      .or(`${ilikeAny("author")},${ilikeAny("company")}`)
+      .limit(1);
+    if (testimonials?.[0]?.image_url)
+      return { url: testimonials[0].image_url, caption: `${testimonials[0].author} — ${testimonials[0].company}` };
+
+    // 4. Completed clients (logos)
+    const { data: clients } = await supabaseClient
+      .from("completed_clients")
+      .select("name, logo_url")
+      .or(ilikeAny("name"))
+      .limit(1);
+    if (clients?.[0]?.logo_url) return { url: clients[0].logo_url, caption: clients[0].name };
+
+    // 5. Feedback screenshots
+    const { data: feedback } = await supabaseClient
+      .from("client_feedback_screenshots")
+      .select("title, image_url, client_name")
+      .eq("visible", true)
+      .or(`${ilikeAny("title")},${ilikeAny("client_name")},${ilikeAny("category")}`)
+      .limit(1);
+    if (feedback?.[0]?.image_url) return { url: feedback[0].image_url, caption: feedback[0].title };
+
+    // 6. Generic uploaded images
+    const { data: images } = await supabaseClient
+      .from("images")
+      .select("name, url")
+      .or(ilikeAny("name"))
+      .limit(1);
+    if (images?.[0]?.url) return { url: images[0].url, caption: images[0].name };
+
+    // 7. Company logo fallback for "logo"/"lunexo"
+    if (q.includes("logo") || q.includes("lunexo")) {
+      const { data: company } = await supabaseClient.from("company_info").select("logo, company_name").maybeSingle();
+      if (company?.logo) return { url: company.logo, caption: company.company_name || "Lunexo Media" };
+    }
+  } catch (e) {
+    console.error("Image search error:", e);
+  }
+  return null;
+}
+
+// Parse AI response for [SEND_IMAGE: query] marker — returns { query, cleanText }
+function parseImageMarker(text: string): { query: string | null; cleanText: string } {
+  const m = text.match(/\[SEND_IMAGE:\s*([^\]]+)\]/i);
+  if (!m) return { query: null, cleanText: text };
+  return { query: m[1].trim(), cleanText: text.replace(m[0], "").trim() };
+}
+
+// Send WhatsApp image
+async function sendWhatsAppImage(to: string, imageUrl: string, caption: string): Promise<boolean> {
+  try {
+    const response = await fetch(`https://graph.facebook.com/v18.0/${META_PHONE_ID}/messages`, {
+      method: "POST",
+      headers: { "Authorization": `Bearer ${META_ACCESS_TOKEN}`, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        messaging_product: "whatsapp",
+        recipient_type: "individual",
+        to,
+        type: "image",
+        image: { link: imageUrl, caption: caption.substring(0, 1024) },
+      }),
+    });
+    const r = await response.json();
+    console.log("WhatsApp image send:", r);
+    return response.ok;
+  } catch (e) {
+    console.error("Send image error:", e);
+    return false;
+  }
+}
+
 // Send WhatsApp message
 async function sendWhatsAppMessage(to: string, message: string): Promise<boolean> {
   try {
@@ -843,10 +964,30 @@ We look forward to speaking with you! 🚀`;
             aiResponse = await generateAIResponse(messageText, history, systemPrompt);
           }
 
+          // Check for [SEND_IMAGE: ...] marker from AI
+          const { query: imgQuery, cleanText } = parseImageMarker(aiResponse);
+          if (imgQuery) {
+            const found = await findWebsiteImage(supabaseClient, imgQuery);
+            if (found) {
+              await sendWhatsAppImage(from, found.url, cleanText || found.caption);
+              aiResponse = cleanText || `Sent: ${found.caption}`;
+              await supabaseClient.from("visitor_activities").insert({
+                activity_type: "whatsapp_message_sent",
+                metadata: {
+                  to: from, name: customerName, original_message: messageText,
+                  ai_response: aiResponse, sent_image_url: found.url,
+                  is_ai_response: true, booking_created: bookingCreated, booking_step: state.step,
+                },
+              });
+              continue;
+            } else {
+              aiResponse = cleanText || "Sorry, I couldn't find that image on our website 🙏 Visit lunexomedia.com to browse.";
+            }
+          }
+
           // Send response
           let sent = false;
           if (state.step === 0 && !bookingCreated) {
-            // Try buttons for general messages
             const isGreeting = ["hi", "hello", "hey", "help"].some(w => messageText.toLowerCase().includes(w));
             if (isGreeting) {
               sent = await sendWhatsAppWithButtons(from, aiResponse, [
