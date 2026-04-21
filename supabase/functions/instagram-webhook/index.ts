@@ -3,7 +3,6 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const VERIFY_TOKEN = "lunexo_instagram_verify_2024";
 const META_PAGE_ACCESS_TOKEN = Deno.env.get("META_PAGE_ACCESS_TOKEN");
-const META_FACEBOOK_PAGE_ID = Deno.env.get("META_FACEBOOK_PAGE_ID");
 const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
 
 const corsHeaders = {
@@ -11,7 +10,6 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-// Farhan AI System Prompt
 const FARHAN_AI_SYSTEM_PROMPT = `You are Farhan AI, the friendly AI assistant for Lunexo Media, a digital marketing agency in New York.
 
 About Lunexo Media:
@@ -19,6 +17,7 @@ About Lunexo Media:
 - Phone: +1 (702) 483-0749
 - Email: hello@lunexomedia.com
 - Website: www.lunexomedia.com
+- Booking: https://lunexomedia.com/book-apartment
 - 50+ projects completed
 
 Services & Pricing:
@@ -28,21 +27,34 @@ Services & Pricing:
 - Facebook/Instagram Ads: $400-$1500/month
 - AI Automation: $500-$3000
 
-IMPORTANT: Keep responses short for Instagram DM (under 200 words). Be friendly and helpful.`;
+IMPORTANT:
+- Keep responses short for Instagram DM (under 200 words). Be friendly and helpful.
+- If a user sends an image, describe what you see and relate it to our services if relevant.
+- Auto-detect language and reply in the same language.`;
 
-// Get conversation history from database
-async function getConversationHistory(supabaseClient: any, senderId: string): Promise<Array<{ role: string; content: string }>> {
+async function isBotEnabled(supabaseClient: any): Promise<boolean> {
   try {
-    const { data, error } = await supabaseClient
+    const { data } = await supabaseClient
+      .from("ai_bot_settings")
+      .select("is_enabled")
+      .eq("platform", "instagram")
+      .maybeSingle();
+    return data?.is_enabled ?? true;
+  } catch {
+    return true;
+  }
+}
+
+async function getConversationHistory(supabaseClient: any, senderId: string) {
+  try {
+    const { data } = await supabaseClient
       .from("visitor_activities")
       .select("activity_type, metadata")
       .in("activity_type", ["instagram_message_received", "instagram_message_sent"])
       .or(`metadata->>sender_id.eq.${senderId},metadata->>recipient_id.eq.${senderId}`)
       .order("created_at", { ascending: true })
-      .limit(10);
-
-    if (error || !data) return [];
-
+      .limit(20);
+    if (!data) return [];
     const history: Array<{ role: string; content: string }> = [];
     for (const msg of data) {
       if (msg.activity_type === "instagram_message_received") {
@@ -55,14 +67,24 @@ async function getConversationHistory(supabaseClient: any, senderId: string): Pr
     }
     return history;
   } catch (error) {
-    console.error("Error getting Instagram history:", error);
+    console.error("History error:", error);
     return [];
   }
 }
 
-// Generate AI response
-async function generateAIResponse(userMessage: string, history: Array<{ role: string; content: string }>): Promise<string> {
+async function generateAIResponse(
+  userMessage: string,
+  imageUrl: string | null,
+  history: Array<{ role: string; content: string }>
+): Promise<string> {
   try {
+    const userContent: any = imageUrl
+      ? [
+          { type: "text", text: userMessage || "What do you see in this image?" },
+          { type: "image_url", image_url: { url: imageUrl } },
+        ]
+      : userMessage;
+
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -74,7 +96,7 @@ async function generateAIResponse(userMessage: string, history: Array<{ role: st
         messages: [
           { role: "system", content: FARHAN_AI_SYSTEM_PROMPT },
           ...history,
-          { role: "user", content: userMessage }
+          { role: "user", content: userContent },
         ],
         max_tokens: 500,
       }),
@@ -84,19 +106,15 @@ async function generateAIResponse(userMessage: string, history: Array<{ role: st
     const data = await response.json();
     return data.choices?.[0]?.message?.content || "Please contact hello@lunexomedia.com";
   } catch (error) {
-    console.error("Error generating response:", error);
+    console.error("AI error:", error);
     return "Sorry, technical issues. Email hello@lunexomedia.com 🙏";
   }
 }
 
-// Send Instagram message
 async function sendInstagramMessage(recipientId: string, message: string): Promise<boolean> {
   try {
-    console.log(`Sending Instagram to ${recipientId}: ${message.substring(0, 50)}...`);
-    
-    // Instagram DMs sent through Facebook Page endpoint
     const response = await fetch(
-      `https://graph.facebook.com/v18.0/${META_FACEBOOK_PAGE_ID}/messages?access_token=${META_PAGE_ACCESS_TOKEN}`,
+      `https://graph.facebook.com/v18.0/me/messages?access_token=${META_PAGE_ACCESS_TOKEN}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -107,96 +125,88 @@ async function sendInstagramMessage(recipientId: string, message: string): Promi
         }),
       }
     );
-
     const result = await response.json();
-    console.log("Instagram response:", result);
-    
-    if (result.error) {
-      console.error("Instagram API error:", result.error);
-    }
-    
+    if (result.error) console.error("Instagram API error:", result.error);
     return response.ok && !result.error;
   } catch (error) {
-    console.error("Error sending Instagram:", error);
+    console.error("Send error:", error);
     return false;
   }
 }
 
 const handler = async (req: Request): Promise<Response> => {
   const url = new URL(req.url);
-  
-  if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
-  }
 
-  // Webhook verification
+  if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+
   if (req.method === "GET") {
     const mode = url.searchParams.get("hub.mode");
     const token = url.searchParams.get("hub.verify_token");
     const challenge = url.searchParams.get("hub.challenge");
-    
-    console.log("Instagram webhook verification:", { mode, token });
-    
     if (mode === "subscribe" && token === VERIFY_TOKEN) {
-      console.log("Instagram webhook verified!");
       return new Response(challenge, { status: 200 });
     }
     return new Response("Forbidden", { status: 403 });
   }
 
-  // Handle incoming messages
   if (req.method === "POST") {
     try {
       const body = await req.json();
       console.log("Instagram webhook received:", JSON.stringify(body));
 
-      // Initialize Supabase
-      const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-      const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-      const supabaseClient = createClient(supabaseUrl, supabaseKey);
+      const supabaseClient = createClient(
+        Deno.env.get("SUPABASE_URL")!,
+        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+      );
 
-      // Process Instagram messaging events
+      const botEnabled = await isBotEnabled(supabaseClient);
+
       if (body.object === "instagram") {
         for (const entry of body.entry || []) {
           for (const event of entry.messaging || []) {
             const senderId = event.sender?.id;
-            const messageText = event.message?.text;
+            if (!senderId || event.message?.is_echo) continue;
 
-            if (senderId && messageText) {
-              console.log(`Instagram from ${senderId}: ${messageText}`);
+            const messageText: string = event.message?.text || "";
+            const attachments = event.message?.attachments || [];
+            const imageAttachment = attachments.find((a: any) => a.type === "image");
+            const imageUrl: string | null = imageAttachment?.payload?.url || null;
 
-              // Log received message
-              await supabaseClient.from("visitor_activities").insert({
-                activity_type: "instagram_message_received",
-                metadata: {
-                  sender_id: senderId,
-                  message: messageText,
-                  platform: "instagram",
-                  timestamp: new Date().toISOString(),
-                },
-              });
+            if (!messageText && !imageUrl) continue;
 
-              // Get conversation history
-              const history = await getConversationHistory(supabaseClient, senderId);
+            console.log(`Instagram from ${senderId}: text="${messageText}" image=${!!imageUrl}`);
 
-              // Generate AI response
-              const aiResponse = await generateAIResponse(messageText, history);
+            await supabaseClient.from("visitor_activities").insert({
+              activity_type: "instagram_message_received",
+              metadata: {
+                sender_id: senderId,
+                message: messageText || (imageUrl ? "[image]" : ""),
+                image_url: imageUrl,
+                platform: "instagram",
+                timestamp: new Date().toISOString(),
+              },
+            });
 
-              // Send response
-              await sendInstagramMessage(senderId, aiResponse);
-
-              // Log sent message
-              await supabaseClient.from("visitor_activities").insert({
-                activity_type: "instagram_message_sent",
-                metadata: {
-                  recipient_id: senderId,
-                  message: aiResponse,
-                  ai_response: aiResponse,
-                  platform: "instagram",
-                  timestamp: new Date().toISOString(),
-                },
-              });
+            if (!botEnabled) {
+              console.log("Instagram AI bot is DISABLED — skipping auto-reply");
+              continue;
             }
+
+            const history = await getConversationHistory(supabaseClient, senderId);
+            const aiResponse = await generateAIResponse(messageText, imageUrl, history);
+
+            await sendInstagramMessage(senderId, aiResponse);
+
+            await supabaseClient.from("visitor_activities").insert({
+              activity_type: "instagram_message_sent",
+              metadata: {
+                recipient_id: senderId,
+                message: aiResponse,
+                ai_response: aiResponse,
+                platform: "instagram",
+                timestamp: new Date().toISOString(),
+              },
+            });
           }
         }
       }
