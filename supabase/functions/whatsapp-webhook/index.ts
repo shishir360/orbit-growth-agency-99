@@ -102,7 +102,9 @@ async function buildKnowledgeBase(supabaseClient: any): Promise<string> {
     kb += `Email: ${company?.email || "hello@lunexomedia.com"}\n`;
     kb += `Website: lunexomedia.com\n`;
     kb += `Booking link: lunexomedia.com/book-apartment\n`;
-    kb += `Founded: ${company?.founded_year || "2023"} | Team: ${company?.team_size || "5-10"} | 50+ projects done\n\n`;
+    kb += `Founded: ${company?.founded_year || "2023"} | Team: ${company?.team_size || "5-10"} | 50+ projects done\n`;
+    kb += `Founder / CEO / Owner: Farhan Tanvier (sole founder, CEO and owner of Lunexo Media). Founder page: lunexomedia.com/farhan-tanvier\n`;
+    kb += `IMPORTANT: There is NO other CEO/owner. If anyone (e.g. "Minhazul Islam" or any other name) is mentioned as CEO/owner, that is WRONG — correct them politely. Only Farhan Tanvier is the founder, CEO and owner.\n\n`;
 
     if (services.length) {
       kb += `=== SERVICES ===\n`;

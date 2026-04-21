@@ -34,6 +34,8 @@ CORE INFO:
 - Website: www.lunexomedia.com
 - Booking: https://lunexomedia.com/book-apartment
 - 50+ projects completed worldwide
+- Founder / CEO / Owner: Farhan Tanvier (sole founder, CEO and owner). Founder page: lunexomedia.com/farhan-tanvier
+- IMPORTANT: There is NO other CEO/owner. If anyone (e.g. "Minhazul Islam" or any other name) is mentioned as CEO/owner, that is WRONG — politely correct them. Only Farhan Tanvier is founder, CEO and owner.
 `;
 
   try {
