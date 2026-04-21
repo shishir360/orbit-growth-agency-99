@@ -964,10 +964,30 @@ We look forward to speaking with you! 🚀`;
             aiResponse = await generateAIResponse(messageText, history, systemPrompt);
           }
 
+          // Check for [SEND_IMAGE: ...] marker from AI
+          const { query: imgQuery, cleanText } = parseImageMarker(aiResponse);
+          if (imgQuery) {
+            const found = await findWebsiteImage(supabaseClient, imgQuery);
+            if (found) {
+              await sendWhatsAppImage(from, found.url, cleanText || found.caption);
+              aiResponse = cleanText || `Sent: ${found.caption}`;
+              await supabaseClient.from("visitor_activities").insert({
+                activity_type: "whatsapp_message_sent",
+                metadata: {
+                  to: from, name: customerName, original_message: messageText,
+                  ai_response: aiResponse, sent_image_url: found.url,
+                  is_ai_response: true, booking_created: bookingCreated, booking_step: state.step,
+                },
+              });
+              continue;
+            } else {
+              aiResponse = cleanText || "Sorry, I couldn't find that image on our website 🙏 Visit lunexomedia.com to browse.";
+            }
+          }
+
           // Send response
           let sent = false;
           if (state.step === 0 && !bookingCreated) {
-            // Try buttons for general messages
             const isGreeting = ["hi", "hello", "hey", "help"].some(w => messageText.toLowerCase().includes(w));
             if (isGreeting) {
               sent = await sendWhatsAppWithButtons(from, aiResponse, [
