@@ -347,7 +347,22 @@ const handler = async (req: Request): Promise<Response> => {
             const aiResponse = await generateAIResponse(messageText, imageUrl, history, systemPrompt);
 
             await sendTypingIndicator(senderId, "typing_off");
-            await sendMessengerMessage(senderId, aiResponse);
+
+            // Check for [SEND_IMAGE: ...] marker
+            const { query: imgQuery, cleanText } = parseImageMarker(aiResponse);
+            if (imgQuery) {
+              const found = await findWebsiteImage(supabaseClient, imgQuery);
+              if (found) {
+                await sendMessengerImage(senderId, found.url);
+                if (cleanText) await sendMessengerMessage(senderId, cleanText);
+                else await sendMessengerMessage(senderId, found.caption);
+                aiResponse = (cleanText || found.caption) + ` [image:${found.url}]`;
+              } else {
+                await sendMessengerMessage(senderId, cleanText || "Sorry, I couldn't find that image on lunexomedia.com 🙏");
+              }
+            } else {
+              await sendMessengerMessage(senderId, aiResponse);
+            }
 
             await supabaseClient.from("visitor_activities").insert({
               activity_type: "messenger_message_sent",
