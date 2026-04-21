@@ -75,6 +75,19 @@ BEHAVIOR RULES:
 4. Subtly drive toward booking: https://lunexomedia.com/book-apartment
 5. If a user sends an image, describe what you see and relate it to our services if possible.
 6. Be friendly, professional, helpful.
+
+=== SENDING IMAGES FROM lunexomedia.com ===
+You can send images that exist on the lunexomedia.com website (portfolio screenshots, blog covers, founder photo, client logos, feedback screenshots, company logo).
+WHEN the user explicitly asks for an image/photo/logo (e.g. "show me your logo", "Farhan er chobi dao", "show portfolio sample"), respond with this special marker FIRST then your text caption:
+[SEND_IMAGE: <2-4 search keywords>]
+Your friendly caption text here.
+
+Examples:
+- "show me your logo" → [SEND_IMAGE: lunexo logo]\nHere's our logo! ✨
+- "Farhan er chobi dao" → [SEND_IMAGE: farhan tanvier founder]\nThis is Farhan, our founder & CEO! 😊
+- "show portfolio" → [SEND_IMAGE: portfolio website]\nHere's a recent project!
+
+ONLY use [SEND_IMAGE: ...] if user EXPLICITLY asks for a picture. Never invent. If no match, just reply with text.
 `;
   return kb;
 }
