@@ -117,7 +117,7 @@ const COUNTRY_FLAGS: { [key: string]: string } = {
 };
 
 const ACTIVITY_COLORS: { [key: string]: string } = {
-  page_view: '#C5FF4A',
+  page_view: 'hsl(var(--accent-cta))',
   contact_form: '#6366f1',
   booking: '#8b5cf6',
   pdf_download: '#ec4899',
@@ -136,7 +136,7 @@ const ACTIVITY_COLORS: { [key: string]: string } = {
   instagram_message_received: '#C13584',
 };
 
-const CHART_COLORS = ['#C5FF4A', '#6366f1', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981'];
+const CHART_COLORS = ['hsl(var(--accent-cta))', '#6366f1', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981'];
 
 export default function AdminVisitorTracking() {
   const { toast } = useToast();
@@ -342,7 +342,7 @@ export default function AdminVisitorTracking() {
     const totalVisitors = pageViewIPs.size || 1;
 
     const funnel = [
-      { stage: 'Page Views', count: pageViewIPs.size, percentage: 100, color: '#C5FF4A' },
+      { stage: 'Page Views', count: pageViewIPs.size, percentage: 100, color: 'hsl(var(--accent-cta))' },
       { stage: 'Engaged (Scrolled)', count: scrollIPs.size, percentage: Math.round((scrollIPs.size / totalVisitors) * 100), color: '#10b981' },
       { stage: 'Clicked', count: clickIPs.size, percentage: Math.round((clickIPs.size / totalVisitors) * 100), color: '#f97316' },
       { stage: 'Form Started', count: formInteractionIPs.size, percentage: Math.round((formInteractionIPs.size / totalVisitors) * 100), color: '#3b82f6' },
@@ -524,7 +524,7 @@ export default function AdminVisitorTracking() {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center space-y-4">
-          <Loader2 className="h-12 w-12 animate-spin mx-auto text-[#C5FF4A]" />
+          <Loader2 className="h-12 w-12 animate-spin mx-auto text-[hsl(var(--primary))]" />
           <p className="text-muted-foreground">Loading visitor data...</p>
         </div>
       </div>
@@ -539,10 +539,10 @@ export default function AdminVisitorTracking() {
         <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-3 mb-2">
-              <div className="p-2 rounded-xl bg-[#C5FF4A]/20">
-                <Users className="h-6 w-6 text-[#C5FF4A]" />
+              <div className="p-2 rounded-xl bg-[hsl(var(--primary))]/20">
+                <Users className="h-6 w-6 text-[hsl(var(--primary))]" />
               </div>
-              <Badge className="bg-[#C5FF4A]/20 text-[#C5FF4A] border-[#C5FF4A]/30">
+              <Badge className="bg-[hsl(var(--primary))]/20 text-[hsl(var(--primary))] border-[hsl(var(--primary))]/30">
                 <Activity className="h-3 w-3 mr-1" />
                 Real-time Tracking
               </Badge>
@@ -576,7 +576,7 @@ export default function AdminVisitorTracking() {
             >
               <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
             </Button>
-            <Button onClick={exportToCSV} className="bg-[#C5FF4A] text-black hover:bg-[#d4ff6a]">
+            <Button onClick={exportToCSV} className="bg-[hsl(var(--primary))] text-black hover:bg-[#d4ff6a]">
               <Download className="h-4 w-4 mr-2" />
               Export CSV
             </Button>
@@ -588,7 +588,7 @@ export default function AdminVisitorTracking() {
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3">
         {[
           { label: 'Total Activities', value: stats.total, icon: Activity, color: 'text-blue-500' },
-          { label: 'Unique Visitors', value: stats.uniqueVisitors, icon: Users, color: 'text-[#C5FF4A]' },
+          { label: 'Unique Visitors', value: stats.uniqueVisitors, icon: Users, color: 'text-[hsl(var(--primary))]' },
           { label: 'Page Views', value: stats.page_views, icon: Eye, color: 'text-purple-500' },
           { label: 'Contact Forms', value: stats.contact_forms, icon: Mail, color: 'text-indigo-500' },
           { label: 'Bookings', value: stats.bookings, icon: Calendar, color: 'text-pink-500' },
@@ -616,23 +616,23 @@ export default function AdminVisitorTracking() {
       {/* Main Content Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
         <TabsList className="bg-gray-900 border border-white/10">
-          <TabsTrigger value="visitors" className="data-[state=active]:bg-[#C5FF4A] data-[state=active]:text-black">
+          <TabsTrigger value="visitors" className="data-[state=active]:bg-[hsl(var(--primary))] data-[state=active]:text-black">
             <Users className="h-4 w-4 mr-2" />
             Visitors ({stats.uniqueVisitors})
           </TabsTrigger>
-          <TabsTrigger value="timeline" className="data-[state=active]:bg-[#C5FF4A] data-[state=active]:text-black">
+          <TabsTrigger value="timeline" className="data-[state=active]:bg-[hsl(var(--primary))] data-[state=active]:text-black">
             <Clock className="h-4 w-4 mr-2" />
             Activity Timeline
           </TabsTrigger>
-          <TabsTrigger value="charts" className="data-[state=active]:bg-[#C5FF4A] data-[state=active]:text-black">
+          <TabsTrigger value="charts" className="data-[state=active]:bg-[hsl(var(--primary))] data-[state=active]:text-black">
             <TrendingUp className="h-4 w-4 mr-2" />
             Charts
           </TabsTrigger>
-          <TabsTrigger value="funnel" className="data-[state=active]:bg-[#C5FF4A] data-[state=active]:text-black">
+          <TabsTrigger value="funnel" className="data-[state=active]:bg-[hsl(var(--primary))] data-[state=active]:text-black">
             <Target className="h-4 w-4 mr-2" />
             Funnel
           </TabsTrigger>
-          <TabsTrigger value="heatmap" className="data-[state=active]:bg-[#C5FF4A] data-[state=active]:text-black">
+          <TabsTrigger value="heatmap" className="data-[state=active]:bg-[hsl(var(--primary))] data-[state=active]:text-black">
             <Zap className="h-4 w-4 mr-2" />
             Click Heatmap
           </TabsTrigger>
@@ -683,7 +683,7 @@ export default function AdminVisitorTracking() {
             <Card className="lg:col-span-1 bg-gradient-to-br from-gray-900 to-gray-950 border-white/10">
               <CardHeader className="pb-2">
                 <CardTitle className="text-white flex items-center gap-2">
-                  <Users className="h-5 w-5 text-[#C5FF4A]" />
+                  <Users className="h-5 w-5 text-[hsl(var(--primary))]" />
                   Visitors ({filteredProfiles.length})
                 </CardTitle>
               </CardHeader>
@@ -699,7 +699,7 @@ export default function AdminVisitorTracking() {
                         onClick={() => setSelectedVisitor(profile)}
                         className={`p-3 rounded-lg cursor-pointer transition-all ${
                           selectedVisitor?.ip === profile.ip 
-                            ? 'bg-[#C5FF4A]/20 border border-[#C5FF4A]/50' 
+                            ? 'bg-[hsl(var(--primary))]/20 border border-[hsl(var(--primary))]/50' 
                             : 'bg-white/5 hover:bg-white/10 border border-transparent'
                         }`}
                       >
@@ -746,7 +746,7 @@ export default function AdminVisitorTracking() {
             <Card className="lg:col-span-2 bg-gradient-to-br from-gray-900 to-gray-950 border-white/10">
               <CardHeader className="pb-2">
                 <CardTitle className="text-white flex items-center gap-2">
-                  <Target className="h-5 w-5 text-[#C5FF4A]" />
+                  <Target className="h-5 w-5 text-[hsl(var(--primary))]" />
                   Visitor Journey
                 </CardTitle>
                 <CardDescription>
@@ -788,7 +788,7 @@ export default function AdminVisitorTracking() {
                     <ScrollArea className="h-[350px]">
                       <div className="relative pl-6 space-y-4">
                         {/* Timeline line */}
-                        <div className="absolute left-2 top-2 bottom-2 w-0.5 bg-gradient-to-b from-[#C5FF4A] via-purple-500 to-gray-700" />
+                        <div className="absolute left-2 top-2 bottom-2 w-0.5 bg-gradient-to-b from-[hsl(var(--primary))] via-purple-500 to-gray-700" />
                         
                         {selectedVisitor.activities.map((activity, index) => (
                           <motion.div
@@ -962,7 +962,7 @@ export default function AdminVisitorTracking() {
             <Card className="bg-gradient-to-br from-gray-900 to-gray-950 border-white/10">
               <CardHeader>
                 <CardTitle className="text-white flex items-center gap-2">
-                  <Clock className="h-5 w-5 text-[#C5FF4A]" />
+                  <Clock className="h-5 w-5 text-[hsl(var(--primary))]" />
                   Activity by Hour
                 </CardTitle>
                 <CardDescription>When are visitors most active?</CardDescription>
@@ -973,8 +973,8 @@ export default function AdminVisitorTracking() {
                     <AreaChart data={activityByHour}>
                       <defs>
                         <linearGradient id="colorHourly" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#C5FF4A" stopOpacity={0.3}/>
-                          <stop offset="95%" stopColor="#C5FF4A" stopOpacity={0}/>
+                          <stop offset="5%" stopColor="hsl(var(--accent-cta))" stopOpacity={0.3}/>
+                          <stop offset="95%" stopColor="hsl(var(--accent-cta))" stopOpacity={0}/>
                         </linearGradient>
                       </defs>
                       <CartesianGrid strokeDasharray="3 3" stroke="#333" />
@@ -991,7 +991,7 @@ export default function AdminVisitorTracking() {
                       <Area 
                         type="monotone" 
                         dataKey="activities" 
-                        stroke="#C5FF4A" 
+                        stroke="hsl(var(--accent-cta))" 
                         fillOpacity={1} 
                         fill="url(#colorHourly)" 
                         name="Activities"
@@ -1006,7 +1006,7 @@ export default function AdminVisitorTracking() {
             <Card className="bg-gradient-to-br from-gray-900 to-gray-950 border-white/10">
               <CardHeader>
                 <CardTitle className="text-white flex items-center gap-2">
-                  <Zap className="h-5 w-5 text-[#C5FF4A]" />
+                  <Zap className="h-5 w-5 text-[hsl(var(--primary))]" />
                   Activity Breakdown
                 </CardTitle>
                 <CardDescription>Types of activities performed</CardDescription>
@@ -1053,7 +1053,7 @@ export default function AdminVisitorTracking() {
             <Card className="bg-gradient-to-br from-gray-900 to-gray-950 border-white/10">
               <CardHeader>
                 <CardTitle className="text-white flex items-center gap-2">
-                  <Target className="h-5 w-5 text-[#C5FF4A]" />
+                  <Target className="h-5 w-5 text-[hsl(var(--primary))]" />
                   Conversion Funnel
                 </CardTitle>
                 <CardDescription>Visitor journey from page view to conversion</CardDescription>
@@ -1123,7 +1123,7 @@ export default function AdminVisitorTracking() {
                           <span className="text-sm font-medium text-white truncate max-w-[200px]">
                             {page.page}
                           </span>
-                          <Badge className="bg-[#C5FF4A]/20 text-[#C5FF4A]">
+                          <Badge className="bg-[hsl(var(--primary))]/20 text-[hsl(var(--primary))]">
                             {page.engagement}% engaged
                           </Badge>
                         </div>
@@ -1162,7 +1162,7 @@ export default function AdminVisitorTracking() {
           <Card className="bg-gradient-to-br from-gray-900 to-gray-950 border-white/10">
             <CardHeader>
               <CardTitle className="text-white flex items-center gap-2">
-                <TrendingUp className="h-5 w-5 text-[#C5FF4A]" />
+                <TrendingUp className="h-5 w-5 text-[hsl(var(--primary))]" />
                 Stage-to-Stage Conversion Rates
               </CardTitle>
             </CardHeader>
@@ -1270,7 +1270,7 @@ export default function AdminVisitorTracking() {
             <Card className="bg-gradient-to-br from-gray-900 to-gray-950 border-white/10">
               <CardHeader>
                 <CardTitle className="text-white flex items-center gap-2">
-                  <Activity className="h-5 w-5 text-[#C5FF4A]" />
+                  <Activity className="h-5 w-5 text-[hsl(var(--primary))]" />
                   Click Statistics
                 </CardTitle>
               </CardHeader>

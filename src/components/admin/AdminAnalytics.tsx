@@ -55,7 +55,7 @@ const COUNTRY_FLAGS: { [key: string]: string } = {
   'CH': '🇨🇭', 'AT': '🇦🇹', 'IE': '🇮🇪', 'PT': '🇵🇹', 'GR': '🇬🇷',
 };
 
-const CHART_COLORS = ['#C5FF4A', '#6366f1', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981'];
+const CHART_COLORS = ['hsl(var(--accent-cta))', '#6366f1', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981'];
 
 const AdminAnalytics = () => {
   const [loading, setLoading] = useState(true);
@@ -174,7 +174,7 @@ const AdminAnalytics = () => {
     const totalVisits = Array.from(sourceMap.values()).reduce((sum, v) => sum + v, 0);
     
     const sourceIcons: { [key: string]: { icon: React.ReactNode; color: string } } = {
-      'Direct': { icon: <Globe className="h-4 w-4" />, color: '#C5FF4A' },
+      'Direct': { icon: <Globe className="h-4 w-4" />, color: 'hsl(var(--accent-cta))' },
       'Google': { icon: <Search className="h-4 w-4" />, color: '#4285F4' },
       'Facebook': { icon: <Facebook className="h-4 w-4" />, color: '#1877F2' },
       'Instagram': { icon: <Share2 className="h-4 w-4" />, color: '#E4405F' },
@@ -301,7 +301,7 @@ const AdminAnalytics = () => {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center space-y-4">
-          <Loader2 className="h-12 w-12 animate-spin mx-auto text-[#C5FF4A]" />
+          <Loader2 className="h-12 w-12 animate-spin mx-auto text-[hsl(var(--primary))]" />
           <p className="text-muted-foreground">Loading analytics data...</p>
         </div>
       </div>
@@ -316,10 +316,10 @@ const AdminAnalytics = () => {
         <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-3 mb-2">
-              <div className="p-2 rounded-xl bg-[#C5FF4A]/20">
-                <BarChart3 className="h-6 w-6 text-[#C5FF4A]" />
+              <div className="p-2 rounded-xl bg-[hsl(var(--primary))]/20">
+                <BarChart3 className="h-6 w-6 text-[hsl(var(--primary))]" />
               </div>
-              <Badge className="bg-[#C5FF4A]/20 text-[#C5FF4A] border-[#C5FF4A]/30">
+              <Badge className="bg-[hsl(var(--primary))]/20 text-[hsl(var(--primary))] border-[hsl(var(--primary))]/30">
                 <Activity className="h-3 w-3 mr-1" />
                 Live Data
               </Badge>
@@ -362,7 +362,7 @@ const AdminAnalytics = () => {
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
         {[
           { label: 'Total Visits', value: stats.totalVisits.toLocaleString(), icon: Eye, color: 'text-blue-500', bg: 'bg-blue-500/10' },
-          { label: 'Unique Visitors', value: stats.uniqueVisitors.toLocaleString(), icon: Users, color: 'text-[#C5FF4A]', bg: 'bg-[#C5FF4A]/10' },
+          { label: 'Unique Visitors', value: stats.uniqueVisitors.toLocaleString(), icon: Users, color: 'text-[hsl(var(--primary))]', bg: 'bg-[hsl(var(--primary))]/10' },
           { label: 'Page Views', value: stats.pageViews.toLocaleString(), icon: Monitor, color: 'text-purple-500', bg: 'bg-purple-500/10' },
           { label: 'Avg. Session', value: stats.avgSessionDuration, icon: Zap, color: 'text-orange-500', bg: 'bg-orange-500/10' },
           { label: 'Bounce Rate', value: `${stats.bounceRate}%`, icon: TrendingDown, color: 'text-red-500', bg: 'bg-red-500/10' },
@@ -391,7 +391,7 @@ const AdminAnalytics = () => {
       <Card className="bg-gradient-to-br from-gray-900 to-gray-950 border-white/10">
         <CardHeader>
           <CardTitle className="text-white flex items-center gap-2">
-            <TrendingUp className="h-5 w-5 text-[#C5FF4A]" />
+            <TrendingUp className="h-5 w-5 text-[hsl(var(--primary))]" />
             Traffic Overview
           </CardTitle>
           <CardDescription>Daily visits and unique visitors over time</CardDescription>
@@ -402,8 +402,8 @@ const AdminAnalytics = () => {
               <AreaChart data={dailyTraffic}>
                 <defs>
                   <linearGradient id="colorVisits" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#C5FF4A" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#C5FF4A" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="hsl(var(--accent-cta))" stopOpacity={0.3}/>
+                    <stop offset="95%" stopColor="hsl(var(--accent-cta))" stopOpacity={0}/>
                   </linearGradient>
                   <linearGradient id="colorUnique" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#8B5CF6" stopOpacity={0.3}/>
@@ -424,7 +424,7 @@ const AdminAnalytics = () => {
                 <Area 
                   type="monotone" 
                   dataKey="visits" 
-                  stroke="#C5FF4A" 
+                  stroke="hsl(var(--accent-cta))" 
                   fillOpacity={1} 
                   fill="url(#colorVisits)" 
                   name="Total Visits"
@@ -449,7 +449,7 @@ const AdminAnalytics = () => {
         <Card className="bg-gradient-to-br from-gray-900 to-gray-950 border-white/10">
           <CardHeader>
             <CardTitle className="text-white flex items-center gap-2">
-              <Globe className="h-5 w-5 text-[#C5FF4A]" />
+              <Globe className="h-5 w-5 text-[hsl(var(--primary))]" />
               Traffic by Country
             </CardTitle>
             <CardDescription>Where your visitors are coming from</CardDescription>
@@ -475,7 +475,7 @@ const AdminAnalytics = () => {
                       </Badge>
                     </div>
                     <div className="text-right">
-                      <span className="text-[#C5FF4A] font-bold">{country.percentage.toFixed(1)}%</span>
+                      <span className="text-[hsl(var(--primary))] font-bold">{country.percentage.toFixed(1)}%</span>
                       <span className="text-gray-500 text-xs ml-2">({country.visits})</span>
                     </div>
                   </div>
@@ -496,7 +496,7 @@ const AdminAnalytics = () => {
         <Card className="bg-gradient-to-br from-gray-900 to-gray-950 border-white/10">
           <CardHeader>
             <CardTitle className="text-white flex items-center gap-2">
-              <Share2 className="h-5 w-5 text-[#C5FF4A]" />
+              <Share2 className="h-5 w-5 text-[hsl(var(--primary))]" />
               Traffic Sources
             </CardTitle>
             <CardDescription>How visitors find your website</CardDescription>
@@ -566,7 +566,7 @@ const AdminAnalytics = () => {
       <Card className="bg-gradient-to-br from-gray-900 to-gray-950 border-white/10">
         <CardHeader>
           <CardTitle className="text-white flex items-center gap-2">
-            <Target className="h-5 w-5 text-[#C5FF4A]" />
+            <Target className="h-5 w-5 text-[hsl(var(--primary))]" />
             Top Pages
           </CardTitle>
           <CardDescription>Most visited pages on your website</CardDescription>
@@ -595,7 +595,7 @@ const AdminAnalytics = () => {
                 />
                 <Bar 
                   dataKey="visits" 
-                  fill="#C5FF4A" 
+                  fill="hsl(var(--accent-cta))" 
                   radius={[0, 4, 4, 0]}
                   name="Visits"
                 />
@@ -610,7 +610,7 @@ const AdminAnalytics = () => {
         <Card className="bg-gradient-to-br from-gray-900 to-gray-950 border-white/10">
           <CardHeader>
             <CardTitle className="text-white flex items-center gap-2">
-              <Smartphone className="h-5 w-5 text-[#C5FF4A]" />
+              <Smartphone className="h-5 w-5 text-[hsl(var(--primary))]" />
               Device Breakdown
             </CardTitle>
           </CardHeader>
@@ -627,7 +627,7 @@ const AdminAnalytics = () => {
                       <device.icon className="h-4 w-4 text-gray-400" />
                       <span className="text-white">{device.device}</span>
                     </div>
-                    <span className="text-[#C5FF4A] font-bold">{device.percentage}%</span>
+                    <span className="text-[hsl(var(--primary))] font-bold">{device.percentage}%</span>
                   </div>
                   <Progress value={device.percentage} className="h-2 bg-gray-800" />
                 </div>
@@ -639,7 +639,7 @@ const AdminAnalytics = () => {
         <Card className="bg-gradient-to-br from-gray-900 to-gray-950 border-white/10">
           <CardHeader>
             <CardTitle className="text-white flex items-center gap-2">
-              <Sparkles className="h-5 w-5 text-[#C5FF4A]" />
+              <Sparkles className="h-5 w-5 text-[hsl(var(--primary))]" />
               Engagement Metrics
             </CardTitle>
           </CardHeader>

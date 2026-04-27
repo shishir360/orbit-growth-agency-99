@@ -38,9 +38,9 @@ const ClientFeedbackCarousel: React.FC = () => {
 
   if (loading) {
     return (
-      <section className="py-20 bg-black overflow-hidden">
+      <section className="py-20 bg-background overflow-hidden">
         <div className="container mx-auto px-4 text-center">
-          <div className="animate-pulse h-64 bg-muted/20 rounded-xl"></div>
+          <div className="animate-pulse h-64 bg-slate-100 rounded-3xl"></div>
         </div>
       </section>
     );
@@ -54,11 +54,11 @@ const ClientFeedbackCarousel: React.FC = () => {
   const duplicatedScreenshots = [...screenshots, ...screenshots, ...screenshots];
 
   return (
-    <section className="py-20 bg-black overflow-hidden relative">
+    <section className="py-20 bg-background overflow-hidden relative">
       {/* Background effects */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-lime-500/5 rounded-full blur-3xl" />
+      <div className="absolute inset-0 overflow-hidden pointer-events-none bg-background">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-[120px]" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/5 rounded-full blur-[100px]" />
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
@@ -69,16 +69,14 @@ const ClientFeedbackCarousel: React.FC = () => {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-pink-500/10 border border-pink-500/20 mb-4">
-            <MessageSquare className="h-4 w-4 text-pink-400" />
-            <span className="text-sm text-pink-300">Real Client Feedback</span>
+          <div className="inline-flex items-center gap-3 bg-primary/5 backdrop-blur-xl border border-primary/20 text-primary px-6 py-3 rounded-full text-sm font-bold mb-8 shadow-sm">
+            <MessageSquare className="h-5 h-5 text-primary" />
+            <span className="text-sm">Real Client Feedback</span>
           </div>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
-            <span className="bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 bg-clip-text text-transparent">
-              What Our Clients Say
-            </span>
+          <h2 className="text-4xl lg:text-6xl font-heading font-bold mb-6 text-slate-900">
+            What Our Clients <span className="text-primary">Say</span>
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-lg text-slate-500 max-w-2xl mx-auto font-body">
             Real screenshots from happy clients sharing their success stories
           </p>
         </motion.div>
@@ -86,8 +84,8 @@ const ClientFeedbackCarousel: React.FC = () => {
         {/* Auto-scrolling Carousel - Row 1 (Left to Right) */}
         <div className="relative mb-6">
           {/* Gradient masks */}
-          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none" />
-          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none" />
+          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
           
           <div className="overflow-hidden">
             <motion.div
@@ -111,7 +109,7 @@ const ClientFeedbackCarousel: React.FC = () => {
                   whileHover={{ scale: 1.05, y: -10 }}
                   transition={{ type: 'spring', stiffness: 300 }}
                 >
-                  <div className="relative group rounded-2xl overflow-hidden border border-white/10 bg-gradient-to-br from-white/5 to-white/0 backdrop-blur-sm shadow-xl">
+                  <div className="relative group rounded-[2rem] overflow-hidden border border-white/40 bg-white/40 backdrop-blur-xl shadow-glass transition-all duration-500">
                     {/* Image */}
                     <div className="aspect-[4/5] overflow-hidden">
                       <img
@@ -126,21 +124,21 @@ const ClientFeedbackCarousel: React.FC = () => {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
                     
                     {/* Content overlay */}
-                    <div className="absolute bottom-0 left-0 right-0 p-4">
+                    <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-slate-900/90 to-transparent">
                       <div className="flex items-center gap-1 mb-2">
                         {[...Array(5)].map((_, i) => (
                           <Star key={i} className="h-3 w-3 fill-yellow-400 text-yellow-400" />
                         ))}
                       </div>
-                      <p className="text-white font-medium text-sm truncate">{screenshot.title}</p>
+                      <p className="text-white font-heading font-bold text-sm truncate">{screenshot.title}</p>
                       {screenshot.client_name && (
-                        <p className="text-white/70 text-xs mt-1">— {screenshot.client_name}</p>
+                        <p className="text-white/70 text-xs mt-1 font-body">— {screenshot.client_name}</p>
                       )}
                     </div>
 
                     {/* Quote icon */}
-                    <div className="absolute top-3 right-3 p-2 rounded-full bg-pink-500/20 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity">
-                      <Quote className="h-4 w-4 text-pink-400" />
+                    <div className="absolute top-4 right-4 p-3 rounded-full bg-primary/20 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity">
+                      <Quote className="h-4 w-4 text-primary" />
                     </div>
                   </div>
                 </motion.div>

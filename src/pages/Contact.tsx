@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Navigation from "@/components/ui/navigation";
 import Footer from "@/components/ui/footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { MessageSquare, Mail, Phone, Sparkles, Zap, Send, ArrowRight, Clock, MapPin } from "lucide-react";
+import { MessageSquare, Mail, Phone, Sparkles, Zap, Send, ArrowRight, Clock, MapPin, Play, ShieldCheck, Activity, Globe, Database, Cpu } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { Badge } from "@/components/ui/badge";
 import SEO from "@/components/ui/seo";
 import { supabase } from "@/integrations/supabase/client";
-
 
 const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -38,16 +39,16 @@ const Contact = () => {
       if (error) throw error;
 
       toast({
-        title: "Message sent!",
-        description: "We’ll get back to you within 24 hours. WhatsApp reply is delivered only if you’ve recently messaged us on WhatsApp.",
+        title: "Protocol Transmitted",
+        description: "Your absolute intelligence has been received. We will respond within 24 business hours sync.",
       });
       
       form.reset();
     } catch (error) {
       console.error('Contact form error:', error);
       toast({
-        title: "Error sending message",
-        description: "Please try again or contact us directly via email.",
+        title: "Transmission Failed",
+        description: "Neural node error. Please try again or contact us directly via email protocol.",
         variant: "destructive",
       });
     } finally {
@@ -58,208 +59,217 @@ const Contact = () => {
   const contactMethods = [
     {
       icon: MessageSquare,
-      title: "WhatsApp",
-      description: "Instant responses",
-      action: "Message us",
+      title: "WhatsApp Logic",
+      description: "Instant absolute neural responses sync",
+      action: "Initialize Node",
       href: "https://wa.me/8801339731664",
-      color: "from-green-500 to-emerald-500"
+      color: "primary"
     },
     {
       icon: Mail,
-      title: "Email",
-      description: "Detailed inquiries",
+      title: "Email Protocol",
+      description: "Detailed architectures and blueprints",
       action: "hello@lunexomedia.com",
       href: "mailto:hello@lunexomedia.com",
-      color: "from-blue-500 to-cyan-500"
+      color: "accent"
     },
     {
       icon: Phone,
-      title: "Call Us",
-      description: "Speak directly",
+      title: "Voice Intelligence",
+      description: "Direct operational sync",
       action: "+1 (702) 483-0749",
       href: "tel:+17024830749",
-      color: "from-purple-500 to-pink-500"
+      color: "primary"
     }
   ];
 
   useEffect(() => {
-    document.title = "Contact Lunexo Media | Let's Grow Your Business";
+    document.title = "Contact Absolute Intelligence | LUNEXO MEDIA";
   }, []);
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-background font-body text-slate-900 overflow-hidden">
       <SEO
-        title="Contact Lunexo Media | Let's Grow Your Business"
-        description="Get in touch with Lunexo Media for SEO, paid ads, and web design solutions."
+        title="Contact Absolute Intelligence | LUNEXO MEDIA"
+        description="Initialize your absolute protocol with Lunexo Media. Transmit your vision and let us architect your scalable digital growth logic."
         image="https://www.lunexomedia.com/og-image-new.jpg"
         url="https://www.lunexomedia.com/contact"
-        keywords="contact us, digital marketing consultation, web design quote"
+        keywords="contact us, digital marketing consultation, web design quote, absolute intelligence"
       />
       
       <Navigation />
       
-      {/* Hero */}
-      <section className="relative py-32 overflow-hidden bg-black">
-        <div className="absolute top-20 left-10 w-[500px] h-[500px] bg-gradient-to-r from-emerald-600/25 to-cyan-500/20 rounded-full blur-[150px] animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-[400px] h-[400px] bg-gradient-to-r from-cyan-600/20 to-teal-500/15 rounded-full blur-[120px]"></div>
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-[size:80px_80px]"></div>
-        
+      {/* Hero Section */}
+      <section className="relative min-h-screen flex items-center justify-center pt-32 pb-24 overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+          <div className="absolute top-[10%] left-[5%] w-[800px] h-[800px] bg-primary/10 rounded-full blur-[140px]" />
+          <div className="absolute bottom-[10%] right-[5%] w-[600px] h-[600px] bg-accent/10 rounded-full blur-[120px]" />
+        </div>
+
         <div className="container-wide section-padding relative z-10">
-          <div className="text-center max-w-4xl mx-auto">
-            <div className="inline-flex items-center gap-3 bg-gradient-to-r from-emerald-500/15 to-cyan-500/15 border border-emerald-500/30 text-emerald-400 px-6 py-3 rounded-full text-sm font-medium backdrop-blur-xl mb-8">
-              <Sparkles className="w-4 h-4" />
-              Get In Touch
-            </div>
-            
-            <h1 className="text-4xl lg:text-7xl font-bold text-white mb-6" style={{fontFamily: "'Playfair Display', serif"}}>
-              Contact
-              <br />
-              <span className="bg-gradient-to-r from-emerald-400 via-cyan-400 to-teal-400 bg-clip-text text-transparent">
-                Lunexo Media
-              </span>
-            </h1>
-            
-            <p className="text-lg text-white/70 max-w-2xl mx-auto">
-              Ready to launch your next project? We'd love to hear about your vision and discuss how we can help.
-            </p>
+          <div className="text-center max-w-7xl mx-auto space-y-16">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              <Badge className="bg-primary/10 border border-primary/20 text-primary px-10 py-4 text-sm font-black uppercase tracking-[0.4em] rounded-full backdrop-blur-xl">
+                <Sparkles className="w-5 h-5 mr-4" />
+                Initiate Absolute Growth
+              </Badge>
+            </motion.div>
+
+            <motion.h1 
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 1 }}
+              className="text-6xl sm:text-7xl lg:text-[11rem] font-heading font-bold text-slate-900 leading-[1] tracking-tighter"
+            >
+              Contact <span className="text-primary italic">Intelligence.</span>
+            </motion.h1>
+
+            <motion.p 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4, duration: 1 }}
+              className="text-3xl text-slate-500 max-w-5xl mx-auto leading-relaxed font-medium"
+            >
+              Ready to initialize your next operational node? Transmit your <span className="text-primary italic font-bold">absolute vision</span> and discuss how we can architect your scaling logic.
+            </motion.p>
           </div>
         </div>
       </section>
 
-      {/* Contact Methods */}
-      <section className="py-16 relative bg-black">
+      {/* Contact Nodes */}
+      <section className="py-48 bg-white/50 backdrop-blur-md border-y border-white/40">
         <div className="container-wide section-padding">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-7xl mx-auto">
             {contactMethods.map((method, i) => (
-              <a
+              <motion.a
                 key={i}
                 href={method.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-sm hover:bg-white/10 hover:border-white/20 transition-all duration-300 text-center"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1, duration: 1 }}
+                className="group bg-white/40 backdrop-blur-xl border border-white/60 rounded-[4rem] p-16 text-center hover:shadow-glass transition-all duration-1000 hover:translate-y-[-15px]"
               >
-                <div className={`w-14 h-14 rounded-xl bg-gradient-to-r ${method.color} flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:scale-110 transition-transform`}>
-                  <method.icon className="w-7 h-7 text-white" />
+                <div className="w-24 h-24 bg-slate-900 rounded-[2rem] flex items-center justify-center border border-white/20 mx-auto mb-10 group-hover:bg-primary transition-all duration-700 shadow-2xl group-hover:rotate-12">
+                  <method.icon className="w-12 h-12 text-white" />
                 </div>
-                <h3 className="text-lg font-bold text-white mb-1">{method.title}</h3>
-                <p className="text-white/70 text-sm mb-3">{method.description}</p>
-                <span className="text-emerald-400 font-medium">{method.action}</span>
-              </a>
+                <div className="space-y-6 mb-8">
+                   <h3 className="text-4xl font-heading font-bold text-slate-900 tracking-tight">{method.title}</h3>
+                   <p className="text-2xl text-slate-500 font-medium leading-relaxed">{method.description}</p>
+                </div>
+                <div className="pt-8 border-t border-white/60">
+                   <span className="text-primary font-black uppercase tracking-[0.4em] text-xs group-hover:text-slate-900 transition-colors">{method.action}</span>
+                </div>
+              </motion.a>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Contact Form */}
-      <section className="py-24 relative overflow-hidden bg-black">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-r from-emerald-600/15 to-cyan-500/15 rounded-full blur-[150px]"></div>
-        
+      {/* Form Section */}
+      <section className="py-48 bg-background relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[140px] pointer-events-none" />
         <div className="container-wide section-padding relative z-10">
-          <div className="max-w-3xl mx-auto">
-            <div className="text-center mb-12">
-              <div className="inline-flex items-center gap-3 bg-gradient-to-r from-emerald-500/15 to-cyan-500/15 border border-emerald-500/30 text-emerald-400 px-6 py-3 rounded-full text-sm font-medium mb-6">
-                <Zap className="w-4 h-4" />
-                Book Your Free Consultation
+          <div className="grid lg:grid-cols-2 gap-24 max-w-7xl mx-auto items-start">
+            <div className="space-y-16">
+              <div className="space-y-12">
+                <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+                  <Badge className="bg-primary/10 border border-primary/20 text-primary px-10 py-4 text-sm font-black uppercase tracking-[0.4em] rounded-full backdrop-blur-xl">
+                    <Clock className="w-5 h-5 mr-4" />
+                    Operational Velocity
+                  </Badge>
+                </motion.div>
+                <h2 className="text-6xl lg:text-[8rem] font-heading font-bold text-slate-900 leading-[1] tracking-tighter">
+                  Transmit <br /> <span className="text-primary italic">Project Logic.</span>
+                </h2>
+                <p className="text-3xl text-slate-500 font-medium leading-relaxed max-w-2xl">
+                  Fill out the protocol form to book your absolute strategy consultation. We execute responses within 24 business hours sync.
+                </p>
               </div>
-              <h2 className="text-3xl lg:text-5xl font-bold text-white mb-4" style={{fontFamily: "'Playfair Display', serif"}}>
-                Let's Discuss Your <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">Project</span>
-              </h2>
+
+              <div className="space-y-12 pt-8">
+                <div className="flex items-center gap-10 group bg-white/40 backdrop-blur-xl border border-white/60 p-10 rounded-[3rem] hover:shadow-glass transition-all duration-700 hover:translate-x-5">
+                  <div className="w-24 h-24 bg-slate-900 rounded-[2rem] flex items-center justify-center text-white group-hover:bg-primary transition-all duration-700 shadow-2xl flex-shrink-0 group-hover:rotate-12">
+                    <Zap className="w-12 h-12" />
+                  </div>
+                  <div className="space-y-4">
+                    <h4 className="text-4xl font-heading font-bold text-slate-900">Absolute Execution</h4>
+                    <p className="text-2xl text-slate-500 font-medium">Telemetry response within 24 hours.</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-10 group bg-white/40 backdrop-blur-xl border border-white/60 p-10 rounded-[3rem] hover:shadow-glass transition-all duration-700 hover:translate-x-5">
+                  <div className="w-24 h-24 bg-slate-900 rounded-[2rem] flex items-center justify-center text-white group-hover:bg-primary transition-all duration-700 shadow-2xl flex-shrink-0 group-hover:rotate-12">
+                    <Globe className="w-12 h-12" />
+                  </div>
+                  <div className="space-y-4">
+                    <h4 className="text-4xl font-heading font-bold text-slate-900">Global Node Network</h4>
+                    <p className="text-2xl text-slate-500 font-medium">Servicing absolute clients worldwide.</p>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-8 lg:p-10 backdrop-blur-sm">
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="firstName" className="text-white">First Name *</Label>
+            <motion.div 
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1 }}
+              className="bg-white/40 backdrop-blur-xl border border-white/60 rounded-[5rem] p-16 lg:p-24 shadow-glass hover:shadow-2xl transition-all duration-700"
+            >
+              <form onSubmit={handleSubmit} className="space-y-12">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                  <div className="space-y-4">
+                    <Label htmlFor="firstName" className="text-slate-900 font-black uppercase tracking-[0.3em] text-xs ml-4">First Name *</Label>
                     <Input 
                       id="firstName" 
                       name="firstName" 
                       required 
-                      className="h-12 bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-emerald-500"
+                      className="h-24 bg-white/60 border-white/60 rounded-[3rem] px-10 focus:border-primary/50 focus:bg-white text-slate-900 font-bold text-xl placeholder:text-slate-400 transition-all duration-300 shadow-inner"
                       placeholder="John"
                     />
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="lastName" className="text-white">Last Name *</Label>
+                  <div className="space-y-4">
+                    <Label htmlFor="lastName" className="text-slate-900 font-black uppercase tracking-[0.3em] text-xs ml-4">Last Name *</Label>
                     <Input 
                       id="lastName" 
                       name="lastName" 
                       required 
-                      className="h-12 bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-emerald-500"
+                      className="h-24 bg-white/60 border-white/60 rounded-[3rem] px-10 focus:border-primary/50 focus:bg-white text-slate-900 font-bold text-xl placeholder:text-slate-400 transition-all duration-300 shadow-inner"
                       placeholder="Doe"
                     />
                   </div>
                 </div>
                 
-                <div className="space-y-2">
-                  <Label htmlFor="email" className="text-white">Email Address *</Label>
+                <div className="space-y-4">
+                  <Label htmlFor="email" className="text-slate-900 font-black uppercase tracking-[0.3em] text-xs ml-4">Email Architecture *</Label>
                   <Input 
                     id="email" 
                     name="email" 
                     type="email" 
                     required 
-                    className="h-12 bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-emerald-500"
+                    className="h-24 bg-white/60 border-white/60 rounded-[3rem] px-10 focus:border-primary/50 focus:bg-white text-slate-900 font-bold text-xl placeholder:text-slate-400 transition-all duration-300 shadow-inner"
                     placeholder="john@company.com"
                   />
                 </div>
                 
-                <div className="space-y-2">
-                  <Label htmlFor="phone" className="text-white">Phone Number *</Label>
-                  <div className="flex gap-3">
+                <div className="space-y-4">
+                  <Label htmlFor="phone" className="text-slate-900 font-black uppercase tracking-[0.3em] text-xs ml-4">Voice Protocol *</Label>
+                  <div className="flex gap-6">
                     <select 
                       id="countryCode" 
                       name="countryCode"
                       required
-                      className="h-12 px-4 border border-white/10 rounded-md bg-zinc-900 text-white min-w-[100px] focus:border-emerald-500"
+                      className="h-24 px-10 border-white/60 border rounded-[3rem] bg-white/60 text-slate-900 font-bold text-xl focus:border-primary/50 focus:bg-white min-w-[160px] appearance-none transition-all duration-300 shadow-inner"
                     >
-                      <option value="+1" className="bg-zinc-900 text-white">🇺🇸 +1</option>
-                      <option value="+1" className="bg-zinc-900 text-white">🇨🇦 +1</option>
-                      <option value="+44" className="bg-zinc-900 text-white">🇬🇧 +44</option>
-                      <option value="+91" className="bg-zinc-900 text-white">🇮🇳 +91</option>
-                      <option value="+880" className="bg-zinc-900 text-white">🇧🇩 +880</option>
-                      <option value="+61" className="bg-zinc-900 text-white">🇦🇺 +61</option>
-                      <option value="+49" className="bg-zinc-900 text-white">🇩🇪 +49</option>
-                      <option value="+33" className="bg-zinc-900 text-white">🇫🇷 +33</option>
-                      <option value="+971" className="bg-zinc-900 text-white">🇦🇪 +971</option>
-                      <option value="+966" className="bg-zinc-900 text-white">🇸🇦 +966</option>
-                      <option value="+92" className="bg-zinc-900 text-white">🇵🇰 +92</option>
-                      <option value="+81" className="bg-zinc-900 text-white">🇯🇵 +81</option>
-                      <option value="+86" className="bg-zinc-900 text-white">🇨🇳 +86</option>
-                      <option value="+82" className="bg-zinc-900 text-white">🇰🇷 +82</option>
-                      <option value="+65" className="bg-zinc-900 text-white">🇸🇬 +65</option>
-                      <option value="+60" className="bg-zinc-900 text-white">🇲🇾 +60</option>
-                      <option value="+39" className="bg-zinc-900 text-white">🇮🇹 +39</option>
-                      <option value="+34" className="bg-zinc-900 text-white">🇪🇸 +34</option>
-                      <option value="+31" className="bg-zinc-900 text-white">🇳🇱 +31</option>
-                      <option value="+55" className="bg-zinc-900 text-white">🇧🇷 +55</option>
-                      <option value="+52" className="bg-zinc-900 text-white">🇲🇽 +52</option>
-                      <option value="+27" className="bg-zinc-900 text-white">🇿🇦 +27</option>
-                      <option value="+234" className="bg-zinc-900 text-white">🇳🇬 +234</option>
-                      <option value="+20" className="bg-zinc-900 text-white">🇪🇬 +20</option>
-                      <option value="+7" className="bg-zinc-900 text-white">🇷🇺 +7</option>
-                      <option value="+380" className="bg-zinc-900 text-white">🇺🇦 +380</option>
-                      <option value="+48" className="bg-zinc-900 text-white">🇵🇱 +48</option>
-                      <option value="+90" className="bg-zinc-900 text-white">🇹🇷 +90</option>
-                      <option value="+62" className="bg-zinc-900 text-white">🇮🇩 +62</option>
-                      <option value="+63" className="bg-zinc-900 text-white">🇵🇭 +63</option>
-                      <option value="+66" className="bg-zinc-900 text-white">🇹🇭 +66</option>
-                      <option value="+84" className="bg-zinc-900 text-white">🇻🇳 +84</option>
-                      <option value="+64" className="bg-zinc-900 text-white">🇳🇿 +64</option>
-                      <option value="+353" className="bg-zinc-900 text-white">🇮🇪 +353</option>
-                      <option value="+41" className="bg-zinc-900 text-white">🇨🇭 +41</option>
-                      <option value="+43" className="bg-zinc-900 text-white">🇦🇹 +43</option>
-                      <option value="+32" className="bg-zinc-900 text-white">🇧🇪 +32</option>
-                      <option value="+46" className="bg-zinc-900 text-white">🇸🇪 +46</option>
-                      <option value="+47" className="bg-zinc-900 text-white">🇳🇴 +47</option>
-                      <option value="+45" className="bg-zinc-900 text-white">🇩🇰 +45</option>
-                      <option value="+358" className="bg-zinc-900 text-white">🇫🇮 +358</option>
-                      <option value="+351" className="bg-zinc-900 text-white">🇵🇹 +351</option>
-                      <option value="+30" className="bg-zinc-900 text-white">🇬🇷 +30</option>
-                      <option value="+972" className="bg-zinc-900 text-white">🇮🇱 +972</option>
-                      <option value="+974" className="bg-zinc-900 text-white">🇶🇦 +974</option>
-                      <option value="+968" className="bg-zinc-900 text-white">🇴🇲 +968</option>
-                      <option value="+965" className="bg-zinc-900 text-white">🇰🇼 +965</option>
-                      <option value="+973" className="bg-zinc-900 text-white">🇧🇭 +973</option>
+                      <option value="+1">🇺🇸 +1</option>
+                      <option value="+44">🇬🇧 +44</option>
+                      <option value="+880">🇧🇩 +880</option>
+                      <option value="+971">🇦🇪 +971</option>
                     </select>
                     <Input 
                       id="phone" 
@@ -267,88 +277,92 @@ const Contact = () => {
                       type="tel" 
                       required
                       placeholder="123 456 7890"
-                      className="flex-1 h-12 bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-emerald-500"
+                      className="flex-1 h-24 bg-white/60 border-white/60 rounded-[3rem] px-10 focus:border-primary/50 focus:bg-white text-slate-900 font-bold text-xl placeholder:text-slate-400 transition-all duration-300 shadow-inner"
                     />
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="company" className="text-white">Company Name</Label>
-                  <Input 
-                    id="company" 
-                    name="company" 
-                    className="h-12 bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-emerald-500"
-                    placeholder="Your company"
-                  />
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="service" className="text-white">Service Interest *</Label>
+                <div className="space-y-4">
+                  <Label htmlFor="service" className="text-slate-900 font-black uppercase tracking-[0.3em] text-xs ml-4">Service Logic *</Label>
                   <select 
                     id="service" 
                     name="service"
-                    className="w-full h-12 px-4 border border-white/10 rounded-md bg-zinc-900 text-white focus:border-emerald-500"
+                    className="w-full h-24 px-10 border-white/60 border rounded-[3rem] bg-white/60 text-slate-900 font-bold text-xl focus:border-primary/50 focus:bg-white appearance-none transition-all duration-300 shadow-inner"
                     required
                   >
-                    <option value="" className="bg-zinc-900 text-white">Select a service</option>
-                    <option value="website-design" className="bg-zinc-900 text-white">Website Design</option>
-                    <option value="ads-management" className="bg-zinc-900 text-white">Ads Management</option>
-                    <option value="ai-automation" className="bg-zinc-900 text-white">AI Automation</option>
-                    <option value="complete-package" className="bg-zinc-900 text-white">Complete Package</option>
-                    <option value="consultation" className="bg-zinc-900 text-white">Consultation</option>
+                    <option value="">Select a protocol</option>
+                    <option value="website-design">Digital Architecture</option>
+                    <option value="ads-management">ROI Orchestration</option>
+                    <option value="ai-automation">Intelligence Logic</option>
+                    <option value="consultation">Strategic Consultation</option>
                   </select>
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="message" className="text-white">Project Details *</Label>
+                <div className="space-y-4">
+                  <Label htmlFor="message" className="text-slate-900 font-black uppercase tracking-[0.3em] text-xs ml-4">Project Details *</Label>
                   <Textarea 
                     id="message" 
                     name="message" 
                     required
-                    rows={4}
-                    className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-emerald-500"
-                    placeholder="Tell us about your project..."
+                    rows={5}
+                    className="bg-white/60 border-white/60 rounded-[3rem] px-10 py-8 focus:border-primary/50 focus:bg-white text-slate-900 font-bold text-xl placeholder:text-slate-400 min-h-[250px] transition-all duration-300 shadow-inner resize-none"
+                    placeholder="Tell us about your absolute project goals..."
                   />
                 </div>
 
-                <Button 
-                  type="submit" 
-                  size="lg"
-                  disabled={isSubmitting}
-                  className="w-full bg-[#C5FF4A] hover:bg-[#d4ff6a] text-black rounded-xl h-14 text-lg font-semibold shadow-2xl shadow-[#C5FF4A]/30"
-                >
-                  {isSubmitting ? (
-                    <>Sending...</>
-                  ) : (
-                    <>
-                      Send Message
-                      <Send className="w-5 h-5 ml-2" />
-                    </>
-                  )}
-                </Button>
+                <div className="pt-8">
+                  <Button 
+                    type="submit" 
+                    size="lg"
+                    disabled={isSubmitting}
+                    className="w-full py-16 rounded-[4rem] font-bold text-3xl bg-slate-900 text-white hover:bg-primary hover:text-white shadow-2xl transition-all duration-700 group hover:scale-105"
+                  >
+                    {isSubmitting ? (
+                      "Transmitting..."
+                    ) : (
+                      <span className="flex items-center justify-center">
+                        Transmit Protocol
+                        <Send className="w-10 h-10 ml-8 group-hover:translate-x-5 transition-transform" />
+                      </span>
+                    )}
+                  </Button>
+                </div>
               </form>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="py-24 relative overflow-hidden bg-black">
-        <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/15 via-transparent to-cyan-600/15"></div>
-        
-        <div className="container-wide section-padding relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl lg:text-5xl font-bold text-white mb-6" style={{fontFamily: "'Playfair Display', serif"}}>
-              Prefer a <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">Quick Call?</span>
+      {/* Gateway CTA */}
+      <section className="py-48 bg-slate-900 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-accent/20 opacity-40" />
+        <div className="container-wide section-padding relative z-10 text-center">
+          <div className="max-w-7xl mx-auto space-y-24">
+             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+              <Badge className="bg-white/10 text-white border-white/20 px-10 py-4 rounded-full text-sm font-black uppercase tracking-[0.4em] backdrop-blur-xl">
+                Absolute Telemetry Sync
+              </Badge>
+            </motion.div>
+            <h2 className="text-6xl lg:text-[11rem] font-heading font-bold text-white leading-[1] tracking-tighter">
+              Prefer a <br /> <span className="text-primary italic">Quick Sync?</span>
             </h2>
-            <p className="text-lg text-white/70 mb-8">
-              Book a free 15-minute strategy call with our team.
+            <p className="text-3xl text-slate-300 font-body leading-relaxed max-w-5xl mx-auto font-medium">
+              Book a free absolute strategy session with our team. No obligation, pure intelligence value.
             </p>
-            <Button asChild size="lg" className="bg-[#C5FF4A] hover:bg-[#d4ff6a] text-black rounded-full px-10 py-7 font-semibold shadow-2xl shadow-[#C5FF4A]/30">
-              <a href="https://lunexomedia.com/book-apartment">
-                Book a Call <ArrowRight className="w-4 h-4 ml-2" />
-              </a>
-            </Button>
+            <div className="pt-16">
+              <Button asChild size="lg" className="bg-primary text-white hover:bg-primary/90 text-3xl px-24 py-16 rounded-full font-bold shadow-2xl transition-all duration-700 hover:scale-110 group"
+              >
+                <a href="https://lunexomedia.com/book-apartment" className="flex items-center">
+                  Book Strategy Session <ArrowRight className="w-10 h-10 ml-8 group-hover:translate-x-5 transition-transform" />
+                </a>
+              </Button>
+            </div>
+             <div className="pt-24 flex items-center justify-center gap-16 opacity-30 text-white">
+               <ShieldCheck className="w-10 h-10" />
+               <Cpu className="w-10 h-10" />
+               <Database className="w-10 h-10" />
+               <Activity className="w-10 h-10" />
+            </div>
           </div>
         </div>
       </section>

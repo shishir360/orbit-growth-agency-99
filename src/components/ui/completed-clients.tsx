@@ -38,14 +38,14 @@ const CompletedClients = () => {
   const duplicatedClients = [...clients, ...clients, ...clients];
 
   return (
-    <section className="py-24 relative overflow-hidden">
+    <section className="py-24 relative overflow-hidden border-b border-white/20">
       {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0f] via-[#0f0f1a] to-[#0a0a0f]" />
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.01)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.01)_1px,transparent_1px)] bg-[size:60px_60px]" />
+      <div className="absolute inset-0 bg-background/50" />
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(236,72,153,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(236,72,153,.02)_1px,transparent_1px)] bg-[size:60px_60px]" />
       
       {/* Gradient orbs */}
-      <div className="absolute top-1/2 left-1/4 w-[400px] h-[400px] bg-emerald-600/10 rounded-full blur-[120px]" />
-      <div className="absolute top-1/2 right-1/4 w-[300px] h-[300px] bg-cyan-600/10 rounded-full blur-[100px]" />
+      <div className="absolute top-1/2 left-1/4 w-[400px] h-[400px] bg-primary/5 rounded-full blur-[120px]" />
+      <div className="absolute top-1/2 right-1/4 w-[300px] h-[300px] bg-accent/5 rounded-full blur-[100px]" />
       
       <div className="container-wide section-padding relative z-10">
         {/* Header */}
@@ -54,33 +54,27 @@ const CompletedClients = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-3 bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 backdrop-blur-xl border border-emerald-500/30 text-emerald-300 px-6 py-3 rounded-full text-sm font-semibold mb-8"
+            className="inline-flex items-center gap-3 bg-primary/5 backdrop-blur-xl border border-primary/20 text-primary px-6 py-3 rounded-full text-sm font-bold mb-8 shadow-sm"
           >
             <Award className="w-5 h-5" />
-            Our Clients
-            <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
+            Elite Partners
+            <span className="w-2 h-2 bg-primary rounded-full animate-pulse"></span>
           </motion.div>
           
           <motion.h2 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-4xl lg:text-6xl font-bold mb-6" 
-            style={{fontFamily: "'Playfair Display', serif"}}
+            className="text-4xl lg:text-6xl font-heading font-bold mb-6 text-slate-900"
           >
-            <span className="bg-gradient-to-r from-white to-white/60 bg-clip-text text-transparent">
-              Clients We've{" "}
-            </span>
-            <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-              Worked With
-            </span>
+            Clients We've <span className="text-primary">Worked With</span>
           </motion.h2>
           
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-lg text-white/50 max-w-2xl mx-auto"
+            className="text-lg text-slate-500 max-w-2xl mx-auto font-body"
           >
             Proud to have delivered exceptional results for these amazing businesses
           </motion.p>
@@ -89,8 +83,8 @@ const CompletedClients = () => {
         {/* Infinite Scroll Animation */}
         <div className="relative">
           {/* Gradient masks */}
-          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#0a0a0f] to-transparent z-10" />
-          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#0a0a0f] to-transparent z-10" />
+          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-background to-transparent z-10" />
+          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-background to-transparent z-10" />
           
           <div className="overflow-hidden">
             <motion.div 
@@ -113,7 +107,7 @@ const CompletedClients = () => {
                       href={client.website_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group relative block w-48 h-32 bg-white/5 backdrop-blur-xl border border-white/10 hover:border-emerald-500/50 rounded-2xl p-6 transition-all duration-500 hover:shadow-[0_0_40px_rgba(16,185,129,0.2)]"
+                      className="group relative block w-48 h-32 bg-white/40 backdrop-blur-xl border border-white/40 hover:border-primary/50 rounded-2xl p-6 transition-all duration-500 hover:shadow-glass"
                     >
                       {/* Hover glow */}
                       <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/0 to-cyan-500/0 group-hover:from-emerald-500/10 group-hover:to-cyan-500/10 rounded-2xl transition-all duration-500" />

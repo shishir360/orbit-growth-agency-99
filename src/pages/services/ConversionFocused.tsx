@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import Navigation from "@/components/ui/navigation";
 import Footer from "@/components/ui/footer";
 import SEO from "@/components/ui/seo";
@@ -15,7 +17,13 @@ import {
   Brain,
   Eye,
   ShieldCheck,
-  BarChart
+  BarChart,
+  ArrowRight,
+  Sparkles,
+  ChevronRight,
+  Activity,
+  Cpu,
+  Database
 } from "lucide-react";
 
 const ConversionFocused = () => {
@@ -23,64 +31,64 @@ const ConversionFocused = () => {
     "Strategic CTAs Placement",
     "Trust Signals Integration", 
     "User Journey Optimization",
-    "A/B Testing Ready",
+    "A/B Testing Framework",
     "Psychological Design Triggers",
-    "Social Proof Elements",
-    "Urgency & Scarcity Tactics",
+    "Social Proof Architecture",
+    "Urgency & Scarcity Logic",
     "Mobile-First Conversion"
   ];
 
   const stats = [
-    { icon: <TrendingUp className="w-6 h-6" />, stat: "180%", label: "Average Conversion Boost" },
-    { icon: <Target className="w-6 h-6" />, stat: "4.2%", label: "Average Conversion Rate" },
-    { icon: <Users className="w-6 h-6" />, stat: "73%", label: "User Engagement Increase" },
-    { icon: <BarChart className="w-6 h-6" />, stat: "2.8x", label: "Revenue Multiplier" }
+    { icon: <TrendingUp className="w-10 h-10" />, stat: "180%", label: "Average Conversion Boost" },
+    { icon: <Target className="w-10 h-10" />, stat: "4.2%", label: "Top-Tier Conversion Rate" },
+    { icon: <Users className="w-10 h-10" />, stat: "73%", label: "User Engagement Surge" },
+    { icon: <BarChart className="w-10 h-10" />, stat: "2.8x", label: "Revenue Multiplier" }
   ];
 
   const conversionElements = [
     {
-      icon: <Brain className="w-8 h-8" />,
+      icon: <Brain className="w-12 h-12" />,
       title: "Psychology-Driven Design",
-      description: "We use proven psychological principles to influence user behavior and guide visitors toward conversion actions.",
-      techniques: ["Color Psychology", "Visual Hierarchy", "Cognitive Load Reduction", "Decision Architecture"]
+      description: "We utilize proven cognitive absolute principles to influence user behavior and guide visitors toward conversion logic.",
+      techniques: ["Color Psychology Logic", "Visual Hierarchy Sync", "Cognitive Load Reduction", "Decision Architecture"]
     },
     {
-      icon: <MousePointer className="w-8 h-8" />,
+      icon: <MousePointer className="w-12 h-12" />,
       title: "Strategic CTA Placement",
-      description: "Call-to-action buttons positioned at optimal locations using heat map data and user behavior analysis.",
-      techniques: ["Above-the-Fold CTAs", "Exit-Intent Popups", "Sticky Navigation", "Multiple CTA Variations"]
+      description: "Call-to-action systems positioned at optimal absolute locations using heat map data and user behavior analysis.",
+      techniques: ["Above-the-Fold CTAs", "Exit-Intent Logic", "Sticky Navigation Sync", "Dynamic CTA Variations"]
     },
     {
-      icon: <ShieldCheck className="w-8 h-8" />,
-      title: "Trust Signal Integration",
-      description: "Build credibility and reduce purchase anxiety with strategically placed trust elements throughout the site.",
-      techniques: ["Customer Reviews", "Security Badges", "Money-Back Guarantees", "Client Testimonials"]
+      icon: <ShieldCheck className="w-12 h-12" />,
+      title: "Trust Signal Architecture",
+      description: "Build absolute credibility and eliminate purchase anxiety with strategically placed high-trust absolute elements.",
+      techniques: ["Customer Review Logic", "Security Badge Sync", "Risk Reversal Protocol", "Client Testimonials"]
     },
     {
-      icon: <Eye className="w-8 h-8" />,
-      title: "User Experience Optimization",
-      description: "Seamless user journeys that eliminate friction and guide visitors naturally toward your conversion goals.",
-      techniques: ["Simplified Forms", "Progress Indicators", "Mobile Optimization", "Fast Loading Speed"]
+      icon: <Eye className="w-12 h-12" />,
+      title: "User Experience Logic",
+      description: "Seamless user journeys that eliminate friction and guide visitors naturally toward your absolute conversion goals.",
+      techniques: ["Simplified Form Logic", "Progress Indicators", "Mobile Optimization Sync", "Instant Loading Protocol"]
     }
   ];
 
   const caseStudy = {
-    title: "E-commerce Fashion Store",
-    challenge: "Low conversion rate of 0.8% despite high traffic",
-    solution: "Complete UX redesign with conversion optimization",
+    title: "E-commerce Fashion House",
+    challenge: "Low conversion rate of 0.8% despite high traffic repository",
+    solution: "Complete UX redesign with absolute conversion optimization",
     results: [
-      { metric: "Conversion Rate", before: "0.8%", after: "3.2%", improvement: "+300%" },
-      { metric: "Average Order Value", before: "$45", after: "$78", improvement: "+73%" },
-      { metric: "Cart Abandonment", before: "85%", after: "42%", improvement: "-51%" },
-      { metric: "Revenue", before: "$15K/mo", after: "$48K/mo", improvement: "+220%" }
+      { metric: "Conversion Rate", before: "0.8%", after: "3.2%", improvement: "+300% Delta" },
+      { metric: "Avg Order Value", before: "$45", after: "$78", improvement: "+73% Lift" },
+      { metric: "Cart Abandonment", before: "85%", after: "42%", improvement: "-51% Logic" },
+      { metric: "Monthly Revenue", before: "$15K", after: "$48K", improvement: "+220% ROI" }
     ]
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background font-body text-slate-900 overflow-hidden">
       <SEO
-        title="Conversion Focused Website Design | Lunexo Media"
-        description="Increase your website conversions with psychology-driven design. Our conversion optimization strategies turn more visitors into customers and boost your revenue."
+        title="Absolute Conversion Design - Psychology-Driven Architecture | LUNEXO MEDIA"
+        description="Increase your absolute website conversions with psychology-driven design. Our conversion optimization strategies turn more visitors into absolute customers."
         image="https://www.lunexomedia.com/og-image-new.jpg"
         url="https://www.lunexomedia.com/services/conversion-focused"
         keywords="conversion focused website, conversion optimization, CRO, increase conversions"
@@ -89,246 +97,318 @@ const ConversionFocused = () => {
       <Navigation />
       
       {/* Hero Section */}
-      <section className="py-24 bg-gradient-to-br from-background via-background/50 to-muted/30">
-        <div className="container-wide section-padding">
-          <div className="max-w-4xl mx-auto text-center">
-            <Button variant="outline" size="sm" className="mb-6" asChild>
-              <Link to="/website-design">
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Back to Website Design
-              </Link>
-            </Button>
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-32 pb-24">
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+          <div className="absolute top-[10%] left-[5%] w-[800px] h-[800px] bg-primary/10 rounded-full blur-[140px]" />
+          <div className="absolute bottom-[10%] right-[5%] w-[600px] h-[600px] bg-accent/10 rounded-full blur-[120px]" />
+        </div>
+
+        <div className="container-wide section-padding relative z-10">
+          <div className="text-center max-w-7xl mx-auto space-y-16">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              <Badge className="bg-primary/10 border border-primary/20 text-primary px-10 py-4 rounded-full text-sm font-black uppercase tracking-[0.4em] backdrop-blur-xl">
+                <TrendingUp className="w-5 h-5 mr-4" />
+                Performance Engineering
+              </Badge>
+            </motion.div>
+
+            <motion.h1 
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 1 }}
+              className="text-6xl sm:text-7xl lg:text-[11rem] font-heading font-bold text-slate-900 leading-[1] tracking-tighter"
+            >
+              Conversion <br /> <span className="text-primary italic">Intelligence.</span>
+            </motion.h1>
+
+            <motion.p 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4, duration: 1 }}
+              className="text-3xl text-slate-500 max-w-5xl mx-auto leading-relaxed font-medium"
+            >
+              Transform your digital interface into a high-octane revenue machine. Our absolute architectures use psychology and data to turn <span className="text-primary italic font-bold">visitors into absolute loyalists.</span>
+            </motion.p>
             
-            <Badge variant="outline" className="mb-4 text-primary border-primary/20">
-              <TrendingUp className="w-4 h-4 mr-2" />
-              Conversion Optimization
-            </Badge>
-            
-            <h1 className="text-4xl lg:text-6xl font-bold mb-6 bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-              Conversion-Focused Websites
-            </h1>
-            
-            <p className="text-xl text-muted-foreground mb-10 leading-relaxed max-w-3xl mx-auto">
-              Transform your website into a customer-generating machine. Our conversion-focused designs use psychology, data, and proven strategies to turn more visitors into paying customers.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild size="lg" className="text-lg px-8 py-4">
-                <a href="https://lunexomedia.com/contact">
-                  Boost My Conversions
-                </a>
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6, duration: 1 }}
+              className="flex flex-col sm:flex-row gap-10 justify-center pt-12"
+            >
+              <Button size="lg" className="bg-slate-900 text-white hover:bg-slate-800 text-3xl px-24 py-16 rounded-full font-bold shadow-2xl transition-all duration-700 hover:scale-110 group" asChild
+              >
+                <Link to="/contact" className="flex items-center gap-6">
+                  Maximize Revenue
+                  <ArrowRight className="w-10 h-10 group-hover:translate-x-5 transition-transform" />
+                </Link>
               </Button>
-              <Button asChild size="lg" variant="outline" className="text-lg px-8 py-4">
-                <a href="https://lunexomedia.com/portfolio">
-                  See Conversion Results
-                </a>
-              </Button>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
 
-      {/* Conversion Impact Section */}
-      <section className="py-20 bg-white">
+      {/* Performance Metrics Delta */}
+      <section className="py-48 bg-white/50 backdrop-blur-md border-y border-white/40 relative">
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[140px] pointer-events-none" />
         <div className="container-wide section-padding">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold mb-6">
-              Proven Conversion Results
+          <div className="text-center mb-32 space-y-12">
+             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+                <Badge className="bg-primary/10 border border-primary/20 text-primary px-10 py-4 rounded-full text-sm font-black uppercase tracking-[0.4em]">
+                  <Activity className="w-5 h-5 mr-4" />
+                  Absolute Conversion Impact
+                </Badge>
+              </motion.div>
+            <h2 className="text-6xl lg:text-[11rem] font-heading font-bold text-slate-900 mb-10 leading-[1.05] tracking-tighter">
+              Impact <span className="text-primary italic">Delta.</span>
             </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Our conversion-optimized websites consistently outperform industry averages and drive measurable business growth.
-            </p>
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 text-center mb-16">
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 max-w-7xl mx-auto">
             {stats.map((item, index) => (
-              <div key={index} className="group">
-                <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center text-primary mx-auto mb-4 group-hover:bg-primary group-hover:text-white transition-all duration-300">
+              <motion.div 
+                key={index} 
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1, duration: 1 }}
+                className="group bg-white/40 backdrop-blur-xl border border-white/60 rounded-[4rem] p-16 text-center hover:shadow-glass transition-all duration-1000 flex flex-col items-center gap-10 hover:translate-y-[-15px]"
+              >
+                <div className="w-24 h-24 bg-slate-900 text-white rounded-[2rem] flex items-center justify-center mx-auto shadow-2xl group-hover:bg-primary transition-all duration-700 group-hover:rotate-12">
                   {item.icon}
                 </div>
-                <div className="text-3xl font-bold text-foreground mb-2">{item.stat}</div>
-                <div className="text-sm text-muted-foreground">{item.label}</div>
-              </div>
+                <div className="space-y-4">
+                  <div className="text-6xl font-heading font-black text-primary tracking-tighter">{item.stat}</div>
+                  <h3 className="text-3xl font-heading font-bold text-slate-900 tracking-tight leading-tight">{item.label}</h3>
+                </div>
+                <div className="pt-8 border-t border-white/60 w-full opacity-20">
+                   <TrendingUp className="w-8 h-8 mx-auto" />
+                </div>
+              </motion.div>
             ))}
           </div>
 
-          <div className="bg-gradient-to-r from-blue-50 to-green-50 p-8 rounded-2xl max-w-4xl mx-auto">
-            <h3 className="text-2xl font-bold text-center mb-8">Industry Conversion Rate Comparison</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
-              <div className="p-4">
-                <div className="text-3xl font-bold text-red-600 mb-2">2.35%</div>
-                <div className="text-sm text-muted-foreground">Industry Average</div>
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1 }}
+            className="mt-32 bg-slate-900 p-20 lg:p-32 rounded-[5rem] max-w-7xl mx-auto shadow-2xl relative overflow-hidden"
+          >
+            <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-primary/20 rounded-full blur-[120px] pointer-events-none" />
+            <h3 className="text-5xl font-heading font-bold text-center text-white mb-20 tracking-tight leading-tight">Global Conversion Matrix</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-16 text-center">
+              <div className="space-y-8 p-12 bg-white/5 rounded-[3rem] border border-white/10 hover:bg-white/10 transition-all duration-500">
+                <div className="text-6xl font-heading font-black text-slate-500 tracking-tighter">2.35%</div>
+                <div className="text-[10px] font-black text-slate-400 uppercase tracking-[0.5em]">Industry Average</div>
               </div>
-              <div className="p-4">
-                <div className="text-3xl font-bold text-orange-600 mb-2">3.68%</div>
-                <div className="text-sm text-muted-foreground">Top 25% Websites</div>
+              <div className="space-y-8 p-12 bg-white/10 rounded-[3rem] border border-white/20 hover:bg-white/20 transition-all duration-500 scale-110">
+                <div className="text-6xl font-heading font-black text-white tracking-tighter">3.68%</div>
+                <div className="text-[10px] font-black text-slate-300 uppercase tracking-[0.5em]">Top 25% Sites</div>
               </div>
-              <div className="p-4">
-                <div className="text-3xl font-bold text-green-600 mb-2">5.31%</div>
-                <div className="text-sm text-muted-foreground">Our Client Average</div>
+              <div className="space-y-8 p-12 bg-primary/20 rounded-[3rem] border border-primary/20 hover:bg-primary/30 transition-all duration-500">
+                <div className="text-6xl font-heading font-black text-primary tracking-tighter">5.31%</div>
+                <div className="text-[10px] font-black text-primary uppercase tracking-[0.5em]">Our Client Average</div>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* Conversion Elements */}
-      <section className="py-20 bg-muted/30">
+      {/* Revenue Playbook Protocols */}
+      <section className="py-48 bg-background relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-[800px] h-[800px] bg-primary/5 rounded-full blur-[180px] pointer-events-none" />
         <div className="container-wide section-padding">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold mb-6">
-              Conversion Optimization Strategies
+          <div className="text-center mb-32 space-y-12">
+             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+                <Badge className="bg-primary/10 border border-primary/20 text-primary px-10 py-4 rounded-full text-sm font-black uppercase tracking-[0.4em]">
+                  <Database className="w-5 h-5 mr-4" />
+                  Absolute Revenue Playbook
+                </Badge>
+              </motion.div>
+            <h2 className="text-6xl lg:text-[11rem] font-heading font-bold text-slate-900 mb-10 leading-[1] tracking-tighter">
+              Revenue <span className="text-primary italic">Playbook.</span>
             </h2>
-            <p className="text-xl text-muted-foreground">
-              Science-backed techniques we use to maximize your website conversions
-            </p>
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 max-w-7xl mx-auto">
             {conversionElements.map((element, index) => (
-              <Card key={index} className="group hover:shadow-lg transition-all duration-300">
-                <CardContent className="p-8">
-                  <div className="flex items-start gap-6">
-                    <div className="w-16 h-16 bg-gradient-to-br from-primary to-primary/70 rounded-2xl flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform duration-300">
-                      {element.icon}
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors duration-300">
-                        {element.title}
-                      </h3>
-                      <p className="text-muted-foreground mb-4 leading-relaxed">
-                        {element.description}
-                      </p>
-                      <div className="space-y-2">
-                        {element.techniques.map((technique, techIndex) => (
-                          <div key={techIndex} className="flex items-center gap-2 text-sm">
-                            <CheckCircle className="w-4 h-4 text-primary flex-shrink-0" />
-                            <span className="text-muted-foreground">{technique}</span>
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1, duration: 1 }}
+                className="group bg-white/40 backdrop-blur-xl border border-white/60 rounded-[5rem] p-16 lg:p-24 hover:shadow-glass transition-all duration-1000 flex flex-col gap-12 hover:translate-y-[-15px]"
+              >
+                <div className="flex flex-col md:flex-row gap-12">
+                  <div className="w-24 h-24 bg-slate-900 text-white rounded-[2rem] flex items-center justify-center flex-shrink-0 shadow-2xl group-hover:bg-primary transition-all duration-700 group-hover:rotate-12">
+                    {element.icon}
+                  </div>
+                  <div className="space-y-10">
+                    <h3 className="text-4xl font-heading font-bold text-slate-900 group-hover:text-primary transition-all duration-700 tracking-tight leading-tight">{element.title}</h3>
+                    <p className="text-2xl text-slate-500 leading-relaxed font-medium">{element.description}</p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-8 border-t border-white/60">
+                      {element.techniques.map((tech, i) => (
+                        <div key={i} className="flex items-center gap-6 text-xl text-slate-700 font-bold group/feat">
+                          <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center group-hover/feat:bg-primary transition-all duration-500">
+                             <CheckCircle className="w-4 h-4 text-primary group-hover/feat:text-white" />
                           </div>
-                        ))}
-                      </div>
+                          <span className="group-hover/feat:text-slate-900 transition-colors">{tech}</span>
+                        </div>
+                      ))}
                     </div>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </motion.div>
             ))}
           </div>
 
-          <div className="max-w-4xl mx-auto">
-            <h3 className="text-2xl font-bold text-center mb-8">Conversion Features Included</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {conversionFeatures.map((feature, index) => (
-                <div key={index} className="flex items-center gap-3 p-4 bg-white rounded-lg shadow-sm">
-                  <CheckCircle className="w-5 h-5 text-primary flex-shrink-0" />
-                  <span className="text-foreground font-medium">{feature}</span>
-                </div>
-              ))}
-            </div>
+          <div className="mt-24 flex flex-wrap justify-center gap-8 max-w-7xl mx-auto">
+            {conversionFeatures.map((feature, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.05, duration: 1 }}
+                className="px-12 py-6 bg-white/40 backdrop-blur-xl border border-white/60 rounded-full font-black text-lg text-slate-700 hover:text-primary transition-all duration-700 hover:shadow-glass cursor-default hover:scale-110 uppercase tracking-[0.2em]"
+              >
+                {feature}
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Case Study Section */}
-      <section className="py-20 bg-white">
+      {/* Case Study Repository */}
+      <section className="py-48 bg-white/50 backdrop-blur-md border-y border-white/40">
         <div className="container-wide section-padding">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl lg:text-4xl font-bold mb-6">
-                Real Conversion Success Story
-              </h2>
-              <p className="text-xl text-muted-foreground">
-                How we transformed an underperforming website into a conversion powerhouse
-              </p>
-            </div>
-            
-            <Card className="overflow-hidden">
-              <CardHeader className="bg-gradient-to-r from-primary/10 to-primary/5 p-8">
-                <div className="text-center">
-                  <h3 className="text-2xl font-bold mb-2">{caseStudy.title}</h3>
-                  <p className="text-muted-foreground mb-4">{caseStudy.challenge}</p>
-                  <Badge variant="secondary" className="text-primary">
-                    {caseStudy.solution}
-                  </Badge>
-                </div>
-              </CardHeader>
-              
-              <CardContent className="p-8">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                  {caseStudy.results.map((result, index) => (
-                    <div key={index} className="text-center p-4 bg-muted/30 rounded-lg">
-                      <div className="text-sm text-muted-foreground mb-2">{result.metric}</div>
-                      <div className="flex items-center justify-center gap-2 mb-2">
-                        <span className="text-lg text-muted-foreground">{result.before}</span>
-                        <span className="text-primary">→</span>
-                        <span className="text-lg font-bold">{result.after}</span>
-                      </div>
-                      <Badge variant="secondary" className="text-green-600 bg-green-100">
-                        {result.improvement}
-                      </Badge>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* A/B Testing Section */}
-      <section className="py-20 bg-muted/30">
-        <div className="container-wide section-padding">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl lg:text-4xl font-bold mb-6">
-              Continuous Optimization Process
+          <div className="text-center mb-32 space-y-12">
+             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+                <Badge className="bg-primary/10 border border-primary/20 text-primary px-10 py-4 rounded-full text-sm font-black uppercase tracking-[0.4em]">
+                  <Activity className="w-5 h-5 mr-4" />
+                  Absolute Case Study
+                </Badge>
+              </motion.div>
+            <h2 className="text-6xl lg:text-[11rem] font-heading font-bold text-slate-900 mb-10 leading-[1.1] tracking-tighter">
+              Case <span className="text-primary italic">Study.</span>
             </h2>
-            <p className="text-xl text-muted-foreground mb-12">
-              We don't just build and leave. Our process includes ongoing testing and optimization to maximize your results.
-            </p>
-            
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              {[
-                { step: "1", title: "Analyze", description: "Study user behavior and identify optimization opportunities" },
-                { step: "2", title: "Design", description: "Create conversion-focused variations based on data insights" },
-                { step: "3", title: "Test", description: "Run A/B tests to validate which design performs better" },
-                { step: "4", title: "Optimize", description: "Implement winning variations and repeat the process" }
-              ].map((item, index) => (
-                <Card key={index} className="text-center group hover:shadow-lg transition-all duration-300">
-                  <CardContent className="p-6">
-                    <div className="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                      {item.step}
-                    </div>
-                    <h3 className="text-lg font-bold mb-3">{item.title}</h3>
-                    <p className="text-muted-foreground text-sm">
-                      {item.description}
-                    </p>
-                  </CardContent>
-                </Card>
-              ))}
+          </div>
+
+          <motion.div 
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1.5 }}
+            className="bg-white/40 backdrop-blur-xl border border-white/60 rounded-[5rem] overflow-hidden shadow-glass max-w-7xl mx-auto"
+          >
+            <div className="bg-slate-900 p-20 lg:p-32 text-center text-white space-y-12 relative overflow-hidden">
+               <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-primary/20 rounded-full blur-[120px] pointer-events-none" />
+              <h3 className="text-5xl font-heading font-bold tracking-tight">{caseStudy.title}</h3>
+              <p className="text-3xl text-slate-400 max-w-4xl mx-auto leading-relaxed font-medium">{caseStudy.challenge}</p>
+              <Badge className="bg-primary text-white border-none px-12 py-5 rounded-full text-sm font-black uppercase tracking-[0.4em] shadow-2xl">{caseStudy.solution}</Badge>
             </div>
+            
+            <div className="p-20 lg:p-32">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16">
+                {caseStudy.results.map((result, index) => (
+                  <div key={index} className="text-center space-y-8 group">
+                    <div className="text-[10px] font-black text-slate-400 uppercase tracking-[0.5em]">{result.metric}</div>
+                    <div className="flex flex-col items-center gap-4">
+                      <span className="text-2xl text-slate-400 line-through font-medium opacity-50">{result.before}</span>
+                      <ChevronRight className="w-10 h-10 text-primary rotate-90 lg:rotate-0 group-hover:translate-x-4 transition-transform duration-700" />
+                      <span className="text-6xl font-heading font-black text-slate-900 tracking-tighter">{result.after}</span>
+                    </div>
+                    <Badge className="bg-slate-900 text-white border-none px-10 py-3 rounded-full font-black uppercase tracking-[0.2em] text-[10px] shadow-xl group-hover:bg-primary transition-all duration-700">{result.improvement}</Badge>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Lifecycle Process */}
+      <section className="py-48 bg-background relative overflow-hidden">
+        <div className="container-wide section-padding">
+          <div className="text-center mb-32 space-y-12">
+             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+                <Badge className="bg-primary/10 border border-primary/20 text-primary px-10 py-4 rounded-full text-sm font-black uppercase tracking-[0.4em]">
+                  <Cpu className="w-5 h-5 mr-4" />
+                  Absolute Lifecycle Process
+                </Badge>
+              </motion.div>
+            <h2 className="text-6xl lg:text-[11rem] font-heading font-bold text-slate-900 mb-10 leading-[1.1] tracking-tighter">
+              Lifecycle <span className="text-primary italic">Process.</span>
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 max-w-7xl mx-auto">
+            {[
+              { step: "01", title: "Analyze Logic", description: "Deep absolute study of user behavior and friction identification node." },
+              { step: "02", title: "Architect Sync", description: "Creation of high-conversion absolute variations based on repository data." },
+              { step: "03", title: "Verify Performance", description: "Rigorous absolute A/B testing to confirm performance surge delta." },
+              { step: "04", title: "Deploy Logic", description: "Implementation of winning absolute logic and continuous optimization loop." }
+            ].map((item, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1, duration: 1 }}
+                className="bg-white/40 backdrop-blur-xl border border-white/60 rounded-[4rem] p-16 text-center hover:shadow-glass transition-all duration-1000 flex flex-col items-center gap-10 hover:translate-y-[-15px]"
+              >
+                <div className="text-7xl font-heading font-black text-primary/10 tracking-tighter group-hover:text-primary/20 transition-colors">{item.step}</div>
+                <h3 className="text-4xl font-heading font-bold text-slate-900 tracking-tight leading-tight">{item.title}</h3>
+                <p className="text-2xl text-slate-500 font-medium leading-relaxed">{item.description}</p>
+                <div className="pt-8 border-t border-white/60 w-full opacity-20 flex justify-center">
+                   <Activity className="w-8 h-8" />
+                </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 bg-gradient-to-br from-primary via-primary to-primary/80 text-primary-foreground">
-        <div className="container-narrow section-padding text-center">
-          <h2 className="text-4xl lg:text-5xl font-bold mb-8">
-            Ready to Maximize Your Conversions?
-          </h2>
-          <p className="text-xl mb-10 opacity-90 max-w-2xl mx-auto">
-            Stop leaving money on the table. Get a conversion-optimized website that turns more visitors into customers and grows your revenue.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild size="lg" variant="secondary" className="text-lg px-8 py-4">
-              <a href="https://lunexomedia.com/contact">
-                Start Conversion Optimization
-              </a>
-            </Button>
-            <Button asChild size="lg" variant="outline" className="text-lg px-8 py-4 bg-white/20 border-white/30 text-white hover:bg-white/30">
-              <a href="https://lunexomedia.com/website-design">
-                Back to Services
-              </a>
-            </Button>
+      <section className="py-48 bg-slate-900 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/40 to-accent/20 opacity-40" />
+        <div className="container-wide section-padding relative z-10 text-center">
+          <div className="max-w-7xl mx-auto space-y-24">
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+              <Badge className="bg-white/10 text-white border-white/20 px-10 py-4 rounded-full text-sm font-black uppercase tracking-[0.4em] backdrop-blur-xl">
+                The Absolute Optimization
+              </Badge>
+            </motion.div>
+            <h2 className="text-6xl lg:text-[11rem] font-heading font-bold text-white leading-tight tracking-tighter">
+              Stop Leaving <br /> <span className="text-primary italic">Absolute Revenue?</span>
+            </h2>
+            <p className="text-3xl text-slate-300 font-body leading-relaxed max-w-5xl mx-auto font-medium">
+              Get an absolute conversion-optimized architecture that turns more visitors into high-value loyalists automatically.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-10 justify-center pt-16">
+              <Button size="lg" className="bg-primary text-white hover:bg-primary/90 text-3xl px-24 py-16 rounded-full font-bold shadow-2xl transition-all duration-700 hover:scale-110 group" asChild>
+                <Link to="/contact" className="flex items-center gap-6">
+                  Start Optimization
+                  <ArrowRight className="w-10 h-10 ml-8 group-hover:translate-x-5 transition-transform" />
+                </Link>
+              </Button>
+              <Button size="lg" variant="outline" className="border-2 border-white/20 bg-white/10 backdrop-blur-xl text-white hover:bg-white/20 text-3xl px-24 py-16 rounded-full font-bold transition-all duration-700 hover:scale-105" asChild>
+                <Link to="/portfolio">
+                  Success Repository
+                </Link>
+              </Button>
+            </div>
+            <div className="pt-24 flex items-center justify-center gap-16 opacity-30 text-white">
+               <ShieldCheck className="w-10 h-10" />
+               <Cpu className="w-10 h-10" />
+               <Database className="w-10 h-10" />
+               <Activity className="w-10 h-10" />
+            </div>
           </div>
         </div>
       </section>

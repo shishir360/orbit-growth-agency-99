@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import Navigation from '@/components/ui/navigation';
 import Footer from '@/components/ui/footer';
@@ -7,6 +7,10 @@ import SEO from '@/components/ui/seo';
 import { Skeleton } from '@/components/ui/skeleton';
 import NotFound from './NotFound';
 import DOMPurify from 'isomorphic-dompurify';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { ArrowLeft, Layers, Sparkles, Database, Globe } from 'lucide-react';
 
 interface Page {
   id: string;
@@ -28,11 +32,9 @@ const CatchAllPage = () => {
     const fetchPage = async () => {
       setLoading(true);
 
-      // Normalize path to match stored slug
       const rawPath = location.pathname;
       const normalizedSlug = rawPath.replace(/^\/+|\/+$/g, "");
 
-      // Try without leading slash first
       let { data } = await supabase
         .from('pages')
         .select('*')
@@ -40,7 +42,6 @@ const CatchAllPage = () => {
         .eq('visible', true)
         .maybeSingle();
 
-      // Fallback: try with leading slash if not found
       if (!data) {
         const altSlug = `/${normalizedSlug}`;
         const resp = await supabase
@@ -55,7 +56,6 @@ const CatchAllPage = () => {
       setPage(data ?? null);
       setLoading(false);
 
-      // Add/remove landing-page class on body
       if (data?.is_landing_page) {
         document.body.classList.add('landing-page');
       } else {
@@ -71,18 +71,18 @@ const CatchAllPage = () => {
 
   if (loading) {
     return (
-      <>
+      <div className="min-h-screen bg-background flex flex-col items-center justify-center space-y-8">
         <Navigation />
-        <main className="min-h-screen pt-20 px-4">
-          <div className="max-w-7xl mx-auto py-12 space-y-4">
-            <Skeleton className="h-12 w-3/4" />
-            <Skeleton className="h-6 w-full" />
-            <Skeleton className="h-6 w-full" />
-            <Skeleton className="h-6 w-2/3" />
-          </div>
-        </main>
+        <div className="relative w-24 h-24">
+          <div className="absolute inset-0 border-4 border-primary/20 rounded-full"></div>
+          <div className="absolute inset-0 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+        </div>
+        <div className="space-y-4 text-center max-w-md px-6">
+          <Skeleton className="h-12 w-full bg-white/40 rounded-full" />
+          <Skeleton className="h-6 w-3/4 mx-auto bg-white/40 rounded-full" />
+        </div>
         <Footer />
-      </>
+      </div>
     );
   }
 
@@ -90,82 +90,104 @@ const CatchAllPage = () => {
     return <NotFound />;
   }
 
-  // If it's a landing page, render without header/footer
   if (page.is_landing_page) {
     return (
-      <>
+      <div className="min-h-screen bg-background overflow-hidden">
         <SEO
           title={page.title}
           description={`Landing page: ${page.title}`}
           url={`https://www.lunexomedia.com${location.pathname}`}
         />
 
-        {page.iframe_url ? (
-          <div className="fixed inset-0 m-0 p-0">
-            <iframe
-              src={page.iframe_url}
-              className="w-full h-full border-0 m-0 p-0"
-              style={{ 
-                display: 'block',
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%'
-              }}
-              title={page.title}
-              sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox allow-top-navigation"
-              loading="lazy"
-            />
-          </div>
-        ) : page.html_file_url || page.content ? (
-          <div
-            className="min-h-screen m-0 p-0"
-            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(page.content) }}
-          />
-        ) : null}
-      </>
+        <AnimatePresence mode="wait">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1 }}
+          >
+            {page.iframe_url ? (
+              <div className="fixed inset-0 m-0 p-0 z-50 bg-white">
+                <iframe
+                  src={page.iframe_url}
+                  className="w-full h-full border-0 m-0 p-0"
+                  style={{ display: 'block' }}
+                  title={page.title}
+                  sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox allow-top-navigation"
+                  loading="lazy"
+                />
+              </div>
+            ) : (
+              <div
+                className="min-h-screen m-0 p-0"
+                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(page.content) }}
+              />
+            )}
+          </motion.div>
+        </AnimatePresence>
+      </div>
     );
   }
 
-  // Regular page with navigation and footer
   return (
-    <>
+    <div className="min-h-screen bg-background font-body text-slate-900 overflow-hidden">
       <SEO 
-        title={page.title}
+        title={`${page.title} | LUNEXO MEDIA`}
         description={page.iframe_url ? `Visit ${page.title}` : page.content.substring(0, 160)}
         keywords={page.title}
       />
       <Navigation />
-      <main className={page.iframe_url ? "" : "pt-20"}>
-        {page.iframe_url ? (
-          <div className="w-full">
-            <iframe
-              src={page.iframe_url}
-              className="w-full border-0 block"
-              style={{ 
-                minHeight: '100vh',
-                height: '200vh',
-                display: 'block',
-                margin: 0,
-                padding: 0
-              }}
-              title={page.title}
-              sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox allow-top-navigation"
-              loading="lazy"
-            />
-          </div>
-        ) : (
-          <div className="max-w-7xl mx-auto px-4 py-12">
-            <h1 className="text-4xl font-bold mb-6">{page.title}</h1>
-            <div className="prose prose-lg max-w-none">
-              <p className="whitespace-pre-wrap">{page.content}</p>
-            </div>
-          </div>
-        )}
+      
+      <main className={page.iframe_url ? "pt-0" : "pt-32 pb-32"}>
+        <AnimatePresence mode="wait">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8 }}
+          >
+            {page.iframe_url ? (
+              <div className="w-full">
+                <iframe
+                  src={page.iframe_url}
+                  className="w-full border-0 block"
+                  style={{ 
+                    minHeight: '100vh',
+                    height: '200vh',
+                    display: 'block',
+                    margin: 0,
+                    padding: 0
+                  }}
+                  title={page.title}
+                  sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox allow-top-navigation"
+                  loading="lazy"
+                />
+              </div>
+            ) : (
+              <div className="container-wide section-padding">
+                <div className="max-w-6xl mx-auto space-y-16">
+                  <div className="space-y-8">
+                    <Button variant="ghost" asChild className="text-slate-500 hover:text-primary p-0 h-auto font-black uppercase tracking-widest text-[10px] group">
+                      <Link to="/" className="flex items-center gap-3">
+                        <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+                        Back to Core
+                      </Link>
+                    </Button>
+                    <h1 className="text-5xl lg:text-8xl font-heading font-bold text-slate-900 leading-[1.05] tracking-tight">{page.title}</h1>
+                  </div>
+
+                  <div className="bg-white/40 backdrop-blur-xl border border-white/60 rounded-[4rem] p-16 lg:p-24 shadow-glass">
+                    <div className="prose prose-2xl max-w-none text-slate-600 font-medium leading-relaxed">
+                      <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(page.content) }} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </motion.div>
+        </AnimatePresence>
       </main>
+      
       <Footer />
-    </>
+    </div>
   );
 };
 

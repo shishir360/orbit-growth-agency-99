@@ -1,5 +1,5 @@
-import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -25,18 +25,23 @@ import {
   Globe,
   Shield,
   Sparkles,
-  Play
+  Play,
+  PieChart,
+  Layers,
+  ShieldCheck,
+  Activity,
+  Cpu
 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const AdsManagement = () => {
   const [isVisible, setIsVisible] = useState(false);
-  const [activeService, setActiveService] = useState(0);
 
   useEffect(() => {
     setIsVisible(true);
+    document.title = "Paid Advertising & ROI Orchestration | Lunexo Media";
   }, []);
 
-  // Platform logos with actual brand colors
   const platformLogos = [
     {
       name: "Google Ads",
@@ -48,8 +53,7 @@ const AdsManagement = () => {
           <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
         </svg>
       ),
-      color: "from-blue-500 to-green-500",
-      description: "Search, Display & YouTube",
+      description: "Search & YouTube",
       roas: "5.2x"
     },
     {
@@ -59,8 +63,7 @@ const AdsManagement = () => {
           <path fill="#1877F2" d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
         </svg>
       ),
-      color: "from-blue-600 to-purple-600",
-      description: "Facebook & Instagram",
+      description: "FB & Instagram",
       roas: "4.8x"
     },
     {
@@ -70,8 +73,7 @@ const AdsManagement = () => {
           <path fill="#FF0050" d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/>
         </svg>
       ),
-      color: "from-pink-500 to-cyan-400",
-      description: "Viral Marketing",
+      description: "Viral Logic",
       roas: "6.4x"
     },
     {
@@ -81,116 +83,76 @@ const AdsManagement = () => {
           <path fill="#0A66C2" d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
         </svg>
       ),
-      color: "from-blue-700 to-blue-500",
-      description: "B2B Excellence",
+      description: "B2B Protocol",
       roas: "7.1x"
-    },
-    {
-      name: "YouTube Ads",
-      logo: (
-        <svg viewBox="0 0 24 24" className="w-8 h-8">
-          <path fill="#FF0000" d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-        </svg>
-      ),
-      color: "from-red-600 to-red-500",
-      description: "Video Authority",
-      roas: "4.2x"
-    },
-    {
-      name: "Microsoft Ads",
-      logo: (
-        <svg viewBox="0 0 24 24" className="w-8 h-8">
-          <path fill="#F25022" d="M0 0h11.377v11.377H0z"/>
-          <path fill="#00A4EF" d="M0 12.623h11.377V24H0z"/>
-          <path fill="#7FBA00" d="M12.623 0H24v11.377H12.623z"/>
-          <path fill="#FFB900" d="M12.623 12.623H24V24H12.623z"/>
-        </svg>
-      ),
-      color: "from-blue-500 to-green-500",
-      description: "Bing & Partner Networks",
-      roas: "5.8x"
     }
   ];
 
   const premiumServices = [
     {
       icon: <Target className="w-8 h-8" />,
-      title: "Strategic Campaign Architecture",
-      description: "Enterprise-level advertising strategy with advanced targeting methodologies and cross-platform optimization.",
-      features: ["Advanced Audience Intelligence", "Competitive Market Analysis", "Multi-Channel Attribution", "Performance Forecasting"],
+      title: "Strategic Architecture",
+      description: "Enterprise-level advertising logic with advanced targeting methodologies and cross-platform orchestration.",
+      features: ["Audience Intelligence", "Market DNA Analysis", "Multi-Spectrum Attribution", "Velocity Forecasting"],
       metrics: { roas: "540%", ctr: "4.8%", conv: "24%" }
     },
     {
       icon: <BarChart3 className="w-8 h-8" />,
-      title: "Data Science & Analytics",
-      description: "AI-powered performance optimization using machine learning algorithms and predictive analytics.",
-      features: ["Predictive Analytics", "Real-Time Optimization", "Custom Attribution Models", "Advanced Segmentation"],
+      title: "Data Intelligence",
+      description: "AI-powered performance optimization using machine learning algorithms and predictive telemetry.",
+      features: ["Predictive Analytics", "Real-Time Telemetry", "Custom Attribution", "Advanced Segmentation"],
       metrics: { roas: "480%", ctr: "5.2%", conv: "28%" }
     },
     {
       icon: <Globe className="w-8 h-8" />,
       title: "Omnichannel Dominance",
-      description: "Comprehensive advertising across all major platforms with unified messaging and budget allocation.",
-      features: ["Platform Optimization", "Creative Automation", "Budget Intelligence", "Cross-Platform Tracking"],
+      description: "Comprehensive advertising across all major platforms with unified logic and budget allocation.",
+      features: ["Platform Optimization", "Creative Automation", "Budget Intelligence", "Cross-Platform Sync"],
       metrics: { roas: "620%", ctr: "4.2%", conv: "31%" }
     },
     {
       icon: <Rocket className="w-8 h-8" />,
-      title: "Growth Acceleration Engine",
-      description: "Rapid scaling solutions for ambitious businesses ready to dominate their market.",
-      features: ["Rapid Scaling", "Market Expansion", "Competitive Advantage", "ROI Maximization"],
+      title: "Growth Acceleration",
+      description: "Rapid scaling solutions for ambitious brands ready to dominate their market trajectory.",
+      features: ["Rapid Scaling Logic", "Market Expansion", "Competitive Advantage", "ROI Maximization"],
       metrics: { roas: "720%", ctr: "6.1%", conv: "34%" }
     }
   ];
 
   const results = [
     { metric: "Average ROAS", value: "640%", icon: <TrendingUp className="w-6 h-6" /> },
-    { metric: "Client Revenue", value: "$127M+", icon: <DollarSign className="w-6 h-6" /> },
+    { metric: "Generated Revenue", value: "$127M+", icon: <DollarSign className="w-6 h-6" /> },
     { metric: "Success Rate", value: "98.4%", icon: <Trophy className="w-6 h-6" /> },
-    { metric: "Global Reach", value: "47", icon: <Globe className="w-6 h-6" /> }
+    { metric: "Global Nodes", value: "47", icon: <Globe className="w-6 h-6" /> }
   ];
 
   const caseStudies = [
     {
-      title: "Enterprise SaaS Scale-Up",
-      industry: "Software",
-      challenge: "Scale from $500K to $10M ARR",
-      solution: "Comprehensive multi-platform strategy with advanced attribution",
-      results: ["1,900% revenue growth", "480% ROAS", "85% lower CAC"],
+      title: "Enterprise SaaS Scaling",
+      industry: "Software Architecture",
+      challenge: "Scale from $500K to $10M ARR velocity.",
+      solution: "Comprehensive multi-platform logic with advanced attribution telemetry.",
+      results: ["1,900% Growth Velocity", "480% ROAS", "85% Lower CAC"],
       investment: "$2.4M",
       returns: "$47M",
       timeline: "18 months"
     },
     {
       title: "Global E-commerce Empire",
-      industry: "Retail",
-      challenge: "International expansion and market dominance",
-      solution: "Localized campaigns across 12 countries with dynamic creative",
-      results: ["2,400% international growth", "620% ROAS", "Market leadership"],
+      industry: "Retail Logic",
+      challenge: "International expansion and absolute market dominance.",
+      solution: "Localized campaigns across 12 countries with dynamic creative nodes.",
+      results: ["2,400% International Growth", "620% ROAS", "Market Leadership"],
       investment: "$3.8M",
       returns: "$89M",
       timeline: "24 months"
-    },
-    {
-      title: "FinTech Disruption",
-      industry: "Financial Technology",
-      challenge: "Break into competitive financial services market",
-      solution: "Precision targeting with compliance-focused creative strategy",
-      results: ["$50M+ in loans originated", "340% conversion rate", "Market penetration"],
-      investment: "$1.9M",
-      returns: "$23M",
-      timeline: "12 months"
     }
   ];
 
-  useEffect(() => {
-    document.title = "Paid Advertising & PPC Management | Lunexo Media";
-  }, []);
-
   return (
-    <div className="min-h-screen bg-slate-950 overflow-hidden">
+    <div className="min-h-screen bg-background font-body text-slate-900 overflow-hidden">
       <SEO
-        title="Paid Advertising & PPC Management | Lunexo Media"
+        title="Paid Advertising & ROI Orchestration | Lunexo Media"
         description="Maximize ROI with targeted Google Ads, Facebook Ads, and social media ad campaigns managed by Lunexo Media's digital experts."
         image="https://www.lunexomedia.com/og-image-new.jpg"
         url="https://www.lunexomedia.com/ads-management"
@@ -198,7 +160,7 @@ const AdsManagement = () => {
       />
       
       <ServiceSchema
-        name="Paid Advertising & PPC Management"
+        name="Paid Advertising & ROI Orchestration"
         description="Expert PPC management services for Google Ads, Facebook Ads, and social media campaigns."
         provider="Lunexo Media"
         areaServed="Worldwide"
@@ -209,500 +171,270 @@ const AdsManagement = () => {
       
       <Navigation />
       
-      {/* Premium Dark Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Animated gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
-          <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-full blur-[120px] animate-pulse" />
-          <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full blur-[120px] animate-pulse delay-1000" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-indigo-500/10 to-cyan-500/10 rounded-full blur-[150px]" />
+      {/* Hero Section */}
+      <section className="relative min-h-screen flex items-center justify-center pt-32 pb-24 overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+          <div className="absolute top-[10%] left-[5%] w-[600px] h-[600px] bg-primary/10 rounded-full blur-[120px]" />
+          <div className="absolute bottom-[10%] right-[5%] w-[500px] h-[500px] bg-accent/10 rounded-full blur-[100px]" />
         </div>
 
-        {/* Grid pattern overlay */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:72px_72px]" />
-
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-32 relative z-10">
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="max-w-5xl mx-auto text-center space-y-10"
-          >
-            {/* Breadcrumb */}
-            <div className="mb-8">
-              <BreadcrumbSEO 
-                items={[{ label: "Services", href: "/services-explore" }]}
-                currentPage="Ads Management"
-              />
-            </div>
-
+        <div className="container-wide section-padding relative z-10">
+          <div className="text-center max-w-7xl mx-auto space-y-16">
             <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.2, duration: 0.6 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
             >
-              <Badge className="bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border border-cyan-500/30 text-cyan-400 px-6 py-3 text-lg font-medium rounded-full backdrop-blur-sm">
-                <Sparkles className="w-5 h-5 mr-2" />
-                Premium Performance Marketing
+              <Badge className="bg-primary/10 border border-primary/20 text-primary px-8 py-3 text-sm font-bold rounded-full backdrop-blur-xl">
+                <Target className="w-5 h-5 mr-3" />
+                Performance-Driven Orchestration
               </Badge>
             </motion.div>
 
             <motion.h1 
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.8 }}
-              className="text-5xl sm:text-6xl lg:text-7xl font-black leading-tight tracking-tight"
+              transition={{ delay: 0.2, duration: 0.8 }}
+              className="text-6xl sm:text-7xl lg:text-9xl font-heading font-bold text-slate-900 leading-[1.05] tracking-tight"
             >
-              <span className="text-white">Paid Ads &</span>
-              <br />
-              <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
-                PPC Management
-              </span>
+              Scale Your <br /> <span className="text-primary italic">ROI Velocity.</span>
             </motion.h1>
 
             <motion.p 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.5, duration: 0.8 }}
-              className="text-xl sm:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed"
+              transition={{ delay: 0.4, duration: 0.8 }}
+              className="text-2xl text-slate-500 max-w-4xl mx-auto leading-relaxed font-medium"
             >
-              Enterprise-grade advertising delivering{" "}
-              <span className="text-cyan-400 font-bold">640% average ROAS</span> through 
-              strategic campaigns that dominate markets.
+              Enterprise-grade advertising delivering <span className="text-primary italic font-bold">640% average ROAS</span> through predictive intelligence and absolute market dominance.
             </motion.p>
-
-            {/* Metrics Row */}
+            
             <motion.div 
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6, duration: 0.8 }}
-              className="grid grid-cols-3 gap-8 max-w-2xl mx-auto pt-8"
+              className="flex flex-col sm:flex-row gap-8 justify-center pt-8"
             >
-              {[
-                { value: "$127M+", label: "Revenue Generated" },
-                { value: "640%", label: "Average ROAS" },
-                { value: "98.4%", label: "Success Rate" }
-              ].map((stat, index) => (
-                <div key={index} className="text-center group">
-                  <div className="text-3xl sm:text-4xl font-black bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent group-hover:scale-110 transition-transform duration-300">
-                    {stat.value}
-                  </div>
-                  <div className="text-sm sm:text-base text-gray-400 mt-2 font-medium">{stat.label}</div>
-                </div>
-              ))}
-            </motion.div>
-
-            {/* CTAs */}
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.7, duration: 0.8 }}
-              className="flex flex-col sm:flex-row gap-5 justify-center pt-6"
-            >
-              <Button 
-                size="lg" 
-                className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white text-lg px-10 py-7 rounded-2xl font-semibold shadow-2xl shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all duration-300 hover:scale-105 group"
-                asChild
-              >
-                <a href="https://lunexomedia.com/contact">
-                  Get Free Consultation
-                  <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-                </a>
+              <Button size="lg" className="bg-slate-900 text-white hover:bg-slate-800 text-xl px-16 py-10 rounded-full font-bold shadow-2xl transition-all duration-500 group" asChild>
+                <Link to="/contact">
+                  Start Scaling Now
+                  <ArrowRight className="w-6 h-6 ml-4 group-hover:translate-x-2 transition-transform" />
+                </Link>
               </Button>
-              
-              <Button 
-                size="lg" 
-                variant="outline" 
-                className="text-lg px-10 py-7 rounded-2xl border-2 border-gray-600 text-white hover:bg-white hover:text-slate-900 transition-all duration-300 hover:scale-105"
-                asChild
-              >
-                <a href="https://lunexomedia.com/portfolio">
-                  View Success Stories
-                </a>
+              <Button size="lg" variant="outline" className="text-xl px-16 py-10 rounded-full border-2 border-white/60 bg-white/40 backdrop-blur-xl text-slate-900 hover:bg-white/60 transition-all duration-500 font-bold" asChild>
+                <Link to="/portfolio">View Case Protocols</Link>
               </Button>
             </motion.div>
-          </motion.div>
-        </div>
 
-        {/* Scroll indicator */}
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2, duration: 0.8 }}
-          className="absolute bottom-10 left-1/2 -translate-x-1/2"
-        >
-          <div className="w-8 h-12 border-2 border-gray-600 rounded-full flex justify-center">
-            <motion.div 
-              animate={{ y: [0, 12, 0] }}
-              transition={{ repeat: Infinity, duration: 1.5 }}
-              className="w-2 h-2 bg-cyan-400 rounded-full mt-2"
-            />
-          </div>
-        </motion.div>
-      </section>
-
-      {/* Platform Logos Section - Premium Style */}
-      <section className="py-24 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 relative overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute top-1/2 left-0 w-full h-px bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent" />
-        </div>
-
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
-            <Badge className="bg-white/5 border border-white/10 text-gray-300 px-4 py-2 mb-6">
-              <Shield className="w-4 h-4 mr-2" />
-              Certified Partners
-            </Badge>
-            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
-              Master Every Major Platform
-            </h2>
-            <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-              Certified advertising experts delivering exceptional results across all platforms
-            </p>
-          </motion.div>
-
-          {/* Platform Cards Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {platformLogos.map((platform, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1, duration: 0.5 }}
-                className="group"
-              >
-                <div className="relative bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 rounded-2xl p-6 text-center hover:border-cyan-500/50 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-cyan-500/10 backdrop-blur-sm">
-                  <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
-                  
-                  <div className="relative z-10">
-                    <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center bg-white/5 rounded-xl group-hover:scale-110 transition-transform duration-300">
-                      {platform.logo}
-                    </div>
-                    <h3 className="text-white font-semibold text-sm mb-1">{platform.name}</h3>
-                    <p className="text-gray-500 text-xs mb-3">{platform.description}</p>
-                    <div className="inline-block bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-cyan-400 text-xs font-bold px-3 py-1 rounded-full">
-                      {platform.roas} ROAS
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Premium Services Section */}
-      <section className="py-32 bg-gradient-to-b from-slate-950 to-slate-900 relative overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute top-1/4 left-0 w-96 h-96 bg-gradient-to-r from-blue-500/10 to-transparent rounded-full blur-[100px]" />
-          <div className="absolute bottom-1/4 right-0 w-96 h-96 bg-gradient-to-r from-purple-500/10 to-transparent rounded-full blur-[100px]" />
-        </div>
-
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-20"
-          >
-            <Badge className="bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 px-5 py-2 mb-6">
-              <Target className="w-4 h-4 mr-2" />
-              Enterprise Solutions
-            </Badge>
-            <h2 className="text-4xl sm:text-5xl font-black text-white mb-6">
-              Strategic Campaign
-              <br />
-              <span className="bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
-                Architecture
-              </span>
-            </h2>
-            <p className="text-gray-400 text-xl max-w-3xl mx-auto">
-              Advanced advertising solutions designed for businesses demanding 
-              <span className="text-cyan-400 font-semibold"> market dominance</span>
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {premiumServices.map((service, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.15, duration: 0.6 }}
-              >
-                <Card 
-                  className={`group bg-gradient-to-br from-white/[0.08] to-white/[0.02] border border-white/10 hover:border-cyan-500/50 transition-all duration-500 hover:scale-[1.02] backdrop-blur-sm cursor-pointer overflow-hidden ${activeService === index ? 'border-cyan-500/50 shadow-2xl shadow-cyan-500/10' : ''}`}
-                  onMouseEnter={() => setActiveService(index)}
+            {/* Performance Telemetry Grid */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 pt-32 max-w-6xl mx-auto">
+              {results.map((result, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.8 + (i * 0.1), duration: 0.8 }}
+                  className="bg-white/40 backdrop-blur-xl border border-white/60 rounded-[3rem] p-10 shadow-glass text-center group hover:translate-y-[-8px] transition-all duration-500"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  
-                  <CardHeader className="p-8 relative z-10">
-                    <div className="flex items-start gap-6">
-                      <div className="w-16 h-16 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform duration-300">
-                        {service.icon}
-                      </div>
-                      <div className="flex-1">
-                        <CardTitle className="text-xl sm:text-2xl text-white mb-3 group-hover:text-cyan-400 transition-colors">
-                          {service.title}
-                        </CardTitle>
-                        <p className="text-gray-400 leading-relaxed">
-                          {service.description}
-                        </p>
-                      </div>
-                    </div>
-                  </CardHeader>
-                  
-                  <CardContent className="p-8 pt-0 relative z-10">
-                    {/* Metrics */}
-                    <div className="grid grid-cols-3 gap-4 mb-6 p-4 bg-white/5 rounded-xl border border-white/5">
-                      <div className="text-center">
-                        <div className="text-xl font-bold text-cyan-400">{service.metrics.roas}</div>
-                        <div className="text-xs text-gray-500">ROAS</div>
-                      </div>
-                      <div className="text-center">
-                        <div className="text-xl font-bold text-blue-400">{service.metrics.ctr}</div>
-                        <div className="text-xs text-gray-500">CTR</div>
-                      </div>
-                      <div className="text-center">
-                        <div className="text-xl font-bold text-purple-400">{service.metrics.conv}</div>
-                        <div className="text-xs text-gray-500">Conv Rate</div>
-                      </div>
-                    </div>
-
-                    {/* Features */}
-                    <div className="grid grid-cols-2 gap-3 mb-6">
-                      {service.features.map((feature, fIndex) => (
-                        <div key={fIndex} className="flex items-center gap-2">
-                          <CheckCircle className="w-4 h-4 text-cyan-500 flex-shrink-0" />
-                          <span className="text-sm text-gray-300">{feature}</span>
-                        </div>
-                      ))}
-                    </div>
-
-                    <Button 
-                      variant="ghost" 
-                      className="w-full border border-white/10 hover:bg-cyan-500 hover:text-white hover:border-cyan-500 text-gray-300 transition-all duration-300 rounded-xl group/btn"
-                    >
-                      Explore Features
-                      <ChevronRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
-                    </Button>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Results Section */}
-      <section className="py-24 bg-gradient-to-b from-slate-900 to-slate-950 relative overflow-hidden">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <Badge className="bg-purple-500/10 border border-purple-500/30 text-purple-400 px-5 py-2 mb-6">
-              <Trophy className="w-4 h-4 mr-2" />
-              Proven Excellence
-            </Badge>
-            <h2 className="text-4xl sm:text-5xl font-black text-white">
-              Extraordinary{" "}
-              <span className="bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
-                Results
-              </span>
-            </h2>
-          </motion.div>
-
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
-            {results.map((result, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <Card className="bg-gradient-to-br from-white/[0.08] to-white/[0.02] border border-white/10 text-center p-8 hover:border-cyan-500/50 transition-all duration-300 hover:scale-105 group">
-                  <div className="w-14 h-14 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center text-white mx-auto mb-4 group-hover:scale-110 transition-transform">
+                  <div className="w-16 h-16 bg-primary/5 rounded-2xl flex items-center justify-center text-primary mx-auto mb-6 group-hover:bg-primary group-hover:text-white transition-all duration-500">
                     {result.icon}
                   </div>
-                  <div className="text-4xl font-black bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent mb-2">
-                    {result.value}
-                  </div>
-                  <div className="text-gray-400 font-medium">{result.metric}</div>
-                </Card>
-              </motion.div>
-            ))}
+                  <div className="text-4xl font-black text-slate-900 mb-2">{result.value}</div>
+                  <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{result.metric}</div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Omnichannel Dominance */}
+      <section className="py-32 bg-white/50 backdrop-blur-md border-y border-white/40">
+        <div className="container-wide section-padding">
+          <div className="text-center mb-24 space-y-8">
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+              <Badge className="bg-primary/10 border border-primary/20 text-primary px-8 py-3 text-sm font-bold rounded-full backdrop-blur-xl">
+                <Globe className="w-5 h-5 mr-3" />
+                Global Network Orchestration
+              </Badge>
+            </motion.div>
+            <motion.h2 initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-5xl lg:text-8xl font-heading font-bold text-slate-900 leading-tight">
+              Omnichannel <span className="text-primary italic">Dominance</span>
+            </motion.h2>
           </div>
 
-          {/* Case Studies */}
-          <div className="space-y-8">
-            <h3 className="text-3xl font-bold text-white text-center mb-12">Elite Case Studies</h3>
-            
-            {caseStudies.map((study, index) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 max-w-7xl mx-auto">
+            {platformLogos.map((platform, i) => (
               <motion.div
-                key={index}
+                key={i}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.2 }}
+                transition={{ delay: i * 0.1, duration: 0.8 }}
+                className="group relative bg-white/40 border border-white/60 rounded-[3rem] p-12 hover:shadow-glass transition-all duration-1000 text-center"
               >
-                <Card className="bg-gradient-to-br from-white/[0.08] to-white/[0.02] border border-white/10 overflow-hidden hover:border-cyan-500/30 transition-all duration-300">
-                  <div className="grid grid-cols-1 lg:grid-cols-2">
-                    <div className="bg-gradient-to-br from-cyan-600 via-blue-600 to-purple-600 p-10 relative overflow-hidden">
-                      <div className="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full -mr-20 -mt-20" />
-                      <div className="absolute bottom-0 left-0 w-32 h-32 bg-white/10 rounded-full -ml-16 -mb-16" />
-                      
-                      <div className="relative z-10">
-                        <Badge className="bg-white/20 text-white border-white/30 mb-4">
-                          {study.industry}
-                        </Badge>
-                        <h4 className="text-2xl sm:text-3xl font-bold text-white mb-6">{study.title}</h4>
-                        
-                        <div className="grid grid-cols-2 gap-6 mb-6">
-                          <div>
-                            <div className="text-2xl font-bold text-white">{study.investment}</div>
-                            <div className="text-sm text-white/70">Ad Investment</div>
-                          </div>
-                          <div>
-                            <div className="text-2xl font-bold text-white">{study.returns}</div>
-                            <div className="text-sm text-white/70">Revenue Generated</div>
-                          </div>
-                        </div>
-                        <div className="text-white/80">{study.timeline}</div>
-                      </div>
-                    </div>
-                    
-                    <div className="p-10 bg-slate-900/50">
-                      <div className="space-y-6">
-                        <div>
-                          <h5 className="font-bold text-red-400 mb-2">Challenge</h5>
-                          <p className="text-gray-400">{study.challenge}</p>
-                        </div>
-                        <div>
-                          <h5 className="font-bold text-blue-400 mb-2">Solution</h5>
-                          <p className="text-gray-400">{study.solution}</p>
-                        </div>
-                        <div>
-                          <h5 className="font-bold text-green-400 mb-3">Results</h5>
-                          <div className="space-y-2">
-                            {study.results.map((result, rIndex) => (
-                              <div key={rIndex} className="flex items-center gap-3">
-                                <TrendingUp className="w-4 h-4 text-green-500" />
-                                <span className="text-white font-medium">{result}</span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </Card>
+                <div className="w-20 h-20 bg-white/60 rounded-3xl flex items-center justify-center border border-white/60 mx-auto mb-8 group-hover:scale-110 transition-transform shadow-sm">
+                  {platform.logo}
+                </div>
+                <h3 className="text-2xl font-heading font-bold text-slate-900 mb-4">{platform.name}</h3>
+                <p className="text-sm text-slate-500 mb-8 font-medium uppercase tracking-widest">{platform.description}</p>
+                <Badge className="bg-primary/5 text-primary border border-primary/20 px-6 py-2 rounded-full font-black text-xs">
+                  {platform.roas} ROAS
+                </Badge>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Premium CTA Section */}
-      <section className="py-32 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 relative overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-cyan-500/20 to-purple-500/20 rounded-full blur-[150px]" />
-        </div>
-        
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="max-w-4xl mx-auto"
-          >
-            <Badge className="bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 px-5 py-2 mb-8">
-              <Rocket className="w-4 h-4 mr-2" />
-              Ready to Dominate?
-            </Badge>
-            
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white mb-8">
-              Scale Beyond{" "}
-              <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
-                Expectations
-              </span>
+      {/* Campaign Architecture */}
+      <section className="py-32 relative overflow-hidden bg-background">
+        <div className="container-wide section-padding">
+          <div className="text-center mb-24 space-y-8">
+            <h2 className="text-5xl lg:text-8xl font-heading font-bold text-slate-900 leading-tight">
+              Campaign <span className="text-primary italic">Architecture</span>
             </h2>
-            
-            <p className="text-xl text-gray-400 mb-12 leading-relaxed max-w-3xl mx-auto">
-              Join elite businesses achieving extraordinary growth through strategic advertising excellence. 
-              Your market dominance starts with a single conversation.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-5 justify-center">
-              <Button 
-                size="lg" 
-                className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white text-lg px-12 py-7 rounded-2xl font-semibold shadow-2xl shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all duration-300 hover:scale-105 group"
-                asChild
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-7xl mx-auto">
+            {premiumServices.map((service, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1, duration: 0.8 }}
+                className="group relative bg-white/40 border border-white/60 rounded-[4rem] p-16 hover:shadow-glass transition-all duration-1000"
               >
-                <a href="https://lunexomedia.com/contact">
-                  Book Strategic Consultation
-                  <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-                </a>
-              </Button>
-              
-              <Button 
-                size="lg" 
-                variant="outline" 
-                className="text-lg px-12 py-7 rounded-2xl border-2 border-gray-600 text-white hover:bg-white hover:text-slate-900 transition-all duration-300 hover:scale-105"
-                asChild
-              >
-                <a href="https://lunexomedia.com/portfolio">
-                  Explore Success Stories
-                </a>
-              </Button>
-            </div>
-          </motion.div>
+                <div className="flex flex-col h-full space-y-12">
+                  <div className="flex justify-between items-start">
+                    <div className="w-20 h-20 bg-primary/5 rounded-3xl flex items-center justify-center border border-primary/10 group-hover:bg-primary group-hover:text-white transition-all duration-500 shadow-sm">
+                      {service.icon}
+                    </div>
+                    <div className="text-right">
+                      <div className="text-4xl font-black text-primary">{service.metrics.roas}</div>
+                      <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Target ROAS</div>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-6">
+                    <h3 className="text-3xl lg:text-4xl font-heading font-bold text-slate-900 group-hover:text-primary transition-colors">{service.title}</h3>
+                    <p className="text-xl text-slate-500 font-medium leading-relaxed">{service.description}</p>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-6">
+                    {service.features.map((feat, fi) => (
+                      <div key={fi} className="flex items-center gap-4 bg-white/40 border border-white/60 px-6 py-4 rounded-3xl shadow-sm text-sm font-bold text-slate-700">
+                        <ShieldCheck className="w-5 h-5 text-primary" />
+                        {feat}
+                      </div>
+                    ))}
+                  </div>
+
+                  <Button variant="ghost" className="p-0 h-auto font-black uppercase tracking-[0.3em] text-[10px] text-primary hover:bg-transparent hover:translate-x-3 transition-all duration-500">
+                    View Protocol Details <ArrowRight className="w-4 h-4 ml-3" />
+                  </Button>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* FAQ Section */}
-      <section className="py-24 relative overflow-hidden bg-[#0a0a1a]">
-        <div className="container-wide section-padding relative z-10">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl lg:text-5xl font-bold mb-12 text-white text-center">
-              Ads Management <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">FAQ</span>
+      {/* Success Protocols (Case Studies) */}
+      <section className="py-32 bg-white/50 backdrop-blur-md">
+        <div className="container-wide section-padding">
+          <div className="text-center mb-24 space-y-8">
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+              <Badge className="bg-slate-900 text-white px-10 py-4 rounded-full text-[10px] font-black uppercase tracking-[0.4em]">
+                Success Protocols
+              </Badge>
+            </motion.div>
+            <h2 className="text-5xl lg:text-8xl font-heading font-bold text-slate-900 leading-tight">
+              Elite <span className="text-primary italic">Returns</span>
             </h2>
-            <FAQSchema
-              className="space-y-4"
-              faqs={[
-                {
-                  question: "How much should I spend on Google and Facebook Ads?",
-                  answer: "Your ideal ad budget depends on your industry, competition, and goals. We recommend starting with at least $500-$1,000 per month per platform to gather enough data for optimization. Our management fee starts at $299/month. We'll help you determine the optimal budget during your free consultation based on your target cost-per-acquisition and growth goals."
-                },
-                {
-                  question: "How long does it take to see results from paid advertising?",
-                  answer: "You can start seeing traffic and leads within the first few days of launching a campaign. However, it typically takes 2-4 weeks to gather enough data for meaningful optimization. Most clients see strong, consistent results within 60-90 days as we refine targeting, ad creatives, and bidding strategies based on performance data."
-                },
-                {
-                  question: "Which advertising platforms do you manage?",
-                  answer: "We manage campaigns across Google Search Ads, Google Display Network, YouTube Ads, Facebook Ads, Instagram Ads, and TikTok Ads. We'll recommend the best platform mix based on your target audience, industry, and goals. Most B2B businesses perform well on Google and LinkedIn, while B2C brands often see great results on Facebook, Instagram, and TikTok."
-                },
-                {
-                  question: "Do you provide monthly reporting on ad performance?",
-                  answer: "Yes, we provide detailed monthly performance reports that cover key metrics including impressions, clicks, conversions, cost-per-click (CPC), cost-per-acquisition (CPA), return on ad spend (ROAS), and more. We also schedule monthly strategy calls to review results and discuss optimization opportunities."
-                },
-                {
-                  question: "Can you help with ad creative and copywriting?",
-                  answer: "Absolutely. Our team creates high-converting ad copy, designs eye-catching visuals, and produces video ads when needed. We continuously A/B test different creatives to identify what resonates best with your target audience and drives the highest conversion rates."
-                }
-              ]}
-            />
+          </div>
+
+          <div className="space-y-16 max-w-6xl mx-auto">
+            {caseStudies.map((study, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1 }}
+                className="bg-white/40 backdrop-blur-xl border border-white/60 rounded-[4rem] overflow-hidden shadow-glass group"
+              >
+                <div className="grid grid-cols-1 lg:grid-cols-2">
+                  <div className="bg-primary/5 p-16 lg:p-24 flex flex-col justify-center space-y-12">
+                    <Badge className="bg-white text-primary border border-primary/20 w-fit px-8 py-3 rounded-full font-black text-[10px] uppercase tracking-widest">
+                      {study.industry}
+                    </Badge>
+                    <h4 className="text-4xl lg:text-5xl font-heading font-bold text-slate-900 leading-tight">{study.title}</h4>
+                    <div className="grid grid-cols-2 gap-12 pt-8">
+                      <div>
+                        <div className="text-4xl font-black text-primary">{study.investment}</div>
+                        <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-2">Ad Capital</div>
+                      </div>
+                      <div>
+                        <div className="text-4xl font-black text-slate-900">{study.returns}</div>
+                        <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-2">Generated Revenue</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="p-16 lg:p-24 space-y-12 bg-white/20">
+                    <div className="space-y-4">
+                      <h5 className="font-black text-primary uppercase tracking-[0.3em] text-[10px]">The Challenge</h5>
+                      <p className="text-2xl text-slate-500 font-medium leading-relaxed">{study.challenge}</p>
+                    </div>
+                    <div className="space-y-8">
+                      <h5 className="font-black text-slate-900 uppercase tracking-[0.3em] text-[10px]">Performance Milestones</h5>
+                      <div className="grid gap-6">
+                        {study.results.map((res, ri) => (
+                          <div key={ri} className="flex items-center gap-6 bg-white/60 p-8 rounded-[2.5rem] border border-white/60 shadow-sm group-hover:border-primary/30 transition-colors">
+                            <Activity className="w-8 h-8 text-primary" />
+                            <span className="text-2xl font-bold text-slate-800">{res}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Final Gateway */}
+      <section className="py-40 bg-slate-900 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-accent/20 opacity-40" />
+        <div className="container-wide section-padding relative z-10 text-center">
+          <div className="max-w-6xl mx-auto space-y-16">
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+              <Badge className="bg-white/10 text-white border-white/20 px-10 py-4 rounded-full text-sm font-black uppercase tracking-[0.4em]">
+                Initialize Protocol
+              </Badge>
+            </motion.div>
+            
+            <motion.h2 initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-6xl lg:text-9xl font-heading font-bold text-white leading-tight">
+              Dominate Your <br /> <span className="text-primary italic">Market Trajectory.</span>
+            </motion.h2>
+            
+            <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-2xl text-slate-300 font-body leading-relaxed max-w-4xl mx-auto">
+              Join our absolute repository of elite brands achieving exponential scale through our precision-engineered advertising protocols.
+            </motion.p>
+            
+            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="flex flex-col sm:flex-row gap-8 justify-center pt-12">
+              <Button size="lg" className="bg-primary text-white hover:bg-primary/90 text-2xl px-20 py-12 rounded-full font-bold shadow-2xl transition-all duration-500 hover:scale-105 group" asChild>
+                <Link to="/contact">
+                  Scale My Brand
+                  <ArrowRight className="w-8 h-8 ml-4 group-hover:translate-x-2 transition-transform" />
+                </Link>
+              </Button>
+              <Button size="lg" variant="outline" className="border-2 border-white/20 bg-white/10 backdrop-blur-xl text-white hover:bg-white/20 text-2xl px-16 py-10 rounded-full font-bold transition-all duration-500" asChild>
+                <Link to="/pricing">Explore Pricing Plans</Link>
+              </Button>
+            </motion.div>
           </div>
         </div>
       </section>

@@ -59,14 +59,17 @@ import AdminOutreachTasks from '@/components/admin/AdminOutreachTasks';
 import AdminOutreachCalendar from '@/components/admin/AdminOutreachCalendar';
 import AdminAffiliatePages from '@/components/admin/AdminAffiliatePages';
 import AdminAIBotSettings from '@/components/admin/AdminAIBotSettings';
+import { ShieldCheck, Activity, Cpu, Database } from 'lucide-react';
+import { motion } from "framer-motion";
 
 const AdminDashboard = () => {
   const { isAdmin, loading } = useAdminAuth();
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      <div className="min-h-screen bg-background flex flex-col items-center justify-center space-y-8">
+        <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary"></div>
+        <p className="text-2xl font-heading font-bold text-slate-900 tracking-tighter">Synchronizing Absolute Control...</p>
       </div>
     );
   }
@@ -78,81 +81,101 @@ const AdminDashboard = () => {
   return (
     <SidebarProvider defaultOpen={true}>
       <NotificationService isAdmin={true} />
-      <div className="flex min-h-screen w-full bg-muted/30">
+      <div className="flex min-h-screen w-full bg-background font-body text-slate-900 relative overflow-hidden">
+        {/* Visual background elements */}
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+          <div className="absolute top-[-5%] right-[-5%] w-[1000px] h-[1000px] bg-primary/5 rounded-full blur-[140px]" />
+          <div className="absolute bottom-[-5%] left-[-5%] w-[800px] h-[800px] bg-accent/5 rounded-full blur-[120px]" />
+        </div>
+
         <AdminSidebar />
         
-        <SidebarInset className="flex-1 w-full">
-          <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4 sm:px-6">
-            <SidebarTrigger className="-ml-1" />
+        <SidebarInset className="flex-1 w-full bg-transparent relative z-10">
+          <header className="sticky top-0 z-50 flex h-24 items-center gap-6 border-b border-white/60 bg-white/40 backdrop-blur-xl px-8 lg:px-12 shadow-sm">
+            <SidebarTrigger className="-ml-2 h-12 w-12 rounded-2xl hover:bg-white/60 transition-all duration-500" />
             <div className="flex items-center justify-between flex-1 min-w-0">
-              <div>
-                <h1 className="text-xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-                  Admin Dashboard
+              <div className="space-y-1">
+                <h1 className="text-3xl lg:text-4xl font-heading font-bold tracking-tighter text-slate-900">
+                  Absolute <span className="text-primary italic">Control.</span>
                 </h1>
-                <p className="text-xs text-muted-foreground">Manage your business operations</p>
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] flex items-center gap-3">
+                  <Activity className="w-3 h-3 text-primary" /> Managing Absolute Operational Assets
+                </p>
               </div>
-              <AdminNotifications />
+              <div className="flex items-center gap-8">
+                <div className="hidden lg:flex items-center gap-4 bg-white/60 border border-white/80 rounded-full px-6 py-3 shadow-sm">
+                  <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse" />
+                  <span className="text-[10px] font-black uppercase tracking-widest text-slate-900">System Healthy</span>
+                </div>
+                <AdminNotifications />
+              </div>
             </div>
           </header>
 
-          <main className="flex-1 overflow-auto p-4 sm:p-6 md:p-8">
-            <Routes>
-              <Route index element={<AdminOverview />} />
-              <Route path="hero" element={<AdminHero />} />
-              <Route path="services" element={<AdminServices />} />
-              <Route path="website-design" element={<AdminWebsiteDesign />} />
-              <Route path="ads-management" element={<AdminAdsManagement />} />
-              <Route path="ai-automation" element={<AdminAIAutomation />} />
-              <Route path="blog" element={<AdminBlog />} />
-              <Route path="questions" element={<AdminQuestions />} />
-              <Route path="categories" element={<AdminCategories />} />
-              <Route path="tutorials" element={<AdminTutorials />} />
-              <Route path="portfolio" element={<AdminPortfolio />} />
-              <Route path="testimonials" element={<AdminTestimonials />} />
-              <Route path="reviews" element={<AdminReviews />} />
-              <Route path="company" element={<AdminCompany />} />
-              <Route path="contact" element={<AdminContact />} />
-              <Route path="pages" element={<AdminPages />} />
-              <Route path="landing-pages" element={<AdminLandingPages />} />
-              <Route path="images" element={<AdminImages />} />
-              <Route path="navigation" element={<AdminNavigation />} />
-              <Route path="seo-meta" element={<AdminSEOMeta />} />
-              <Route path="tracking" element={<AdminTracking />} />
-              <Route path="analytics" element={<AdminAnalytics />} />
-              <Route path="users" element={<AdminUsers />} />
-              <Route path="pricing" element={<AdminPricing />} />
-              <Route path="bookings" element={<AdminBookings />} />
-              <Route path="invoices" element={<AdminInvoices />} />
-              <Route path="contact-submissions" element={<AdminContacts />} />
-              <Route path="pdf-documents" element={<AdminPDFDocuments />} />
-              <Route path="pdf-leads" element={<AdminPDFLeads />} />
-              <Route path="pdf-landing-pages" element={<AdminPDFLandingPages />} />
-              <Route path="accounting" element={<AdminAccounting />} />
-              <Route path="clients" element={<AdminClients />} />
-              <Route path="visitor-tracking" element={<AdminVisitorTracking />} />
-              <Route path="knowledge" element={<AdminKnowledge />} />
-              <Route path="messaging" element={<AdminMessaging />} />
-              <Route path="whatsapp" element={<AdminMessaging />} />
-              <Route path="email" element={<AdminEmail />} />
-              <Route path="social-automation" element={<AdminSocialAutomation />} />
-              <Route path="trusted-logos" element={<AdminTrustedLogos />} />
-              <Route path="completed-clients" element={<AdminCompletedClients />} />
-              <Route path="wallet" element={<AdminWallet />} />
-              <Route path="feedback-screenshots" element={<AdminFeedbackScreenshots />} />
-              <Route path="templates" element={<AdminTemplates />} />
-              <Route path="video-reviews" element={<AdminVideoReviews />} />
-              <Route path="outreach" element={<AdminOutreachDashboard />} />
-              <Route path="outreach/leads" element={<AdminOutreachLeads />} />
-              <Route path="outreach/emails" element={<AdminOutreachEmails />} />
-              <Route path="outreach/dms" element={<AdminOutreachDMs />} />
-              <Route path="outreach/posts" element={<AdminOutreachPosts />} />
-              <Route path="outreach/tracker" element={<AdminOutreachTracker />} />
-              <Route path="outreach/deals" element={<AdminOutreachDeals />} />
-              <Route path="outreach/tasks" element={<AdminOutreachTasks />} />
-              <Route path="outreach/calendar" element={<AdminOutreachCalendar />} />
-              <Route path="affiliate-pages" element={<AdminAffiliatePages />} />
-              <Route path="ai-bot-settings" element={<AdminAIBotSettings />} />
-            </Routes>
+          <main className="flex-1 overflow-auto p-8 lg:p-16">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <Routes>
+                <Route index element={<AdminOverview />} />
+                <Route path="hero" element={<AdminHero />} />
+                <Route path="services" element={<AdminServices />} />
+                <Route path="website-design" element={<AdminWebsiteDesign />} />
+                <Route path="ads-management" element={<AdminAdsManagement />} />
+                <Route path="ai-automation" element={<AdminAIAutomation />} />
+                <Route path="blog" element={<AdminBlog />} />
+                <Route path="questions" element={<AdminQuestions />} />
+                <Route path="categories" element={<AdminCategories />} />
+                <Route path="tutorials" element={<AdminTutorials />} />
+                <Route path="portfolio" element={<AdminPortfolio />} />
+                <Route path="testimonials" element={<AdminTestimonials />} />
+                <Route path="reviews" element={<AdminReviews />} />
+                <Route path="company" element={<AdminCompany />} />
+                <Route path="contact" element={<AdminContact />} />
+                <Route path="pages" element={<AdminPages />} />
+                <Route path="landing-pages" element={<AdminLandingPages />} />
+                <Route path="images" element={<AdminImages />} />
+                <Route path="navigation" element={<AdminNavigation />} />
+                <Route path="seo-meta" element={<AdminSEOMeta />} />
+                <Route path="tracking" element={<AdminTracking />} />
+                <Route path="analytics" element={<AdminAnalytics />} />
+                <Route path="users" element={<AdminUsers />} />
+                <Route path="pricing" element={<AdminPricing />} />
+                <Route path="bookings" element={<AdminBookings />} />
+                <Route path="invoices" element={<AdminInvoices />} />
+                <Route path="contact-submissions" element={<AdminContacts />} />
+                <Route path="pdf-documents" element={<AdminPDFDocuments />} />
+                <Route path="pdf-leads" element={<AdminPDFLeads />} />
+                <Route path="pdf-landing-pages" element={<AdminPDFLandingPages />} />
+                <Route path="accounting" element={<AdminAccounting />} />
+                <Route path="clients" element={<AdminClients />} />
+                <Route path="visitor-tracking" element={<AdminVisitorTracking />} />
+                <Route path="knowledge" element={<AdminKnowledge />} />
+                <Route path="messaging" element={<AdminMessaging />} />
+                <Route path="whatsapp" element={<AdminMessaging />} />
+                <Route path="email" element={<AdminEmail />} />
+                <Route path="social-automation" element={<AdminSocialAutomation />} />
+                <Route path="trusted-logos" element={<AdminTrustedLogos />} />
+                <Route path="completed-clients" element={<AdminCompletedClients />} />
+                <Route path="wallet" element={<AdminWallet />} />
+                <Route path="feedback-screenshots" element={<AdminFeedbackScreenshots />} />
+                <Route path="templates" element={<AdminTemplates />} />
+                <Route path="video-reviews" element={<AdminVideoReviews />} />
+                <Route path="outreach" element={<AdminOutreachDashboard />} />
+                <Route path="outreach/leads" element={<AdminOutreachLeads />} />
+                <Route path="outreach/emails" element={<AdminOutreachEmails />} />
+                <Route path="outreach/dms" element={<AdminOutreachDMs />} />
+                <Route path="outreach/posts" element={<AdminOutreachPosts />} />
+                <Route path="outreach/tracker" element={<AdminOutreachTracker />} />
+                <Route path="outreach/deals" element={<AdminOutreachDeals />} />
+                <Route path="outreach/tasks" element={<AdminOutreachTasks />} />
+                <Route path="outreach/calendar" element={<AdminOutreachCalendar />} />
+                <Route path="affiliate-pages" element={<AdminAffiliatePages />} />
+                <Route path="ai-bot-settings" element={<AdminAIBotSettings />} />
+              </Routes>
+            </motion.div>
           </main>
         </SidebarInset>
         

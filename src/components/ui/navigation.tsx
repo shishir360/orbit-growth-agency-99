@@ -56,15 +56,15 @@ const Navigation = () => {
         scrolled ? 'py-2' : 'py-4'
       }`}
     >
-      {/* Dark solid background */}
-      <div className={`absolute inset-0 transition-all duration-500 bg-[#0d0d0d] ${
+      {/* Liquid Glass Background */}
+      <div className={`absolute inset-0 transition-all duration-500 bg-white/40 backdrop-blur-xl ${
         scrolled 
-          ? 'shadow-[0_2px_20px_rgba(0,0,0,0.5)]' 
+          ? 'shadow-glass border-b border-white/20' 
           : ''
       }`} />
       
-      {/* Subtle bottom border */}
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-[#2e2e2e]" />
+      {/* Subtle bottom border for unscrolled state */}
+      {!scrolled && <div className="absolute bottom-0 left-0 right-0 h-px bg-white/10" />}
       
       
       <div className="container-wide section-padding relative">
@@ -88,13 +88,13 @@ const Navigation = () => {
             </motion.div>
             <div className="flex flex-col">
               <motion.span 
-                className="text-xl font-bold text-white tracking-wide"
+                className="text-xl font-heading font-bold text-slate-900 tracking-wide"
                 whileHover={{ scale: 1.02 }}
               >
                 LUNEXO
               </motion.span>
-              <span className="text-[10px] font-semibold text-[#888888] tracking-[0.25em] -mt-0.5">
-                MEDIA
+              <span className="text-[10px] font-bold text-slate-500 tracking-[0.25em] -mt-0.5 uppercase">
+                Media
               </span>
             </div>
           </a>
@@ -107,14 +107,14 @@ const Navigation = () => {
               whileHover={{ scale: 1.05 }}
               className={`relative px-5 py-2.5 text-sm font-medium transition-all duration-300 rounded-xl group overflow-hidden ${
                 isActive("/")
-                  ? "text-white"
-                  : "text-[#888888] hover:text-white"
+                  ? "text-primary"
+                  : "text-slate-600 hover:text-slate-900"
               }`}
             >
               {isActive("/") && (
                 <motion.span 
                   layoutId="activeTab"
-                  className="absolute inset-0 bg-[#1e1e1e] rounded-xl"
+                  className="absolute inset-0 bg-primary/5 rounded-xl"
                 />
               )}
               <span className="relative z-10 flex items-center gap-1.5">
@@ -127,7 +127,7 @@ const Navigation = () => {
               <DropdownMenuTrigger asChild>
                 <motion.button 
                   whileHover={{ scale: 1.05 }}
-                  className="relative px-5 py-2.5 text-sm font-medium text-[#888888] hover:text-white transition-all duration-300 rounded-xl group flex items-center outline-none"
+                  className="relative px-5 py-2.5 text-sm font-medium text-slate-600 hover:text-slate-900 transition-all duration-300 rounded-xl group flex items-center outline-none"
                 >
                   Services
                   <ChevronDown className="w-4 h-4 ml-1.5 transition-transform duration-300 group-data-[state=open]:rotate-180" />
@@ -135,7 +135,7 @@ const Navigation = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent 
                 align="start" 
-                className="w-56 bg-[#161616] border-[#2e2e2e] p-3 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.5)]"
+                className="w-56 bg-white/90 backdrop-blur-2xl border-white/40 p-3 rounded-2xl shadow-glass"
               >
                 {serviceItems.map((item, index) => (
                   <DropdownMenuItem key={item.id} asChild>
@@ -146,11 +146,11 @@ const Navigation = () => {
                       transition={{ delay: index * 0.05 }}
                       className={`w-full rounded-xl px-4 py-3 text-sm transition-all duration-300 flex items-center gap-3 ${
                         isActive(item.href) 
-                          ? "text-white bg-[#1e1e1e]" 
-                          : "text-[#888888] hover:text-white hover:bg-[#1e1e1e]"
+                          ? "text-primary bg-primary/5" 
+                          : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
                       }`}
                     >
-                      <Zap className="w-4 h-4 text-[#3ECF8E]" />
+                      <Zap className="w-4 h-4 text-[hsl(var(--primary))]" />
                       {item.name}
                     </motion.a>
                   </DropdownMenuItem>
@@ -164,8 +164,8 @@ const Navigation = () => {
               whileHover={{ scale: 1.05 }}
               className={`relative px-5 py-2.5 text-sm font-medium transition-all duration-300 rounded-xl group ${
                 isActive("/portfolio")
-                  ? "text-white"
-                  : "text-[#888888] hover:text-white"
+                  ? "text-primary"
+                  : "text-slate-600 hover:text-slate-900"
               }`}
             >
               {isActive("/portfolio") && (
@@ -185,8 +185,8 @@ const Navigation = () => {
                 whileHover={{ scale: 1.05 }}
                 className={`relative px-5 py-2.5 text-sm font-medium transition-all duration-300 rounded-xl group ${
                   isActive(item.href)
-                    ? "text-white"
-                    : "text-[#888888] hover:text-white"
+                    ? "text-primary"
+                    : "text-slate-600 hover:text-slate-900"
                 }`}
               >
                 {isActive(item.href) && (
@@ -206,7 +206,7 @@ const Navigation = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.98 }}
             >
-              <div className="relative inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#3ECF8E] hover:bg-[#34B27B] text-[#0d0d0d] text-sm font-semibold rounded-xl transition-all duration-300 shadow-[0_0_20px_rgba(62,207,142,0.3)]">
+              <div className="relative inline-flex items-center justify-center gap-2 px-6 py-3 bg-slate-900 text-white text-sm font-bold rounded-xl transition-all duration-300 shadow-lg hover:bg-slate-800">
                 <motion.div
                   animate={{ rotate: [0, 15, -15, 0] }}
                   transition={{ duration: 2, repeat: Infinity }}
@@ -223,7 +223,7 @@ const Navigation = () => {
             <motion.button
               whileTap={{ scale: 0.9 }}
               onClick={() => setIsOpen(!isOpen)}
-              className="relative w-12 h-12 text-white hover:text-white rounded-xl bg-[#1e1e1e] border border-[#2e2e2e] flex items-center justify-center"
+              className="relative w-12 h-12 text-slate-900 hover:text-slate-900 rounded-xl bg-white/20 border border-white/30 flex items-center justify-center backdrop-blur-xl"
             >
               <AnimatePresence mode="wait">
                 {isOpen ? (
@@ -260,9 +260,9 @@ const Navigation = () => {
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3, ease: "easeInOut" }}
-              className="md:hidden overflow-hidden"
+              className="md:hidden overflow-hidden bg-white/80 backdrop-blur-3xl"
             >
-              <div className="py-6 border-t border-[#2e2e2e] mt-4">
+              <div className="py-6 border-t border-white/20 mt-4 px-4">
                 <div className="flex flex-col space-y-2">
                   {/* Home Link */}
                   <motion.a
@@ -272,8 +272,8 @@ const Navigation = () => {
                     transition={{ delay: 0.1 }}
                     className={`px-5 py-4 text-base font-medium transition-all rounded-xl flex items-center gap-3 ${
                       isActive("/")
-                        ? "text-white bg-[#1e1e1e]"
-                        : "text-[#888888] hover:text-white hover:bg-[#1e1e1e]"
+                        ? "text-primary bg-primary/5"
+                        : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
                     }`}
                   >
                     Home
@@ -286,10 +286,10 @@ const Navigation = () => {
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.15 }}
                       onClick={() => setServicesOpen(!servicesOpen)}
-                      className="w-full px-5 py-4 text-base font-medium transition-all rounded-xl flex items-center justify-between text-[#888888] hover:text-white hover:bg-[#1e1e1e]"
+                      className="w-full px-5 py-4 text-base font-medium transition-all rounded-xl flex items-center justify-between text-slate-600 hover:text-slate-900 hover:bg-slate-50"
                     >
                       <span className="flex items-center gap-3">
-                        <Zap className="w-4 h-4 text-[#3ECF8E]" />
+                        <Zap className="w-4 h-4 text-[hsl(var(--primary))]" />
                         Services
                       </span>
                       <motion.div
@@ -309,7 +309,7 @@ const Navigation = () => {
                           transition={{ duration: 0.3 }}
                           className="overflow-hidden"
                         >
-                          <div className="ml-4 space-y-1 py-2 border-l-2 border-[#2e2e2e]">
+                          <div className="ml-4 space-y-1 py-2 border-l-2 border-slate-200">
                             {serviceItems.map((item, index) => (
                               <motion.a
                                 key={item.id}
@@ -319,11 +319,11 @@ const Navigation = () => {
                                 transition={{ delay: index * 0.05 }}
                                 className={`px-5 py-3 text-base font-medium transition-all rounded-xl ml-2 flex items-center gap-3 ${
                                   isActive(item.href)
-                                    ? "text-white bg-[#1e1e1e]"
-                                    : "text-[#888888] hover:text-white hover:bg-[#1e1e1e]"
+                                    ? "text-primary bg-primary/5"
+                                    : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
                                 }`}
                               >
-                                <span className="w-1.5 h-1.5 rounded-full bg-[#3ECF8E]" />
+                                <span className="w-1.5 h-1.5 rounded-full bg-[hsl(var(--primary))]" />
                                 {item.name}
                               </motion.a>
                             ))}
@@ -341,8 +341,8 @@ const Navigation = () => {
                     transition={{ delay: 0.35 }}
                     className={`px-5 py-4 text-base font-medium transition-all rounded-xl flex items-center gap-3 ${
                       isActive("/portfolio")
-                        ? "text-white bg-[#1e1e1e]"
-                        : "text-[#888888] hover:text-white hover:bg-[#1e1e1e]"
+                        ? "text-primary bg-primary/5"
+                        : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
                     }`}
                   >
                     Portfolio
@@ -375,7 +375,7 @@ const Navigation = () => {
                   >
                     <a 
                       href="https://lunexomedia.com/book-apartment" 
-                      className="flex items-center justify-center gap-3 px-6 py-4 bg-[#3ECF8E] hover:bg-[#34B27B] text-[#0d0d0d] text-base font-semibold rounded-xl shadow-[0_0_20px_rgba(62,207,142,0.3)]"
+                      className="flex items-center justify-center gap-3 px-6 py-4 bg-[hsl(var(--primary))] hover:bg-[hsl(var(--primary))] text-[#0d0d0d] text-base font-semibold rounded-xl shadow-[0_0_20px_rgba(62,207,142,0.3)]"
                     >
                       <Sparkles className="w-5 h-5" />
                       Book Now

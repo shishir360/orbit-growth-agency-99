@@ -41,43 +41,12 @@ import {
   LineChart,
   Puzzle,
   Check,
-  Calendar
+  Calendar,
+  PieChart,
+  Layers,
+  ShieldCheck,
+  Activity
 } from "lucide-react";
-
-// Blog post type
-interface BlogPost {
-  id: string;
-  title: string;
-  slug: string;
-  excerpt: string;
-  image_url: string | null;
-  author: string;
-  publish_date: string;
-}
-
-// Portfolio project type
-interface PortfolioProject {
-  id: string;
-  title: string;
-  slug: string;
-  description: string;
-  category: string;
-  image_url: string | null;
-  technologies: string[] | null;
-}
-
-// Trusted logo type
-interface TrustedLogo {
-  id: string;
-  name: string;
-  logo_url: string;
-  visible: boolean;
-}
-
-// Import images
-import aiHeroDashboard from "@/assets/ai-hero-dashboard.jpg";
-import aiBrainNetwork from "@/assets/ai-brain-network.jpg";
-import aiTeamWorking from "@/assets/ai-team-working.jpg";
 
 // AI Platform Logos as SVG components
 const OpenAILogo = () => (
@@ -110,19 +79,6 @@ const MicrosoftLogo = () => (
   </svg>
 );
 
-const ZapierLogo = () => (
-  <svg viewBox="0 0 24 24" className="w-8 h-8">
-    <path fill="#FF4A00" d="M15.674 8.326l-2.27 2.27 5.888 5.888h-4.584v3.208h8.984v-8.984h-3.208v4.584l-5.888-5.888 2.27-2.27L12 2.268 7.134 7.134l2.27 2.27-5.888 5.888v-4.584H.308v8.984h8.984v-3.208H4.708l5.888-5.888-2.27-2.27L12 4.732l3.674 3.594z"/>
-  </svg>
-);
-
-const MakeLogo = () => (
-  <svg viewBox="0 0 24 24" className="w-8 h-8">
-    <circle fill="#6D01D0" cx="12" cy="12" r="10"/>
-    <path fill="white" d="M8 8h3v8H8V8zm5 0h3v8h-3V8z"/>
-  </svg>
-);
-
 const HubSpotLogo = () => (
   <svg viewBox="0 0 24 24" className="w-8 h-8">
     <path fill="#FF7A59" d="M18.164 7.93V5.084a2.198 2.198 0 001.267-1.984v-.066A2.198 2.198 0 0017.24.845h-.067a2.198 2.198 0 00-2.19 2.19v.065c0 .877.527 1.645 1.267 1.984V7.93a5.749 5.749 0 00-3.247 1.64L5.07 3.654a2.35 2.35 0 00.072-.56 2.395 2.395 0 10-2.395 2.395c.396 0 .769-.101 1.097-.275l7.848 5.86a5.754 5.754 0 00-.098 1.046c0 .385.038.76.111 1.123l-3.905 1.9a2.48 2.48 0 00-2.162-1.272 2.488 2.488 0 100 4.977 2.487 2.487 0 002.477-2.72l3.74-1.82a5.783 5.783 0 1010.31-6.178l-.001-.2z"/>
@@ -135,157 +91,78 @@ const SalesforceLogo = () => (
   </svg>
 );
 
+// Import images
+import aiHeroDashboard from "@/assets/ai-hero-dashboard.jpg";
+import aiBrainNetwork from "@/assets/ai-brain-network.jpg";
+import aiTeamWorking from "@/assets/ai-team-working.jpg";
+
 const AIAutomation = () => {
   const [isVisible, setIsVisible] = useState(false);
-  const [activeSolution, setActiveSolution] = useState(0);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const heroRef = useRef<HTMLElement>(null);
 
-  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
-  const [portfolioProjects, setPortfolioProjects] = useState<PortfolioProject[]>([]);
-  const [trustedLogos, setTrustedLogos] = useState<TrustedLogo[]>([]);
-
   useEffect(() => {
     setIsVisible(true);
-    
-    const handleMouseMove = (e: MouseEvent) => {
-      if (heroRef.current) {
-        const rect = heroRef.current.getBoundingClientRect();
-        setMousePosition({
-          x: (e.clientX - rect.left) / rect.width,
-          y: (e.clientY - rect.top) / rect.height
-        });
-      }
-    };
-    
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    document.title = "AI Automation for Business | Absolute Intelligence | Lunexo Media";
   }, []);
 
-  // Fetch blog posts
-  useEffect(() => {
-    const fetchBlogPosts = async () => {
-      const { data, error } = await supabase
-        .from('blog_posts')
-        .select('id, title, slug, excerpt, image_url, author, publish_date')
-        .eq('published', true)
-        .order('publish_date', { ascending: false })
-        .limit(3);
-      
-      if (data && !error) {
-        setBlogPosts(data);
-      }
-    };
-    fetchBlogPosts();
-  }, []);
-
-  // Fetch portfolio projects (AI Automation category)
-  useEffect(() => {
-    const fetchProjects = async () => {
-      const { data, error } = await supabase
-        .from('portfolio')
-        .select('*')
-        .eq('published', true)
-        .eq('blocked', false)
-        .eq('category', 'AI Automation')
-        .limit(6)
-        .order('created_at', { ascending: false });
-      
-      if (data && !error) {
-        setPortfolioProjects(data);
-      }
-    };
-    fetchProjects();
-  }, []);
-
-  // Fetch trusted logos
-  useEffect(() => {
-    const fetchLogos = async () => {
-      const { data, error } = await supabase
-        .from('trusted_logos')
-        .select('*')
-        .eq('visible', true)
-        .order('display_order', { ascending: true });
-      
-      if (data && !error) {
-        setTrustedLogos(data);
-      }
-    };
-    fetchLogos();
-  }, []);
-
-  // AI Platform Partners
   const aiPlatforms = [
-    { name: "HubSpot", logo: <HubSpotLogo />, description: "CRM Automation" },
-    { name: "Salesforce", logo: <SalesforceLogo />, description: "Enterprise CRM" },
-    { name: "Zapier", logo: <ZapierLogo />, description: "Workflow Hub" },
-    { name: "OpenAI", logo: <OpenAILogo />, description: "GPT-4 & DALL-E" },
-    { name: "Make", logo: <MakeLogo />, description: "Visual Automation" },
-    { name: "Google AI", logo: <GoogleAILogo />, description: "Gemini AI" }
+    { name: "HubSpot", logo: <HubSpotLogo /> },
+    { name: "Salesforce", logo: <SalesforceLogo /> },
+    { name: "OpenAI", logo: <OpenAILogo /> },
+    { name: "Google AI", logo: <GoogleAILogo /> },
+    { name: "Microsoft", logo: <MicrosoftLogo /> },
+    { name: "Anthropic", logo: <AnthropicLogo /> }
   ];
 
-  // Feature services
-  const featureServices = [
-    { icon: <Zap className="w-8 h-8" />, title: "CRM Automation", description: "Automate your customer relationship management" },
-    { icon: <Database className="w-8 h-8" />, title: "Financial Automation", description: "Streamline invoicing, payments & reporting" },
-    { icon: <Puzzle className="w-8 h-8" />, title: "Workflow Automation", description: "Connect apps and automate processes" },
-    { icon: <Target className="w-8 h-8" />, title: "Marketing Automation", description: "Scale your marketing with AI" },
-    { icon: <LineChart className="w-8 h-8" />, title: "AI Chatbots", description: "24/7 intelligent customer support" },
-    { icon: <Settings className="w-8 h-8" />, title: "Business Process", description: "End-to-end process optimization" }
-  ];
-
-  // Pricing plans
   const pricingPlans = [
     {
-      name: "90 Day Fast-Track",
+      name: "90 Day Fast-Track Protocol",
       price: "Call",
       period: "3 mo",
-      description: "Done-for-you in 90 days with ongoing support available",
-      badge: null,
+      description: "Done-for-you in 90 days with ongoing absolute intelligence support.",
       features: [
-        "90 days done-for-you",
-        "Weekly progress calls",
+        "90 days done-for-you architecture",
+        "Weekly velocity progress calls",
         "Full AI end-to-end journey",
-        "Bespoke for your business",
+        "Bespoke neural logic",
         "Quick wins in month 1",
         "ROI guaranteed"
       ],
-      guarantee: "Money back guarantee*"
+      guarantee: "Absolute Return Guarantee*"
     },
     {
-      name: "Retainer",
+      name: "Retainer Protocol",
       price: "Call",
       period: "mo",
-      description: "Ongoing monthly management with the latest updates",
-      badge: "Most popular",
+      description: "Ongoing management with the latest intelligence updates and node syncs.",
+      badge: "Most dominant",
       features: [
         "Expert AI systems long term",
-        "Weekly progress calls",
+        "Weekly velocity progress calls",
         "Full AI end-to-end journey",
-        "Bespoke for your business",
+        "Bespoke neural logic",
         "Grows with your business",
-        "Massive ROI long term"
+        "Absolute ROI trajectory"
       ],
-      guarantee: "Hands off for you. Hands on for us"
+      guarantee: "Operational Autonomy Guarantee"
     },
     {
-      name: "Support",
+      name: "Support Node",
       price: "$87",
       period: "week",
-      description: "Get experts on hand daily for AI support",
-      badge: null,
+      description: "Get experts on hand daily for absolute neural support.",
       features: [
         "Access to AI experts daily",
         "Help for one brand/company",
-        "Fast response times",
+        "Fast response telemetry",
         "On hand to help",
-        "Pick our brains"
+        "Pick our neural brains"
       ],
-      guarantee: "Billed monthly"
+      guarantee: "Billed monthly protocol"
     }
   ];
 
-  // FAQ items
   const faqItems = [
     {
       question: "What exactly does your AI Automation service offer?",
@@ -305,16 +182,10 @@ const AIAutomation = () => {
     }
   ];
 
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
-
-  useEffect(() => {
-    document.title = "AI Automation for Business | Lunexo Media";
-  }, []);
-
   return (
-    <div className="min-h-screen bg-black overflow-hidden">
+    <div className="min-h-screen bg-background font-body text-slate-900 overflow-hidden">
       <SEO
-        title="AI Automation for Business | Lunexo Media"
+        title="AI Automation for Business | Absolute Intelligence | Lunexo Media"
         description="Transform your business with enterprise-grade AI automation. Chatbots, workflows, voice AI, and intelligent agents delivering 85% cost savings."
         image="https://www.lunexomedia.com/og-image-new.jpg"
         url="https://www.lunexomedia.com/ai-automation"
@@ -333,1064 +204,354 @@ const AIAutomation = () => {
       
       <Navigation />
       
-      {/* Hero Section - TheAIAutomationAgency Style with Image */}
-      <section 
-        ref={heroRef}
-        className="relative min-h-screen flex items-center overflow-hidden pt-20"
-      >
-        {/* Emerald/Teal glow effects */}
-        <div className="absolute inset-0 bg-black">
-          <motion.div 
-            className="absolute w-[1000px] h-[1000px] rounded-full blur-[200px]"
-            style={{
-              background: 'radial-gradient(circle, rgba(16, 185, 129, 0.25) 0%, transparent 70%)',
-              left: '-10%',
-              top: '10%',
-            }}
-            animate={{
-              scale: [1, 1.1, 1],
-              opacity: [0.5, 0.7, 0.5]
-            }}
-            transition={{ duration: 8, repeat: Infinity }}
-          />
-          <motion.div 
-            className="absolute w-[800px] h-[800px] rounded-full blur-[200px]"
-            style={{
-              background: 'radial-gradient(circle, rgba(6, 182, 212, 0.2) 0%, transparent 70%)',
-              right: '-5%',
-              bottom: '0%',
-            }}
-            animate={{
-              scale: [1, 1.15, 1],
-              opacity: [0.4, 0.6, 0.4]
-            }}
-            transition={{ duration: 10, repeat: Infinity }}
-          />
+      {/* Hero Section */}
+      <section className="relative min-h-screen flex items-center justify-center pt-32 pb-24 overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+          <div className="absolute top-[10%] left-[5%] w-[600px] h-[600px] bg-primary/10 rounded-full blur-[120px]" />
+          <div className="absolute bottom-[10%] right-[5%] w-[500px] h-[500px] bg-accent/10 rounded-full blur-[100px]" />
         </div>
 
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-20 relative z-10">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Left Content */}
-            <div className="text-center lg:text-left">
-              {/* Top Badge */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                className="mb-8"
-              >
-                <span className="inline-flex items-center px-4 py-2 rounded-full bg-white/5 border border-white/10 text-gray-400 text-sm">
-                  Done for you AI Setup
-                </span>
-              </motion.div>
+        <div className="container-wide section-padding relative z-10">
+          <div className="text-center max-w-7xl mx-auto space-y-16">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              <Badge className="bg-primary/10 border border-primary/20 text-primary px-10 py-4 rounded-full text-sm font-black uppercase tracking-[0.4em] backdrop-blur-xl">
+                <Brain className="w-5 h-5 mr-3" />
+                Absolute Intelligence Protocol
+              </Badge>
+            </motion.div>
 
-              {/* Main Headline */}
-              <motion.h1 
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2, duration: 0.8 }}
-                className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black leading-[1.05] tracking-tight mb-8"
-              >
-                <span className="text-white">Done-for-you AI</span>
-                <br />
-                <span className="inline-block bg-[#C5FF4A] text-black px-4 py-1 rounded-2xl mt-2">
-                  Plan. Build. Deploy.
-                </span>
-                <br />
-                <span className="text-white mt-2 inline-block">In just 90 Days</span>
-              </motion.h1>
+            <motion.h1 
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.8 }}
+              className="text-6xl sm:text-7xl lg:text-9xl font-heading font-bold text-slate-900 leading-[1.05] tracking-tight"
+            >
+              Plan. Build. <br /> <span className="text-primary italic">Deploy Logic.</span>
+            </motion.h1>
 
-              {/* Subtitle */}
-              <motion.p 
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.4, duration: 0.8 }}
-                className="text-xl text-gray-400 leading-relaxed max-w-xl mx-auto lg:mx-0 mb-10"
-              >
-                AI fully integrated into your business within 90 days. Scale faster, reduce costs, automate everything.
-              </motion.p>
-
-              {/* CTA Button */}
-              <motion.div 
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5, duration: 0.8 }}
-                className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
-              >
-                <Button 
-                  size="lg" 
-                  className="bg-[#C5FF4A] hover:bg-[#d4ff6a] text-black text-lg px-10 py-7 rounded-full font-semibold shadow-2xl shadow-[#C5FF4A]/30 hover:shadow-[#C5FF4A]/50 transition-all duration-300 hover:scale-105 group"
-                  asChild
-                >
-                  <a href="https://lunexomedia.com/contact">
-                    Get Automated
-                    <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-                  </a>
-                </Button>
-                <Button 
-                  size="lg" 
-                  variant="outline"
-                  className="border-[#C5FF4A]/50 text-[#C5FF4A] hover:bg-[#C5FF4A]/10 hover:border-[#C5FF4A] text-lg px-8 py-7 rounded-full font-medium"
-                  asChild
-                >
-                  <a href="#how-it-works">
-                    <Play className="w-5 h-5 mr-2" />
-                    See How It Works
-                  </a>
-                </Button>
-              </motion.div>
-            </div>
-
-            {/* Right Image */}
-            <motion.div 
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
+            <motion.p 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
               transition={{ delay: 0.4, duration: 0.8 }}
-              className="relative hidden lg:block"
+              className="text-2xl text-slate-500 max-w-4xl mx-auto leading-relaxed font-medium"
             >
-              <div className="relative">
-                {/* Main Image */}
-                <div className="relative rounded-[2rem] overflow-hidden border border-white/10 shadow-2xl shadow-emerald-500/20">
-                  <img 
-                    src={aiHeroDashboard} 
-                    alt="AI Automation Dashboard"
-                    className="w-full h-auto"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                </div>
-                
-                {/* Floating Stats Card */}
-                <motion.div 
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.8 }}
-                  className="absolute -bottom-6 -left-6 bg-black/90 backdrop-blur-xl border border-[#C5FF4A]/30 rounded-2xl p-4 shadow-xl"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-[#C5FF4A]/20 rounded-xl flex items-center justify-center">
-                      <TrendingUp className="w-6 h-6 text-[#C5FF4A]" />
-                    </div>
-                    <div>
-                      <div className="text-2xl font-black text-white">340%</div>
-                      <div className="text-xs text-gray-400">Growth Rate</div>
-                    </div>
-                  </div>
-                </motion.div>
-
-                {/* Floating Badge */}
-                <motion.div 
-                  initial={{ opacity: 0, y: -20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 1 }}
-                  className="absolute -top-4 -right-4 bg-emerald-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg"
-                >
-                  ✨ AI-Powered
-                </motion.div>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-
-        {/* Scroll indicator */}
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2 }}
-          className="absolute bottom-10 left-1/2 -translate-x-1/2"
-        >
-          <motion.div 
-            animate={{ y: [0, 10, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
-            className="flex flex-col items-center gap-2 text-gray-500"
-          >
-            <span className="text-sm font-medium">Scroll to explore</span>
-            <ChevronRight className="w-5 h-5 rotate-90" />
-          </motion.div>
-        </motion.div>
-      </section>
-
-      {/* AI Platform Partners - Logo Cloud */}
-      <section className="py-20 bg-black relative overflow-hidden">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-14"
-          >
-            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">
-              Leading AI Companies We Work With
-            </h2>
-          </motion.div>
-
-          {/* Platform logos grid */}
-          <div className="grid grid-cols-3 md:grid-cols-6 gap-6 md:gap-10">
-            {aiPlatforms.map((platform, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="flex flex-col items-center group"
-              >
-                <div className="w-16 h-16 flex items-center justify-center grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-300">
-                  {platform.logo}
-                </div>
-                <span className="text-gray-500 text-xs mt-2 group-hover:text-white transition-colors">{platform.name}</span>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* How It Works Section with Images */}
-      <section id="how-it-works" className="py-24 bg-black relative overflow-hidden">
-        {/* Background glow */}
-        <div className="absolute top-1/2 left-0 w-[600px] h-[600px] bg-gradient-to-r from-emerald-500/20 to-transparent rounded-full blur-[200px] -translate-y-1/2" />
-        
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <span className="text-[#C5FF4A] text-sm font-medium uppercase tracking-wider mb-4 block">How It Works</span>
-            <h2 className="text-4xl sm:text-5xl font-black text-white mb-6">
-              Your AI Journey in{" "}
-              <span className="text-[#C5FF4A]">3 Steps</span>
-            </h2>
-            <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-              From strategy to deployment, we handle everything for you
-            </p>
-          </motion.div>
-
-          {/* Step 1 */}
-          <div className="grid lg:grid-cols-2 gap-12 items-center mb-20">
+              Experience the absolute integration of <span className="text-primary italic font-bold">neural architectures</span> engineered for high-velocity growth and absolute operational autonomy.
+            </motion.p>
+            
             <motion.div 
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="order-2 lg:order-1"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6, duration: 0.8 }}
+              className="flex flex-col sm:flex-row gap-8 justify-center pt-8"
             >
-              <div className="inline-flex items-center gap-2 bg-[#C5FF4A]/10 border border-[#C5FF4A]/30 rounded-full px-4 py-2 mb-6">
-                <span className="w-8 h-8 bg-[#C5FF4A] text-black rounded-full flex items-center justify-center font-bold text-sm">1</span>
-                <span className="text-[#C5FF4A] font-medium">Plan</span>
-              </div>
-              <h3 className="text-3xl sm:text-4xl font-bold text-white mb-4">Strategic AI Assessment</h3>
-              <p className="text-gray-400 text-lg leading-relaxed mb-6">
-                We analyze your business processes, identify automation opportunities, and create a custom AI implementation roadmap tailored to your specific needs and goals.
-              </p>
-              <ul className="space-y-3">
-                {["Business process audit", "AI opportunity mapping", "ROI projections", "Custom implementation plan"].map((item, i) => (
-                  <li key={i} className="flex items-center gap-3 text-gray-300">
-                    <Check className="w-5 h-5 text-[#C5FF4A]" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
+              <Button size="lg" className="bg-slate-900 text-white hover:bg-slate-800 text-2xl px-20 py-12 rounded-full font-bold shadow-2xl transition-all duration-500 group" asChild>
+                <Link to="/contact">
+                  Initialize Automation
+                  <ArrowRight className="w-8 h-8 ml-6 group-hover:translate-x-3 transition-transform" />
+                </Link>
+              </Button>
+              <Button size="lg" variant="outline" className="text-2xl px-16 py-10 rounded-full border-2 border-white/60 bg-white/40 backdrop-blur-xl text-slate-900 hover:bg-white/60 transition-all duration-500 font-bold" asChild>
+                <a href="#strategy">View Intelligence Strategy</a>
+              </Button>
             </motion.div>
-            <motion.div 
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="order-1 lg:order-2"
-            >
-              <div className="relative rounded-[2rem] overflow-hidden border border-white/10 shadow-2xl shadow-emerald-500/10">
-                <img 
-                  src={aiBrainNetwork} 
-                  alt="AI Strategy Planning"
-                  className="w-full h-auto"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-              </div>
-            </motion.div>
-          </div>
 
-          {/* Step 2 */}
-          <div className="grid lg:grid-cols-2 gap-12 items-center mb-20">
-            <motion.div 
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
+            {/* Hero Visual */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.8, duration: 1 }}
+              className="relative mt-32 max-w-6xl mx-auto"
             >
-              <div className="relative rounded-[2rem] overflow-hidden border border-white/10 shadow-2xl shadow-cyan-500/10">
-                <img 
-                  src={aiTeamWorking} 
-                  alt="AI Implementation Team"
-                  className="w-full h-auto"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-              </div>
-            </motion.div>
-            <motion.div 
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-            >
-              <div className="inline-flex items-center gap-2 bg-cyan-500/10 border border-cyan-500/30 rounded-full px-4 py-2 mb-6">
-                <span className="w-8 h-8 bg-cyan-500 text-white rounded-full flex items-center justify-center font-bold text-sm">2</span>
-                <span className="text-cyan-400 font-medium">Build</span>
-              </div>
-              <h3 className="text-3xl sm:text-4xl font-bold text-white mb-4">Expert Implementation</h3>
-              <p className="text-gray-400 text-lg leading-relaxed mb-6">
-                Our team of AI specialists builds and integrates custom automation solutions, connecting all your tools and systems for seamless operation.
-              </p>
-              <ul className="space-y-3">
-                {["Custom AI development", "System integrations", "Workflow automation", "Quality assurance testing"].map((item, i) => (
-                  <li key={i} className="flex items-center gap-3 text-gray-300">
-                    <Check className="w-5 h-5 text-cyan-400" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-          </div>
-
-          {/* Step 3 */}
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <motion.div 
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="order-2 lg:order-1"
-            >
-              <div className="inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/30 rounded-full px-4 py-2 mb-6">
-                <span className="w-8 h-8 bg-emerald-500 text-white rounded-full flex items-center justify-center font-bold text-sm">3</span>
-                <span className="text-emerald-400 font-medium">Deploy</span>
-              </div>
-              <h3 className="text-3xl sm:text-4xl font-bold text-white mb-4">Launch & Optimize</h3>
-              <p className="text-gray-400 text-lg leading-relaxed mb-6">
-                We deploy your AI systems, train your team, and provide ongoing optimization to ensure maximum performance and ROI.
-              </p>
-              <ul className="space-y-3">
-                {["Full deployment support", "Team training sessions", "Performance monitoring", "Continuous optimization"].map((item, i) => (
-                  <li key={i} className="flex items-center gap-3 text-gray-300">
-                    <Check className="w-5 h-5 text-emerald-400" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-            <motion.div 
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="order-1 lg:order-2"
-            >
-              <div className="relative rounded-[2rem] overflow-hidden border border-white/10 shadow-2xl shadow-emerald-500/10">
+              <div className="relative bg-white/40 backdrop-blur-xl border border-white/60 rounded-[5rem] p-6 lg:p-12 shadow-glass overflow-hidden">
                 <img 
                   src={aiHeroDashboard} 
-                  alt="AI Deployment Dashboard"
-                  className="w-full h-auto"
+                  alt="AI Intelligence Preview" 
+                  className="w-full h-auto rounded-[4rem] shadow-2xl grayscale hover:grayscale-0 transition-all duration-1000"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-                {/* Success badge */}
-                <motion.div 
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.3 }}
-                  className="absolute bottom-6 right-6 bg-emerald-500 text-white px-4 py-2 rounded-full text-sm font-bold flex items-center gap-2"
-                >
-                  <CheckCircle className="w-4 h-4" />
-                  Go Live!
-                </motion.div>
               </div>
+              
+              {/* Floating Node */}
+              <motion.div 
+                animate={{ y: [0, -25, 0] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute -top-16 -left-16 hidden lg:block"
+              >
+                <div className="bg-white/80 backdrop-blur-xl border border-white/60 rounded-[3.5rem] p-12 shadow-glass space-y-6 w-96 text-center">
+                  <div className="flex items-center gap-6 justify-center">
+                    <div className="w-16 h-16 bg-primary/10 rounded-3xl flex items-center justify-center shadow-sm">
+                      <Zap className="w-8 h-8 text-primary" />
+                    </div>
+                    <div>
+                      <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Efficiency Telemetry</div>
+                      <div className="text-4xl font-black text-slate-900 tracking-tighter">+85%</div>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* Feature Services Grid */}
-      <section className="py-24 bg-black relative overflow-hidden">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl sm:text-5xl font-black text-white mb-6">
-              AI Automation{" "}
-              <span className="text-[#C5FF4A]">Services</span>
+      {/* Intelligence Ecosystem */}
+      <section className="py-24 bg-white/50 backdrop-blur-md border-y border-white/40">
+        <div className="container-wide section-padding">
+          <div className="text-center mb-16">
+            <h2 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mb-4">
+              The Intelligence Ecosystem Sync
             </h2>
-            <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-              Transform every aspect of your business with intelligent automation
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {featureServices.map((service, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                whileHover={{ y: -5, scale: 1.02 }}
-              >
-                <div className="relative bg-gradient-to-br from-white/[0.05] to-white/[0.02] backdrop-blur-sm border border-white/10 rounded-[2rem] p-8 h-full hover:border-emerald-500/50 transition-all duration-300 group overflow-hidden">
-                  {/* Hover glow effect */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-[2rem]" />
-                  
-                  <div className="relative z-10">
-                    <div className="w-14 h-14 bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 rounded-2xl flex items-center justify-center text-[#C5FF4A] mb-5 group-hover:scale-110 transition-transform duration-300">
-                      {service.icon}
-                    </div>
-                    <h3 className="text-xl font-bold text-white mb-3">{service.title}</h3>
-                    <p className="text-gray-400 text-sm leading-relaxed">{service.description}</p>
-                  </div>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-12 items-center justify-items-center opacity-50">
+            {aiPlatforms.map((platform, i) => (
+              <div key={i} className="flex flex-col items-center gap-6 group cursor-pointer hover:opacity-100 transition-all duration-700">
+                <div className="w-20 h-20 bg-white/60 backdrop-blur-xl border border-white/60 rounded-3xl flex items-center justify-center group-hover:scale-125 transition-transform shadow-glass">
+                  {platform.logo}
                 </div>
-              </motion.div>
+                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest group-hover:text-primary transition-colors">{platform.name}</span>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-20 bg-black relative overflow-hidden">
-        {/* Emerald glow */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-gradient-to-r from-emerald-500/20 via-teal-500/20 to-cyan-500/20 rounded-full blur-[150px]" />
-        
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+      {/* Strategy Section */}
+      <section id="strategy" className="py-32 relative overflow-hidden bg-background">
+        <div className="container-wide section-padding">
+          <div className="text-center mb-24 space-y-12">
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+              <Badge className="bg-primary/10 border border-primary/20 text-primary px-10 py-4 rounded-full text-sm font-black uppercase tracking-[0.4em]">
+                <Workflow className="w-5 h-5 mr-3" />
+                Strategic Evolution Protocol
+              </Badge>
+            </motion.div>
+            <motion.h2 initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-5xl lg:text-8xl font-heading font-bold text-slate-900 leading-tight">
+              The Absolute <span className="text-primary italic">Architecture.</span>
+            </motion.h2>
+          </div>
+
+          <div className="space-y-40 max-w-7xl mx-auto">
             {[
-              { value: "85%", label: "Cost Reduction" },
-              { value: "340%", label: "Growth Rate" },
-              { value: "50K+", label: "Hours Saved" },
-              { value: "99.7%", label: "AI Accuracy" }
-            ].map((stat, index) => (
+              {
+                step: "01",
+                title: "Cognitive Audit",
+                desc: "We perform a deep-tissue scan of your operational DNA to identify high-leverage AI opportunities that redefine absolute market velocity.",
+                features: ["DNA Mapping Protocol", "ROI Telemetry", "Risk Mitigation Sync", "Custom Blueprint"],
+                img: aiBrainNetwork
+              },
+              {
+                step: "02",
+                title: "Neural Synapse",
+                desc: "Our elite engineers build and integrate custom neural pathways that connect your disparate systems into a unified absolute force.",
+                features: ["Custom Core Dev", "Neural Logic Sync", "Architecture Sync", "Precision Telemetry"],
+                img: aiTeamWorking,
+                reverse: true
+              },
+              {
+                step: "03",
+                title: "Absolute Launch",
+                desc: "We activate your new intelligent nodes, ensuring your team has the cognitive surplus to focus on absolute high-value strategy.",
+                features: ["Node Activation", "Intelligence Sync", "Real-time Telemetry", "Iterative Scaling"],
+                img: aiHeroDashboard
+              }
+            ].map((item, index) => (
+              <div key={index} className={`grid lg:grid-cols-2 gap-24 items-center ${item.reverse ? 'lg:flex-row-reverse' : ''}`}>
+                <motion.div 
+                  initial={{ opacity: 0, x: item.reverse ? 50 : -50 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 1 }}
+                  className="space-y-12"
+                >
+                  <div className="flex items-center gap-8">
+                    <span className="text-7xl lg:text-[10rem] font-heading font-black text-primary/5 leading-none">{item.step}</span>
+                    <h3 className="text-4xl lg:text-6xl font-heading font-bold text-slate-900">{item.title}</h3>
+                  </div>
+                  <p className="text-2xl text-slate-500 font-medium leading-relaxed">
+                    {item.desc}
+                  </p>
+                  <div className="grid grid-cols-2 gap-6 pt-6">
+                    {item.features.map((feat, fi) => (
+                      <div key={fi} className="flex items-center gap-5 bg-white/60 backdrop-blur-xl border border-white/60 px-8 py-5 rounded-[2rem] shadow-sm font-black uppercase tracking-[0.2em] text-[10px] text-slate-700">
+                        <ShieldCheck className="w-6 h-6 text-primary" />
+                        {feat}
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+                
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 1.2 }}
+                  className="relative"
+                >
+                  <div className="bg-white/40 backdrop-blur-xl border border-white/60 rounded-[4rem] p-8 shadow-glass group overflow-hidden">
+                    <img src={item.img} alt={item.title} className="w-full h-auto rounded-[3rem] shadow-sm grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-105" />
+                  </div>
+                </motion.div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Intelligence Nodes Grid */}
+      <section className="py-32 bg-white/50 backdrop-blur-md border-y border-white/40">
+        <div className="container-wide section-padding">
+          <div className="text-center mb-24 space-y-12">
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+              <Badge className="bg-primary/10 border border-primary/20 text-primary px-10 py-4 rounded-full text-sm font-black uppercase tracking-[0.4em]">
+                Automated Intelligence Nodes
+              </Badge>
+            </motion.div>
+            <h2 className="text-5xl lg:text-8xl font-heading font-bold text-slate-900 leading-tight">
+              Absolute <span className="text-primary italic">Intelligence Nodes.</span>
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 max-w-7xl mx-auto">
+            {[
+              { icon: Cpu, title: "CRM Logic Protocol", desc: "Automate your customer relationship management architectures with absolute precision." },
+              { icon: Database, title: "Financial Intelligence", desc: "Streamline invoicing, payments, and reporting logic for absolute fiscal velocity." },
+              { icon: Network, title: "Workflow Synapse", desc: "Connect applications and automate processes through intelligent neural pathways." },
+              { icon: Target, title: "Marketing Logic Node", desc: "Scale your marketing trajectory with AI-driven optimization and telemetry." },
+              { icon: MessageSquare, title: "Intelligence Bots", desc: "24/7 intelligent customer support nodes that reduce friction and enhance velocity." },
+              { icon: Settings, title: "Operational Logic", desc: "End-to-end business process optimization for absolute operational excellence." }
+            ].map((service, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="text-center"
+                transition={{ delay: index * 0.1, duration: 1 }}
+                className="group relative bg-white/40 backdrop-blur-xl border border-white/60 rounded-[4rem] p-16 lg:p-20 hover:shadow-glass transition-all duration-1000 h-full flex flex-col hover:translate-y-[-10px]"
               >
-                <div className="text-5xl sm:text-6xl font-black text-[#C5FF4A] mb-2">
-                  {stat.value}
+                <div className="w-24 h-24 bg-primary/5 rounded-[2.5rem] flex items-center justify-center border border-primary/10 mb-12 group-hover:bg-primary group-hover:text-white transition-all duration-700 shadow-sm">
+                  <service.icon className="w-12 h-12" />
                 </div>
-                <div className="text-gray-400 text-sm uppercase tracking-wider">
-                  {stat.label}
-                </div>
+                <h3 className="text-3xl lg:text-4xl font-heading font-bold text-slate-900 mb-8 leading-tight">{service.title}</h3>
+                <p className="text-2xl text-slate-500 mb-12 leading-relaxed font-medium flex-1">{service.desc}</p>
+                <Button variant="ghost" className="p-0 h-auto font-black uppercase tracking-[0.4em] text-[10px] text-primary hover:bg-transparent hover:translate-x-4 transition-all duration-500">
+                  Explore Intelligence Node <ArrowRight className="w-5 h-5 ml-4" />
+                </Button>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Pricing Section */}
-      <section className="py-24 bg-black relative overflow-hidden">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <p className="text-gray-400 mb-4">Work short-term or long-term. Your choice.</p>
-            <h2 className="text-4xl sm:text-5xl font-black text-white">
-              Pricing{" "}
-              <span className="text-[#C5FF4A]">Plans</span>
+      {/* Strategic Investment (Pricing) */}
+      <section className="py-32 bg-background relative overflow-hidden">
+        <div className="container-wide section-padding">
+          <div className="text-center mb-32 space-y-12">
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+              <Badge className="bg-primary/10 border border-primary/20 text-primary px-10 py-4 rounded-full text-sm font-black uppercase tracking-[0.4em]">
+                Strategic Investment Protocol
+              </Badge>
+            </motion.div>
+            <h2 className="text-5xl lg:text-8xl font-heading font-bold text-slate-900 leading-tight">
+              Absolute <span className="text-primary italic">Investment.</span>
             </h2>
-          </motion.div>
+          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          <div className="grid lg:grid-cols-3 gap-16 max-w-7xl mx-auto items-start">
             {pricingPlans.map((plan, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.15 }}
-                className={`relative ${index === 1 ? 'lg:-mt-4 lg:mb-4' : ''}`}
+                transition={{ delay: index * 0.1, duration: 1 }}
+                className={`relative bg-white/40 backdrop-blur-xl border border-white/60 rounded-[4rem] p-16 lg:p-20 shadow-glass flex flex-col h-full hover:translate-y-[-12px] transition-all duration-700 ${plan.badge ? 'border-primary shadow-2xl scale-[1.05] z-10' : ''}`}
               >
-                <div className={`relative bg-gradient-to-br from-white/[0.08] to-white/[0.02] backdrop-blur-sm border rounded-[2rem] p-8 h-full transition-all duration-300 ${index === 1 ? 'border-[#C5FF4A]/50' : 'border-white/10 hover:border-white/20'}`}>
-                  {/* Popular badge */}
-                  {plan.badge && (
-                    <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                      <span className="bg-[#C5FF4A] text-black text-xs font-bold px-4 py-1.5 rounded-full">
-                        {plan.badge}
-                      </span>
-                    </div>
-                  )}
-                  
-                  <div className="text-sm text-gray-400 mb-2">{plan.name}</div>
-                  <div className="flex items-baseline gap-2 mb-2">
-                    <span className="text-4xl font-black text-white">{plan.price}</span>
-                    <span className="text-gray-500">/ {plan.period}</span>
-                  </div>
-                  <p className="text-sm text-gray-400 mb-6">{plan.description}</p>
-                  
-                  <Button 
-                    className={`w-full rounded-full py-6 font-semibold transition-all duration-300 ${index === 1 ? 'bg-[#C5FF4A] text-black hover:bg-[#d4ff6a]' : 'bg-emerald-500/20 border border-emerald-500/50 text-emerald-400 hover:bg-emerald-500 hover:text-black'}`}
-                    asChild
-                  >
-                    <a href="https://lunexomedia.com/contact">
-                      {plan.price === "Call" ? "Book a Call" : "Get started"}
-                      <ArrowRight className="w-4 h-4 ml-2" />
-                    </a>
-                  </Button>
-                  
-                  <div className="mt-4 mb-6 text-center">
-                    <span className="text-xs text-emerald-400">{plan.guarantee}</span>
-                  </div>
-                  
-                  <div className="space-y-3">
-                    {plan.features.map((feature, fIndex) => (
-                      <div key={fIndex} className="flex items-center gap-3 text-sm text-gray-300">
-                        <Check className="w-4 h-4 text-[#C5FF4A] flex-shrink-0" />
-                        {feature}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ Section */}
-      <section className="py-24 bg-black relative overflow-hidden">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <span className="text-[#C5FF4A] text-sm font-medium uppercase tracking-wider mb-4 block">FAQs</span>
-            <h2 className="text-4xl sm:text-5xl font-black text-white mb-4">
-              Frequently Asked Questions
-            </h2>
-            <p className="text-gray-400 max-w-2xl mx-auto">
-              These FAQs are based on the real, pressing questions our clients asked
-            </p>
-          </motion.div>
-
-          <div className="max-w-3xl mx-auto space-y-4">
-            {faqItems.map((item, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <div 
-                  className="bg-gradient-to-br from-white/[0.05] to-white/[0.02] border border-white/10 rounded-2xl overflow-hidden hover:border-white/20 transition-all duration-300"
-                >
-                  <button
-                    onClick={() => setOpenFaq(openFaq === index ? null : index)}
-                    className="w-full p-6 text-left flex items-center justify-between gap-4"
-                  >
-                    <span className="text-white font-medium">{item.question}</span>
-                    <ChevronRight 
-                      className={`w-5 h-5 text-gray-400 flex-shrink-0 transition-transform duration-300 ${openFaq === index ? 'rotate-90' : ''}`}
-                    />
-                  </button>
-                  <AnimatePresence>
-                    {openFaq === index && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3 }}
-                        className="overflow-hidden"
-                      >
-                        <p className="px-6 pb-6 text-gray-400 leading-relaxed">
-                          {item.answer}
-                        </p>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-
-          <motion.div 
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="text-center mt-10"
-          >
-            <Button 
-              variant="outline" 
-              className="rounded-full border-[#C5FF4A]/50 text-[#C5FF4A] hover:bg-[#C5FF4A] hover:text-black transition-all duration-300 px-6"
-              asChild
-            >
-              <a href="https://lunexomedia.com/contact">
-                Still have a question?
-              </a>
-            </Button>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Blog Posts Section */}
-      <section className="py-24 bg-black relative overflow-hidden">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <span className="text-[#C5FF4A] text-sm font-medium uppercase tracking-wider mb-4 block">Blog</span>
-            <h2 className="text-4xl sm:text-5xl font-black text-white mb-4">
-              Latest <span className="text-[#C5FF4A]">Insights</span>
-            </h2>
-            <p className="text-gray-400 max-w-2xl mx-auto">
-              Expert articles on AI automation, business growth, and digital transformation
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {blogPosts.map((post, index) => (
-              <motion.div
-                key={post.id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <Link to={`/blog/${post.slug}`} className="block group h-full">
-                  <div className="bg-gradient-to-br from-white/[0.08] to-white/[0.02] backdrop-blur-sm border border-white/10 rounded-[1.5rem] overflow-hidden h-full hover:border-[#C5FF4A]/50 transition-all duration-500 hover:shadow-2xl hover:shadow-[#C5FF4A]/10">
-                    {/* Image */}
-                    <div className="relative h-52 overflow-hidden">
-                      <img 
-                        src={post.image_url || '/assets/ai-automation-beginners-guide.png'} 
-                        alt={post.title}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                      
-                      {/* Category Badge */}
-                      <div className="absolute top-4 left-4">
-                        <span className="bg-[#C5FF4A] text-black text-xs font-bold px-3 py-1 rounded-full">
-                          AI Automation
-                        </span>
-                      </div>
-                    </div>
-                    
-                    {/* Content */}
-                    <div className="p-6">
-                      <div className="flex items-center gap-3 text-gray-400 text-sm mb-3">
-                        <Calendar className="w-4 h-4" />
-                        {new Date(post.publish_date).toLocaleDateString('en-US', { 
-                          month: 'short', 
-                          day: 'numeric', 
-                          year: 'numeric' 
-                        })}
-                      </div>
-                      
-                      <h3 className="text-xl font-bold text-white mb-3 line-clamp-2 group-hover:text-[#C5FF4A] transition-colors duration-300">
-                        {post.title}
-                      </h3>
-                      
-                      {post.excerpt && (
-                        <p className="text-gray-400 text-sm line-clamp-2 mb-4">
-                          {post.excerpt}
-                        </p>
-                      )}
-                      
-                      <div className="flex items-center gap-2 text-[#C5FF4A] font-medium text-sm group-hover:gap-3 transition-all duration-300">
-                        Read Article
-                        <ArrowRight className="w-4 h-4" />
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* View All Button */}
-          <motion.div 
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="text-center mt-12"
-          >
-            <Button 
-              variant="outline" 
-              className="rounded-full border-[#C5FF4A] text-[#C5FF4A] hover:bg-[#C5FF4A] hover:text-black hover:border-[#C5FF4A] transition-all duration-300 px-8"
-              asChild
-            >
-              <a href="https://lunexomedia.com/blog">
-                View All Articles
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </a>
-            </Button>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Portfolio Section */}
-      {portfolioProjects.length > 0 && (
-        <section className="py-32 bg-gradient-to-b from-black to-[#0a0f0a] relative overflow-hidden">
-          {/* Background effects */}
-          <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-bl from-[#C5FF4A]/10 to-transparent rounded-full blur-3xl" />
-            <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-gradient-to-tr from-emerald-500/10 to-transparent rounded-full blur-3xl" />
-          </div>
-
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            {/* Section Header with Typing Animation */}
-            <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between mb-16">
-              <div>
-                <motion.div
-                  initial={{ opacity: 0, x: -30 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6 }}
-                >
-                  <Badge className="bg-[#C5FF4A] text-black px-4 py-2 rounded-full text-sm font-bold mb-6">
-                    <Sparkles className="w-4 h-4 mr-2" />
-                    Our AI Projects
+                {plan.badge && (
+                  <Badge className="absolute -top-8 left-1/2 -translate-x-1/2 bg-primary text-white px-12 py-5 rounded-full text-[10px] font-black uppercase tracking-[0.4em] shadow-2xl">
+                    <Star className="w-5 h-5 mr-3" /> {plan.badge}
                   </Badge>
-                </motion.div>
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.8, delay: 0.2 }}
-                >
-                  <h2 className="text-4xl lg:text-6xl font-black text-white overflow-hidden">
-                    <motion.span className="inline-block">
-                      {"AI Automation Portfolio".split("").map((char, index) => (
-                        <motion.span
-                          key={index}
-                          initial={{ opacity: 0, y: 50 }}
-                          whileInView={{ opacity: 1, y: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ 
-                            duration: 0.05,
-                            delay: index * 0.03,
-                            ease: "easeOut"
-                          }}
-                          className="inline-block"
-                        >
-                          {char === " " ? "\u00A0" : char}
-                        </motion.span>
-                      ))}
-                    </motion.span>
-                  </h2>
-                </motion.div>
-                <motion.p
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.8 }}
-                  className="text-gray-400 text-lg mt-4 max-w-xl"
-                >
-                  See how we've transformed businesses with cutting-edge AI solutions
-                </motion.p>
-              </div>
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 1 }}
-              >
-                <Button 
-                  variant="outline" 
-                  className="mt-6 lg:mt-0 border-2 border-[#C5FF4A]/50 text-[#C5FF4A] hover:bg-[#C5FF4A] hover:text-black rounded-full px-8 transition-all duration-300"
-                  asChild
-                >
-                  <a href="https://lunexomedia.com/portfolio">
-                    View All Projects
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </a>
-                </Button>
-              </motion.div>
-            </div>
+                )}
+                
+                <div className="mb-16 text-center space-y-6">
+                  <h3 className="text-4xl font-heading font-bold text-slate-900 leading-tight">{plan.name}</h3>
+                  <div className="flex items-baseline justify-center gap-4">
+                    <span className="text-7xl lg:text-8xl font-heading font-black text-slate-900 tracking-tighter">{plan.price}</span>
+                    <span className="text-slate-400 font-black uppercase tracking-[0.4em] text-[10px]">/{plan.period}</span>
+                  </div>
+                </div>
 
-            {/* Portfolio Cards with Staggered Animation */}
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {portfolioProjects.map((project, index) => (
-                <motion.div
-                  key={project.id}
-                  initial={{ opacity: 0, y: 50 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ 
-                    duration: 0.6, 
-                    delay: index * 0.15,
-                    ease: "easeOut"
-                  }}
-                >
-                  <Link
-                    to={`/portfolio/${project.slug}`}
-                    className="group bg-gradient-to-br from-white/[0.08] to-white/[0.02] backdrop-blur-sm border border-white/10 rounded-[1.5rem] overflow-hidden hover:border-[#C5FF4A]/50 transition-all duration-500 hover:shadow-2xl hover:shadow-[#C5FF4A]/10 block"
-                  >
-                    {/* Image */}
-                    <div className="relative overflow-hidden aspect-[4/3]">
-                      {project.image_url ? (
-                        <motion.img 
-                          src={project.image_url}
-                          alt={project.title}
-                          className="w-full h-full object-cover"
-                          whileHover={{ scale: 1.1 }}
-                          transition={{ duration: 0.7 }}
-                        />
-                      ) : (
-                        <div className="w-full h-full bg-gradient-to-br from-[#C5FF4A]/20 to-emerald-500/20 flex items-center justify-center">
-                          <Brain className="w-12 h-12 text-[#C5FF4A]/50" />
+                <div className="space-y-12 flex-1">
+                  <p className="text-2xl text-slate-500 text-center font-medium leading-relaxed">{plan.description}</p>
+                  <div className="h-px bg-white/60 w-full" />
+                  <ul className="space-y-8">
+                    {plan.features.map((feat, fi) => (
+                      <li key={fi} className="flex items-center gap-6 text-slate-700 font-bold text-xl">
+                        <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center text-primary shadow-sm">
+                          <CheckCircle className="w-5 h-5" />
                         </div>
-                      )}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                      <motion.div 
-                        className="absolute top-4 left-4"
-                        initial={{ opacity: 0, x: -20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: index * 0.15 + 0.3 }}
-                      >
-                        <span className="bg-[#C5FF4A] text-black px-4 py-2 rounded-full text-sm font-bold shadow-lg">
-                          {project.category}
-                        </span>
-                      </motion.div>
-                    </div>
-                    
-                    {/* Content with Typing Effect */}
-                    <div className="p-6">
-                      <motion.h3 
-                        className="text-xl font-bold text-white mb-3 group-hover:text-[#C5FF4A] transition-colors overflow-hidden"
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: index * 0.15 + 0.4 }}
-                      >
-                        {project.title.split("").map((char, charIndex) => (
-                          <motion.span
-                            key={charIndex}
-                            initial={{ opacity: 0 }}
-                            whileInView={{ opacity: 1 }}
-                            viewport={{ once: true }}
-                            transition={{ 
-                              duration: 0.02,
-                              delay: index * 0.15 + 0.4 + charIndex * 0.02
-                            }}
-                            className="inline-block"
-                          >
-                            {char === " " ? "\u00A0" : char}
-                          </motion.span>
-                        ))}
-                      </motion.h3>
-                      <motion.p 
-                        className="text-gray-400 text-sm line-clamp-2 mb-4"
-                        initial={{ opacity: 0, y: 10 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: index * 0.15 + 0.6 }}
-                      >
-                        {project.description}
-                      </motion.p>
-                      
-                      {/* Technologies with Staggered Animation */}
-                      {project.technologies && project.technologies.length > 0 && (
-                        <motion.div 
-                          className="flex flex-wrap gap-2 pt-4 border-t border-white/10"
-                          initial={{ opacity: 0 }}
-                          whileInView={{ opacity: 1 }}
-                          viewport={{ once: true }}
-                          transition={{ delay: index * 0.15 + 0.7 }}
-                        >
-                          {project.technologies.slice(0, 3).map((tech, tIndex) => (
-                            <motion.span 
-                              key={tIndex} 
-                              className="text-xs font-medium bg-white/10 text-gray-300 px-3 py-1 rounded-full"
-                              initial={{ opacity: 0, scale: 0.8 }}
-                              whileInView={{ opacity: 1, scale: 1 }}
-                              viewport={{ once: true }}
-                              transition={{ delay: index * 0.15 + 0.7 + tIndex * 0.1 }}
-                              whileHover={{ scale: 1.05, backgroundColor: "#C5FF4A", color: "#000" }}
-                            >
-                              {tech}
-                            </motion.span>
-                          ))}
-                        </motion.div>
-                      )}
-                    </div>
-                  </Link>
-                </motion.div>
-              ))}
-            </div>
+                        <span className="uppercase tracking-widest text-[10px]">{feat}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="mt-20 space-y-10 text-center">
+                  <Button size="lg" className="w-full py-14 rounded-[2.5rem] font-bold text-3xl bg-slate-900 text-white hover:bg-slate-800 transition-all duration-500 shadow-2xl group/btn" asChild>
+                    <Link to="/contact">
+                      Acquire Protocol
+                      <ArrowRight className="w-8 h-8 ml-6 group-hover/btn:translate-x-4 transition-transform" />
+                    </Link>
+                  </Button>
+                  <div className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] flex items-center justify-center gap-4">
+                    <ShieldCheck className="w-4 h-4 text-primary" /> {plan.guarantee}
+                  </div>
+                </div>
+              </motion.div>
+            ))}
           </div>
-        </section>
-      )}
-
-      {/* Trusted By Section with Infinite Scroll */}
-      {trustedLogos.length > 0 ? (
-        <section className="py-20 bg-black relative overflow-hidden border-y border-white/5">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-center mb-12"
-            >
-              <span className="text-sm font-semibold text-[#C5FF4A] uppercase tracking-widest">
-                Trusted By Industry Leaders
-              </span>
-            </motion.div>
-
-            {/* Infinite Scroll Animation */}
-            <div className="relative overflow-hidden">
-              {/* Gradient Masks */}
-              <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-black to-transparent z-10" />
-              <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-black to-transparent z-10" />
-              
-              {/* First Row - Scroll Left */}
-              <div className="flex animate-scroll-left-ai hover:[animation-play-state:paused] mb-8">
-                {[...trustedLogos, ...trustedLogos, ...trustedLogos].map((logo, index) => (
-                  <motion.div
-                    key={`${logo.id}-${index}`}
-                    className="flex-shrink-0 mx-8 group"
-                    whileHover={{ scale: 1.1 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <div className="w-32 h-16 flex items-center justify-center bg-white/5 rounded-xl border border-white/10 group-hover:border-[#C5FF4A]/50 transition-all duration-300 p-4">
-                      <img 
-                        src={logo.logo_url} 
-                        alt={logo.name}
-                        className="max-w-full max-h-full object-contain opacity-80 group-hover:opacity-100 transition-opacity duration-300"
-                      />
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-
-              {/* Second Row - Scroll Right */}
-              <div className="flex animate-scroll-right-ai hover:[animation-play-state:paused]">
-                {[...trustedLogos, ...trustedLogos, ...trustedLogos].reverse().map((logo, index) => (
-                  <motion.div
-                    key={`${logo.id}-reverse-${index}`}
-                    className="flex-shrink-0 mx-8 group"
-                    whileHover={{ scale: 1.1 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <div className="w-32 h-16 flex items-center justify-center bg-white/5 rounded-xl border border-white/10 group-hover:border-[#C5FF4A]/50 transition-all duration-300 p-4">
-                      <img 
-                        src={logo.logo_url} 
-                        alt={logo.name}
-                        className="max-w-full max-h-full object-contain opacity-80 group-hover:opacity-100 transition-opacity duration-300"
-                      />
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <style>{`
-            @keyframes scroll-left-ai {
-              0% { transform: translateX(0); }
-              100% { transform: translateX(-33.33%); }
-            }
-            @keyframes scroll-right-ai {
-              0% { transform: translateX(-33.33%); }
-              100% { transform: translateX(0); }
-            }
-            .animate-scroll-left-ai {
-              animation: scroll-left-ai 30s linear infinite;
-            }
-            .animate-scroll-right-ai {
-              animation: scroll-right-ai 30s linear infinite;
-            }
-          `}</style>
-        </section>
-      ) : null}
-
-      {/* CTA Section */}
-      <section className="py-32 bg-black relative overflow-hidden">
-        {/* Large emerald glow */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[600px] bg-gradient-to-r from-emerald-500/30 via-teal-500/30 to-cyan-500/30 rounded-full blur-[200px]" />
-        
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="max-w-4xl mx-auto"
-          >
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white mb-8 leading-tight">
-              Ready to{" "}
-              <span className="text-[#C5FF4A]">Automate</span>
-              <br />
-              Your Business?
-            </h2>
-            
-            <p className="text-xl text-gray-400 mb-12 leading-relaxed max-w-2xl mx-auto">
-              Join the AI revolution and transform your business operations. 
-              Get fully automated in just 90 days.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-5 justify-center">
-              <Button 
-                size="lg" 
-                className="bg-[#C5FF4A] hover:bg-[#d4ff6a] text-black text-lg px-12 py-7 rounded-full font-semibold shadow-2xl shadow-[#C5FF4A]/30 hover:shadow-[#C5FF4A]/50 transition-all duration-300 hover:scale-105 group"
-                asChild
-              >
-                <a href="https://lunexomedia.com/contact">
-                  Get Automated Now
-                  <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-                </a>
-              </Button>
-              
-              <Button 
-                size="lg" 
-                variant="outline" 
-                className="text-lg px-12 py-7 rounded-full border-2 border-[#C5FF4A]/50 text-[#C5FF4A] hover:bg-[#C5FF4A] hover:text-black transition-all duration-300 hover:scale-105"
-                asChild
-              >
-                <a href="https://lunexomedia.com/portfolio">
-                  View Our Work
-                </a>
-              </Button>
-            </div>
-          </motion.div>
         </div>
       </section>
 
-      {/* FAQ Section */}
-      <section className="py-24 relative overflow-hidden bg-black">
+      {/* FAQ: Neural Logic */}
+      <section className="py-40 bg-slate-900 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-accent/20 opacity-40" />
         <div className="container-wide section-padding relative z-10">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl lg:text-5xl font-bold mb-12 text-white text-center">
-              AI Automation <span className="text-[#C5FF4A]">FAQ</span>
-            </h2>
-            <FAQSchema
-              className="space-y-4"
-              faqs={[
-                {
-                  question: "What is AI automation for business?",
-                  answer: "AI automation uses artificial intelligence to handle repetitive business tasks without human intervention. This includes AI chatbots for customer support, voice agents for lead qualification and appointment scheduling, email automation for nurturing leads, and workflow automation that connects your business tools. AI automation saves time, reduces costs, and improves customer experience by providing instant, 24/7 responses."
-                },
-                {
-                  question: "How much does AI automation cost?",
-                  answer: "AI automation pricing varies based on the complexity and scope of your needs. Simple chatbot implementations start at around $997, while comprehensive automation systems with voice agents, email sequences, and workflow integrations can range from $2,500 to $10,000+. We provide custom quotes based on your specific requirements during a free consultation."
-                },
-                {
-                  question: "How long does it take to implement AI automation?",
-                  answer: "Basic AI chatbot implementations can be completed in 1-2 weeks. More complex systems involving voice agents, multi-channel automation, and custom integrations typically take 4-8 weeks. Our goal is to have your automation fully operational within 90 days, including testing, optimization, and team training."
-                },
-                {
-                  question: "Will AI automation replace my employees?",
-                  answer: "No, AI automation is designed to augment your team, not replace them. It handles repetitive, time-consuming tasks so your employees can focus on high-value work that requires human creativity, empathy, and strategic thinking. Most businesses find that AI automation makes their existing team more productive and effective."
-                },
-                {
-                  question: "What tools and platforms do you use for AI automation?",
-                  answer: "We use a variety of cutting-edge AI tools and platforms depending on your needs, including custom-built solutions powered by OpenAI and Google AI, Make.com and Zapier for workflow automation, custom voice agents using VAPI technology, and email automation through platforms like ActiveCampaign and Mailchimp. We always recommend the best tool for your specific use case."
-                }
-              ]}
-            />
+          <div className="max-w-6xl mx-auto space-y-40">
+            <div className="text-center space-y-16">
+              <Badge className="bg-white/10 text-white border-white/20 px-12 py-5 rounded-full text-sm font-black uppercase tracking-[0.4em]">
+                Strategic Query Protocol
+              </Badge>
+              <h2 className="text-6xl lg:text-[10rem] font-heading font-bold text-white leading-tight tracking-tighter">
+                Reclaim Your <span className="text-primary italic">Tempo.</span>
+              </h2>
+              <Button size="lg" className="bg-primary text-white hover:bg-primary/90 text-3xl px-24 py-16 rounded-full font-bold shadow-2xl transition-all duration-500 hover:scale-110 group" asChild>
+                <Link to="/contact">
+                  Initialize Automation
+                  <ArrowRight className="w-10 h-10 ml-8 group-hover:translate-x-5 transition-transform" />
+                </Link>
+              </Button>
+            </div>
+
+            <div className="space-y-32">
+              <h3 className="text-5xl lg:text-8xl font-heading font-bold text-white text-center">Neural Logic.</h3>
+              <div className="grid lg:grid-cols-2 gap-16">
+                {faqItems.map((faq, i) => (
+                  <motion.div 
+                    key={i}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.1, duration: 1 }}
+                    className="p-20 bg-white/5 backdrop-blur-3xl border border-white/10 rounded-[5rem] hover:border-primary/50 transition-all duration-1000 group"
+                  >
+                    <h4 className="text-4xl font-heading font-bold text-white mb-10 group-hover:text-primary transition-colors leading-tight">{faq.question}</h4>
+                    <p className="text-2xl text-slate-400 font-medium leading-relaxed">{faq.answer}</p>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>

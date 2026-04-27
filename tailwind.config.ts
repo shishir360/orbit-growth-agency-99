@@ -22,6 +22,10 @@ export default {
 				'inter': ['Inter', 'sans-serif'],
 				'playfair': ['Playfair Display', 'serif'],
 				'space': ['Space Grotesk', 'sans-serif'],
+				'heading': ['"Bodoni Moda"', 'serif'],
+				'body': ['Jost', 'sans-serif'],
+				'jost': ['Jost', 'sans-serif'],
+				'bodoni': ['"Bodoni Moda"', 'serif'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',

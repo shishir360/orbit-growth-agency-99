@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import Navigation from "@/components/ui/navigation";
 import Footer from "@/components/ui/footer";
 import SEO from "@/components/ui/seo";
@@ -13,33 +15,40 @@ import {
   ArrowLeft,
   TrendingUp,
   Users,
-  Zap
+  Zap,
+  ArrowRight,
+  ChevronRight,
+  Sparkles,
+  Activity,
+  Cpu,
+  ShieldCheck,
+  Database
 } from "lucide-react";
 
 const MobileOptimized = () => {
   const benefits = [
-    "Cross-device Compatibility",
-    "Touch-friendly Interface", 
-    "Adaptive Content Layout",
-    "Fast Mobile Performance",
-    "Mobile-first Design Approach",
-    "Responsive Navigation",
-    "Optimized Images & Media",
-    "Mobile SEO Best Practices"
+    "Cross-device Synchronization Logic",
+    "Finger-Friendly UI Architectures", 
+    "Adaptive Content Flow Protocol",
+    "Sub-Second Mobile Sync Node",
+    "Mobile-first Architecture",
+    "Neural Responsive Navigation",
+    "Neural Image Scaling Logic",
+    "Mobile SEO Dominance Protocol"
   ];
 
   const stats = [
-    { icon: <Smartphone className="w-6 h-6" />, stat: "60%", label: "Mobile Traffic Average" },
-    { icon: <TrendingUp className="w-6 h-6" />, stat: "200%", label: "Mobile Conversion Boost" },
-    { icon: <Users className="w-6 h-6" />, stat: "85%", label: "User Retention Increase" },
-    { icon: <Zap className="w-6 h-6" />, stat: "3x", label: "Faster Load Times" }
+    { icon: <Smartphone className="w-10 h-10" />, stat: "60%", label: "Mobile Traffic Average" },
+    { icon: <TrendingUp className="w-10 h-10" />, stat: "200%", label: "Mobile Conversion Lift" },
+    { icon: <Users className="w-10 h-10" />, stat: "85%", label: "User Retention Surge" },
+    { icon: <Zap className="w-10 h-10" />, stat: "3x", label: "Faster Mobile Load" }
   ];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background font-body text-slate-900 overflow-hidden">
       <SEO
-        title="Mobile Optimized Website Design | Lunexo Media"
-        description="Get responsive, mobile-first website designs that work perfectly on all devices. Boost your mobile traffic and conversions with our expert optimization services."
+        title="Absolute Mobile Design - Omnichannel UI Architecture | LUNEXO MEDIA"
+        description="Get absolute mobile-first website designs that work perfectly on all glass screens. Boost your mobile traffic and conversions with our expert optimization."
         image="https://www.lunexomedia.com/og-image-new.jpg"
         url="https://www.lunexomedia.com/services/mobile-optimized"
         keywords="mobile optimized website, responsive design, mobile-first, mobile web design"
@@ -48,177 +57,218 @@ const MobileOptimized = () => {
       <Navigation />
       
       {/* Hero Section */}
-      <section className="py-24 bg-gradient-to-br from-background via-background/50 to-muted/30">
-        <div className="container-wide section-padding">
-          <div className="max-w-4xl mx-auto text-center">
-            <Button variant="outline" size="sm" className="mb-6" asChild>
-              <Link to="/website-design">
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Back to Website Design
-              </Link>
-            </Button>
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-32 pb-24">
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+          <div className="absolute top-[10%] left-[5%] w-[800px] h-[800px] bg-primary/10 rounded-full blur-[140px]" />
+          <div className="absolute bottom-[10%] right-[5%] w-[600px] h-[600px] bg-accent/10 rounded-full blur-[120px]" />
+        </div>
+
+        <div className="container-wide section-padding relative z-10">
+          <div className="text-center max-w-7xl mx-auto space-y-16">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              <Badge className="bg-primary/10 border border-primary/20 text-primary px-10 py-4 rounded-full text-sm font-black uppercase tracking-[0.4em] backdrop-blur-xl">
+                <Smartphone className="w-5 h-5 mr-4" />
+                Device Agnostic Logic
+              </Badge>
+            </motion.div>
+
+            <motion.h1 
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 1 }}
+              className="text-6xl sm:text-7xl lg:text-[11rem] font-heading font-bold text-slate-900 leading-[1] tracking-tighter"
+            >
+              Omnichannel <br /> <span className="text-primary italic">Interfaces.</span>
+            </motion.h1>
+
+            <motion.p 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4, duration: 1 }}
+              className="text-3xl text-slate-500 max-w-5xl mx-auto leading-relaxed font-medium"
+            >
+              In a mobile-first world, your absolute interface must be seamless. Our architectures ensure your brand looks perfect and performs flawlessly on <span className="text-primary italic font-bold">every glass screen repository.</span>
+            </motion.p>
             
-            <Badge variant="outline" className="mb-4 text-primary border-primary/20">
-              <Smartphone className="w-4 h-4 mr-2" />
-              Mobile Optimization
-            </Badge>
-            
-            <h1 className="text-4xl lg:text-6xl font-bold mb-6 bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-              Mobile Optimized Websites
-            </h1>
-            
-            <p className="text-xl text-muted-foreground mb-10 leading-relaxed max-w-3xl mx-auto">
-              In today's mobile-first world, your website must deliver an exceptional experience across all devices. Our mobile optimization ensures your site looks perfect and performs flawlessly on smartphones, tablets, and desktops.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild size="lg" className="text-lg px-8 py-4">
-                <a href="https://lunexomedia.com/contact">
-                  Get Mobile Optimization
-                </a>
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6, duration: 1 }}
+              className="flex flex-col sm:flex-row gap-10 justify-center pt-12"
+            >
+              <Button size="lg" className="bg-slate-900 text-white hover:bg-slate-800 text-3xl px-24 py-16 rounded-full font-bold shadow-2xl transition-all duration-700 hover:scale-110 group" asChild
+              >
+                <Link to="/contact" className="flex items-center gap-6">
+                  Optimize My Site
+                  <ArrowRight className="w-10 h-10 group-hover:translate-x-5 transition-transform" />
+                </Link>
               </Button>
-              <Button asChild size="lg" variant="outline" className="text-lg px-8 py-4">
-                <a href="https://lunexomedia.com/portfolio">
-                  View Mobile Examples
-                </a>
-              </Button>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
 
-      {/* Device Preview Section */}
-      <section className="py-20 bg-white">
+      {/* Viewport Sync Matrix */}
+      <section className="py-48 bg-white/50 backdrop-blur-md border-y border-white/40 relative">
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[140px] pointer-events-none" />
         <div className="container-wide section-padding">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold mb-6">
-              Perfect on Every Device
+          <div className="text-center mb-32 space-y-12">
+             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+                <Badge className="bg-primary/10 border border-primary/20 text-primary px-10 py-4 rounded-full text-sm font-black uppercase tracking-[0.4em]">
+                  <Activity className="w-5 h-5 mr-4" />
+                  Absolute Viewport Sync
+                </Badge>
+              </motion.div>
+            <h2 className="text-6xl lg:text-[11rem] font-heading font-bold text-slate-900 mb-10 leading-[1.05] tracking-tighter">
+              The Viewport <span className="text-primary italic">Sync.</span>
             </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Our responsive designs automatically adapt to provide the optimal viewing experience across all screen sizes and devices.
-            </p>
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            <Card className="text-center group hover:shadow-lg transition-all duration-300">
-              <CardContent className="p-8">
-                <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center text-primary mx-auto mb-6 group-hover:bg-primary group-hover:text-white transition-all duration-300">
-                  <Smartphone className="w-8 h-8" />
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-7xl mx-auto">
+            {[
+              { icon: <Smartphone className="w-12 h-12" />, title: "Mobile Phones", description: "Optimized for touch logic with finger-friendly interaction layers and intuitive navigation protocols.", range: "320px - 768px Width" },
+              { icon: <Tablet className="w-12 h-12" />, title: "Tablets", description: "Perfect balance of mobile convenience and high-end desktop absolute functionality sync.", range: "768px - 1024px Width" },
+              { icon: <Monitor className="w-12 h-12" />, title: "Desktops", description: "Full-featured expansive experience with advanced absolute layouts and immersive depth logic.", range: "1024px+ Resolution" }
+            ].map((device, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1, duration: 1 }}
+                className="group bg-white/40 backdrop-blur-xl border border-white/60 rounded-[4rem] p-16 text-center hover:shadow-glass transition-all duration-1000 flex flex-col items-center gap-10 hover:translate-y-[-15px]"
+              >
+                <div className="w-24 h-24 bg-slate-900 text-white rounded-[2rem] flex items-center justify-center mx-auto shadow-2xl group-hover:bg-primary transition-all duration-700 group-hover:rotate-12">
+                  {device.icon}
                 </div>
-                <h3 className="text-xl font-bold mb-4">Mobile Phones</h3>
-                <p className="text-muted-foreground mb-4">
-                  Optimized for touch interactions with finger-friendly buttons and intuitive navigation.
-                </p>
-                <div className="text-sm text-primary font-semibold">
-                  320px - 768px screens
+                <div className="space-y-6">
+                   <h3 className="text-4xl font-heading font-bold text-slate-900 tracking-tight leading-tight">{device.title}</h3>
+                   <p className="text-2xl text-slate-500 font-medium leading-relaxed">{device.description}</p>
                 </div>
-              </CardContent>
-            </Card>
-            
-            <Card className="text-center group hover:shadow-lg transition-all duration-300">
-              <CardContent className="p-8">
-                <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center text-primary mx-auto mb-6 group-hover:bg-primary group-hover:text-white transition-all duration-300">
-                  <Tablet className="w-8 h-8" />
+                <div className="pt-8 border-t border-white/60 w-full">
+                   <div className="text-xs font-black text-primary uppercase tracking-[0.4em]">{device.range}</div>
                 </div>
-                <h3 className="text-xl font-bold mb-4">Tablets</h3>
-                <p className="text-muted-foreground mb-4">
-                  Perfect balance of mobile convenience and desktop functionality for tablet users.
-                </p>
-                <div className="text-sm text-primary font-semibold">
-                  768px - 1024px screens
-                </div>
-              </CardContent>
-            </Card>
-            
-            <Card className="text-center group hover:shadow-lg transition-all duration-300">
-              <CardContent className="p-8">
-                <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center text-primary mx-auto mb-6 group-hover:bg-primary group-hover:text-white transition-all duration-300">
-                  <Monitor className="w-8 h-8" />
-                </div>
-                <h3 className="text-xl font-bold mb-4">Desktop</h3>
-                <p className="text-muted-foreground mb-4">
-                  Full-featured experience with advanced layouts and comprehensive navigation.
-                </p>
-                <div className="text-sm text-primary font-semibold">
-                  1024px+ screens
-                </div>
-              </CardContent>
-            </Card>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Benefits Section */}
-      <section className="py-20 bg-muted/30">
+      {/* Strategic Mobile Benefits */}
+      <section className="py-48 bg-background relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-[800px] h-[800px] bg-primary/5 rounded-full blur-[180px] pointer-events-none" />
         <div className="container-wide section-padding">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl lg:text-4xl font-bold mb-6">
-                Mobile Optimization Benefits
-              </h2>
-              <p className="text-xl text-muted-foreground">
-                Why mobile optimization is crucial for your business success
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {benefits.map((benefit, index) => (
-                <div key={index} className="flex items-center gap-3 p-4 bg-white rounded-lg shadow-sm">
-                  <CheckCircle className="w-5 h-5 text-primary flex-shrink-0" />
-                  <span className="text-foreground font-medium">{benefit}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Stats Section */}
-      <section className="py-20 bg-white">
-        <div className="container-wide section-padding">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold mb-6">
-              Mobile Optimization Impact
+          <div className="text-center mb-32 space-y-12">
+             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+                <Badge className="bg-primary/10 border border-primary/20 text-primary px-10 py-4 rounded-full text-sm font-black uppercase tracking-[0.4em]">
+                  <Database className="w-5 h-5 mr-4" />
+                  Absolute Mobile Benefits
+                </Badge>
+              </motion.div>
+            <h2 className="text-6xl lg:text-[11rem] font-heading font-bold text-slate-900 mb-10 leading-[1] tracking-tighter">
+              Strategic <span className="text-primary italic">Benefits.</span>
             </h2>
-            <p className="text-xl text-muted-foreground">
-              Real results from our mobile-optimized websites
-            </p>
           </div>
-          
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-7xl mx-auto">
+            {benefits.map((benefit, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.05, duration: 1 }}
+                className="bg-white/40 backdrop-blur-xl border border-white/60 rounded-[3rem] p-12 flex items-center gap-8 hover:shadow-glass transition-all duration-700 hover:translate-y-[-5px]"
+              >
+                <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                   <ShieldCheck className="w-8 h-8 text-primary" />
+                </div>
+                <span className="text-2xl font-heading font-bold text-slate-700 tracking-tight leading-tight">{benefit}</span>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Impact Delta Matrix */}
+      <section className="py-48 bg-white/50 backdrop-blur-md border-y border-white/40">
+        <div className="container-wide section-padding">
+          <div className="text-center mb-32 space-y-12">
+             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+                <Badge className="bg-primary/10 border border-primary/20 text-primary px-10 py-4 rounded-full text-sm font-black uppercase tracking-[0.4em]">
+                  <Cpu className="w-5 h-5 mr-4" />
+                  Absolute Impact Delta
+                </Badge>
+              </motion.div>
+            <h2 className="text-6xl lg:text-[11rem] font-heading font-bold text-slate-900 mb-10 leading-[1.1] tracking-tighter">
+              The Impact <span className="text-primary italic">Delta.</span>
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 max-w-7xl mx-auto">
             {stats.map((item, index) => (
-              <div key={index} className="group">
-                <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center text-primary mx-auto mb-4 group-hover:bg-primary group-hover:text-white transition-all duration-300">
+              <motion.div 
+                key={index} 
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1, duration: 1 }}
+                className="group bg-white/40 backdrop-blur-xl border border-white/60 rounded-[4rem] p-16 text-center hover:shadow-glass transition-all duration-1000 flex flex-col items-center gap-10 hover:translate-y-[-15px]"
+              >
+                <div className="w-24 h-24 bg-slate-900 text-white rounded-[2rem] flex items-center justify-center mx-auto shadow-2xl group-hover:bg-primary transition-all duration-700 group-hover:rotate-12">
                   {item.icon}
                 </div>
-                <div className="text-3xl font-bold text-foreground mb-2">{item.stat}</div>
-                <div className="text-sm text-muted-foreground">{item.label}</div>
-              </div>
+                <div className="space-y-4">
+                  <div className="text-6xl font-heading font-black text-primary tracking-tighter">{item.stat}</div>
+                  <h3 className="text-3xl font-heading font-bold text-slate-900 tracking-tight leading-tight">{item.label}</h3>
+                </div>
+                <div className="pt-8 border-t border-white/60 w-full opacity-20">
+                   <TrendingUp className="w-8 h-8 mx-auto" />
+                </div>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 bg-gradient-to-br from-primary via-primary to-primary/80 text-primary-foreground">
-        <div className="container-narrow section-padding text-center">
-          <h2 className="text-4xl lg:text-5xl font-bold mb-8">
-            Ready for Mobile Success?
-          </h2>
-          <p className="text-xl mb-10 opacity-90 max-w-2xl mx-auto">
-            Don't lose customers to poor mobile experience. Get a mobile-optimized website that converts visitors into customers across all devices.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild size="lg" variant="secondary" className="text-lg px-8 py-4">
-              <a href="https://lunexomedia.com/contact">
-                Start Mobile Optimization
-              </a>
-            </Button>
-            <Button asChild size="lg" variant="outline" className="text-lg px-8 py-4 bg-white/20 border-white/30 text-white hover:bg-white/30">
-              <a href="https://lunexomedia.com/website-design">
-                Back to Services
-              </a>
-            </Button>
+      <section className="py-48 bg-slate-900 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/40 to-accent/20 opacity-40" />
+        <div className="container-wide section-padding relative z-10 text-center">
+          <div className="max-w-7xl mx-auto space-y-24">
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+              <Badge className="bg-white/10 text-white border-white/20 px-10 py-4 rounded-full text-sm font-black uppercase tracking-[0.4em] backdrop-blur-xl">
+                The Absolute Deployment
+              </Badge>
+            </motion.div>
+            <h2 className="text-6xl lg:text-[11rem] font-heading font-bold text-white leading-tight tracking-tighter">
+              Ready for <br /> <span className="text-primary italic">Any Screen?</span>
+            </h2>
+            <p className="text-3xl text-slate-300 font-body leading-relaxed max-w-5xl mx-auto font-medium">
+              Don't lose high-value identity clients to poor mobile experiences. Get an absolute omnichannel interface that converts across every glass screen.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-10 justify-center pt-16">
+              <Button size="lg" className="bg-primary text-white hover:bg-primary/90 text-3xl px-24 py-16 rounded-full font-bold shadow-2xl transition-all duration-700 hover:scale-110 group" asChild>
+                <Link to="/contact" className="flex items-center gap-6">
+                  Start Optimization
+                  <ArrowRight className="w-10 h-10 ml-8 group-hover:translate-x-5 transition-transform" />
+                </Link>
+              </Button>
+              <Button size="lg" variant="outline" className="border-2 border-white/20 bg-white/10 backdrop-blur-xl text-white hover:bg-white/20 text-3xl px-24 py-16 rounded-full font-bold transition-all duration-700 hover:scale-105" asChild>
+                <Link to="/website-design">
+                  Success Repository
+                </Link>
+              </Button>
+            </div>
+            <div className="pt-24 flex items-center justify-center gap-16 opacity-30 text-white">
+               <ShieldCheck className="w-10 h-10" />
+               <Cpu className="w-10 h-10" />
+               <Database className="w-10 h-10" />
+               <Activity className="w-10 h-10" />
+            </div>
           </div>
         </div>
       </section>

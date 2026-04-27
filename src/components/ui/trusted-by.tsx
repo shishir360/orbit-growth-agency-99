@@ -52,12 +52,9 @@ const TrustedBy = () => {
   const duplicatedLogos = [...logos, ...logos];
 
   return (
-    <section className="relative py-24 bg-[#0a0a0f] overflow-hidden">
-      {/* Subtle gradient line at top */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-orange-500/30 to-transparent"></div>
-      
-      {/* Background glow - Orange themed */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[300px] bg-gradient-to-r from-orange-500/10 via-orange-400/8 to-orange-500/10 rounded-full blur-[120px]"></div>
+    <section className="relative py-24 bg-background/50 overflow-hidden border-y border-white/20">
+      {/* Subtle background glow - Pink/Cyan themed */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[300px] bg-gradient-to-r from-primary/5 via-accent/5 to-primary/5 rounded-full blur-[120px]"></div>
       
       <div className="container-wide section-padding relative z-10">
         <motion.div 
@@ -67,19 +64,19 @@ const TrustedBy = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <p className="text-sm font-bold tracking-[0.4em] uppercase text-orange-400/60 mb-4">
+          <p className="text-sm font-bold tracking-[0.4em] uppercase text-primary mb-4">
             Trusted Worldwide
           </p>
-          <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white" style={{fontFamily: "'Playfair Display', serif"}}>
-            Partnering with <span className="bg-gradient-to-r from-orange-400 to-orange-500 bg-clip-text text-transparent">Industry Leaders</span>
+          <h3 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-slate-900">
+            Partnering with <span className="text-primary">Industry Leaders</span>
           </h3>
         </motion.div>
         
         {/* Infinite Scroll Logo Animation */}
         <div className="relative overflow-hidden">
           {/* Gradient masks for smooth fade */}
-          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#0a0a0f] to-transparent z-10"></div>
-          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#0a0a0f] to-transparent z-10"></div>
+          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-background to-transparent z-10"></div>
+          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-background to-transparent z-10"></div>
           
           <motion.div 
             className="flex gap-8"
@@ -114,9 +111,9 @@ const TrustedBy = () => {
                   }}
                 >
                   {/* Glow effect on hover */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-orange-400/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-2xl"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-accent/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-2xl"></div>
                   
-                  <div className="relative flex items-center justify-center w-40 h-28 bg-white/[0.04] border border-white/10 rounded-2xl backdrop-blur-sm group-hover:border-orange-500/30 group-hover:bg-white/[0.08] transition-all duration-500 p-4">
+                  <div className="relative flex items-center justify-center w-40 h-28 bg-white/40 border border-white/40 rounded-2xl backdrop-blur-xl group-hover:border-primary/30 group-hover:bg-white/60 transition-all duration-500 p-4 shadow-sm">
                     <img 
                       src={logo.logo_url} 
                       alt={`${logo.name} logo`}
@@ -134,7 +131,7 @@ const TrustedBy = () => {
           {[...Array(4)].map((_, i) => (
             <motion.div 
               key={i} 
-              className={`rounded-full ${i === 0 ? 'w-8 h-1.5 bg-gradient-to-r from-orange-400 to-orange-500' : 'w-1.5 h-1.5 bg-white/20'}`}
+              className={`rounded-full ${i === 0 ? 'w-8 h-1.5 bg-primary' : 'w-1.5 h-1.5 bg-slate-200'}`}
               animate={{
                 scale: i === 0 ? [1, 1.1, 1] : 1,
               }}

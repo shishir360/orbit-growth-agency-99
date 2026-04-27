@@ -1,58 +1,172 @@
 import React from "react";
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import Navigation from "@/components/ui/navigation";
 import Footer from "@/components/ui/footer";
 import SEO from "@/components/ui/seo";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, CalendarCheck, Users, Activity, Heart } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { ArrowRight, CalendarCheck, Users, Activity, Heart, ChevronRight, Sparkles, ShieldCheck, Cpu, Database } from "lucide-react";
 
 const DentalMarketing = () => {
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-background font-body text-slate-900 overflow-hidden">
       <SEO 
-        title="Dental Marketing Agency | High-Converting SEO & Ads for Dentists"
-        description="Grow your dental practice with Lunexo Media. We specialize in local SEO, Google Ads, and patient-converting website designs tailored for dentists."
+        title="Absolute Dental Marketing | High-Converting Architecture for Dentists"
+        description="Grow your dental practice with Lunexo Media. We specialize in absolute local visibility, high-end ads, and absolute patient acquisition architectures."
         url="https://lunexomedia.com/dental-marketing"
         image="https://lunexomedia.com/og-dental-marketing.jpg"
       />
       <Navigation />
       
-      <section className="pt-32 pb-20 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-blue-900/20 to-black z-0"></div>
-        <div className="container-wide section-padding relative z-10 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 mb-8">
-            <Heart className="w-4 h-4" />
-            <span className="text-sm font-medium">Specialized Dental Marketing</span>
+      {/* Hero Section */}
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-32 pb-24">
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+          <div className="absolute top-[10%] left-[5%] w-[800px] h-[800px] bg-primary/10 rounded-full blur-[140px]" />
+          <div className="absolute bottom-[10%] right-[5%] w-[600px] h-[600px] bg-accent/10 rounded-full blur-[120px]" />
+        </div>
+
+        <div className="container-wide section-padding relative z-10">
+          <div className="text-center max-w-7xl mx-auto space-y-16">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              <Badge className="bg-primary/10 border border-primary/20 text-primary px-10 py-4 rounded-full text-sm font-black uppercase tracking-[0.4em] backdrop-blur-xl">
+                <Heart className="w-5 h-5 mr-4" />
+                Absolute Dental Growth
+              </Badge>
+            </motion.div>
+
+            <motion.h1 
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 1 }}
+              className="text-6xl sm:text-7xl lg:text-[11rem] font-heading font-bold text-slate-900 leading-[1] tracking-tighter"
+            >
+              High-Value <br /> <span className="text-primary italic">Dental Patients.</span>
+            </motion.h1>
+
+            <motion.p 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4, duration: 1 }}
+              className="text-3xl text-slate-500 max-w-5xl mx-auto leading-relaxed font-medium"
+            >
+              We help dental clinics dominate their local repository with absolute high-conversion architectures, targeted visibility, and <span className="text-primary italic font-bold">automated patient acquisition protocols.</span>
+            </motion.p>
+            
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6, duration: 1 }}
+              className="flex flex-col sm:flex-row gap-10 justify-center pt-12"
+            >
+              <Button size="lg" className="bg-slate-900 text-white hover:bg-slate-800 text-3xl px-24 py-16 rounded-full font-bold shadow-2xl transition-all duration-700 hover:scale-110 group" asChild
+              >
+                <Link to="/contact" className="flex items-center gap-6">
+                  Absolute Strategy
+                  <ArrowRight className="w-10 h-10 group-hover:translate-x-5 transition-transform" />
+                </Link>
+              </Button>
+            </motion.div>
           </div>
-          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
-            Get More High-Value <br className="hidden md:block" />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">Dental Patients</span>
-          </h1>
-          <p className="text-xl text-gray-400 max-w-2xl mx-auto mb-10">
-            We help dental clinics dominate their local market. From high-converting websites to targeted Google Ads and Local SEO, we turn clicks into booked appointments.
-          </p>
-          <Button size="lg" className="bg-[#C5FF4A] text-black hover:bg-[#b0f030] rounded-full px-8 font-semibold">
-            Book a Strategy Call <ArrowRight className="w-4 h-4 ml-2" />
-          </Button>
         </div>
       </section>
 
-      <section className="py-20 bg-zinc-950">
+      {/* Proven Protocol */}
+      <section className="py-48 bg-white/50 backdrop-blur-md border-y border-white/40 relative">
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[140px] pointer-events-none" />
         <div className="container-wide section-padding">
-          <h2 className="text-3xl font-bold text-center text-white mb-16">Our Proven System for Dentists</h2>
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="text-center mb-32 space-y-12">
+             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+                <Badge className="bg-primary/10 border border-primary/20 text-primary px-10 py-4 rounded-full text-sm font-black uppercase tracking-[0.4em]">
+                  <Activity className="w-5 h-5 mr-4" />
+                  Growth Trajectory
+                </Badge>
+              </motion.div>
+            <h2 className="text-6xl lg:text-[11rem] font-heading font-bold text-slate-900 mb-10 leading-[1.05] tracking-tighter">
+              The Proven <span className="text-primary italic">Protocol.</span>
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-16 max-w-7xl mx-auto">
             {[
-              { title: "Local SEO for Dentists", icon: <Users className="w-8 h-8 text-blue-400" />, desc: "Rank #1 on Google Maps when patients search for 'dentist near me'." },
-              { title: "Patient-First Websites", icon: <Activity className="w-8 h-8 text-cyan-400" />, desc: "Fast, mobile-friendly websites designed to build trust and increase bookings." },
-              { title: "Automated Booking", icon: <CalendarCheck className="w-8 h-8 text-[#C5FF4A]" />, desc: "AI chatbots and automation to answer questions and book patients 24/7." }
+              { 
+                title: "Local Authority Visibility", 
+                icon: <Users className="w-12 h-12" />, 
+                desc: "Rank absolute #1 on Google Maps for high-intent 'dentist near me' searches in your specific repository geography." 
+              },
+              { 
+                title: "Patient-First Architecture", 
+                icon: <Cpu className="w-12 h-12" />, 
+                desc: "Sub-second, mobile-first architectures designed to build immediate trust and maximize absolute patient bookings." 
+              },
+              { 
+                title: "Automated Patient Pipeline", 
+                icon: <CalendarCheck className="w-12 h-12" />, 
+                desc: "AI-powered conversation layers that qualify leads and book absolute appointments automatically, 24/7/365." 
+              }
             ].map((feature, i) => (
-              <div key={i} className="bg-zinc-900 border border-zinc-800 p-8 rounded-2xl hover:border-blue-500/30 transition-all">
-                <div className="bg-black/50 w-16 h-16 rounded-xl flex items-center justify-center mb-6">
+              <motion.div 
+                key={i} 
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1, duration: 1 }}
+                className="group bg-white/40 backdrop-blur-xl border border-white/60 p-16 rounded-[4rem] hover:shadow-glass transition-all duration-1000 flex flex-col items-center text-center gap-10 hover:translate-y-[-15px]"
+              >
+                <div className="bg-slate-900 text-white w-24 h-24 rounded-[2.5rem] flex items-center justify-center group-hover:bg-primary transition-all duration-700 shadow-2xl group-hover:rotate-12">
                   {feature.icon}
                 </div>
-                <h3 className="text-xl font-bold text-white mb-3">{feature.title}</h3>
-                <p className="text-gray-400">{feature.desc}</p>
-              </div>
+                <div className="space-y-6">
+                  <h3 className="text-4xl font-heading font-bold text-slate-900 tracking-tight">{feature.title}</h3>
+                  <p className="text-2xl text-slate-500 font-medium leading-relaxed">{feature.desc}</p>
+                </div>
+              </motion.div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-48 bg-slate-900 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/40 to-accent/20 opacity-40" />
+        <div className="container-wide section-padding relative z-10 text-center">
+          <div className="max-w-7xl mx-auto space-y-24">
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+              <Badge className="bg-white/10 text-white border-white/20 px-10 py-4 rounded-full text-sm font-black uppercase tracking-[0.4em] backdrop-blur-xl">
+                The Absolute Audit
+              </Badge>
+            </motion.div>
+            
+            <h2 className="text-6xl lg:text-[11rem] font-heading font-bold text-white leading-tight tracking-tighter">
+              Scale Your <br /> <span className="text-primary italic">Practice?</span>
+            </h2>
+            
+            <p className="text-3xl text-slate-300 font-body leading-relaxed max-w-5xl mx-auto font-medium">
+              Join the elite dental practices that have transformed their patient acquisition with high-end digital architecture and absolute scaling logic.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-10 justify-center pt-16">
+              <Button size="lg" className="bg-primary text-white hover:bg-primary/90 text-3xl px-24 py-16 rounded-full font-bold shadow-2xl transition-all duration-700 hover:scale-110 group" asChild>
+                <Link to="/contact" className="flex items-center gap-6">
+                  Initialize Audit
+                  <ArrowRight className="w-10 h-10 ml-8 group-hover:translate-x-5 transition-transform" />
+                </Link>
+              </Button>
+              <Button size="lg" variant="outline" className="border-2 border-white/20 bg-white/10 backdrop-blur-xl text-white hover:bg-white/20 text-3xl px-24 py-16 rounded-full font-bold transition-all duration-700 hover:scale-105" asChild>
+                <Link to="/portfolio">
+                  Success Repository
+                </Link>
+              </Button>
+            </div>
+            
+            <div className="pt-24 flex items-center justify-center gap-16 opacity-30 text-white">
+               <ShieldCheck className="w-10 h-10" />
+               <Cpu className="w-10 h-10" />
+               <Database className="w-10 h-10" />
+            </div>
           </div>
         </div>
       </section>

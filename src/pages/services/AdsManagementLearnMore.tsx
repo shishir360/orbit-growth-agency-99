@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent } from "@/components/ui/card";
 import Navigation from "@/components/ui/navigation";
 import Footer from "@/components/ui/footer";
 import SEO from "@/components/ui/seo";
@@ -22,9 +22,14 @@ import {
   Pause,
   Settings,
   Eye,
-  Calculator
+  Calculator,
+  ChevronRight,
+  Globe,
+  Activity,
+  Cpu,
+  ShieldCheck,
+  Database
 } from "lucide-react";
-import ThreeDBackground from "@/components/ui/3d-background";
 
 const AdsManagementLearnMore = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -35,137 +40,110 @@ const AdsManagementLearnMore = () => {
 
   const platforms = [
     {
-      name: "Google Ads",
+      name: "Google Ads Protocol",
       icon: "🔍",
-      description: "Capture high-intent traffic when customers are actively searching",
-      features: ["Search Campaigns", "Display Network", "Shopping Ads", "YouTube Ads"],
+      description: "Capture high-intent traffic when customers are actively searching for absolute solutions.",
+      features: ["Search Campaigns", "Display Network", "Shopping Logic", "YouTube Ads Sync"],
       avgRoas: "4.2x",
       avgCtr: "3.2%",
       bestFor: "High-intent searches, B2B services, e-commerce"
     },
     {
-      name: "Facebook & Instagram",
+      name: "Meta & Instagram Logic",
       icon: "📘",
-      description: "Target your ideal customers with precision demographic targeting",
-      features: ["Feed Ads", "Stories", "Reels", "Shop Integration"],
+      description: "Target your ideal customers with precision demographic targeting and visual excellence.",
+      features: ["Feed Ads", "Stories Protocol", "Reels Logic", "Shop Integration"],
       avgRoas: "3.8x",
       avgCtr: "2.8%",
       bestFor: "Brand awareness, e-commerce, local businesses"
     },
     {
-      name: "TikTok Ads",
+      name: "TikTok Visibility",
       icon: "🎵",
-      description: "Engage younger audiences with creative short-form video content",
-      features: ["In-Feed Ads", "Spark Ads", "Brand Takeover", "Effect Ads"],
+      description: "Engage younger audiences with creative short-form absolute video content.",
+      features: ["In-Feed Ads", "Spark Ads Protocol", "Brand Takeover", "Effect Ads Logic"],
       avgRoas: "3.2x",
       avgCtr: "4.1%",
       bestFor: "Gen Z marketing, entertainment, viral campaigns"
     },
     {
-      name: "LinkedIn Ads",
+      name: "LinkedIn B2B Intel",
       icon: "💼",
-      description: "Target decision-makers and professionals for B2B campaigns",
-      features: ["Sponsored Content", "Message Ads", "Lead Gen Forms", "Event Ads"],
+      description: "Target decision-makers and professionals with absolute B2B precision.",
+      features: ["Sponsored Content", "Message Ads Protocol", "Lead Gen Forms", "Event Ads Logic"],
       avgRoas: "5.1x",
       avgCtr: "1.9%",
       bestFor: "B2B services, recruitment, professional services"
     },
     {
-      name: "YouTube Ads",
+      name: "YouTube Video Sync",
       icon: "📺",
-      description: "Reach audiences through engaging video content",
-      features: ["Skippable Video", "Non-skippable", "Bumper Ads", "Discovery Ads"],
+      description: "Reach audiences through engaging absolute video content and storytelling.",
+      features: ["Skippable Video", "Non-skippable Logic", "Bumper Ads", "Discovery Ads Protocol"],
       avgRoas: "2.9x",
       avgCtr: "2.1%",
       bestFor: "Brand awareness, product demos, tutorials"
     },
     {
-      name: "Pinterest Ads",
+      name: "Pinterest Visual Logic",
       icon: "📌",
-      description: "Drive discovery and sales through visual search platform",
-      features: ["Product Pins", "Video Pins", "Shopping Features", "Idea Pins"],
+      description: "Drive discovery and sales through high-end visual search platform protocols.",
+      features: ["Product Pins", "Video Pins Logic", "Shopping Features", "Idea Pins Protocol"],
       avgRoas: "4.1x",
       avgCtr: "3.8%",
       bestFor: "E-commerce, lifestyle brands, DIY products"
-    },
-    {
-      name: "Twitter Ads",
-      icon: "🐦",
-      description: "Engage in real-time conversations and promote content",
-      features: ["Promoted Tweets", "Trend Takeover", "Followers Campaign", "Website Clicks"],
-      avgRoas: "2.4x",
-      avgCtr: "1.8%",
-      bestFor: "News, events, real-time marketing"
-    },
-    {
-      name: "Snapchat Ads",
-      icon: "👻",
-      description: "Connect with younger demographics through AR and video",
-      features: ["Snap Ads", "Story Ads", "AR Lenses", "Collection Ads"],
-      avgRoas: "2.8x",
-      avgCtr: "4.2%",
-      bestFor: "Youth marketing, entertainment, AR experiences"
-    },
-    {
-      name: "Microsoft Bing",
-      icon: "🌐",
-      description: "Reach users on Bing with lower competition and better CPCs",
-      features: ["Search Campaigns", "Shopping Ads", "Audience Network", "App Install"],
-      avgRoas: "3.4x",
-      avgCtr: "2.6%",
-      bestFor: "Lower competition, older demographics, B2B"
     }
   ];
 
   const serviceTypes = [
     {
-      title: "Campaign Setup & Strategy",
-      description: "Complete campaign architecture and strategic planning",
+      title: "Campaign Architecture & Strategy",
+      description: "Complete campaign architecture and absolute strategic planning.",
       features: [
         "Account Structure Optimization",
-        "Audience Research & Segmentation", 
-        "Competitive Analysis",
-        "Budget Allocation Strategy",
-        "Creative Strategy Development",
-        "Landing Page Recommendations"
+        "Audience Research & Logic", 
+        "Competitive Repository Analysis",
+        "Budget Allocation Protocol",
+        "Creative Strategy Sync",
+        "Landing Page Logic"
       ],
       timeline: "Week 1-2"
     },
     {
-      title: "Creative Development",
-      description: "High-converting ad creatives and copy that drive results",
+      title: "Creative Development Protocols",
+      description: "High-converting ad creatives and copy that drive absolute results.",
       features: [
-        "Ad Copy Writing & Testing",
-        "Visual Asset Creation",
-        "Video Ad Production",
+        "Ad Copy Writing & Logic",
+        "Visual Asset Orchestration",
+        "Video Ad Production Sync",
         "A/B Testing Framework",
-        "Brand Guideline Adherence",
+        "Brand Sovereignty Adherence",
         "Performance Creative Analysis"
       ],
       timeline: "Week 2-3"
     },
     {
-      title: "Campaign Management",
-      description: "Daily optimization and performance monitoring",
+      title: "Absolute Campaign Management",
+      description: "Daily optimization and performance monitoring nodes.",
       features: [
         "Bid Management & Optimization",
-        "Audience Refinement",
-        "Budget Reallocation",
-        "Performance Monitoring",
-        "Quality Score Improvement",
+        "Audience Refinement Logic",
+        "Budget Reallocation Protocol",
+        "Performance Monitoring Sync",
+        "Quality Score Logic",
         "Ad Schedule Optimization"
       ],
       timeline: "Ongoing"
     },
     {
-      title: "Analytics & Reporting",
-      description: "Comprehensive performance tracking and insights",
+      title: "Analytics & Intelligence Reporting",
+      description: "Comprehensive performance tracking and absolute insights.",
       features: [
-        "Custom Dashboard Setup",
-        "Weekly Performance Reports",
-        "ROI & ROAS Analysis",
-        "Attribution Modeling",
-        "Conversion Tracking Setup",
+        "Custom Dashboard Orchestration",
+        "Weekly Performance Intel",
+        "ROI & ROAS Logic",
+        "Attribution Modeling Sync",
+        "Conversion Tracking Logic",
         "Strategic Recommendations"
       ],
       timeline: "Weekly/Monthly"
@@ -173,102 +151,64 @@ const AdsManagementLearnMore = () => {
   ];
 
   const results = [
-    { metric: "Average ROAS", value: "4.2x", description: "Return on ad spend across all campaigns", change: "+85%" },
-    { metric: "Cost Per Lead", value: "65% Lower", description: "Reduction in cost per qualified lead", change: "vs. industry average" },
-    { metric: "Conversion Rate", value: "180% Higher", description: "Increase in conversion rates", change: "within 90 days" },
-    { metric: "Click-Through Rate", value: "3.2%", description: "Average CTR across all platforms", change: "+120% vs baseline" }
-  ];
-
-  const caseStudies = [
-    {
-      title: "SaaS Company Scale-Up",
-      industry: "Software",
-      challenge: "Needed to scale from $10K to $100K MRR",
-      solution: "Multi-platform funnel with LinkedIn, Google, and Facebook",
-      results: ["400% increase in MRR", "60% lower CAC", "2.1x LTV improvement"],
-      timeline: "6 months",
-      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=400&q=80"
-    },
-    {
-      title: "E-commerce Brand Growth",
-      industry: "Retail",
-      challenge: "Struggling with high CAC and low ROAS",
-      solution: "Creative testing framework with TikTok and Instagram",
-      results: ["900% revenue growth", "3.8x ROAS", "45% lower CAC"],
-      timeline: "4 months",
-      image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=400&q=80"
-    },
-    {
-      title: "Local Service Business",
-      industry: "Home Services",
-      challenge: "Needed more qualified local leads",
-      solution: "Hyperlocal targeting with Google Local and Facebook",
-      results: ["350% more qualified leads", "40% higher close rate", "$250K additional revenue"],
-      timeline: "3 months",
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80"
-    }
+    { metric: "Average ROAS", value: "4.2x", description: "Return on ad spend across all absolute campaigns", change: "+85% Velocity" },
+    { metric: "Cost Per Lead", value: "65% Lower", description: "Reduction in cost per qualified lead node", change: "vs. industry average" },
+    { metric: "Conversion Logic", value: "180% Higher", description: "Increase in conversion trajectory", change: "within 90 days" },
+    { metric: "Click-Through Intel", value: "3.2%", description: "Average CTR across all platforms", change: "+120% vs baseline" }
   ];
 
   const pricing = [
     {
-      title: "Starter",
+      title: "Starter Protocol",
       price: "$1,497",
       period: "/month",
-      description: "Perfect for small businesses starting with ads",
+      description: "Perfect for businesses starting with absolute ads.",
       features: [
         "2 advertising platforms",
         "Up to $5K monthly ad spend",
-        "Basic reporting",
-        "Campaign setup & optimization",
-        "Monthly strategy calls"
+        "Basic reporting intel",
+        "Campaign setup & logic",
+        "Monthly strategy sync"
       ],
       popular: false
     },
     {
-      title: "Growth",
+      title: "Growth Trajectory",
       price: "$2,497",
       period: "/month",
-      description: "Ideal for scaling businesses",
+      description: "Ideal for scaling absolute businesses.",
       features: [
         "4 advertising platforms",
         "Up to $15K monthly ad spend",
-        "Advanced reporting & analytics",
-        "Creative development",
+        "Advanced reporting & intel",
+        "Creative development sync",
         "Bi-weekly strategy calls",
-        "Landing page optimization"
+        "Landing page logic"
       ],
       popular: true
     },
     {
-      title: "Enterprise",
+      title: "Enterprise Architecture",
       price: "Custom",
       period: "",
-      description: "For large-scale advertising operations",
+      description: "For large-scale advertising operations and absolute reach.",
       features: [
         "All advertising platforms",
-        "Unlimited ad spend management",
+        "Unlimited ad spend logic",
         "Custom reporting & dashboards",
-        "Dedicated account manager",
-        "Weekly strategy calls",
-        "Advanced attribution modeling"
+        "Dedicated account node",
+        "Weekly strategy sync",
+        "Advanced attribution logic"
       ],
       popular: false
     }
   ];
 
-  useEffect(() => {
-    document.title = "Ads Management Services - Complete Guide | LUNEXO MEDIA";
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription) {
-      metaDescription.setAttribute('content', 'Complete guide to LUNEXO MEDIA ads management services. Learn about platforms, strategies, pricing, and results we deliver for businesses.');
-    }
-  }, []);
-
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background font-body text-slate-900 overflow-hidden">
       <SEO
-        title="Ads Management Services - Complete Guide | LUNEXO MEDIA"
-        description="Complete guide to LUNEXO MEDIA ads management services. Learn about platforms, strategies, pricing, and results we deliver for businesses."
+        title="Absolute Ads Management - Complete Guide | LUNEXO MEDIA"
+        description="Complete guide to LUNEXO MEDIA absolute ads management services. Learn about platforms, strategies, pricing, and absolute results we deliver."
         image="https://www.lunexomedia.com/og-image-new.jpg"
         url="https://www.lunexomedia.com/services/ads-management-learn-more"
         keywords="ads management, Google Ads, Facebook Ads, PPC management, digital advertising"
@@ -277,272 +217,325 @@ const AdsManagementLearnMore = () => {
       <Navigation />
       
       {/* Hero Section */}
-      <section className="py-24 bg-gradient-to-br from-background via-background/50 to-muted/30 relative overflow-hidden">
-        <ThreeDBackground />
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-32 pb-24">
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+          <div className="absolute top-[10%] left-[5%] w-[800px] h-[800px] bg-primary/10 rounded-full blur-[140px]" />
+          <div className="absolute bottom-[10%] right-[5%] w-[600px] h-[600px] bg-accent/10 rounded-full blur-[120px]" />
+        </div>
+
         <div className="container-wide section-padding relative z-10">
-          <div className={`text-center mb-16 transition-all duration-1000 ${isVisible ? 'animate-fade-in' : 'opacity-0'}`}>
-            <Badge variant="outline" className="mb-4 text-primary border-primary/20 text-lg px-4 py-2">
-              <Target className="w-5 h-5 mr-2" />
-              Comprehensive Ads Management
-            </Badge>
-            <h1 className="text-5xl lg:text-7xl font-bold mb-8 bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-              Master Multi-Platform Advertising
-            </h1>
-            <p className="text-2xl text-muted-foreground max-w-4xl mx-auto leading-relaxed mb-12">
-              Everything you need to know about our data-driven advertising services that help businesses scale efficiently across all major platforms
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg text-lg px-8 py-4" asChild>
-                <Link to="/contact">Get Custom Strategy</Link>
+          <div className="text-center max-w-7xl mx-auto space-y-16">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              <Badge className="bg-primary/10 border border-primary/20 text-primary px-10 py-4 rounded-full text-sm font-black uppercase tracking-[0.4em] backdrop-blur-xl">
+                <Target className="w-5 h-5 mr-4" />
+                The Absolute Growth Catalyst
+              </Badge>
+            </motion.div>
+
+            <motion.h1 
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 1 }}
+              className="text-6xl sm:text-7xl lg:text-[11rem] font-heading font-bold text-slate-900 leading-[1] tracking-tighter"
+            >
+              Mastering the <br /> <span className="text-primary italic">Attention Economy.</span>
+            </motion.h1>
+
+            <motion.p 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4, duration: 1 }}
+              className="text-3xl text-slate-500 max-w-5xl mx-auto leading-relaxed font-medium"
+            >
+              Everything you need to know about our absolute data-driven advertising engines that scale businesses efficiently across <span className="text-primary italic font-bold">all major attention platforms.</span>
+            </motion.p>
+            
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6, duration: 1 }}
+              className="flex flex-col sm:flex-row gap-10 justify-center pt-12"
+            >
+              <Button size="lg" className="bg-slate-900 text-white hover:bg-slate-800 text-3xl px-24 py-16 rounded-full font-bold shadow-2xl transition-all duration-700 hover:scale-110 group" asChild
+              >
+                <Link to="/contact" className="flex items-center gap-6">
+                  Absolute Strategy
+                  <ArrowRight className="w-10 h-10 group-hover:translate-x-5 transition-transform" />
+                </Link>
               </Button>
-              <Button size="lg" variant="outline" className="border-primary/20 hover:bg-primary hover:text-white text-lg px-8 py-4" asChild>
-                <Link to="/ads-management">View Service Page</Link>
-              </Button>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
 
-      {/* Advertising Platforms Section */}
-      <section className="py-24 bg-white">
+      {/* Advertising Platforms */}
+      <section className="py-48 bg-white/50 backdrop-blur-md border-y border-white/40 relative">
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[140px] pointer-events-none" />
         <div className="container-wide section-padding">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold mb-6">
-              Advertising Platforms We Manage
+          <div className="text-center mb-32 space-y-12">
+             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+                <Badge className="bg-primary/10 border border-primary/20 text-primary px-10 py-4 rounded-full text-sm font-black uppercase tracking-[0.4em]">
+                  <Globe className="w-5 h-5 mr-4" />
+                  Attention Ecosystem
+                </Badge>
+              </motion.div>
+            <h2 className="text-6xl lg:text-[11rem] font-heading font-bold text-slate-900 mb-10 leading-[1.05] tracking-tighter">
+              Repository <span className="text-primary italic">Nodes.</span>
             </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              We expertly manage campaigns across all major advertising platforms to maximize your reach and ROI
-            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16 max-w-7xl mx-auto">
             {platforms.map((platform, index) => (
-              <Card key={index} className="group hover:shadow-xl transition-all duration-300">
-                <CardHeader className="text-center">
-                  <div className="text-4xl mb-4">{platform.icon}</div>
-                  <CardTitle className="text-xl mb-3">{platform.name}</CardTitle>
-                  <p className="text-muted-foreground text-sm">{platform.description}</p>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-2 gap-4 mb-6 text-center">
-                    <div>
-                      <div className="text-2xl font-bold text-primary">{platform.avgRoas}</div>
-                      <div className="text-xs text-muted-foreground">Avg ROAS</div>
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1, duration: 1 }}
+                className="group relative bg-white/40 backdrop-blur-xl border border-white/60 rounded-[4rem] p-16 hover:shadow-glass transition-all duration-1000 flex flex-col justify-between hover:translate-y-[-15px]"
+              >
+                <div className="space-y-10">
+                  <div className="text-7xl group-hover:scale-110 transition-transform duration-700">{platform.icon}</div>
+                  <h3 className="text-4xl font-heading font-bold text-slate-900 group-hover:text-primary transition-all duration-700 tracking-tight leading-tight">{platform.name}</h3>
+                  <p className="text-2xl text-slate-500 leading-relaxed font-medium h-32 overflow-hidden">{platform.description}</p>
+                  
+                  <div className="grid grid-cols-2 gap-6 pt-6">
+                    <div className="p-8 bg-white/60 rounded-[2.5rem] border border-white/60 shadow-sm text-center">
+                      <div className="text-3xl font-heading font-black text-primary">{platform.avgRoas}</div>
+                      <div className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mt-2">Avg ROAS</div>
                     </div>
-                    <div>
-                      <div className="text-2xl font-bold text-primary">{platform.avgCtr}</div>
-                      <div className="text-xs text-muted-foreground">Avg CTR</div>
+                    <div className="p-8 bg-white/60 rounded-[2.5rem] border border-white/60 shadow-sm text-center">
+                      <div className="text-3xl font-heading font-black text-primary">{platform.avgCtr}</div>
+                      <div className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mt-2">Avg CTR</div>
                     </div>
                   </div>
                   
-                  <div className="space-y-2 mb-4">
-                    {platform.features.map((feature, featureIndex) => (
-                      <div key={featureIndex} className="flex items-center gap-2 text-sm">
-                        <CheckCircle className="w-4 h-4 text-primary flex-shrink-0" />
-                        <span>{feature}</span>
-                      </div>
-                    ))}
+                  <div className="space-y-6 pt-6">
+                    <div className="space-y-2">
+                       <h4 className="text-[10px] font-black text-slate-900 uppercase tracking-[0.4em]">Protocol Nodes:</h4>
+                       <div className="h-[2px] w-full bg-gradient-to-r from-primary/40 to-transparent" />
+                    </div>
+                    <div className="flex flex-wrap gap-4">
+                      {platform.features.map((f, i) => (
+                        <Badge key={i} className="bg-primary/10 text-primary border-primary/20 px-8 py-3 rounded-full text-sm font-black uppercase tracking-[0.2em]">
+                          {f}
+                        </Badge>
+                      ))}
+                    </div>
                   </div>
-                  
-                  <div className="text-sm text-muted-foreground mb-4">
-                    <strong>Best for:</strong> {platform.bestFor}
-                  </div>
-                  
-                  <Button variant="outline" className="w-full" size="sm" asChild>
-                    <Link to={`/services/learn-platform?platform=${platform.name.toLowerCase().replace(/\s+/g, '-').replace('&', '').replace(/--+/g, '-')}`}>
-                      Learn Platform Strategy
-                    </Link>
+
+                  <Button variant="ghost" className="w-full text-slate-400 font-bold hover:text-primary hover:bg-transparent group-hover:translate-x-4 transition-all pt-12 text-xl" asChild>
+                    <Link to="/contact">Platform Logic <ChevronRight className="w-8 h-8 ml-2" /></Link>
                   </Button>
-                </CardContent>
-              </Card>
+                </div>
+                <div className="mt-12 pt-8 border-t border-white/60 opacity-20 flex justify-end">
+                   <Activity className="w-8 h-8" />
+                </div>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
       {/* Service Details */}
-      <section className="py-24 bg-gradient-to-b from-muted/30 to-background">
+      <section className="py-48 bg-background relative overflow-hidden">
         <div className="container-wide section-padding">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold mb-6">
-              Our Complete Service Process
+          <div className="text-center mb-32 space-y-12">
+             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+                <Badge className="bg-primary/10 border border-primary/20 text-primary px-10 py-4 rounded-full text-sm font-black uppercase tracking-[0.4em]">
+                  <Zap className="w-5 h-5 mr-4" />
+                  Operational Orchestration
+                </Badge>
+              </motion.div>
+            <h2 className="text-6xl lg:text-[11rem] font-heading font-bold text-slate-900 mb-10 leading-[1.1] tracking-tighter">
+              High-Velocity <span className="text-primary italic">Process.</span>
             </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              From strategy to execution, here's exactly what we do to maximize your advertising ROI
-            </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 max-w-7xl mx-auto">
             {serviceTypes.map((service, index) => (
-              <Card key={index} className="group hover:shadow-lg transition-all duration-300">
-                <CardHeader>
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-8 h-8 bg-primary text-white rounded-lg flex items-center justify-center text-sm font-bold">
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1 }}
+                className="bg-white/40 backdrop-blur-xl border border-white/60 rounded-[5rem] p-16 lg:p-24 hover:shadow-glass transition-all duration-1000 group relative overflow-hidden"
+              >
+                <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-[80px] opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+                <div className="space-y-12 relative z-10">
+                  <div className="flex items-center gap-8">
+                    <div className="w-24 h-24 bg-slate-900 text-white rounded-[2rem] flex items-center justify-center font-black text-4xl shadow-2xl group-hover:bg-primary transition-all duration-700 group-hover:rotate-12">
                       {index + 1}
                     </div>
-                    <Badge variant="outline">{service.timeline}</Badge>
+                    <Badge className="bg-accent/10 text-accent border-accent/20 px-8 py-3 font-black uppercase tracking-[0.2em] rounded-full text-[10px]">{service.timeline}</Badge>
                   </div>
-                  <CardTitle className="text-xl">{service.title}</CardTitle>
-                  <p className="text-muted-foreground">{service.description}</p>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    {service.features.map((feature, featureIndex) => (
-                      <div key={featureIndex} className="flex items-center gap-3">
-                        <CheckCircle className="w-5 h-5 text-primary flex-shrink-0" />
-                        <span className="text-sm">{feature}</span>
+                  <h3 className="text-5xl font-heading font-bold text-slate-900 tracking-tight leading-tight">{service.title}</h3>
+                  <p className="text-3xl text-slate-500 leading-relaxed font-medium">{service.description}</p>
+                  <div className="grid md:grid-cols-2 gap-8 pt-12 border-t border-white/60">
+                    {service.features.map((f, i) => (
+                      <div key={i} className="flex items-center gap-6 text-2xl text-slate-700 font-bold group/act">
+                        <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center group-hover/act:bg-primary transition-all duration-500">
+                           <CheckCircle className="w-5 h-5 text-primary group-hover/act:text-white" />
+                        </div>
+                        <span className="group-hover/act:text-slate-900 transition-colors">{f}</span>
                       </div>
                     ))}
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Results Section */}
-      <section className="py-24 bg-white">
+      {/* Results Matrix */}
+      <section className="py-48 bg-white/50 backdrop-blur-md border-y border-white/40">
         <div className="container-wide section-padding">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold mb-6">
-              Proven Results Across Industries
+          <div className="text-center mb-32 space-y-12">
+             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+                <Badge className="bg-primary/10 border border-primary/20 text-primary px-10 py-4 rounded-full text-sm font-black uppercase tracking-[0.4em]">
+                  <BarChart3 className="w-5 h-5 mr-4" />
+                  Absolute Performance Matrix
+                </Badge>
+              </motion.div>
+            <h2 className="text-6xl lg:text-[11rem] font-heading font-bold text-slate-900 mb-10 leading-[1.1] tracking-tighter">
+              Performance <span className="text-primary italic">Delta.</span>
             </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Our data-driven approach consistently delivers exceptional performance across all platforms
-            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 max-w-7xl mx-auto">
             {results.map((result, index) => (
-              <Card key={index} className="text-center group hover:shadow-lg transition-all duration-300">
-                <CardContent className="p-6">
-                  <div className="text-3xl font-bold text-primary mb-2">{result.value}</div>
-                  <div className="text-lg font-semibold mb-2">{result.metric}</div>
-                  <div className="text-sm text-muted-foreground mb-2">{result.description}</div>
-                  <Badge variant="secondary" className="text-xs">{result.change}</Badge>
-                </CardContent>
-              </Card>
+              <motion.div 
+                key={index} 
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1, duration: 1 }}
+                className="group bg-white/40 backdrop-blur-xl border border-white/60 rounded-[4rem] p-16 text-center hover:shadow-glass transition-all duration-1000 flex flex-col items-center gap-10 hover:translate-y-[-15px]"
+              >
+                <div className="text-6xl font-heading font-black text-primary tracking-tighter">{result.value}</div>
+                <div className="space-y-4">
+                  <h3 className="text-3xl font-heading font-bold text-slate-900 tracking-tight leading-tight">{result.metric}</h3>
+                  <p className="text-2xl text-slate-500 font-medium leading-relaxed mb-8">{result.description}</p>
+                  <Badge className="bg-slate-900 text-white border-none px-10 py-3 rounded-full font-black uppercase tracking-[0.2em] text-[10px] shadow-xl group-hover:bg-primary transition-all duration-700">{result.change}</Badge>
+                </div>
+                <div className="pt-8 border-t border-white/60 w-full opacity-20">
+                   <TrendingUp className="w-8 h-8 mx-auto" />
+                </div>
+              </motion.div>
             ))}
           </div>
+        </div>
+      </section>
 
-          {/* Case Studies */}
-          <div className="space-y-8">
-            <h3 className="text-3xl font-bold text-center mb-12">Featured Case Studies</h3>
-            {caseStudies.map((study, index) => (
-              <Card key={index} className="overflow-hidden">
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-0">
-                  <div className="lg:col-span-1">
-                    <img 
-                      src={study.image} 
-                      alt={study.title}
-                      className="w-full h-64 lg:h-full object-cover"
-                    />
+      {/* Strategic Investment */}
+      <section className="py-48 bg-background relative overflow-hidden">
+        <div className="container-wide section-padding">
+          <div className="text-center mb-32 space-y-12">
+             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+                <Badge className="bg-primary/10 border border-primary/20 text-primary px-10 py-4 rounded-full text-sm font-black uppercase tracking-[0.4em]">
+                  <DollarSign className="w-5 h-5 mr-4" />
+                  Absolute Investment Logic
+                </Badge>
+              </motion.div>
+            <h2 className="text-6xl lg:text-[11rem] font-heading font-bold text-slate-900 mb-10 leading-[1.1] tracking-tighter">
+              Strategic <span className="text-primary italic">Investment.</span>
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-16 max-w-7xl mx-auto">
+            {pricing.map((plan, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1, duration: 1 }}
+                className={`group relative bg-white/40 backdrop-blur-xl border border-white/60 rounded-[4rem] p-16 lg:p-20 hover:shadow-glass transition-all duration-1000 flex flex-col items-center text-center ${plan.popular ? 'border-primary shadow-glass scale-105 z-10' : 'hover:translate-y-[-15px]'}`}
+              >
+                {plan.popular && (
+                  <Badge className="absolute -top-10 left-1/2 -translate-x-1/2 bg-primary text-white px-12 py-5 rounded-full text-sm font-black uppercase tracking-[0.4em] shadow-2xl">
+                    Most Popular Protocol
+                  </Badge>
+                )}
+                
+                <div className="space-y-12 flex-1 w-full">
+                  <div className="space-y-4">
+                     <h3 className="text-4xl font-heading font-bold text-slate-900 tracking-tight leading-tight">{plan.title}</h3>
+                     <div className="h-[2px] w-12 bg-primary mx-auto opacity-40" />
                   </div>
-                  <div className="lg:col-span-2 p-8">
-                    <div className="flex items-center gap-3 mb-4">
-                      <Badge variant="outline">{study.industry}</Badge>
-                      <Badge variant="secondary">{study.timeline}</Badge>
-                    </div>
-                    <h4 className="text-2xl font-bold mb-4">{study.title}</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div>
-                        <h5 className="font-semibold mb-2 text-red-600">Challenge:</h5>
-                        <p className="text-muted-foreground text-sm mb-4">{study.challenge}</p>
-                        <h5 className="font-semibold mb-2 text-blue-600">Solution:</h5>
-                        <p className="text-muted-foreground text-sm">{study.solution}</p>
-                      </div>
-                      <div>
-                        <h5 className="font-semibold mb-3 text-green-600">Results:</h5>
-                        <div className="space-y-2">
-                          {study.results.map((result, resultIndex) => (
-                            <div key={resultIndex} className="flex items-center gap-2">
-                              <TrendingUp className="w-4 h-4 text-green-500" />
-                              <span className="text-sm font-medium">{result}</span>
-                            </div>
-                          ))}
+                  <div className="space-y-4">
+                    <div className="text-6xl lg:text-7xl font-heading font-black text-primary tracking-tighter">{plan.price}</div>
+                    <div className="text-[10px] font-black text-slate-400 uppercase tracking-[0.5em]">{plan.period} Protocol</div>
+                  </div>
+                  <p className="text-2xl text-slate-500 font-medium leading-relaxed">{plan.description}</p>
+                  
+                  <div className="space-y-8 text-left pt-12 border-t border-white/60 w-full">
+                    <h4 className="text-[10px] font-black text-slate-900 uppercase tracking-[0.4em]">Protocol Nodes:</h4>
+                    <div className="space-y-6">
+                      {plan.features.map((f, i) => (
+                        <div key={i} className="flex items-center gap-6 text-2xl text-slate-700 font-bold group/feat">
+                          <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center group-hover/feat:bg-primary transition-all duration-500">
+                             <CheckCircle className="w-5 h-5 text-primary group-hover/feat:text-white" />
+                          </div>
+                          <span className="group-hover/feat:text-slate-900 transition-colors">{f}</span>
                         </div>
-                      </div>
+                      ))}
                     </div>
                   </div>
                 </div>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Pricing Section */}
-      <section className="py-24 bg-gradient-to-b from-muted/30 to-background">
-        <div className="container-wide section-padding">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold mb-6">
-              Transparent Pricing
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Choose the plan that fits your advertising budget and growth goals
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {pricing.map((plan, index) => (
-              <Card 
-                key={index} 
-                className={`relative ${plan.popular ? 'ring-2 ring-primary shadow-lg scale-105' : ''}`}
-              >
-                {plan.popular && (
-                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                    <Badge className="bg-primary text-white">Most Popular</Badge>
-                  </div>
-                )}
-                <CardHeader className="text-center">
-                  <CardTitle className="text-2xl">{plan.title}</CardTitle>
-                  <div className="text-4xl font-bold text-primary mb-2">
-                    {plan.price}<span className="text-lg text-muted-foreground">{plan.period}</span>
-                  </div>
-                  <p className="text-muted-foreground">{plan.description}</p>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3 mb-6">
-                    {plan.features.map((feature, featureIndex) => (
-                      <div key={featureIndex} className="flex items-center gap-3">
-                        <CheckCircle className="w-5 h-5 text-primary flex-shrink-0" />
-                        <span className="text-sm">{feature}</span>
-                      </div>
-                    ))}
-                  </div>
-                  <Button 
-                    className={`w-full ${plan.popular ? 'bg-primary hover:bg-primary/90' : ''}`}
-                    variant={plan.popular ? 'default' : 'outline'}
-                    asChild
-                  >
-                    <a href="https://lunexomedia.com/contact">
-                      {plan.price === 'Custom' ? 'Contact Sales' : 'Get Started'}
-                    </a>
-                  </Button>
-                </CardContent>
-              </Card>
+                
+                <Button className={`mt-16 py-12 px-16 rounded-[2rem] font-bold text-2xl shadow-2xl transition-all duration-700 w-full hover:scale-110 ${plan.popular ? 'bg-primary text-white' : 'bg-slate-900 text-white'}`} asChild>
+                  <Link to="/contact" className="flex items-center justify-center gap-4">
+                    Initialize Scaling
+                    <ArrowRight className="w-8 h-8" />
+                  </Link>
+                </Button>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 bg-gradient-to-br from-primary/5 to-primary/10">
-        <div className="container-wide section-padding text-center">
-          <h2 className="text-4xl lg:text-5xl font-bold mb-6">
-            Ready to Scale Your Advertising?
-          </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-12">
-            Book a free strategy call to discover how our ads management services can help you achieve your growth goals
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg" asChild>
-              <a href="https://lunexomedia.com/book-apartment">Book Strategy Call</a>
-            </Button>
-            <Button size="lg" variant="outline" className="border-primary/20 hover:bg-primary hover:text-white" asChild>
-              <a href="https://lunexomedia.com/portfolio">View Case Studies</a>
-            </Button>
+      <section className="py-48 bg-slate-900 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/40 to-accent/20 opacity-40" />
+        <div className="container-wide section-padding relative z-10 text-center">
+          <div className="max-w-7xl mx-auto space-y-24">
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+              <Badge className="bg-white/10 text-white border-white/20 px-10 py-4 rounded-full text-sm font-black uppercase tracking-[0.4em] backdrop-blur-xl">
+                The Growth Audit
+              </Badge>
+            </motion.div>
+            <h2 className="text-6xl lg:text-[11rem] font-heading font-bold text-white leading-tight tracking-tighter">
+              Ready to <br /> <span className="text-primary italic">Absolute Scale?</span>
+            </h2>
+            <p className="text-3xl text-slate-300 font-body leading-relaxed max-w-5xl mx-auto font-medium">
+              Book an absolute strategy session to discover how our ads management architectures can help you achieve your absolute trajectory.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-10 justify-center pt-16">
+              <Button size="lg" className="bg-primary text-white hover:bg-primary/90 text-3xl px-24 py-16 rounded-full font-bold shadow-2xl transition-all duration-700 hover:scale-110 group" asChild>
+                <a href="https://lunexomedia.com/book-apartment" className="flex items-center gap-6">
+                  Absolute Strategy
+                  <ArrowRight className="w-10 h-10 ml-8 group-hover:translate-x-5 transition-transform" />
+                </a>
+              </Button>
+              <Button size="lg" variant="outline" className="border-2 border-white/20 bg-white/10 backdrop-blur-xl text-white hover:bg-white/20 text-3xl px-24 py-16 rounded-full font-bold transition-all duration-700 hover:scale-105" asChild>
+                <Link to="/portfolio">
+                  View Success Repository
+                </Link>
+              </Button>
+            </div>
+            <div className="pt-24 flex items-center justify-center gap-16 opacity-30 text-white">
+               <ShieldCheck className="w-10 h-10" />
+               <Cpu className="w-10 h-10" />
+               <Database className="w-10 h-10" />
+               <Activity className="w-10 h-10" />
+            </div>
           </div>
         </div>
       </section>

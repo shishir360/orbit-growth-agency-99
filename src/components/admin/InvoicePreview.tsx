@@ -151,119 +151,195 @@ const InvoicePreview = ({ invoice, open, onClose, onSendEmail }: InvoicePreviewP
           {isLoading ? (
             <div className="text-center py-8">Loading invoice...</div>
           ) : (
-            <div id="invoice-print-content" className="bg-background p-8 border rounded-lg">
+            <div id="invoice-print-content" className="bg-white text-slate-900 p-12 border rounded-xl shadow-2xl relative overflow-hidden font-body">
+              {/* Premium Accent Bar */}
+              <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-primary via-accent to-primary-variant" />
+              
               {/* Invoice Header */}
-              <div className="flex justify-between items-start mb-8 border-b pb-6">
-                <div>
-                  {companyInfo?.logo && (
+              <div className="flex justify-between items-start mb-12">
+                <div className="space-y-4">
+                  <div className="bg-slate-950 p-4 rounded-xl inline-block shadow-lg">
                     <img 
-                      src={companyInfo.logo} 
-                      alt={companyInfo.company_name}
-                      className="h-16 mb-4"
+                      src="/logo.png" 
+                      alt="Lunexo Media"
+                      className="h-12 w-auto object-contain invert"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = 'https://www.lunexomedia.com/logo.png';
+                      }}
                     />
-                  )}
-                  <h1 className="text-3xl font-bold mb-2">{companyInfo?.company_name || 'Your Company'}</h1>
-                  {companyInfo?.address && <p className="text-sm text-muted-foreground">{companyInfo.address}</p>}
-                  {companyInfo?.email && <p className="text-sm text-muted-foreground">{companyInfo.email}</p>}
-                  {companyInfo?.phone && <p className="text-sm text-muted-foreground">{companyInfo.phone}</p>}
+                  </div>
+                  <div>
+                    <h1 className="text-2xl font-heading font-bold tracking-tight text-slate-900">
+                      {companyInfo?.company_name || 'LUNEXO MEDIA'}
+                    </h1>
+                    <div className="mt-2 space-y-1 text-sm text-slate-500 font-medium">
+                      <p>{companyInfo?.address || 'Digital Growth Hub'}</p>
+                      <p>{companyInfo?.email || 'hello@lunexomedia.com'}</p>
+                      <p>{companyInfo?.phone || '+1-702-483-0749'}</p>
+                    </div>
+                  </div>
                 </div>
                 <div className="text-right">
-                  <h2 className="text-4xl font-bold mb-2">INVOICE</h2>
-                  <p className="text-sm"><span className="font-semibold">Invoice #:</span> {invoice.invoice_number}</p>
-                  <p className="text-sm"><span className="font-semibold">Issue Date:</span> {format(new Date(invoice.issue_date), 'MMMM dd, yyyy')}</p>
-                  <p className="text-sm"><span className="font-semibold">Due Date:</span> {format(new Date(invoice.due_date), 'MMMM dd, yyyy')}</p>
-                  <p className="text-sm mt-2">
-                    <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${
-                      invoice.status === 'paid' ? 'bg-green-100 text-green-800' :
-                      invoice.status === 'sent' ? 'bg-blue-100 text-blue-800' :
-                      'bg-gray-100 text-gray-800'
-                    }`}>
-                      {invoice.status.toUpperCase()}
-                    </span>
-                  </p>
+                  <h2 className="text-5xl font-heading font-bold text-slate-900/10 mb-2 select-none">INVOICE</h2>
+                  <div className="space-y-1">
+                    <p className="text-sm font-bold text-slate-900 uppercase tracking-widest">Invoice Number</p>
+                    <p className="text-xl font-heading font-bold text-primary">#{invoice.invoice_number}</p>
+                  </div>
+                  <div className="mt-6 grid grid-cols-2 gap-4 text-right">
+                    <div>
+                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Issue Date</p>
+                      <p className="text-sm font-semibold">{format(new Date(invoice.issue_date), 'MMM dd, yyyy')}</p>
+                    </div>
+                    <div>
+                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Due Date</p>
+                      <p className="text-sm font-semibold text-accent">{format(new Date(invoice.due_date), 'MMM dd, yyyy')}</p>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              {/* Bill To Section */}
-              <div className="grid grid-cols-2 gap-8 mb-8">
+              {/* Status Ribbon */}
+              <div className="absolute top-12 right-0 -rotate-45 translate-x-12 translate-y-2">
+                <div className={`px-12 py-1 text-[10px] font-bold uppercase tracking-widest shadow-sm ${
+                  invoice.status === 'paid' ? 'bg-emerald-500 text-white' :
+                  invoice.status === 'sent' ? 'bg-blue-500 text-white' :
+                  'bg-amber-500 text-white'
+                }`}>
+                  {invoice.status}
+                </div>
+              </div>
+
+              {/* Bill To & Details Section */}
+              <div className="grid grid-cols-2 gap-12 mb-12 p-8 bg-slate-50 rounded-2xl border border-slate-100">
                 <div>
-                  <h3 className="text-sm font-semibold mb-2 text-muted-foreground">BILL TO:</h3>
-                  <div className="text-sm">
-                    <p className="font-bold text-lg mb-1">{client?.name}</p>
-                    {client?.company && <p className="text-muted-foreground">{client.company}</p>}
-                    {client?.address && <p>{client.address}</p>}
-                    {(client?.city || client?.state || client?.zip_code) && (
-                      <p>
-                        {client.city}{client.city && client.state ? ', ' : ''}{client.state} {client.zip_code}
-                      </p>
-                    )}
-                    {client?.country && <p>{client.country}</p>}
-                    {client?.email && <p className="mt-2">{client.email}</p>}
-                    {client?.phone && <p>{client.phone}</p>}
+                  <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">Client Details</h3>
+                  <div className="space-y-1">
+                    <p className="text-xl font-bold text-slate-900">{client?.name}</p>
+                    {client?.company && <p className="font-semibold text-primary/80">{client.company}</p>}
+                    <div className="mt-4 text-sm text-slate-500 leading-relaxed">
+                      {client?.address && <p>{client.address}</p>}
+                      {(client?.city || client?.state || client?.zip_code) && (
+                        <p>
+                          {client.city}{client.city && client.state ? ', ' : ''}{client.state} {client.zip_code}
+                        </p>
+                      )}
+                      {client?.country && <p className="font-bold text-slate-400">{client.country}</p>}
+                    </div>
                   </div>
                 </div>
-                <div>
-                  <h3 className="text-sm font-semibold mb-2 text-muted-foreground">PAYMENT TERMS:</h3>
-                  <p className="text-sm">{invoice.payment_terms || 'Net 30'}</p>
+                <div className="flex flex-col justify-between items-end text-right">
+                  <div>
+                    <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">Payment Information</h3>
+                    <div className="space-y-2">
+                      <div className="bg-white px-4 py-2 rounded-lg border border-slate-200 shadow-sm inline-block">
+                        <p className="text-xs font-bold text-slate-400 uppercase tracking-tighter mb-0.5">Payment Terms</p>
+                        <p className="text-sm font-bold text-slate-900">{invoice.payment_terms || 'Net 30'}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-8">
+                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2">Total Amount Due</p>
+                    <p className="text-3xl font-orbitron font-black text-slate-900">
+                      ${Number(invoice.total).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                    </p>
+                  </div>
                 </div>
               </div>
 
               {/* Invoice Items Table */}
-              <div className="mb-8">
-                <table className="w-full border-collapse">
+              <div className="mb-12 overflow-hidden rounded-xl border border-slate-200 shadow-sm">
+                <table className="w-full">
                   <thead>
-                    <tr className="border-b-2 border-foreground">
-                      <th className="text-left py-3 font-semibold text-sm">DESCRIPTION</th>
-                      <th className="text-right py-3 font-semibold text-sm w-20">QTY</th>
-                      <th className="text-right py-3 font-semibold text-sm w-28">UNIT PRICE</th>
-                      <th className="text-right py-3 font-semibold text-sm w-28">AMOUNT</th>
+                    <tr className="bg-slate-900 text-white">
+                      <th className="text-left px-6 py-4 font-orbitron text-[10px] font-bold uppercase tracking-widest">Service Description</th>
+                      <th className="text-center px-4 py-4 font-orbitron text-[10px] font-bold uppercase tracking-widest w-24">Qty</th>
+                      <th className="text-right px-4 py-4 font-orbitron text-[10px] font-bold uppercase tracking-widest w-32">Unit Price</th>
+                      <th className="text-right px-6 py-4 font-orbitron text-[10px] font-bold uppercase tracking-widest w-32">Amount</th>
                     </tr>
                   </thead>
-                  <tbody>
-                    {items.map((item) => (
-                      <tr key={item.id} className="border-b border-muted">
-                        <td className="py-3 text-sm">{item.description}</td>
-                        <td className="py-3 text-right text-sm">{item.quantity}</td>
-                        <td className="py-3 text-right text-sm">${Number(item.unit_price).toFixed(2)}</td>
-                        <td className="py-3 text-right text-sm font-semibold">${Number(item.amount).toFixed(2)}</td>
+                  <tbody className="divide-y divide-slate-100">
+                    {items.map((item, idx) => (
+                      <tr key={item.id} className={idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/50'}>
+                        <td className="px-6 py-4">
+                          <p className="font-bold text-slate-900">{item.description}</p>
+                          <p className="text-xs text-slate-400 mt-0.5 font-medium">Digital Solution Delivery</p>
+                        </td>
+                        <td className="px-4 py-4 text-center font-bold text-slate-600">{item.quantity}</td>
+                        <td className="px-4 py-4 text-right font-medium text-slate-600">${Number(item.unit_price).toFixed(2)}</td>
+                        <td className="px-6 py-4 text-right font-bold text-primary">${Number(item.amount).toFixed(2)}</td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               </div>
 
-              {/* Totals */}
-              <div className="flex justify-end mb-8">
-                <div className="w-80">
-                  <div className="flex justify-between py-2 text-sm">
-                    <span>Subtotal:</span>
-                    <span className="font-semibold">${Number(invoice.subtotal).toFixed(2)}</span>
+              {/* Summary and Notes */}
+              <div className="grid grid-cols-2 gap-12">
+                <div className="space-y-6">
+                  {invoice.notes && (
+                    <div className="p-6 bg-slate-50 rounded-2xl border-l-4 border-primary shadow-sm">
+                      <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Terms & Notes</h3>
+                      <p className="text-xs text-slate-600 leading-relaxed italic">{invoice.notes}</p>
+                    </div>
+                  )}
+                  <div className="p-6 bg-slate-950 rounded-2xl text-white shadow-xl">
+                    <h3 className="text-[10px] font-bold text-primary uppercase tracking-widest mb-3">Quick Support</h3>
+                    <div className="space-y-2 text-[10px] font-medium text-slate-400">
+                      <p className="flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+                        Dedicated support for all billing inquiries
+                      </p>
+                      <p className="flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-accent" />
+                        Instant project updates via our portal
+                      </p>
+                    </div>
                   </div>
-                  <div className="flex justify-between py-2 text-sm border-b border-muted">
-                    <span>Tax ({invoice.tax_rate}%):</span>
-                    <span className="font-semibold">${Number(invoice.tax_amount).toFixed(2)}</span>
+                </div>
+                
+                <div className="space-y-3">
+                  <div className="flex justify-between px-4 py-2 text-sm font-medium text-slate-500">
+                    <span>Subtotal</span>
+                    <span className="text-slate-900 font-bold">${Number(invoice.subtotal).toFixed(2)}</span>
                   </div>
-                  <div className="flex justify-between py-3 text-lg font-bold border-b-2 border-foreground">
-                    <span>TOTAL:</span>
-                    <span>${Number(invoice.total).toFixed(2)} USD</span>
+                  <div className="flex justify-between px-4 py-2 text-sm font-medium text-slate-500 bg-slate-50 rounded-lg">
+                    <span>Tax ({invoice.tax_rate}%)</span>
+                    <span className="text-slate-900 font-bold">${Number(invoice.tax_amount).toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between p-6 bg-primary text-white rounded-2xl shadow-lg mt-4 transform scale-105">
+                    <div className="flex flex-col">
+                      <span className="text-[10px] font-black uppercase tracking-widest opacity-80">Total Amount Due</span>
+                      <span className="text-xs font-bold opacity-60 italic">Currency: USD</span>
+                    </div>
+                    <span className="text-3xl font-orbitron font-black">${Number(invoice.total).toFixed(2)}</span>
                   </div>
                 </div>
               </div>
 
-              {/* Notes */}
-              {invoice.notes && (
-                <div className="mb-8 p-4 bg-muted rounded-lg">
-                  <h3 className="text-sm font-semibold mb-2">NOTES:</h3>
-                  <p className="text-sm whitespace-pre-wrap">{invoice.notes}</p>
-                </div>
-              )}
-
               {/* Footer */}
-              <div className="border-t pt-6 text-center text-xs text-muted-foreground">
-                <p>Thank you for your business!</p>
-                {companyInfo?.website && (
-                  <p className="mt-1">{companyInfo.website}</p>
-                )}
+              <div className="mt-16 pt-8 border-t border-slate-100 flex flex-col items-center gap-6">
+                <div className="flex gap-8">
+                  {['Web Design', 'SEO & Ads', 'AI Automation', 'Branding'].map((service) => (
+                    <span key={service} className="text-[9px] font-black text-slate-300 uppercase tracking-[0.3em]">
+                      {service}
+                    </span>
+                  ))}
+                </div>
+                <div className="text-center space-y-2">
+                  <p className="text-xs font-bold text-slate-900">Thank you for choosing Lunexo Media!</p>
+                  <p className="text-[10px] font-medium text-slate-400 max-w-sm">
+                    We appreciate your partnership. For any questions regarding this invoice, 
+                    please contact us at hello@lunexomedia.com or visit our website.
+                  </p>
+                  {companyInfo?.website && (
+                    <p className="text-[10px] font-black text-primary tracking-widest uppercase pt-2">
+                      {companyInfo.website}
+                    </p>
+                  )}
+                </div>
+                
+                {/* Visual Branding Element */}
+                <div className="w-12 h-1.5 rounded-full bg-slate-100 mt-4" />
               </div>
             </div>
           )}

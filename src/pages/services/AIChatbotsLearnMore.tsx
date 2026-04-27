@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import Navigation from "@/components/ui/navigation";
 import Footer from "@/components/ui/footer";
 import SEO from "@/components/ui/seo";
@@ -18,68 +20,74 @@ import {
   Settings,
   PhoneCall,
   Mail,
-  Globe
+  Globe,
+  ChevronRight,
+  Star,
+  Activity,
+  Cpu,
+  ShieldCheck,
+  Database
 } from "lucide-react";
 
 const AIChatbotsLearnMore = () => {
   const features = [
     {
-      icon: <Brain className="w-6 h-6" />,
-      title: "Natural Language Processing",
-      description: "Advanced NLP that understands context, intent, and nuances in customer conversations"
+      icon: <Brain className="w-12 h-12" />,
+      title: "Cognitive Processing",
+      description: "Advanced NLP that understands context, intent, and subtle nuances in absolute customer conversations with neural logic."
     },
     {
-      icon: <Clock className="w-6 h-6" />,
-      title: "24/7 Availability",
-      description: "Never miss a customer inquiry with round-the-clock automated support"
+      icon: <Clock className="w-12 h-12" />,
+      title: "Absolute Availability",
+      description: "Never miss a customer inquiry with 24/7/365 intelligent automated absolute support layers and zero downtime."
     },
     {
-      icon: <Users className="w-6 h-6" />,
-      title: "Multi-Platform Integration",
-      description: "Deploy across websites, social media, messaging apps, and mobile platforms"
+      icon: <Users className="w-12 h-12" />,
+      title: "Omnichannel Sync",
+      description: "Deploy seamlessly across absolute websites, social ecosystems, and messaging architectures for a unified identity."
     },
     {
-      icon: <Settings className="w-6 h-6" />,
-      title: "Custom Training",
-      description: "Tailored to your business knowledge base and specific industry requirements"
+      icon: <Settings className="w-12 h-12" />,
+      title: "Neural Customization",
+      description: "Tailored to your specific absolute business knowledge base and proprietary repository data structures."
     }
   ];
 
   const platforms = [
-    { name: "Website", icon: <Globe className="w-5 h-5" />, description: "Embedded chat widgets" },
-    { name: "Facebook Messenger", icon: <MessageSquare className="w-5 h-5" />, description: "Social media integration" },
-    { name: "WhatsApp", icon: <PhoneCall className="w-5 h-5" />, description: "Direct messaging support" },
-    { name: "Email", icon: <Mail className="w-5 h-5" />, description: "Email response automation" }
+    { name: "Web Interface", icon: <Globe className="w-10 h-10" />, description: "Embedded glass widgets" },
+    { name: "Meta Social", icon: <MessageSquare className="w-10 h-10" />, description: "Full ecosystem sync" },
+    { name: "WhatsApp Business", icon: <PhoneCall className="w-10 h-10" />, description: "Direct encrypted chat" },
+    { name: "Email Layer", icon: <Mail className="w-10 h-10" />, description: "Automated responses" }
   ];
 
   const useCases = [
     {
-      title: "Customer Support",
-      description: "Handle FAQs, troubleshooting, and issue resolution automatically",
-      results: "80% reduction in support tickets"
+      title: "High-End Support",
+      description: "Handle complex FAQs, troubleshooting, and instant absolute resolution at scale.",
+      results: "80% Ticket Reduction"
     },
     {
-      title: "Lead Qualification",
-      description: "Qualify prospects and collect contact information 24/7",
-      results: "300% increase in qualified leads"
+      title: "Sales Automation",
+      description: "Qualify high-value identity prospects and capture intent data around the clock.",
+      results: "300% Lead Growth"
     },
     {
-      title: "Appointment Booking",
-      description: "Schedule meetings and appointments without human intervention",
-      results: "50% reduction in no-shows"
+      title: "Bespoke Scheduling",
+      description: "Seamless absolute calendar integration for meetings without the back-and-forth.",
+      results: "50% Less No-Shows"
     },
     {
-      title: "E-commerce Support",
-      description: "Order tracking, product recommendations, and purchase assistance",
-      results: "25% increase in conversion rates"
+      title: "Revenue Engines",
+      description: "Order tracking, product discovery, and friction-less absolute purchase assistance.",
+      results: "25% Higher Conversion"
     }
   ];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background font-body text-slate-900 overflow-hidden">
       <SEO
-        title="AI Chatbots - Intelligent Customer Support | LUNEXO MEDIA"
-        description="Deploy smart AI chatbots that handle customer inquiries 24/7. Reduce support costs while improving customer satisfaction with intelligent automation."
+        title="Absolute AI Chatbots - Intelligent Conversation Architecture | LUNEXO MEDIA"
+        description="Deploy absolute AI chatbots that handle customer inquiries 24/7. Reduce support toil while improving satisfaction with intelligent automation."
         image="https://www.lunexomedia.com/og-image-new.jpg"
         url="https://www.lunexomedia.com/services/ai-chatbots-learn-more"
         keywords="AI chatbots, customer support automation, intelligent chatbot, 24/7 support, conversational AI"
@@ -88,154 +96,221 @@ const AIChatbotsLearnMore = () => {
       <Navigation />
       
       {/* Hero Section */}
-      <section className="py-24 bg-gradient-to-br from-primary/10 via-background to-primary/5">
-        <div className="container-wide section-padding">
-          <div className="max-w-4xl mx-auto text-center">
-            <Badge variant="outline" className="mb-6 text-primary border-primary/20">
-              <MessageSquare className="w-4 h-4 mr-2" />
-              AI Chatbots
-            </Badge>
-            <h1 className="text-4xl lg:text-6xl font-bold mb-6 bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-              Intelligent Customer Support That Never Sleeps
-            </h1>
-            <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
-              Transform your customer service with AI-powered chatbots that understand context, resolve issues instantly, and provide 24/7 support across all platforms.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a href="https://lunexomedia.com/contact">
-                <Button size="lg" className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary text-white shadow-lg">
-                  Get Custom Chatbot Quote
-                  <ArrowRight className="w-5 h-5 ml-2" />
-                </Button>
-              </a>
-              <Button size="lg" variant="outline">
-                <Bot className="w-5 h-5 mr-2" />
-                See Demo
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-32 pb-24">
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+          <div className="absolute top-[10%] left-[5%] w-[800px] h-[800px] bg-primary/10 rounded-full blur-[140px]" />
+          <div className="absolute bottom-[10%] right-[5%] w-[600px] h-[600px] bg-accent/10 rounded-full blur-[120px]" />
+        </div>
+
+        <div className="container-wide section-padding relative z-10">
+          <div className="text-center max-w-7xl mx-auto space-y-16">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              <Badge className="bg-primary/10 border border-primary/20 text-primary px-10 py-4 rounded-full text-sm font-black uppercase tracking-[0.4em] backdrop-blur-xl">
+                <MessageSquare className="w-5 h-5 mr-4" />
+                Conversational Intelligence
+              </Badge>
+            </motion.div>
+
+            <motion.h1 
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 1 }}
+              className="text-6xl sm:text-7xl lg:text-[11rem] font-heading font-bold text-slate-900 leading-[1] tracking-tighter"
+            >
+              The Support <br /> <span className="text-primary italic">Paradigm.</span>
+            </motion.h1>
+
+            <motion.p 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4, duration: 1 }}
+              className="text-3xl text-slate-500 max-w-5xl mx-auto leading-relaxed font-medium"
+            >
+              Transform your interface into a dynamic absolute support engine that understands context, resolves issues, and provides <span className="text-primary italic font-bold">absolute satisfaction.</span>
+            </motion.p>
+            
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6, duration: 1 }}
+              className="flex flex-col sm:flex-row gap-10 justify-center pt-12"
+            >
+              <Button size="lg" className="bg-slate-900 text-white hover:bg-slate-800 text-3xl px-24 py-16 rounded-full font-bold shadow-2xl transition-all duration-700 hover:scale-110 group" asChild
+              >
+                <Link to="/contact" className="flex items-center gap-6">
+                  Initialize Paradigm
+                  <ArrowRight className="w-10 h-10 group-hover:translate-x-5 transition-transform" />
+                </Link>
               </Button>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
 
-      {/* Key Features */}
-      <section className="py-20 bg-white">
+      {/* Neural Capability Protocols */}
+      <section className="py-48 bg-white/50 backdrop-blur-md border-y border-white/40 relative">
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[140px] pointer-events-none" />
         <div className="container-wide section-padding">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold mb-4">
-              Advanced Chatbot Capabilities
+          <div className="text-center mb-32 space-y-12">
+             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+                <Badge className="bg-primary/10 border border-primary/20 text-primary px-10 py-4 rounded-full text-sm font-black uppercase tracking-[0.4em]">
+                  <Brain className="w-5 h-5 mr-4" />
+                  Absolute Neural Capabilities
+                </Badge>
+              </motion.div>
+            <h2 className="text-6xl lg:text-[11rem] font-heading font-bold text-slate-900 mb-10 leading-[1.05] tracking-tighter">
+              Neural <span className="text-primary italic">Logic.</span>
             </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Our AI chatbots are powered by cutting-edge technology to deliver human-like conversations and intelligent problem-solving.
-            </p>
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 max-w-7xl mx-auto">
             {features.map((feature, index) => (
-              <Card key={index} className="group hover:shadow-lg transition-all duration-300">
-                <CardHeader>
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
-                      {feature.icon}
-                    </div>
-                    <CardTitle className="text-xl">{feature.title}</CardTitle>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground">{feature.description}</p>
-                </CardContent>
-              </Card>
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1, duration: 1 }}
+                className="group bg-white/40 backdrop-blur-xl border border-white/60 rounded-[4rem] p-20 hover:shadow-glass transition-all duration-1000 flex flex-col gap-12 hover:translate-y-[-15px]"
+              >
+                <div className="w-24 h-24 bg-slate-900 text-white rounded-[2rem] flex items-center justify-center group-hover:bg-primary transition-all duration-700 shadow-2xl group-hover:rotate-12">
+                  {feature.icon}
+                </div>
+                <div className="space-y-8">
+                  <h3 className="text-4xl font-heading font-bold text-slate-900 tracking-tight leading-tight">{feature.title}</h3>
+                  <p className="text-2xl text-slate-500 leading-relaxed font-medium">{feature.description}</p>
+                </div>
+                <div className="mt-4 pt-8 border-t border-white/60 opacity-20 flex justify-end">
+                   <ShieldCheck className="w-8 h-8" />
+                </div>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Platform Integration */}
-      <section className="py-20 bg-muted/30">
+      {/* Omnichannel Presence architectures */}
+      <section className="py-48 bg-background relative overflow-hidden">
         <div className="container-wide section-padding">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold mb-4">
-              Multi-Platform Deployment
+          <div className="text-center mb-32 space-y-12">
+             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+                <Badge className="bg-primary/10 border border-primary/20 text-primary px-10 py-4 rounded-full text-sm font-black uppercase tracking-[0.4em]">
+                  <Globe className="w-5 h-5 mr-4" />
+                  Absolute Omnichannel Presence
+                </Badge>
+              </motion.div>
+            <h2 className="text-6xl lg:text-[11rem] font-heading font-bold text-slate-900 mb-10 leading-[1] tracking-tighter">
+              Presence <span className="text-primary italic">Nodes.</span>
             </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Deploy your chatbot across all customer touchpoints for seamless omnichannel support.
-            </p>
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 max-w-7xl mx-auto">
             {platforms.map((platform, index) => (
-              <Card key={index} className="text-center group hover:shadow-lg transition-all duration-300">
-                <CardContent className="p-6">
-                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-primary group-hover:text-white transition-colors">
-                    {platform.icon}
-                  </div>
-                  <h3 className="font-semibold mb-2">{platform.name}</h3>
-                  <p className="text-sm text-muted-foreground">{platform.description}</p>
-                </CardContent>
-              </Card>
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1, duration: 1 }}
+                className="group bg-white/40 backdrop-blur-xl border border-white/60 rounded-[4rem] p-16 text-center hover:shadow-glass transition-all duration-1000 flex flex-col items-center gap-10 hover:translate-y-[-15px]"
+              >
+                <div className="w-24 h-24 bg-slate-900 text-white rounded-[2rem] flex items-center justify-center mx-auto shadow-2xl group-hover:bg-primary transition-all duration-700 group-hover:rotate-12">
+                  {platform.icon}
+                </div>
+                <div className="space-y-4">
+                  <h3 className="text-3xl font-heading font-bold text-slate-900 tracking-tight leading-tight">{platform.name}</h3>
+                  <p className="text-2xl text-slate-500 font-medium leading-relaxed">{platform.description}</p>
+                </div>
+                <div className="pt-8 border-t border-white/60 w-full opacity-20">
+                   <Activity className="w-8 h-8 mx-auto" />
+                </div>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Use Cases */}
-      <section className="py-20 bg-white">
+      {/* Strategic Impact Matrix */}
+      <section className="py-48 bg-white/50 backdrop-blur-md border-y border-white/40">
         <div className="container-wide section-padding">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold mb-4">
-              Proven Use Cases & Results
+          <div className="text-center mb-32 space-y-12">
+             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+                <Badge className="bg-primary/10 border border-primary/20 text-primary px-10 py-4 rounded-full text-sm font-black uppercase tracking-[0.4em]">
+                  <Database className="w-5 h-5 mr-4" />
+                  Absolute Strategic Impact
+                </Badge>
+              </motion.div>
+            <h2 className="text-6xl lg:text-[11rem] font-heading font-bold text-slate-900 mb-10 leading-[1.1] tracking-tighter">
+              Impact <span className="text-primary italic">Matrix.</span>
             </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              See how businesses across industries are leveraging AI chatbots to improve efficiency and customer satisfaction.
-            </p>
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 max-w-7xl mx-auto">
             {useCases.map((useCase, index) => (
-              <Card key={index} className="group hover:shadow-xl transition-all duration-300">
-                <CardHeader>
-                  <CardTitle className="text-xl group-hover:text-primary transition-colors">
-                    {useCase.title}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground mb-4">{useCase.description}</p>
-                  <div className="flex items-center gap-2">
-                    <TrendingUp className="w-4 h-4 text-green-500" />
-                    <span className="font-semibold text-green-600">{useCase.results}</span>
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1 }}
+                className="bg-white/40 backdrop-blur-xl border border-white/60 rounded-[5rem] p-16 lg:p-24 hover:shadow-glass transition-all duration-1000 relative group overflow-hidden"
+              >
+                <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-[80px] opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+                <div className="space-y-12 relative z-10">
+                  <div className="space-y-6">
+                    <h3 className="text-5xl font-heading font-bold text-slate-900 tracking-tight leading-tight">{useCase.title}</h3>
+                    <p className="text-3xl text-slate-500 leading-relaxed font-medium">{useCase.description}</p>
                   </div>
-                </CardContent>
-              </Card>
+                  <div className="flex items-center gap-8 bg-slate-900 rounded-[2.5rem] p-10 border border-white/20 shadow-2xl">
+                    <TrendingUp className="w-10 h-10 text-primary" />
+                    <span className="text-3xl font-heading font-black text-white italic tracking-tight">{useCase.results}</span>
+                  </div>
+                </div>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-primary/5 to-primary/10">
-        <div className="container-wide section-padding">
-          <Card className="max-w-4xl mx-auto text-center border-0 shadow-xl bg-white">
-            <CardContent className="p-12">
-              <h2 className="text-3xl font-bold mb-4">
-                Ready to Deploy Your AI Chatbot?
-              </h2>
-              <p className="text-xl text-muted-foreground mb-8">
-                Join hundreds of businesses that have transformed their customer support with intelligent automation.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="https://lunexomedia.com/contact">
-                  <Button size="lg" className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary text-white">
-                    Start Your Chatbot Project
-                    <ArrowRight className="w-5 h-5 ml-2" />
-                  </Button>
-                </a>
-                <a href="https://lunexomedia.com/services/ai-automation-learn-more">
-                  <Button size="lg" variant="outline">
-                    View All AI Services
-                  </Button>
-                </a>
-              </div>
-            </CardContent>
-          </Card>
+      <section className="py-48 bg-slate-900 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/40 to-accent/20 opacity-40" />
+        <div className="container-wide section-padding relative z-10 text-center">
+          <div className="max-w-7xl mx-auto space-y-24">
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+              <Badge className="bg-white/10 text-white border-white/20 px-10 py-4 rounded-full text-sm font-black uppercase tracking-[0.4em] backdrop-blur-xl">
+                The Absolute Deployment
+              </Badge>
+            </motion.div>
+            <h2 className="text-6xl lg:text-[11rem] font-heading font-bold text-white leading-tight tracking-tighter">
+              Ready to <br /> <span className="text-primary italic">Absolute Automate?</span>
+            </h2>
+            <p className="text-3xl text-slate-300 font-body leading-relaxed max-w-5xl mx-auto font-medium">
+              Join the elite businesses that have transformed their customer journey with intelligent, automated absolute conversation architectures.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-10 justify-center pt-16">
+              <Button size="lg" className="bg-primary text-white hover:bg-primary/90 text-3xl px-24 py-16 rounded-full font-bold shadow-2xl transition-all duration-700 hover:scale-110 group" asChild>
+                <Link to="/contact" className="flex items-center gap-6">
+                  Launch Your Bot
+                  <ArrowRight className="w-10 h-10 ml-8 group-hover:translate-x-5 transition-transform" />
+                </Link>
+              </Button>
+              <Button size="lg" variant="outline" className="border-2 border-white/20 bg-white/10 backdrop-blur-xl text-white hover:bg-white/20 text-3xl px-24 py-16 rounded-full font-bold transition-all duration-700 hover:scale-105" asChild>
+                <Link to="/services/ai-automation-learn-more">
+                  Success Repository
+                </Link>
+              </Button>
+            </div>
+            <div className="pt-24 flex items-center justify-center gap-16 opacity-30 text-white">
+               <ShieldCheck className="w-10 h-10" />
+               <Cpu className="w-10 h-10" />
+               <Database className="w-10 h-10" />
+               <Activity className="w-10 h-10" />
+            </div>
+          </div>
         </div>
       </section>
 

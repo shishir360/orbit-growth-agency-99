@@ -107,7 +107,7 @@ const AdminInvoices = () => {
         supabase.from('clients').select('*').order('name'),
         supabase.from('invoices').select(`
           *,
-          clients (*)
+          clients(*)
         `).order('created_at', { ascending: false })
       ]);
 
@@ -441,9 +441,9 @@ const AdminInvoices = () => {
   };
 
   const filteredInvoices = invoices.filter(invoice =>
-    invoice.invoice_number.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    invoice.clients?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    invoice.clients?.email.toLowerCase().includes(searchTerm.toLowerCase())
+    (invoice.invoice_number?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+    (invoice.clients?.name?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+    (invoice.clients?.email?.toLowerCase() || '').includes(searchTerm.toLowerCase())
   );
 
   const stats = {
@@ -451,364 +451,366 @@ const AdminInvoices = () => {
     draft: invoices.filter(i => i.status === 'draft').length,
     sent: invoices.filter(i => i.status === 'sent').length,
     paid: invoices.filter(i => i.status === 'paid').length,
-    totalRevenue: invoices.filter(i => i.status === 'paid').reduce((sum, i) => sum + Number(i.total), 0)
+    totalRevenue: invoices.filter(i => i.status === 'paid').reduce((sum, i) => sum + (Number(i.total) || 0), 0)
   };
-
   return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-3xl font-bold mb-2">Invoice Management</h2>
-        <p className="text-muted-foreground">Manage clients and create professional invoices</p>
-      </div>
+    <div className="space-y-8 animate-in fade-in duration-700">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-white/40 backdrop-blur-3xl p-10 rounded-[2.5rem] text-slate-900 shadow-glass border border-white/40 relative overflow-hidden group">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 blur-[100px] -mr-32 -mt-32 rounded-full" />
+        <div className="absolute bottom-0 left-0 w-48 h-48 bg-accent/5 blur-[80px] -ml-24 -mb-24 rounded-full" />
+        
+        <div className="relative z-10">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="h-1 w-12 bg-primary rounded-full" />
+            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">Intelligence Hub</span>
+          </div>
+          <h2 className="text-5xl font-heading font-bold mb-2 tracking-tighter">Command Center</h2>
+          <p className="text-slate-600 font-medium max-w-md">Orchestrate elite client billing with Lunexo's AI-powered precision</p>
+        </div>
 
-      {/* Stats Cards */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Invoices</CardTitle>
-            <FileText className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.total}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Draft</CardTitle>
-            <Clock className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.draft}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Sent</CardTitle>
-            <Mail className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.sent}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Paid</CardTitle>
-            <CheckCircle className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.paid}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">${stats.totalRevenue.toFixed(2)}</div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Actions */}
-      <div className="flex gap-4">
-        <Dialog open={showClientDialog} onOpenChange={setShowClientDialog}>
-          <DialogTrigger asChild>
-            <Button>
-              <Users className="h-4 w-4 mr-2" />
-              Add Client
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle>Add New Client</DialogTitle>
-            </DialogHeader>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="col-span-2">
-                <Label>Name *</Label>
-                <Input
-                  value={clientForm.name}
-                  onChange={(e) => setClientForm({ ...clientForm, name: e.target.value })}
-                  placeholder="John Doe"
-                />
-              </div>
-              <div>
-                <Label>Email *</Label>
-                <Input
-                  type="email"
-                  value={clientForm.email}
-                  onChange={(e) => setClientForm({ ...clientForm, email: e.target.value })}
-                  placeholder="john@example.com"
-                />
-              </div>
-              <div>
-                <Label>Phone</Label>
-                <Input
-                  value={clientForm.phone}
-                  onChange={(e) => setClientForm({ ...clientForm, phone: e.target.value })}
-                  placeholder="+1 234 567 8900"
-                />
-              </div>
-              <div className="col-span-2">
-                <Label>Company</Label>
-                <Input
-                  value={clientForm.company}
-                  onChange={(e) => setClientForm({ ...clientForm, company: e.target.value })}
-                  placeholder="Company Name"
-                />
-              </div>
-              <div className="col-span-2">
-                <Label>Address</Label>
-                <Input
-                  value={clientForm.address}
-                  onChange={(e) => setClientForm({ ...clientForm, address: e.target.value })}
-                  placeholder="123 Main St"
-                />
-              </div>
-              <div>
-                <Label>City</Label>
-                <Input
-                  value={clientForm.city}
-                  onChange={(e) => setClientForm({ ...clientForm, city: e.target.value })}
-                  placeholder="New York"
-                />
-              </div>
-              <div>
-                <Label>State</Label>
-                <Input
-                  value={clientForm.state}
-                  onChange={(e) => setClientForm({ ...clientForm, state: e.target.value })}
-                  placeholder="NY"
-                />
-              </div>
-              <div>
-                <Label>ZIP Code</Label>
-                <Input
-                  value={clientForm.zip_code}
-                  onChange={(e) => setClientForm({ ...clientForm, zip_code: e.target.value })}
-                  placeholder="10001"
-                />
-              </div>
-              <div>
-                <Label>Country</Label>
-                <Input
-                  value={clientForm.country}
-                  onChange={(e) => setClientForm({ ...clientForm, country: e.target.value })}
-                  placeholder="USA"
-                />
-              </div>
-            </div>
-            <div className="flex justify-end gap-2 mt-4">
-              <Button variant="outline" onClick={() => setShowClientDialog(false)}>Cancel</Button>
-              <Button onClick={handleAddClient}>Add Client</Button>
-            </div>
-          </DialogContent>
-        </Dialog>
-
-        <Dialog open={showInvoiceDialog} onOpenChange={setShowInvoiceDialog}>
-          <DialogTrigger asChild>
-            <Button>
-              <Plus className="h-4 w-4 mr-2" />
-              Create Invoice
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle>Create New Invoice</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label>Client *</Label>
-                  <Select value={invoiceForm.client_id} onValueChange={(value) => setInvoiceForm({ ...invoiceForm, client_id: value })}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select client" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {clients.map((client) => (
-                        <SelectItem key={client.id} value={client.id}>
-                          {client.name} - {client.email}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <Label>Payment Terms</Label>
+        <div className="flex flex-wrap gap-4 relative z-10">
+          <Dialog open={showClientDialog} onOpenChange={setShowClientDialog}>
+            <DialogTrigger asChild>
+              <Button className="h-14 px-8 bg-white/40 hover:bg-white/60 border-white/40 text-slate-900 backdrop-blur-2xl rounded-2xl transition-all hover:scale-105 active:scale-95 shadow-sm">
+                <Users className="h-5 w-5 mr-3 text-primary" />
+                <span className="font-bold tracking-tight">New Elite Client</span>
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto border-white/10 bg-slate-950 text-white">
+              <DialogHeader>
+                <DialogTitle className="text-2xl font-orbitron font-bold">Onboard New Client</DialogTitle>
+                <p className="text-sm text-slate-400">Initialize a new relationship in our ecosystem</p>
+              </DialogHeader>
+              <div className="grid grid-cols-2 gap-5 mt-6">
+                <div className="col-span-2 space-y-2">
+                  <Label className="text-xs font-bold uppercase tracking-widest text-slate-500">Full Name</Label>
                   <Input
-                    value={invoiceForm.payment_terms}
-                    onChange={(e) => setInvoiceForm({ ...invoiceForm, payment_terms: e.target.value })}
-                    placeholder="Net 30"
+                    className="bg-white/5 border-white/10 h-12 focus:ring-primary"
+                    value={clientForm.name}
+                    onChange={(e) => setClientForm({ ...clientForm, name: e.target.value })}
+                    placeholder="Enter client name"
                   />
                 </div>
-                <div>
-                  <Label>Issue Date *</Label>
+                <div className="space-y-2">
+                  <Label className="text-xs font-bold uppercase tracking-widest text-slate-500">Email Architecture</Label>
                   <Input
-                    type="date"
-                    value={invoiceForm.issue_date}
-                    onChange={(e) => setInvoiceForm({ ...invoiceForm, issue_date: e.target.value })}
+                    className="bg-white/5 border-white/10 h-12"
+                    type="email"
+                    value={clientForm.email}
+                    onChange={(e) => setClientForm({ ...clientForm, email: e.target.value })}
+                    placeholder="client@domain.com"
                   />
                 </div>
-                <div>
-                  <Label>Due Date *</Label>
+                <div className="space-y-2">
+                  <Label className="text-xs font-bold uppercase tracking-widest text-slate-500">Secure Line</Label>
                   <Input
-                    type="date"
-                    value={invoiceForm.due_date}
-                    onChange={(e) => setInvoiceForm({ ...invoiceForm, due_date: e.target.value })}
+                    className="bg-white/5 border-white/10 h-12"
+                    value={clientForm.phone}
+                    onChange={(e) => setClientForm({ ...clientForm, phone: e.target.value })}
+                    placeholder="+1 (000) 000-0000"
                   />
                 </div>
-                <div>
-                  <Label>Tax Rate (%)</Label>
+                <div className="col-span-2 space-y-2">
+                  <Label className="text-xs font-bold uppercase tracking-widest text-slate-500">Organization / Entity</Label>
                   <Input
-                    type="number"
-                    step="0.01"
-                    value={invoiceForm.tax_rate}
-                    onChange={(e) => setInvoiceForm({ ...invoiceForm, tax_rate: parseFloat(e.target.value) || 0 })}
+                    className="bg-white/5 border-white/10 h-12"
+                    value={clientForm.company}
+                    onChange={(e) => setClientForm({ ...clientForm, company: e.target.value })}
+                    placeholder="Entity Name"
                   />
+                </div>
+                <div className="col-span-2 space-y-2">
+                  <Label className="text-xs font-bold uppercase tracking-widest text-slate-500">Geographic Node</Label>
+                  <Input
+                    className="bg-white/5 border-white/10 h-12"
+                    value={clientForm.address}
+                    onChange={(e) => setClientForm({ ...clientForm, address: e.target.value })}
+                    placeholder="Street Address"
+                  />
+                </div>
+                <div className="grid grid-cols-3 col-span-2 gap-4">
+                  <Input className="bg-white/5 border-white/10 h-12" placeholder="City" value={clientForm.city} onChange={(e) => setClientForm({ ...clientForm, city: e.target.value })} />
+                  <Input className="bg-white/5 border-white/10 h-12" placeholder="State" value={clientForm.state} onChange={(e) => setClientForm({ ...clientForm, state: e.target.value })} />
+                  <Input className="bg-white/5 border-white/10 h-12" placeholder="ZIP" value={clientForm.zip_code} onChange={(e) => setClientForm({ ...clientForm, zip_code: e.target.value })} />
                 </div>
               </div>
+              <div className="flex justify-end gap-3 mt-8">
+                <Button variant="ghost" className="text-slate-400 hover:text-white" onClick={() => setShowClientDialog(false)}>Dismiss</Button>
+                <Button onClick={handleAddClient} className="bg-primary hover:bg-primary-dark text-white h-12 px-8 font-bold rounded-xl shadow-lg shadow-primary/20">Initialize Client</Button>
+              </div>
+            </DialogContent>
+          </Dialog>
 
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <Label>Invoice Items</Label>
-                  <Button type="button" size="sm" variant="outline" onClick={addInvoiceItem}>
-                    <Plus className="h-4 w-4 mr-1" /> Add Item
-                  </Button>
+          <Dialog open={showInvoiceDialog} onOpenChange={setShowInvoiceDialog}>
+            <DialogTrigger asChild>
+              <Button className="h-14 px-10 bg-primary hover:bg-primary-dark text-white rounded-2xl shadow-[0_10px_40px_rgba(236,72,153,0.3)] transition-all hover:scale-105 active:scale-95 border-none group">
+                <Plus className="h-6 w-6 mr-3 group-hover:rotate-90 transition-transform duration-300" />
+                <span className="font-black text-lg tracking-tight">Forge Invoice</span>
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle className="text-3xl font-heading font-bold text-slate-900 flex items-center gap-3">
+                  <Sparkles className="h-8 w-8 text-primary" />
+                  Invoice Forge
+                </DialogTitle>
+                <p className="text-slate-500 font-medium italic">Architecting a new financial milestone</p>
+              </DialogHeader>
+              <div className="space-y-8 pt-6">
+                <div className="grid grid-cols-2 gap-8">
+                  <div className="space-y-2">
+                    <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Target Recipient</Label>
+                    <Select value={invoiceForm.client_id} onValueChange={(value) => setInvoiceForm({ ...invoiceForm, client_id: value })}>
+                      <SelectTrigger className="h-14 bg-slate-50 border-slate-200 rounded-xl focus:ring-primary shadow-sm">
+                        <SelectValue placeholder="Select high-value client" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {clients.map((client) => (
+                          <SelectItem key={client.id} value={client.id}>
+                            {client.name} {client.company && `— ${client.company}`}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Engagement Terms</Label>
+                    <Input
+                      className="h-14 bg-slate-50 border-slate-200 rounded-xl shadow-sm"
+                      value={invoiceForm.payment_terms}
+                      onChange={(e) => setInvoiceForm({ ...invoiceForm, payment_terms: e.target.value })}
+                      placeholder="e.g., Net 30 Priority"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Deployment Date</Label>
+                    <Input
+                      className="h-14 bg-slate-50 border-slate-200 rounded-xl shadow-sm"
+                      type="date"
+                      value={invoiceForm.issue_date}
+                      onChange={(e) => setInvoiceForm({ ...invoiceForm, issue_date: e.target.value })}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Threshold Date</Label>
+                    <Input
+                      className="h-14 bg-slate-50 border-slate-200 rounded-xl shadow-sm"
+                      type="date"
+                      value={invoiceForm.due_date}
+                      onChange={(e) => setInvoiceForm({ ...invoiceForm, due_date: e.target.value })}
+                    />
+                  </div>
                 </div>
-                {invoiceItems.map((item, index) => (
-                  <div key={index} className="grid grid-cols-12 gap-2 mb-2">
-                    <Input
-                      className="col-span-5"
-                      placeholder="Description"
-                      value={item.description}
-                      onChange={(e) => handleItemChange(index, 'description', e.target.value)}
+
+                {/* Premium AI Forge */}
+                <div className="relative p-1 rounded-[2rem] bg-gradient-to-br from-primary via-accent to-primary-variant group overflow-hidden">
+                  <div className="bg-white p-8 rounded-[1.8rem] relative z-10">
+                    <div className="flex items-center justify-between mb-6">
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
+                          <Sparkles className="h-6 w-6 animate-pulse" />
+                        </div>
+                        <div>
+                          <h4 className="font-heading font-bold text-slate-900 uppercase tracking-tight">AI Extraction Engine</h4>
+                          <p className="text-[10px] font-bold text-primary uppercase tracking-[0.3em]">Neural Line Item Generation</p>
+                        </div>
+                      </div>
+                      <Badge variant="outline" className="border-primary/20 text-primary font-black px-3 py-1">V2.0 LIVE</Badge>
+                    </div>
+                    <Textarea
+                      value={paymentDetails}
+                      onChange={(e) => setPaymentDetails(e.target.value)}
+                      placeholder="Describe the project scope or paste raw payment logs here. Our AI will architect the precise line items for you..."
+                      rows={4}
+                      className="mb-6 bg-slate-50/50 border-slate-100 rounded-2xl p-4 focus:ring-primary font-medium"
                     />
-                    <Input
-                      className="col-span-2"
-                      type="number"
-                      placeholder="Qty"
-                      value={item.quantity}
-                      onChange={(e) => handleItemChange(index, 'quantity', parseFloat(e.target.value) || 0)}
-                    />
-                    <Input
-                      className="col-span-2"
-                      type="number"
-                      placeholder="Price"
-                      value={item.unit_price}
-                      onChange={(e) => handleItemChange(index, 'unit_price', parseFloat(e.target.value) || 0)}
-                    />
-                    <Input
-                      className="col-span-2"
-                      value={`$${item.amount.toFixed(2)}`}
-                      disabled
-                    />
-                    <Button
-                      type="button"
-                      size="sm"
-                      variant="destructive"
-                      className="col-span-1"
-                      onClick={() => removeInvoiceItem(index)}
+                    <Button 
+                      type="button" 
+                      onClick={handleGenerateWithAI}
+                      disabled={isGeneratingAI || !paymentDetails || !invoiceForm.client_id}
+                      className="w-full bg-slate-950 hover:bg-slate-900 text-white font-black h-14 rounded-2xl shadow-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
                     >
-                      <Trash2 className="h-4 w-4" />
+                      {isGeneratingAI ? (
+                        <span className="flex items-center gap-3">
+                          <Clock className="h-5 w-5 animate-spin" />
+                          SYTHESIZING DATA NODES...
+                        </span>
+                      ) : (
+                        <span className="flex items-center gap-3">
+                          <Sparkles className="h-5 w-5" />
+                          LAUNCH AI FORGE
+                        </span>
+                      )}
                     </Button>
                   </div>
-                ))}
-              </div>
+                </div>
 
-              <div className="border-t pt-4">
-                <div className="flex justify-end space-y-1">
-                  <div className="w-64 space-y-2">
-                    <div className="flex justify-between">
-                      <span>Subtotal:</span>
-                      <span className="font-bold">${calculateInvoiceTotal().subtotal.toFixed(2)}</span>
+                <div className="space-y-6">
+                  <div className="flex items-center justify-between px-2">
+                    <h3 className="font-heading font-bold text-xl text-slate-900 tracking-tight">Financial Components</h3>
+                    <Button type="button" size="sm" variant="ghost" onClick={addInvoiceItem} className="text-primary hover:bg-primary/5 font-black uppercase tracking-widest text-[10px]">
+                      <Plus className="h-4 w-4 mr-1" /> Add Manual Component
+                    </Button>
+                  </div>
+                  <div className="space-y-4">
+                    {invoiceItems.map((item, index) => (
+                      <div key={index} className="grid grid-cols-12 gap-5 p-5 bg-slate-50/80 rounded-2xl border border-slate-100 shadow-sm transition-all hover:border-primary/20">
+                        <div className="col-span-6 space-y-1">
+                          <Label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Service Node</Label>
+                          <Input
+                            className="bg-white h-12 rounded-xl border-slate-200"
+                            placeholder="Describe component..."
+                            value={item.description}
+                            onChange={(e) => handleItemChange(index, 'description', e.target.value)}
+                          />
+                        </div>
+                        <div className="col-span-2 space-y-1">
+                          <Label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Qty</Label>
+                          <Input
+                            className="bg-white h-12 rounded-xl border-slate-200 text-center font-bold"
+                            type="number"
+                            value={item.quantity}
+                            onChange={(e) => handleItemChange(index, 'quantity', parseFloat(e.target.value) || 0)}
+                          />
+                        </div>
+                        <div className="col-span-3 space-y-1">
+                          <Label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Unit Value</Label>
+                          <div className="relative">
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-bold">$</span>
+                            <Input
+                              className="pl-7 bg-white h-12 rounded-xl border-slate-200 font-bold"
+                              type="number"
+                              value={item.unit_price}
+                              onChange={(e) => handleItemChange(index, 'unit_price', parseFloat(e.target.value) || 0)}
+                            />
+                          </div>
+                        </div>
+                        <div className="col-span-1 flex items-end pb-1.5">
+                          <Button
+                            type="button"
+                            size="icon"
+                            variant="ghost"
+                            className="h-10 w-10 rounded-xl text-slate-300 hover:text-red-500 hover:bg-red-50"
+                            onClick={() => removeInvoiceItem(index)}
+                          >
+                            <Trash2 className="h-5 w-5" />
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex flex-col lg:flex-row gap-8 pt-10 border-t border-slate-100">
+                  <div className="flex-1 space-y-8">
+                    <div className="space-y-3">
+                      <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Engagement Verification</Label>
+                      <div className="group relative cursor-pointer">
+                        <Input
+                          type="file"
+                          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                          accept="image/*,.pdf"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              setReceiptFile(file);
+                              handleReceiptUpload(file);
+                            }
+                          }}
+                        />
+                        <div className={`h-24 rounded-[1.5rem] border-2 border-dashed flex items-center justify-center gap-4 transition-all ${
+                          receiptUrl ? 'bg-emerald-50 border-emerald-200 text-emerald-600' : 'bg-slate-50 border-slate-200 text-slate-400 group-hover:border-primary/30 group-hover:bg-primary/5'
+                        }`}>
+                          <Upload className="h-6 w-6" />
+                          <div className="text-left">
+                            <p className="font-bold">{receiptUrl ? 'Receipt Securely Stored' : 'Upload Transaction Node'}</p>
+                            <p className="text-[10px] uppercase font-black tracking-widest opacity-60">{receiptUrl ? 'Deployment ready' : 'PNG, JPG, or PDF'}</p>
+                          </div>
+                          {receiptUrl && <CheckCircle className="h-6 w-6" />}
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex justify-between">
-                      <span>Tax ({invoiceForm.tax_rate}%):</span>
-                      <span className="font-bold">${calculateInvoiceTotal().taxAmount.toFixed(2)}</span>
+                    <div className="space-y-3">
+                      <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Core Logic / Terms</Label>
+                      <Textarea
+                        value={invoiceForm.notes}
+                        onChange={(e) => setInvoiceForm({ ...invoiceForm, notes: e.target.value })}
+                        placeholder="Define the core logic or special terms for this engagement..."
+                        rows={3}
+                        className="bg-slate-50 border-slate-200 rounded-2xl p-4 font-medium"
+                      />
                     </div>
-                    <div className="flex justify-between text-lg border-t pt-2">
-                      <span className="font-bold">Total:</span>
-                      <span className="font-bold">${calculateInvoiceTotal().total.toFixed(2)}</span>
+                  </div>
+
+                  <div className="w-full lg:w-[360px] bg-slate-950 rounded-[2.5rem] p-10 text-white shadow-2xl relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 blur-3xl -mr-16 -mt-16 rounded-full" />
+                    
+                    <div className="space-y-4 mb-10 relative z-10">
+                      <div className="flex justify-between text-slate-500 text-[10px] font-black uppercase tracking-widest">
+                        <span>Gross Subtotal</span>
+                        <span className="text-white">${calculateInvoiceTotal().subtotal.toFixed(2)}</span>
+                      </div>
+                      <div className="flex justify-between items-center bg-white/5 p-4 rounded-2xl border border-white/5">
+                        <div className="flex items-center gap-2">
+                          <span className="text-slate-500 text-[10px] font-black uppercase tracking-widest">Regulatory Tax</span>
+                          <Input 
+                            type="number" 
+                            className="w-14 h-7 bg-primary text-white text-[10px] font-black text-center p-0 rounded-lg border-none focus:ring-0"
+                            value={invoiceForm.tax_rate}
+                            onChange={(e) => setInvoiceForm({ ...invoiceForm, tax_rate: parseFloat(e.target.value) || 0 })}
+                          />
+                        </div>
+                        <span className="text-white font-black font-orbitron">${calculateInvoiceTotal().taxAmount.toFixed(2)}</span>
+                      </div>
                     </div>
+                    
+                    <div className="space-y-2 mb-10 relative z-10">
+                      <p className="text-primary text-[10px] font-bold uppercase tracking-[0.4em]">Net Capital Forge</p>
+                      <div className="text-5xl font-heading font-bold text-white leading-none">
+                        ${calculateInvoiceTotal().total.toFixed(2)}
+                      </div>
+                      <p className="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Currency: USD Architecture</p>
+                    </div>
+
+                    <Button onClick={handleCreateInvoice} className="w-full bg-primary hover:bg-primary-dark text-white font-black h-16 rounded-2xl shadow-[0_15px_40px_rgba(236,72,153,0.3)] transition-all hover:scale-105 active:scale-95 text-lg relative z-10 border-none">
+                      FINALIZE DEPLOYMENT
+                    </Button>
                   </div>
                 </div>
               </div>
-
-              {/* AI Generation Section */}
-              <div className="border-t pt-4 space-y-4">
-                <div className="bg-gradient-to-r from-primary/10 to-primary/5 p-4 rounded-lg">
-                  <Label className="flex items-center gap-2 mb-2">
-                    <Sparkles className="h-4 w-4 text-primary" />
-                    AI Invoice Generation
-                  </Label>
-                  <Textarea
-                    value={paymentDetails}
-                    onChange={(e) => setPaymentDetails(e.target.value)}
-                    placeholder="Describe the payment received, services provided, or paste payment details here. AI will generate invoice items for you."
-                    rows={3}
-                    className="mb-2"
-                  />
-                  <Button 
-                    type="button" 
-                    onClick={handleGenerateWithAI}
-                    disabled={isGeneratingAI || !paymentDetails || !invoiceForm.client_id}
-                    className="w-full"
-                  >
-                    {isGeneratingAI ? (
-                      <>Generating with AI...</>
-                    ) : (
-                      <>
-                        <Sparkles className="h-4 w-4 mr-2" />
-                        Generate Invoice Items with AI
-                      </>
-                    )}
-                  </Button>
-                </div>
-
-                {/* Receipt Upload */}
-                <div>
-                  <Label className="flex items-center gap-2 mb-2">
-                    <Upload className="h-4 w-4" />
-                    Payment Receipt (Optional)
-                  </Label>
-                  <Input
-                    type="file"
-                    accept="image/*,.pdf"
-                    onChange={(e) => {
-                      const file = e.target.files?.[0];
-                      if (file) {
-                        setReceiptFile(file);
-                        handleReceiptUpload(file);
-                      }
-                    }}
-                  />
-                  {receiptUrl && (
-                    <p className="text-sm text-green-600 mt-2">✓ Receipt uploaded successfully</p>
-                  )}
-                </div>
-              </div>
-
-              <div>
-                <Label>Notes</Label>
-                <Textarea
-                  value={invoiceForm.notes}
-                  onChange={(e) => setInvoiceForm({ ...invoiceForm, notes: e.target.value })}
-                  placeholder="Additional notes or terms..."
-                  rows={3}
-                />
-              </div>
-            </div>
-            <div className="flex justify-end gap-2 mt-4">
-              <Button variant="outline" onClick={() => setShowInvoiceDialog(false)}>Cancel</Button>
-              <Button onClick={handleCreateInvoice}>Create Invoice</Button>
-            </div>
-          </DialogContent>
-        </Dialog>
+            </DialogContent>
+          </Dialog>
+        </div>
       </div>
 
+      {/* Premium Stats Grid */}
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        {[
+          { label: 'Total Volume', value: stats.total, icon: FileText, color: 'text-blue-500', bg: 'bg-blue-500/10' },
+          { label: 'Revenue Pool', value: `$${stats.totalRevenue.toLocaleString()}`, icon: DollarSign, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
+          { label: 'Sent Nodes', value: stats.sent, icon: Mail, color: 'text-primary', bg: 'bg-primary/10' },
+          { label: 'Finalized', value: stats.paid, icon: CheckCircle, color: 'text-accent', bg: 'bg-accent/10' },
+        ].map((stat, i) => (
+          <Card key={i} className="group hover:border-primary/20 transition-all duration-300 rounded-3xl overflow-hidden shadow-glass hover:shadow-xl hover:-translate-y-1 bg-white/60 backdrop-blur-xl border-white/40">
+            <CardContent className="p-8">
+              <div className="flex justify-between items-start">
+                <div className="space-y-2">
+                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">{stat.label}</p>
+                  <p className="text-3xl font-heading font-bold text-slate-900 group-hover:text-primary transition-colors">{stat.value}</p>
+                </div>
+                <div className={`p-4 rounded-2xl ${stat.bg} ${stat.color} transition-transform group-hover:rotate-12 duration-500`}>
+                  <stat.icon className="h-6 w-6" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+
       {/* Invoices Table */}
-      <Card>
-        <CardHeader>
+      <Card className="border-white/40 shadow-glass rounded-[2rem] overflow-hidden bg-white/40 backdrop-blur-3xl">
+        <CardHeader className="border-b border-white/20 p-8">
           <div className="flex items-center gap-4">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
@@ -829,32 +831,30 @@ const AdminInvoices = () => {
           ) : (
             <div className="overflow-x-auto">
               <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Invoice #</TableHead>
-                    <TableHead>Client</TableHead>
-                    <TableHead>Issue Date</TableHead>
-                    <TableHead>Due Date</TableHead>
-                    <TableHead>Amount</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
+                <TableHeader className="bg-slate-50/50">
+                  <TableRow className="hover:bg-transparent border-white/20">
+                    <TableHead className="font-heading font-bold text-slate-900 py-6 pl-8">Invoice #</TableHead>
+                    <TableHead className="font-heading font-bold text-slate-900 py-6">Client</TableHead>
+                    <TableHead className="font-heading font-bold text-slate-900 py-6">Date</TableHead>
+                    <TableHead className="font-heading font-bold text-slate-900 py-6 text-right">Total Value</TableHead>
+                    <TableHead className="font-heading font-bold text-slate-900 py-6">Status Node</TableHead>
+                    <TableHead className="font-heading font-bold text-slate-900 py-6 text-right pr-8">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {filteredInvoices.map((invoice) => (
-                    <TableRow key={invoice.id}>
-                      <TableCell className="font-medium">{invoice.invoice_number}</TableCell>
+                    <TableRow key={invoice.id} className="group hover:bg-primary/5 transition-colors border-white/10">
+                      <TableCell className="font-bold py-5 pl-8">{invoice.invoice_number}</TableCell>
                       <TableCell>
-                        <div>
-                          <div className="font-medium">{invoice.clients?.name}</div>
-                          <div className="text-xs text-muted-foreground">{invoice.clients?.email}</div>
+                        <div className="flex flex-col">
+                          <div className="font-heading font-bold text-slate-900">{invoice.clients?.name}</div>
+                          <div className="text-xs text-slate-500">{invoice.clients?.email}</div>
                         </div>
                       </TableCell>
                       <TableCell>{format(new Date(invoice.issue_date), 'MMM dd, yyyy')}</TableCell>
-                      <TableCell>{format(new Date(invoice.due_date), 'MMM dd, yyyy')}</TableCell>
-                      <TableCell className="font-bold">${Number(invoice.total).toFixed(2)}</TableCell>
+                      <TableCell className="text-right font-bold">${Number(invoice.total).toFixed(2)}</TableCell>
                       <TableCell>
-                        <Badge variant={getStatusBadge(invoice.status)}>
+                        <Badge variant={getStatusBadge(invoice.status)} className="rounded-full px-3 py-1 font-black uppercase text-[10px] tracking-widest">
                           {invoice.status}
                         </Badge>
                       </TableCell>

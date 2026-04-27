@@ -18,48 +18,55 @@ import {
   Heart,
   Globe,
   Star,
-  Zap
+  Zap,
+  Activity,
+  Cpu,
+  ShieldCheck,
+  Database
 } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom";
 
 import founderImage from "@/assets/founder-farhan.jpg";
 
 const FounderFarhan = () => {
   const stats = [
-    { icon: Briefcase, value: "50+", label: "Projects Completed" },
-    { icon: Users, value: "30+", label: "Happy Clients" },
-    { icon: TrendingUp, value: "$10K+", label: "Revenue Generated" },
-    { icon: Award, value: "5+", label: "Years Experience" }
+    { icon: Briefcase, value: "50+", label: "Architectures Delivered" },
+    { icon: Users, value: "30+", label: "Active Intelligence Nodes" },
+    { icon: TrendingUp, value: "$10K+", label: "Velocity Generated" },
+    { icon: Award, value: "5+", label: "Years of Execution" }
   ];
 
   const skills = [
-    "Digital Marketing Strategy",
-    "Web Design & Development", 
-    "AI & Automation Solutions",
-    "Google & Meta Ads",
-    "SEO & Content Marketing",
-    "Business Growth Consulting"
+    "Absolute Digital Strategy",
+    "Architecture Design & Logic", 
+    "AI & Automation Protocols",
+    "Absolute Ads Management",
+    "Intelligence Visibility (SEO)",
+    "Business Scaling Logic"
   ];
 
   const timeline = [
-    { year: "2019", title: "Digital Journey Begins", description: "Started learning web development and digital marketing fundamentals" },
-    { year: "2020", title: "First Clients", description: "Began freelancing and building websites for local businesses" },
-    { year: "2021", title: "Founded Lunexo Media", description: "Launched the agency to help businesses grow digitally" },
-    { year: "2022", title: "Services Expansion", description: "Added AI automation and advanced marketing services" },
-    { year: "2023", title: "50+ Projects Milestone", description: "Reached milestone of 50+ successful client projects" },
-    { year: "2024", title: "Global Reach", description: "Now serving clients across USA, UK, and worldwide" }
+    { year: "2019", title: "Logic Protocol Initialized", description: "Started learning absolute web development and digital marketing fundamentals" },
+    { year: "2020", title: "First Architecture Sync", description: "Began freelancing and building architectures for local businesses" },
+    { year: "2021", title: "Launched Lunexo Media", description: "Initialized the absolute agency to help businesses grow digitally" },
+    { year: "2022", title: "Trajectory Expansion", description: "Added AI automation and advanced operational protocols" },
+    { year: "2023", title: "50+ Architectures Sync", description: "Reached milestone of 50+ successful client project deliveries" },
+    { year: "2024", title: "Global Node Reach", description: "Now serving clients across USA, UK, and worldwide repositories" }
   ];
 
   const values = [
-    { icon: Rocket, title: "Innovation", description: "Always exploring cutting-edge solutions" },
-    { icon: Heart, title: "Passion", description: "Genuinely care about client success" },
-    { icon: Globe, title: "Global Vision", description: "Thinking big, acting local" }
+    { icon: Rocket, title: "Velocity", description: "Always exploring cutting-edge absolute solutions" },
+    { icon: Heart, title: "Precision", description: "Genuinely care about absolute architecture success" },
+    { icon: Globe, title: "Global Vision", description: "Thinking big, acting with absolute local precision" }
   ];
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f]">
+    <div className="min-h-screen bg-background font-body text-slate-900 overflow-hidden">
       <SEO
-        title="Farhan Tanvier - Founder & CEO | Lunexo Media"
-        description="Meet Farhan Tanvier, the visionary founder and CEO of Lunexo Media. Passionate about helping businesses thrive through innovative digital solutions."
+        title="Farhan Tanvier - Founder & Absolute CEO | Lunexo Media"
+        description="Meet Farhan Tanvier, the absolute visionary founder and CEO of Lunexo Media. Passionate about helping businesses thrive through innovative digital architectures."
         image="https://www.lunexomedia.com/og-image-new.jpg"
         url="https://www.lunexomedia.com/farhan-tanvier"
         keywords="Farhan Tanvier, Lunexo Media founder, CEO, digital marketing expert, entrepreneur"
@@ -67,283 +74,333 @@ const FounderFarhan = () => {
       <Navigation />
       
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center overflow-hidden pt-20">
-        {/* Animated gradient orbs */}
-        <div className="absolute top-20 left-10 w-[700px] h-[700px] bg-gradient-to-r from-violet-600/25 to-fuchsia-500/20 rounded-full blur-[180px] animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-[600px] h-[600px] bg-gradient-to-r from-cyan-600/20 to-blue-500/15 rounded-full blur-[150px] animate-pulse" style={{animationDelay: '1.5s'}}></div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-r from-amber-600/10 to-orange-500/10 rounded-full blur-[120px] animate-pulse" style={{animationDelay: '3s'}}></div>
-        
-        {/* Grid pattern */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-[size:60px_60px]"></div>
-        
-        {/* Floating particles */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          {[...Array(20)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute w-1 h-1 bg-white/20 rounded-full animate-pulse"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 3}s`,
-                animationDuration: `${2 + Math.random() * 3}s`
-              }}
-            />
-          ))}
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-32 pb-24">
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+          <div className="absolute top-[10%] left-[5%] w-[800px] h-[800px] bg-primary/10 rounded-full blur-[140px]" />
+          <div className="absolute bottom-[10%] right-[5%] w-[600px] h-[600px] bg-accent/10 rounded-full blur-[120px]" />
         </div>
-        
+
         <div className="container-wide section-padding relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 lg:gap-32 items-center max-w-7xl mx-auto">
             {/* Content */}
-            <div className="text-center lg:text-left">
-              {/* Badge */}
-              <div className="inline-flex items-center gap-3 bg-gradient-to-r from-violet-500/15 to-fuchsia-500/15 border border-violet-500/30 text-violet-300 px-8 py-4 rounded-full text-sm font-medium backdrop-blur-xl mb-10 animate-fade-in">
-                <Star className="w-5 h-5 text-amber-400 fill-amber-400" />
-                Founder & Chief Executive Officer
-                <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+            <div className="text-center lg:text-left space-y-16">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+              >
+                <Badge className="bg-primary/10 border border-primary/20 text-primary px-10 py-4 rounded-full text-sm font-black uppercase tracking-[0.4em] backdrop-blur-xl">
+                  <Star className="w-5 h-5 mr-4 text-primary fill-primary" />
+                  Founder & Absolute CEO
+                </Badge>
+              </motion.div>
+              
+              <div className="space-y-8">
+                <motion.h1 
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2, duration: 1 }}
+                  className="text-6xl sm:text-7xl lg:text-[11rem] font-heading font-bold text-slate-900 leading-[1] tracking-tighter"
+                >
+                  Farhan <br />
+                  <span className="text-primary italic">Tanvier.</span>
+                </motion.h1>
+                
+                <motion.p 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.4, duration: 1 }}
+                  className="text-3xl text-slate-500 max-w-3xl mx-auto lg:mx-0 leading-relaxed font-medium"
+                >
+                  Absolute digital visionary and entrepreneur dedicated to transforming global businesses through innovative architectures, marketing logic, and AI-powered solutions.
+                </motion.p>
               </div>
-              
-              {/* Name */}
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-[1.05] tracking-tight text-white mb-8 animate-fade-in" style={{fontFamily: "'Playfair Display', serif", animationDelay: '0.2s'}}>
-                Farhan
-                <br />
-                <span className="bg-gradient-to-r from-violet-400 via-fuchsia-400 to-pink-400 bg-clip-text text-transparent">
-                  Tanvier
-                </span>
-              </h1>
-              
-              {/* Tagline */}
-              <p className="text-xl lg:text-2xl text-white/60 leading-relaxed max-w-xl mx-auto lg:mx-0 font-light mb-10 animate-fade-in" style={{animationDelay: '0.4s'}}>
-                Visionary digital strategist and entrepreneur dedicated to transforming businesses through innovative web design, marketing, and AI-powered solutions.
-              </p>
               
               {/* Social Links */}
-              <div className="flex items-center justify-center lg:justify-start gap-4 mb-12 animate-fade-in" style={{animationDelay: '0.6s'}}>
-                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="w-14 h-14 bg-gradient-to-br from-white/10 to-white/5 border border-white/15 rounded-2xl flex items-center justify-center hover:bg-white/15 hover:border-white/25 hover:scale-110 transition-all duration-300 group">
-                  <Linkedin className="w-6 h-6 text-white/70 group-hover:text-white" />
-                </a>
-                <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="w-14 h-14 bg-gradient-to-br from-white/10 to-white/5 border border-white/15 rounded-2xl flex items-center justify-center hover:bg-white/15 hover:border-white/25 hover:scale-110 transition-all duration-300 group">
-                  <Twitter className="w-6 h-6 text-white/70 group-hover:text-white" />
-                </a>
-                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="w-14 h-14 bg-gradient-to-br from-white/10 to-white/5 border border-white/15 rounded-2xl flex items-center justify-center hover:bg-white/15 hover:border-white/25 hover:scale-110 transition-all duration-300 group">
-                  <Facebook className="w-6 h-6 text-white/70 group-hover:text-white" />
-                </a>
-                <a href="mailto:farhan@lunexomedia.com" className="w-14 h-14 bg-gradient-to-br from-white/10 to-white/5 border border-white/15 rounded-2xl flex items-center justify-center hover:bg-white/15 hover:border-white/25 hover:scale-110 transition-all duration-300 group">
-                  <Mail className="w-6 h-6 text-white/70 group-hover:text-white" />
-                </a>
-              </div>
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6, duration: 1 }}
+                className="flex items-center justify-center lg:justify-start gap-8"
+              >
+                {[Linkedin, Twitter, Facebook, Mail].map((Icon, i) => (
+                  <a key={i} href="#" className="w-20 h-20 bg-white/40 border border-white/60 rounded-[1.5rem] flex items-center justify-center hover:bg-primary hover:border-primary transition-all duration-700 group shadow-glass hover:scale-110 hover:rotate-6">
+                    <Icon className="w-8 h-8 text-slate-900 group-hover:text-white transition-colors" />
+                  </a>
+                ))}
+              </motion.div>
               
               {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-fade-in" style={{animationDelay: '0.8s'}}>
-                <Button asChild size="lg" className="group text-lg px-12 py-8 bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white hover:from-violet-600 hover:to-fuchsia-600 rounded-full transition-all duration-300 hover:scale-105 font-semibold shadow-2xl shadow-violet-500/30">
-                  <a href="https://lunexomedia.com/book-apartment" className="flex items-center gap-3">
-                    Let's Work Together
-                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                  </a>
+              <motion.div 
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.8, duration: 1 }}
+                className="flex flex-col sm:flex-row gap-10 justify-center lg:justify-start"
+              >
+                <Button asChild size="lg" className="bg-slate-900 text-white hover:bg-slate-800 text-3xl px-20 py-12 rounded-full font-bold shadow-2xl transition-all duration-700 hover:scale-110 group">
+                  <Link to="/contact" className="flex items-center gap-6">
+                    Absolute Sync
+                    <ArrowRight className="w-10 h-10 group-hover:translate-x-5 transition-transform" />
+                  </Link>
                 </Button>
-                <Button asChild variant="outline" size="lg" className="text-lg px-12 py-8 border-2 border-white/20 text-white bg-white/5 hover:bg-white/10 hover:border-white/30 rounded-full transition-all duration-300 backdrop-blur-sm">
-                  <a href="https://lunexomedia.com/portfolio">
-                    View My Work
-                  </a>
+                <Button asChild variant="outline" size="lg" className="border-2 border-primary/20 bg-white/40 backdrop-blur-xl text-primary hover:bg-white/60 text-3xl px-20 py-12 rounded-full font-bold transition-all duration-700 hover:scale-105">
+                  <Link to="/portfolio">
+                    View Architecture
+                  </Link>
                 </Button>
-              </div>
+              </motion.div>
             </div>
             
             {/* Image */}
-            <div className="relative animate-scale-in" style={{animationDelay: '0.3s'}}>
-              <div className="absolute -inset-6 bg-gradient-to-r from-violet-500/30 via-fuchsia-500/25 to-pink-500/20 rounded-3xl blur-3xl opacity-60"></div>
-              <div className="relative bg-gradient-to-br from-white/10 to-white/5 p-2 rounded-3xl backdrop-blur-sm border border-white/15 shadow-2xl">
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1 }}
+              className="relative group"
+            >
+              <div className="absolute -inset-16 bg-primary/10 rounded-full blur-[140px] animate-pulse"></div>
+              <div className="relative bg-white/40 backdrop-blur-xl border border-white/60 p-10 rounded-[5rem] shadow-glass overflow-hidden">
                 <img
                   src={founderImage}
-                  alt="Farhan Tanvier - Founder & CEO of Lunexo Media"
-                  className="w-full h-auto rounded-2xl"
+                  alt="Farhan Tanvier - Founder & Absolute CEO of Lunexo Media"
+                  className="w-full h-auto rounded-[4rem] grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-105"
                 />
                 
                 {/* Floating badge */}
-                <div className="absolute bottom-6 left-6 bg-gradient-to-r from-green-500 to-emerald-500 text-white px-4 py-2 rounded-xl text-sm font-semibold shadow-lg shadow-green-500/30 flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4" />
-                  Available for Projects
-                </div>
+                <motion.div 
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 1, duration: 1 }}
+                  className="absolute bottom-16 left-16 bg-primary text-white px-10 py-5 rounded-[2rem] text-xl font-bold shadow-2xl flex items-center gap-4 z-20"
+                >
+                  <CheckCircle2 className="w-8 h-8" />
+                  Operational
+                </motion.div>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
 
       {/* Stats Section */}
-      <section className="py-24 relative">
+      <section className="py-48 bg-white/50 backdrop-blur-md border-y border-white/40 relative">
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[140px] pointer-events-none" />
         <div className="container-wide section-padding">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 max-w-7xl mx-auto">
             {stats.map((stat, i) => (
-              <div key={i} className="group relative bg-gradient-to-br from-white/8 to-white/3 border border-white/10 rounded-3xl p-8 backdrop-blur-sm hover:bg-white/10 hover:border-white/20 transition-all duration-500 text-center overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-violet-500/10 to-fuchsia-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div className="relative z-10">
-                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center mx-auto mb-5 shadow-xl shadow-violet-500/30 group-hover:scale-110 transition-transform duration-300">
-                    <stat.icon className="w-8 h-8 text-white" />
-                  </div>
-                  <div className="text-4xl lg:text-5xl font-bold text-white mb-2">{stat.value}</div>
-                  <div className="text-white/50 text-sm font-medium">{stat.label}</div>
+              <motion.div 
+                key={i} 
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1, duration: 1 }}
+                className="group relative bg-white/40 backdrop-blur-xl border border-white/60 rounded-[4rem] p-16 text-center hover:shadow-glass transition-all duration-1000 flex flex-col items-center gap-10 hover:translate-y-[-15px]"
+              >
+                <div className="w-24 h-24 bg-slate-900 text-white rounded-[2.5rem] flex items-center justify-center shadow-2xl group-hover:bg-primary transition-all duration-700 group-hover:rotate-12">
+                  <stat.icon className="w-12 h-12" />
                 </div>
-              </div>
+                <div className="space-y-4">
+                  <div className="text-6xl font-heading font-bold text-slate-900 tracking-tighter">{stat.value}</div>
+                  <div className="text-[10px] font-black text-slate-400 uppercase tracking-[0.5em]">{stat.label}</div>
+                </div>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
       {/* About Section */}
-      <section className="py-24 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-r from-cyan-600/15 to-blue-500/15 rounded-full blur-[180px]"></div>
+      <section className="py-48 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-primary/5 rounded-full blur-[180px] pointer-events-none" />
         
         <div className="container-wide section-padding relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div className="space-y-8">
-              <div className="inline-flex items-center gap-3 bg-gradient-to-r from-cyan-500/15 to-blue-500/15 border border-cyan-500/25 text-cyan-300 px-6 py-3 rounded-full text-sm font-medium">
-                <Heart className="w-4 h-4" />
-                About Me
-              </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-32 items-center max-w-7xl mx-auto">
+            <div className="space-y-16">
+              <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
+                <Badge className="bg-primary/10 border border-primary/20 text-primary px-10 py-4 rounded-full text-sm font-black uppercase tracking-[0.4em]">
+                  <Heart className="w-5 h-5 mr-4" />
+                  Absolute Vision
+                </Badge>
+              </motion.div>
               
-              <h2 className="text-4xl lg:text-5xl font-bold text-white" style={{fontFamily: "'Playfair Display', serif"}}>
-                Passionate About
-                <br />
-                <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-400 bg-clip-text text-transparent">
-                  Digital Excellence
-                </span>
-              </h2>
-              
-              <div className="space-y-5 text-white/60 leading-relaxed text-lg">
-                <p>
-                  I'm Farhan Tanvier, a digital entrepreneur and the founder of Lunexo Media. My journey began with a simple passion: helping businesses succeed in the digital world.
-                </p>
-                <p>
-                  Over the years, I've had the privilege of working with startups, small businesses, and established brands, helping them build their online presence and scale their operations.
-                </p>
-                <p>
-                  At Lunexo Media, we combine creativity with strategy to deliver results that matter. Whether it's a stunning website, a high-converting ad campaign, or AI-powered automation, we're here to help your business thrive.
-                </p>
+              <div className="space-y-12">
+                <h2 className="text-6xl lg:text-[10rem] font-heading font-bold text-slate-900 leading-[1.05] tracking-tighter">
+                  Passionate <br /> <span className="text-primary italic">Excellence.</span>
+                </h2>
+                
+                <div className="space-y-10 text-2xl text-slate-500 font-medium leading-relaxed">
+                  <p>
+                    I'm Farhan Tanvier, an absolute digital visionary and the founder of Lunexo Media. My trajectory began with a simple passion: helping businesses reach absolute success in the digital repository.
+                  </p>
+                  <p>
+                    Over the years, I've had the privilege of orchestrating architectures for startups, small businesses, and established brands, helping them build their absolute online nodes and scale their operations.
+                  </p>
+                  <p>
+                    At Lunexo Media, we combine absolute logic with strategy to deliver architectures that matter. Whether it's a stunning architecture, a high-converting ad protocol, or AI-powered logic, we're here to help your business reach absolute trajectory.
+                  </p>
+                </div>
               </div>
             </div>
             
             {/* Skills Card */}
-            <div className="relative">
-              <div className="absolute -inset-4 bg-gradient-to-r from-cyan-500/20 via-blue-500/20 to-indigo-500/20 rounded-3xl blur-2xl"></div>
-              <div className="relative bg-gradient-to-br from-white/10 to-white/5 border border-white/15 rounded-3xl p-10 backdrop-blur-xl">
-                <h3 className="text-2xl font-bold text-white mb-8 flex items-center gap-3">
-                  <Zap className="w-7 h-7 text-amber-400" />
-                  Areas of Expertise
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1 }}
+              className="relative group"
+            >
+              <div className="absolute -inset-16 bg-primary/10 rounded-full blur-[140px] animate-pulse"></div>
+              <div className="relative bg-white/40 backdrop-blur-xl border border-white/60 rounded-[5rem] p-20 lg:p-32 shadow-glass space-y-16">
+                <h3 className="text-5xl font-heading font-bold text-slate-900 flex items-center gap-8 tracking-tight">
+                  <Zap className="w-12 h-12 text-primary" />
+                  Expertise Nodes
                 </h3>
-                <div className="space-y-4">
+                <div className="space-y-10">
                   {skills.map((skill, i) => (
-                    <div key={i} className="flex items-center gap-4 text-white/80 text-lg group">
-                      <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-green-500/20 to-emerald-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <CheckCircle2 className="w-5 h-5 text-green-400" />
+                    <div key={i} className="flex items-center gap-8 text-2xl text-slate-500 font-medium group/skill">
+                      <div className="w-12 h-12 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center group-hover/skill:bg-primary group-hover/skill:border-primary transition-all duration-700 group-hover/skill:rotate-12">
+                        <CheckCircle2 className="w-6 h-6 text-primary group-hover/skill:text-white" />
                       </div>
-                      <span className="group-hover:text-white transition-colors">{skill}</span>
+                      <span className="group-hover/skill:text-slate-900 transition-colors duration-700">{skill}</span>
                     </div>
                   ))}
                 </div>
+                <div className="pt-12 border-t border-white/60 flex items-center justify-center gap-10 opacity-30">
+                   <Activity className="w-8 h-8" />
+                   <Cpu className="w-8 h-8" />
+                   <Database className="w-8 h-8" />
+                </div>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
 
       {/* Values Section */}
-      <section className="py-24 relative">
+      <section className="py-48 relative bg-white/40 border-y border-white/60 backdrop-blur-xl">
         <div className="container-wide section-padding">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-3 bg-gradient-to-r from-amber-500/15 to-orange-500/15 border border-amber-500/25 text-amber-300 px-6 py-3 rounded-full text-sm font-medium mb-6">
-              <Star className="w-4 h-4" />
-              Core Values
-            </div>
-            <h2 className="text-4xl lg:text-5xl font-bold text-white" style={{fontFamily: "'Playfair Display', serif"}}>
-              What Drives
-              <span className="bg-gradient-to-r from-amber-400 via-orange-400 to-red-400 bg-clip-text text-transparent"> Me Forward</span>
+          <div className="text-center mb-32 space-y-12">
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+              <Badge className="bg-primary/10 border border-primary/20 text-primary px-10 py-4 rounded-full text-sm font-black uppercase tracking-[0.4em]">
+                <Star className="w-5 h-5 mr-4" />
+                Core Protocol
+              </Badge>
+            </motion.div>
+            <h2 className="text-6xl lg:text-[11rem] font-heading font-bold text-slate-900 leading-[1] tracking-tighter">
+              Absolute <br /> <span className="text-primary italic">Trajectory.</span>
             </h2>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-16 max-w-7xl mx-auto">
             {values.map((value, i) => (
-              <div key={i} className="group bg-gradient-to-br from-white/8 to-white/3 border border-white/10 rounded-3xl p-10 backdrop-blur-sm hover:bg-white/10 hover:border-white/20 transition-all duration-500 text-center">
-                <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-amber-500/20 to-orange-500/20 flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
-                  <value.icon className="w-10 h-10 text-amber-400" />
+              <motion.div 
+                key={i} 
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1, duration: 1 }}
+                className="group bg-white/40 backdrop-blur-xl border border-white/60 rounded-[4rem] p-20 text-center hover:shadow-glass transition-all duration-1000 flex flex-col items-center gap-10 hover:translate-y-[-15px]"
+              >
+                <div className="w-32 h-32 rounded-[2.5rem] bg-slate-900 text-white flex items-center justify-center shadow-2xl group-hover:bg-primary transition-all duration-700 group-hover:rotate-12">
+                  <value.icon className="w-16 h-16" />
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-3">{value.title}</h3>
-                <p className="text-white/50">{value.description}</p>
-              </div>
+                <div className="space-y-6">
+                  <h3 className="text-4xl font-heading font-bold text-slate-900 tracking-tight">{value.title}</h3>
+                  <p className="text-2xl text-slate-500 font-medium leading-relaxed">{value.description}</p>
+                </div>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
       {/* Timeline Section */}
-      <section className="py-24 relative overflow-hidden">
-        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-gradient-to-r from-violet-600/15 to-fuchsia-500/15 rounded-full blur-[180px]"></div>
+      <section className="py-48 relative overflow-hidden">
+        <div className="absolute bottom-0 left-0 w-[800px] h-[800px] bg-primary/5 rounded-full blur-[180px] pointer-events-none"></div>
         
         <div className="container-wide section-padding relative z-10">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-3 bg-gradient-to-r from-violet-500/15 to-fuchsia-500/15 border border-violet-500/25 text-violet-300 px-6 py-3 rounded-full text-sm font-medium mb-6">
-              <Calendar className="w-4 h-4" />
-              My Journey
-            </div>
-            <h2 className="text-4xl lg:text-5xl font-bold text-white" style={{fontFamily: "'Playfair Display', serif"}}>
-              The Path to
-              <span className="bg-gradient-to-r from-violet-400 via-fuchsia-400 to-pink-400 bg-clip-text text-transparent"> Success</span>
+          <div className="text-center mb-32 space-y-12">
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+              <Badge className="bg-primary/10 border border-primary/20 text-primary px-10 py-4 rounded-full text-sm font-black uppercase tracking-[0.4em]">
+                <Calendar className="w-5 h-5 mr-4" />
+                Absolute Journey
+              </Badge>
+            </motion.div>
+            <h2 className="text-6xl lg:text-[11rem] font-heading font-bold text-slate-900 leading-[1] tracking-tighter">
+              Execution <br /> <span className="text-primary italic">Trajectory.</span>
             </h2>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 max-w-7xl mx-auto">
             {timeline.map((item, i) => (
-              <div key={i} className="group relative bg-gradient-to-br from-white/8 to-white/3 border border-white/10 rounded-3xl p-8 backdrop-blur-sm hover:bg-white/10 hover:border-white/20 transition-all duration-500 overflow-hidden">
-                <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-violet-500/20 to-fuchsia-500/20 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                <div className="relative z-10">
-                  <div className="text-3xl font-bold bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent mb-3">
+              <motion.div 
+                key={i} 
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1, duration: 1 }}
+                className="group relative bg-white/40 backdrop-blur-xl border border-white/60 rounded-[4rem] p-16 hover:shadow-glass transition-all duration-1000 overflow-hidden flex flex-col justify-between h-full hover:translate-y-[-10px]"
+              >
+                <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-[60px] opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                <div className="space-y-10 relative z-10">
+                  <div className="text-5xl font-heading font-bold text-primary tracking-tighter">
                     {item.year}
                   </div>
-                  <h3 className="text-xl font-bold text-white mb-3">{item.title}</h3>
-                  <p className="text-white/50">{item.description}</p>
+                  <div className="space-y-4">
+                    <h3 className="text-3xl font-heading font-bold text-slate-900 tracking-tight">{item.title}</h3>
+                    <p className="text-2xl text-slate-500 font-medium leading-relaxed">{item.description}</p>
+                  </div>
                 </div>
-              </div>
+                <div className="mt-12 pt-8 border-t border-white/60 opacity-20 flex justify-end">
+                   <Activity className="w-6 h-6" />
+                </div>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-32 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-violet-600/20 via-fuchsia-500/15 to-violet-600/20"></div>
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-gradient-to-r from-violet-500/25 to-fuchsia-500/25 rounded-full blur-[150px]"></div>
+      <section className="py-48 relative overflow-hidden bg-slate-900">
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/30 via-accent/20 to-primary/30 opacity-40"></div>
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[600px] bg-primary/10 rounded-full blur-[150px]"></div>
         
         <div className="container-wide section-padding relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center gap-3 bg-white/10 border border-white/15 text-white/80 px-6 py-3 rounded-full text-sm font-medium backdrop-blur-xl mb-10">
-              <Zap className="w-5 h-5 text-amber-400" />
-              Let's Connect
-            </div>
+          <div className="max-w-7xl mx-auto text-center space-y-20">
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+              <Badge className="bg-white/10 text-white border-white/20 px-10 py-4 rounded-full text-sm font-black uppercase tracking-[0.4em] backdrop-blur-xl">
+                <Zap className="w-6 h-6 mr-4 text-primary" />
+                Absolute Uplink
+              </Badge>
+            </motion.div>
             
-            <h2 className="text-5xl lg:text-7xl font-bold text-white mb-8" style={{fontFamily: "'Playfair Display', serif"}}>
-              Ready to Build
-              <br />
-              <span className="bg-gradient-to-r from-violet-400 via-fuchsia-400 to-pink-400 bg-clip-text text-transparent">
-                Something Amazing?
-              </span>
+            <h2 className="text-6xl lg:text-[11rem] font-heading font-bold text-white leading-tight tracking-tighter">
+              Ready to Build <br />
+              <span className="text-primary italic">Absolute Intel?</span>
             </h2>
             
-            <p className="text-xl text-white/50 mb-12 max-w-2xl mx-auto font-light">
-              I'm always excited to work on new projects and help businesses grow. Let's discuss how we can work together to achieve your goals.
+            <p className="text-3xl text-slate-300 mb-12 max-w-5xl mx-auto font-medium leading-relaxed">
+              I'm always excited to orchestrate new absolute architectures and help businesses grow into their full trajectory. Let's discuss how we can sync our goals.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-5 justify-center">
-              <Button asChild size="lg" className="group text-lg px-14 py-8 bg-white text-black hover:bg-white/90 rounded-full transition-all duration-300 hover:scale-105 font-semibold shadow-2xl">
-                <a href="https://lunexomedia.com/book-apartment" className="flex items-center gap-3">
-                  Get In Touch
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </a>
+            <div className="flex flex-col sm:flex-row gap-10 justify-center pt-16">
+              <Button asChild size="lg" className="bg-white text-slate-900 hover:bg-white/90 text-3xl px-24 py-16 rounded-full font-bold shadow-2xl transition-all duration-700 hover:scale-110 group">
+                <Link to="/contact" className="flex items-center gap-6">
+                  Initialize Sync
+                  <ArrowRight className="w-10 h-10 group-hover:translate-x-5 transition-transform" />
+                </Link>
               </Button>
-              <Button asChild variant="outline" size="lg" className="text-lg px-14 py-8 border-2 border-white/25 text-white bg-white/5 hover:bg-white/10 hover:border-white/35 rounded-full transition-all duration-300 backdrop-blur-sm">
-                <a href="https://lunexomedia.com/about">
-                  About Lunexo Media
-                </a>
+              <Button asChild variant="outline" size="lg" className="border-2 border-white/20 bg-white/10 backdrop-blur-xl text-white hover:bg-white/20 text-3xl px-24 py-16 rounded-full font-bold transition-all duration-700 hover:scale-105">
+                <Link to="/about">
+                  About Repository
+                </Link>
               </Button>
+            </div>
+            
+            <div className="pt-24 flex items-center justify-center gap-16 opacity-30 text-white">
+               <ShieldCheck className="w-10 h-10" />
+               <Cpu className="w-10 h-10" />
+               <Database className="w-10 h-10" />
             </div>
           </div>
         </div>

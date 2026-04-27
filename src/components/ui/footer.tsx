@@ -3,9 +3,9 @@ import { ArrowUpRight, Mail, MapPin, Phone } from "lucide-react";
 
 const Footer = () => {
   return (
-    <footer className="relative bg-[#f0f0f0] overflow-hidden">
-      {/* Top border line */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-[#e0e0e0]"></div>
+    <footer className="relative bg-background overflow-hidden border-t border-white/20">
+      {/* Soft background glow */}
+      <div className="absolute bottom-0 left-0 w-64 h-64 bg-primary/5 blur-[100px] -ml-32 -mb-32 rounded-full" />
       
       {/* Remove background effects for clean look */}
       
@@ -21,8 +21,8 @@ const Footer = () => {
                 </div>
               </div>
               <div className="flex flex-col">
-                <span className="text-xl font-bold text-[#1a1a1a] tracking-wide">LUNEXO</span>
-                <span className="text-[10px] font-medium text-[#666666] tracking-[0.2em] -mt-1">MEDIA</span>
+                <span className="text-xl font-heading font-bold text-slate-900 tracking-wide">LUNEXO</span>
+                <span className="text-[10px] font-bold text-slate-500 tracking-[0.25em] -mt-1 uppercase">Media</span>
               </div>
             </div>
             <p className="text-[#666666] text-sm leading-relaxed mb-6">
@@ -36,22 +36,22 @@ const Footer = () => {
           {/* Contact Info */}
           <div className="flex flex-col sm:flex-row gap-8 lg:gap-16">
             <div className="space-y-4">
-              <div className="flex items-center gap-3 text-[#666666] hover:text-[#1a1a1a] transition-colors group">
-                <div className="w-10 h-10 rounded-lg bg-white border border-[#e0e0e0] flex items-center justify-center group-hover:border-[#1a1a1a]/30 transition-colors">
+              <div className="flex items-center gap-3 text-slate-600 hover:text-primary transition-colors group">
+                <div className="w-10 h-10 rounded-lg bg-white/40 border border-white/40 flex items-center justify-center group-hover:border-primary/30 transition-colors backdrop-blur-xl shadow-sm">
                   <Mail className="w-4 h-4" />
                 </div>
                 <div>
-                  <div className="text-xs text-[#999999] mb-0.5">Email us</div>
-                  <a href="mailto:hello@lunexomedia.com" className="text-sm text-[#1a1a1a]">hello@lunexomedia.com</a>
+                  <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Email us</div>
+                  <a href="mailto:hello@lunexomedia.com" className="text-sm font-bold text-slate-900">hello@lunexomedia.com</a>
                 </div>
               </div>
-              <div className="flex items-center gap-3 text-[#666666] hover:text-[#1a1a1a] transition-colors group">
-                <div className="w-10 h-10 rounded-lg bg-white border border-[#e0e0e0] flex items-center justify-center group-hover:border-[#1a1a1a]/30 transition-colors">
+              <div className="flex items-center gap-3 text-slate-600 hover:text-primary transition-colors group">
+                <div className="w-10 h-10 rounded-lg bg-white/40 border border-white/40 flex items-center justify-center group-hover:border-primary/30 transition-colors backdrop-blur-xl shadow-sm">
                   <Phone className="w-4 h-4" />
                 </div>
                 <div>
-                  <div className="text-xs text-[#999999] mb-0.5">Call us</div>
-                  <a href="tel:+17024830749" className="text-sm text-[#1a1a1a]">+1 (702) 483-0749</a>
+                  <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Call us</div>
+                  <a href="tel:+17024830749" className="text-sm font-bold text-slate-900">+1 (702) 483-0749</a>
                 </div>
               </div>
             </div>
@@ -71,7 +71,7 @@ const Footer = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 py-12">
           {/* Services */}
           <div className="space-y-5">
-            <h3 className="text-xs font-semibold text-[#1a1a1a] uppercase tracking-wider">Services</h3>
+            <h3 className="text-xs font-bold text-slate-900 uppercase tracking-[0.2em] font-heading">Services</h3>
             <ul className="space-y-3">
               {[
                 { to: "https://lunexomedia.com/website-design", label: "Website Design" },
@@ -94,7 +94,7 @@ const Footer = () => {
 
           {/* Resources */}
           <div className="space-y-5">
-            <h3 className="text-xs font-semibold text-[#1a1a1a] uppercase tracking-wider">Resources</h3>
+            <h3 className="text-xs font-bold text-slate-900 uppercase tracking-[0.2em] font-heading">Resources</h3>
             <ul className="space-y-3">
               {[
                 { to: "https://lunexomedia.com/blog", label: "Blog" },
@@ -117,7 +117,7 @@ const Footer = () => {
 
           {/* Company */}
           <div className="space-y-5">
-            <h3 className="text-xs font-semibold text-[#1a1a1a] uppercase tracking-wider">Company</h3>
+            <h3 className="text-xs font-bold text-slate-900 uppercase tracking-[0.2em] font-heading">Company</h3>
             <ul className="space-y-3">
               {[
                 { to: "https://lunexomedia.com/about", label: "About Us" },
@@ -139,7 +139,7 @@ const Footer = () => {
 
           {/* Legal */}
           <div className="space-y-5">
-            <h3 className="text-xs font-semibold text-[#1a1a1a] uppercase tracking-wider">Legal</h3>
+            <h3 className="text-xs font-bold text-slate-900 uppercase tracking-[0.2em] font-heading">Legal</h3>
             <ul className="space-y-3">
               {[
                 { to: "https://lunexomedia.com/privacy", label: "Privacy Policy" },
@@ -161,16 +161,16 @@ const Footer = () => {
         </div>
 
         {/* Bottom section */}
-        <div className="border-t border-[#e0e0e0] pt-8">
+        <div className="border-t border-white/20 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-xs text-[#666666]">
-              © {new Date().getFullYear()} LUNEXO MEDIA. All rights reserved.
+            <p className="text-xs text-slate-500 font-bold tracking-tight">
+              © {new Date().getFullYear()} LUNEXO MEDIA. ARCHITECTED FOR GROWTH.
             </p>
             <div className="flex items-center gap-6">
-              <span className="text-xs text-[#666666]">Build Faster. Scale Better.</span>
+              <span className="text-xs text-primary font-black uppercase tracking-widest">Build Faster. Scale Better.</span>
               <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-                <span className="text-xs text-[#666666]">All systems operational</span>
+                <div className="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
+                <span className="text-xs text-slate-400 font-bold uppercase tracking-tighter">Systems Live</span>
               </div>
             </div>
           </div>

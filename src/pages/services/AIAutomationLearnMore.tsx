@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Navigation from "@/components/ui/navigation";
 import Footer from "@/components/ui/footer";
@@ -24,9 +25,15 @@ import {
   Workflow,
   Brain,
   Mic,
-  Globe
+  Globe,
+  ChevronRight,
+  Shield,
+  Activity,
+  Cpu,
+  ShieldCheck,
+  Database,
+  Layers
 } from "lucide-react";
-import ThreeDBackground from "@/components/ui/3d-background";
 
 const AIAutomationLearnMore = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -37,319 +44,251 @@ const AIAutomationLearnMore = () => {
 
   const automationSolutions = [
     {
-      title: "AI Chatbots",
+      title: "AI Conversation Logic",
       icon: <MessageSquare className="w-12 h-12" />,
-      description: "24/7 customer support with intelligent conversation flows that understand context and resolve issues instantly",
+      description: "24/7 autonomous support with intelligent absolute conversation flows that understand repository context and resolve issues instantly.",
       features: [
-        "Natural Language Processing",
-        "Multi-platform Integration", 
-        "Custom Training Data",
-        "Sentiment Analysis",
-        "Multilingual Support",
-        "Analytics & Insights"
+        "Natural Language Intelligence",
+        "Multi-node Integration", 
+        "Custom Repository Training",
+        "Sentiment Logic Analysis",
+        "Global Multilingual Support",
+        "Operational Analytics Sync"
       ],
       useCases: [
-        "Customer Support Automation",
-        "Lead Qualification",
-        "FAQ Handling",
-        "Order Status Inquiries",
-        "Appointment Booking",
-        "Product Recommendations"
+        "Autonomous Support Sync",
+        "Identity Lead Qualification",
+        "FAQ Logic Handling",
+        "Order Status Verification",
+        "Appointment Logic Booking",
+        "Product Recommendations Sync"
       ],
       avgTimeReduction: "80%",
-      avgCostSaving: "$2,400/month",
+      avgCostSaving: "$2.4k/mo",
       roi: "400%"
     },
     {
-      title: "Email Automation",
+      title: "Email Intelligence Sync",
       icon: <Mail className="w-12 h-12" />,
-      description: "Personalized email sequences that nurture leads and convert them into loyal customers using AI-driven insights",
+      description: "Personalized absolute email sequences that nurture identity nodes and convert them into absolute customers using AI-driven logic.",
       features: [
-        "Dynamic Personalization",
-        "Behavioral Triggers",
-        "A/B Testing",
-        "Predictive Send Times",
-        "Smart Segmentation",
-        "Performance Analytics"
+        "Dynamic Personalization Sync",
+        "Behavioral Triggers Logic",
+        "A/B Testing Framework",
+        "Predictive Send Velocity",
+        "Smart Segmentation Logic",
+        "Performance Intelligence Sync"
       ],
       useCases: [
-        "Welcome Series",
-        "Abandoned Cart Recovery",
-        "Lead Nurturing",
-        "Re-engagement Campaigns",
-        "Birthday/Anniversary Emails",
-        "Product Recommendations"
+        "Identity Welcome Series",
+        "Abandoned Cart Logic",
+        "Lead Nurturing Trajectory",
+        "Re-engagement Protocols",
+        "Lifecycle Logic Emails",
+        "Intelligence Recommendations"
       ],
       avgTimeReduction: "70%",
-      avgCostSaving: "$1,800/month",
+      avgCostSaving: "$1.8k/mo",
       roi: "300%"
     },
     {
-      title: "Voice Agents",
+      title: "Absolute Voice Agents",
       icon: <Phone className="w-12 h-12" />,
-      description: "AI-powered phone assistants that handle appointments, support calls, and customer inquiries with human-like conversations",
+      description: "AI-powered autonomous phone assistants that handle appointments, support calls, and inquiry nodes with human-like absolute conversations.",
       features: [
-        "Speech Recognition",
-        "Voice Synthesis",
-        "Call Routing",
-        "24/7 Availability",
-        "Call Recording & Analysis",
-        "Integration with CRM"
+        "Speech Recognition Logic",
+        "Voice Synthesis Protocol",
+        "Call Routing Orchestration",
+        "24/7 Absolute Availability",
+        "Call Intel & Analysis",
+        "CRM Architecture Sync"
       ],
       useCases: [
-        "Appointment Scheduling",
-        "Customer Support Calls",
-        "Lead Qualification",
-        "Order Taking",
-        "Survey Calls",
-        "Debt Collection"
+        "Appointment Logic Scheduling",
+        "Autonomous Support Calls",
+        "Identity Qualification",
+        "Order Taking Protocol",
+        "Survey Intelligence Calls",
+        "Collection Logic Sync"
       ],
       avgTimeReduction: "90%",
-      avgCostSaving: "$3,200/month",
+      avgCostSaving: "$3.2k/mo",
       roi: "500%"
     },
     {
-      title: "Workflow Automation",
+      title: "Workflow Orchestration",
       icon: <Workflow className="w-12 h-12" />,
-      description: "Streamline repetitive business processes and eliminate manual tasks with intelligent automation workflows",
+      description: "Streamline repetitive business logic and eliminate manual toil with absolute autonomous workflow architectures.",
       features: [
-        "Process Optimization",
-        "Data Integration",
-        "Custom Workflows",
-        "Real-time Monitoring",
-        "Error Handling",
-        "Scalable Architecture"
+        "Process Optimization Logic",
+        "Data Orchestration Sync",
+        "Custom Workflow Architectures",
+        "Real-time Logic Monitoring",
+        "Error Protocol Handling",
+        "Scalable Grid Architecture"
       ],
       useCases: [
-        "Data Entry Automation",
-        "Invoice Processing",
-        "Inventory Management",
-        "Report Generation",
-        "Social Media Posting",
-        "Customer Onboarding"
+        "Data Entry Logic Sync",
+        "Invoice Processing Protocol",
+        "Inventory Management Logic",
+        "Report Generation Intel",
+        "Social Media Logic Sync",
+        "Identity Onboarding Protocol"
       ],
       avgTimeReduction: "85%",
-      avgCostSaving: "$2,800/month",
+      avgCostSaving: "$2.8k/mo",
       roi: "450%"
     }
   ];
 
   const industries = [
     {
-      name: "E-commerce",
-      description: "Automate customer support, order processing, and marketing",
-      solutions: ["Customer Support Bots", "Order Tracking", "Product Recommendations", "Abandoned Cart Recovery"],
-      results: "80% reduction in support tickets"
+      name: "E-commerce Repository",
+      description: "Automate absolute support, order logic, and marketing trajectories.",
+      solutions: ["Support Logic Bots", "Order Tracking Sync", "Product Logic", "Cart Recovery Sync"],
+      results: "80% reduction in support toil"
     },
     {
-      name: "Healthcare",
-      description: "Streamline appointment booking and patient communication",
-      solutions: ["Appointment Scheduling", "Patient Reminders", "Symptom Checking", "Insurance Verification"],
-      results: "90% automation of routine tasks"
+      name: "Healthcare Systems",
+      description: "Streamline appointment logic and patient communication protocols.",
+      solutions: ["Scheduling Logic", "Patient Reminders Sync", "Symptom Logic", "Verification Protocol"],
+      results: "90% autonomous routine logic"
     },
     {
-      name: "Real Estate",
-      description: "Qualify leads and schedule property viewings automatically",
-      solutions: ["Lead Qualification", "Property Matching", "Viewing Scheduling", "Follow-up Automation"],
-      results: "300% increase in qualified leads"
+      name: "Real Estate Intel",
+      description: "Qualify identity leads and schedule property viewing protocols automatically.",
+      solutions: ["Identity Qualification", "Property Logic Matching", "Scheduling Sync", "Follow-up Logic"],
+      results: "300% qualified lead lift"
     },
     {
-      name: "Professional Services",
-      description: "Automate client intake and project management workflows",
-      solutions: ["Client Onboarding", "Project Updates", "Invoice Processing", "Meeting Scheduling"],
-      results: "60% reduction in administrative time"
+      name: "Professional Logic",
+      description: "Automate identity intake and project management absolute workflows.",
+      solutions: ["Identity Onboarding", "Project Update Sync", "Invoice Logic", "Scheduling Protocol"],
+      results: "60% admin toil reduction"
     },
     {
-      name: "SaaS",
-      description: "Enhance user onboarding and customer success automation",
-      solutions: ["User Onboarding", "Feature Adoption", "Churn Prevention", "Support Automation"],
-      results: "40% improvement in user retention"
+      name: "SaaS Intelligence",
+      description: "Enhance user onboarding logic and customer success absolute automation.",
+      solutions: ["Onboarding Protocol", "Feature Adoption Logic", "Churn Logic Prevention", "Support Sync"],
+      results: "40% retention velocity lift"
     },
     {
-      name: "Restaurants",
-      description: "Streamline reservations, orders, and customer service",
-      solutions: ["Table Reservations", "Order Taking", "Customer Feedback", "Delivery Coordination"],
-      results: "250% increase in online orders"
+      name: "Hospitality Nodes",
+      description: "Streamline reservation logic, orders, and customer service protocols.",
+      solutions: ["Reservation Sync", "Order Taking Logic", "Feedback Intelligence", "Coordination Protocol"],
+      results: "250% order volume lift"
     }
   ];
 
   const implementationProcess = [
     {
-      phase: "Discovery & Analysis",
+      phase: "Discovery & Logic Analysis",
       duration: "Week 1",
-      description: "We analyze your current processes and identify automation opportunities",
+      description: "We analyze your absolute processes and identify autonomous logic opportunities.",
       activities: [
-        "Business Process Audit",
-        "Workflow Mapping",
-        "Pain Point Identification",
-        "ROI Projection",
-        "Technical Requirements"
+        "Business Logic Audit",
+        "Workflow Mapping Sync",
+        "Pain Point Logic Identification",
+        "ROI Projection Intel",
+        "Technical Requirements Sync"
       ]
     },
     {
-      phase: "Strategy & Design", 
+      phase: "Strategy & Architecture", 
       duration: "Week 2",
-      description: "Design custom automation workflows tailored to your business needs",
+      description: "Design custom absolute automation workflows tailored to your business logic.",
       activities: [
-        "Automation Strategy Development",
-        "Workflow Design",
-        "Integration Planning",
-        "User Experience Design",
-        "Technical Architecture"
+        "Automation Strategy Sync",
+        "Workflow Design Protocol",
+        "Integration Orchestration",
+        "User Experience Logic",
+        "Technical Architecture Audit"
       ]
     },
     {
-      phase: "Development & Training",
+      phase: "Execution & Model Training",
       duration: "Week 3-6",
-      description: "Build and train your AI automation systems with your specific data",
+      description: "Build and train your absolute autonomous systems with your specific repository data.",
       activities: [
-        "System Development",
-        "AI Model Training",
-        "Data Integration",
-        "Quality Assurance Testing",
+        "System Logic Execution",
+        "AI Model Training Protocol",
+        "Data Orchestration Sync",
+        "Quality Logic Testing",
         "Performance Optimization"
       ]
     },
     {
-      phase: "Testing & Optimization",
+      phase: "Verification & Velocity",
       duration: "Week 7-8",
-      description: "Rigorous testing and fine-tuning for optimal performance",
+      description: "Rigorous verification and logic fine-tuning for absolute performance.",
       activities: [
-        "Beta Testing",
-        "Performance Monitoring",
-        "Accuracy Optimization",
-        "User Acceptance Testing",
-        "Final Adjustments"
+        "Beta Verification Sync",
+        "Performance Monitoring Node",
+        "Accuracy Logic Optimization",
+        "Identity Acceptance Testing",
+        "Final Logic Adjustments"
       ]
-    },
-    {
-      phase: "Launch & Support",
-      duration: "Ongoing",
-      description: "Deploy your automation systems with ongoing monitoring and support",
-      activities: [
-        "System Deployment",
-        "User Training",
-        "Performance Monitoring",
-        "Continuous Optimization",
-        "Technical Support"
-      ]
-    }
-  ];
-
-  const caseStudies = [
-    {
-      title: "E-commerce Customer Service Revolution",
-      company: "Fashion Forward",
-      industry: "E-commerce",
-      challenge: "Overwhelmed customer service team handling 500+ inquiries daily",
-      solution: "AI chatbot with order tracking, return processing, and product recommendations",
-      results: [
-        "80% reduction in support tickets",
-        "24/7 customer service availability", 
-        "300% faster response times",
-        "$50K annual savings in staff costs"
-      ],
-      timeline: "6 weeks",
-      image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=400&q=80"
-    },
-    {
-      title: "Healthcare Appointment Automation",
-      company: "MedCare Clinic",
-      industry: "Healthcare",
-      challenge: "Manual appointment booking creating scheduling conflicts and patient frustration",
-      solution: "Voice AI assistant for appointment scheduling with calendar integration",
-      results: [
-        "90% automated appointment bookings",
-        "50% reduction in no-shows",
-        "200% increase in patient satisfaction",
-        "40 hours/week staff time saved"
-      ],
-      timeline: "8 weeks",
-      image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?auto=format&fit=crop&w=400&q=80"
-    },
-    {
-      title: "Real Estate Lead Qualification",
-      company: "Premier Properties",
-      industry: "Real Estate",
-      challenge: "Sales team spending too much time on unqualified leads",
-      solution: "AI-powered lead qualification and property matching system",
-      results: [
-        "300% increase in qualified leads",
-        "70% time savings for sales team",
-        "150% improvement in conversion rate",
-        "$10K additional revenue generated"
-      ],
-      timeline: "10 weeks",
-      image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=400&q=80"
     }
   ];
 
   const pricing = [
     {
-      title: "Starter Automation",
+      title: "Starter Protocol",
       price: "$997",
       period: "/month",
-      description: "Perfect for small businesses getting started with AI",
+      description: "Perfect for absolute new businesses getting started with AI logic.",
       features: [
-        "1 AI automation solution",
-        "Basic chatbot or email automation",
-        "Up to 1,000 interactions/month",
-        "Standard integrations",
-        "Email support",
-        "Monthly optimization"
+        "1 AI automation node",
+        "Basic conversation logic",
+        "Up to 1k interactions/month",
+        "Standard integration sync",
+        "Identity support node",
+        "Monthly logic optimization"
       ],
       popular: false,
       setupFee: "$2,497"
     },
     {
-      title: "Business Growth",
+      title: "Business Logic",
       price: "$2,497",
       period: "/month", 
-      description: "Comprehensive automation for growing businesses",
+      description: "Comprehensive absolute automation for scaling businesses.",
       features: [
-        "3 AI automation solutions",
-        "Advanced chatbot + email + voice",
-        "Up to 10,000 interactions/month",
-        "Custom integrations",
-        "Priority support",
-        "Bi-weekly optimization",
-        "Performance analytics"
+        "3 AI automation nodes",
+        "Advanced bot + email + voice",
+        "Up to 10k interactions/month",
+        "Custom integration orchestration",
+        "Priority absolute support",
+        "Bi-weekly logic sync",
+        "Performance intelligence"
       ],
       popular: true,
       setupFee: "$4,997"
     },
     {
-      title: "Enterprise Scale",
+      title: "Enterprise Architecture",
       price: "Custom",
       period: "",
-      description: "Full-scale automation for large organizations",
+      description: "Full-scale absolute automation for large organizations.",
       features: [
-        "Unlimited AI solutions",
-        "Custom workflow automation",
+        "Unlimited AI logic nodes",
+        "Custom workflow orchestration",
         "Unlimited interactions",
-        "Enterprise integrations",
-        "Dedicated account manager",
-        "24/7 support",
-        "Advanced analytics & reporting"
+        "Enterprise integration sync",
+        "Dedicated identity manager",
+        "24/7 absolute sync",
+        "Advanced intelligence intel"
       ],
       popular: false,
       setupFee: "Custom"
     }
   ];
 
-  useEffect(() => {
-    document.title = "AI Automation Services - Complete Guide | LUNEXO MEDIA";
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription) {
-      metaDescription.setAttribute('content', 'Complete guide to LUNEXO MEDIA AI automation services. Learn about chatbots, email automation, voice agents, and workflow optimization.');
-    }
-  }, []);
-
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background font-body text-slate-900 overflow-hidden">
       <SEO
-        title="AI Automation Services - Complete Guide | LUNEXO MEDIA"
-        description="Complete guide to LUNEXO MEDIA AI automation services. Learn about chatbots, email automation, voice agents, and workflow optimization."
+        title="Absolute AI Automation - Complete Guide | LUNEXO MEDIA"
+        description="Complete guide to LUNEXO MEDIA absolute AI automation services. Learn about chatbots, email automation, voice agents, and absolute workflow optimization."
         image="https://www.lunexomedia.com/og-image-new.jpg"
         url="https://www.lunexomedia.com/services/ai-automation-learn-more"
         keywords="AI automation services, chatbots, email automation, voice agents, workflow optimization"
@@ -358,329 +297,400 @@ const AIAutomationLearnMore = () => {
       <Navigation />
       
       {/* Hero Section */}
-      <section className="py-24 bg-gradient-to-br from-background via-background/50 to-muted/30 relative overflow-hidden">
-        <ThreeDBackground />
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-32 pb-24">
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+          <div className="absolute top-[10%] left-[5%] w-[800px] h-[800px] bg-primary/10 rounded-full blur-[140px]" />
+          <div className="absolute bottom-[10%] right-[5%] w-[600px] h-[600px] bg-accent/10 rounded-full blur-[120px]" />
+        </div>
+
         <div className="container-wide section-padding relative z-10">
-          <div className={`text-center mb-16 transition-all duration-1000 ${isVisible ? 'animate-fade-in' : 'opacity-0'}`}>
-            <Badge variant="outline" className="mb-4 text-primary border-primary/20 text-lg px-4 py-2">
-              <Bot className="w-5 h-5 mr-2" />
-              Complete AI Automation Guide
-            </Badge>
-            <h1 className="text-5xl lg:text-7xl font-bold mb-8 bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-              Transform Your Business with AI
-            </h1>
-            <p className="text-2xl text-muted-foreground max-w-4xl mx-auto leading-relaxed mb-12">
-              Discover how AI automation can eliminate manual work, reduce costs, and scale your business operations 24/7
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg text-lg px-8 py-4" asChild>
-                <Link to="/contact">Book Automation Audit</Link>
+          <div className="text-center max-w-7xl mx-auto space-y-16">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              <Badge className="bg-primary/10 border border-primary/20 text-primary px-10 py-4 rounded-full text-sm font-black uppercase tracking-[0.4em] backdrop-blur-xl">
+                <Brain className="w-5 h-5 mr-4" />
+                The Absolute Intelligence Layer
+              </Badge>
+            </motion.div>
+
+            <motion.h1 
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 1 }}
+              className="text-6xl sm:text-7xl lg:text-[11rem] font-heading font-bold text-slate-900 leading-[1] tracking-tighter"
+            >
+              The Future is <br /> <span className="text-primary italic">Autonomous.</span>
+            </motion.h1>
+
+            <motion.p 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4, duration: 1 }}
+              className="text-3xl text-slate-500 max-w-5xl mx-auto leading-relaxed font-medium"
+            >
+              Everything you need to know about our absolute AI-powered engines that eliminate manual toil and scale your business operations <span className="text-primary italic font-bold">at absolute lightspeed.</span>
+            </motion.p>
+            
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6, duration: 1 }}
+              className="flex flex-col sm:flex-row gap-10 justify-center pt-12"
+            >
+              <Button size="lg" className="bg-slate-900 text-white hover:bg-slate-800 text-3xl px-24 py-16 rounded-full font-bold shadow-2xl transition-all duration-700 hover:scale-110 group" asChild
+              >
+                <Link to="/contact" className="flex items-center gap-6">
+                  Initialize AI Audit
+                  <ArrowRight className="w-10 h-10 group-hover:translate-x-5 transition-transform" />
+                </Link>
               </Button>
-              <Button size="lg" variant="outline" className="border-primary/20 hover:bg-primary hover:text-white text-lg px-8 py-4" asChild>
-                <Link to="/ai-automation">View Service Page</Link>
-              </Button>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
 
-      {/* AI Solutions Section */}
-      <section className="py-24 bg-white">
+      {/* Solutions Tabs */}
+      <section className="py-48 bg-white/50 backdrop-blur-md border-y border-white/40">
         <div className="container-wide section-padding">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold mb-6">
-              Our AI Automation Solutions
+          <div className="text-center mb-32 space-y-12">
+             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+                <Badge className="bg-primary/10 border border-primary/20 text-primary px-10 py-4 rounded-full text-sm font-black uppercase tracking-[0.4em]">
+                  <Layers className="w-5 h-5 mr-4" />
+                  Absolute Core Solutions
+                </Badge>
+              </motion.div>
+            <h2 className="text-6xl lg:text-[11rem] font-heading font-bold text-slate-900 mb-10 leading-[1.05] tracking-tighter">
+              The Intelligence <span className="text-primary italic">Sync.</span>
             </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Comprehensive AI-powered solutions designed to automate your most time-consuming business processes
-            </p>
           </div>
 
           <Tabs defaultValue="chatbots" className="w-full">
-            <TabsList className="grid w-full grid-cols-4 mb-12">
-              <TabsTrigger value="chatbots">AI Chatbots</TabsTrigger>
-              <TabsTrigger value="email">Email Automation</TabsTrigger>
-              <TabsTrigger value="voice">Voice Agents</TabsTrigger>
-              <TabsTrigger value="workflow">Workflow Automation</TabsTrigger>
-            </TabsList>
+            <div className="flex justify-center mb-24">
+              <TabsList className="bg-white/40 backdrop-blur-xl border border-white/60 p-3 rounded-[3rem] h-auto shadow-glass flex flex-wrap justify-center gap-4">
+                <TabsTrigger value="chatbots" className="rounded-full px-12 py-6 text-xl font-bold data-[state=active]:bg-slate-900 data-[state=active]:text-white transition-all duration-700">AI Chatbots</TabsTrigger>
+                <TabsTrigger value="email" className="rounded-full px-12 py-6 text-xl font-bold data-[state=active]:bg-slate-900 data-[state=active]:text-white transition-all duration-700">Email Intelligence</TabsTrigger>
+                <TabsTrigger value="voice" className="rounded-full px-12 py-6 text-xl font-bold data-[state=active]:bg-slate-900 data-[state=active]:text-white transition-all duration-700">Voice Agents</TabsTrigger>
+                <TabsTrigger value="workflow" className="rounded-full px-12 py-6 text-xl font-bold data-[state=active]:bg-slate-900 data-[state=active]:text-white transition-all duration-700">Workflows</TabsTrigger>
+              </TabsList>
+            </div>
 
-            {automationSolutions.map((solution, index) => (
-              <TabsContent key={index} value={solution.title.toLowerCase().split(' ')[1] || 'chatbots'} className="space-y-8">
-                <Card className="overflow-hidden">
-                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-0">
-                    <div className="lg:col-span-1 bg-gradient-to-br from-primary/5 to-primary/10 p-8 flex flex-col items-center justify-center text-center">
-                      <div className="w-24 h-24 bg-gradient-to-br from-primary to-primary/70 rounded-3xl flex items-center justify-center text-white mb-6">
-                        {solution.icon}
-                      </div>
-                      <h3 className="text-2xl font-bold mb-4">{solution.title}</h3>
-                      <p className="text-muted-foreground mb-6">{solution.description}</p>
-                      <div className="grid grid-cols-3 gap-4 text-center">
-                        <div>
-                          <div className="text-2xl font-bold text-primary">{solution.avgTimeReduction}</div>
-                          <div className="text-xs text-muted-foreground">Time Saved</div>
+            {automationSolutions.map((solution, index) => {
+              const value = solution.title.toLowerCase().includes('conversation') ? 'chatbots' : 
+                            solution.title.toLowerCase().includes('email') ? 'email' : 
+                            solution.title.toLowerCase().includes('voice') ? 'voice' : 'workflow';
+              return (
+                <TabsContent key={index} value={value}>
+                  <motion.div 
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 1 }}
+                    className="bg-white/40 backdrop-blur-xl border border-white/60 rounded-[5rem] overflow-hidden shadow-glass"
+                  >
+                    <div className="grid lg:grid-cols-3">
+                      <div className="p-20 lg:p-32 lg:border-r border-white/60 flex flex-col justify-center text-center lg:text-left space-y-12">
+                        <div className="w-24 h-24 bg-slate-900 text-white rounded-[2rem] flex items-center justify-center mx-auto lg:mx-0 shadow-2xl">
+                          {solution.icon}
                         </div>
-                        <div>
-                          <div className="text-2xl font-bold text-primary">{solution.avgCostSaving}</div>
-                          <div className="text-xs text-muted-foreground">Monthly Savings</div>
-                        </div>
-                        <div>
-                          <div className="text-2xl font-bold text-primary">{solution.roi}</div>
-                          <div className="text-xs text-muted-foreground">Avg ROI</div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="lg:col-span-2 p-8">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div>
-                          <h4 className="text-xl font-bold mb-4 text-primary">Features & Capabilities</h4>
-                          <div className="space-y-3">
-                            {solution.features.map((feature, featureIndex) => (
-                              <div key={featureIndex} className="flex items-center gap-3">
-                                <CheckCircle className="w-5 h-5 text-primary flex-shrink-0" />
-                                <span className="text-sm">{feature}</span>
-                              </div>
-                            ))}
+                        <h3 className="text-5xl font-heading font-bold text-slate-900 tracking-tight leading-tight">{solution.title}</h3>
+                        <p className="text-2xl text-slate-500 leading-relaxed font-medium">{solution.description}</p>
+                        <div className="grid grid-cols-3 gap-4 pt-6">
+                          <div className="p-8 bg-white/60 rounded-[2rem] border border-white/60 shadow-sm text-center">
+                            <div className="text-3xl font-heading font-black text-primary">{solution.avgTimeReduction}</div>
+                            <div className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mt-2">Velocity</div>
                           </div>
-                        </div>
-                        <div>
-                          <h4 className="text-xl font-bold mb-4 text-green-600">Common Use Cases</h4>
-                          <div className="space-y-3">
-                            {solution.useCases.map((useCase, useCaseIndex) => (
-                              <div key={useCaseIndex} className="flex items-center gap-3">
-                                <Zap className="w-5 h-5 text-green-500 flex-shrink-0" />
-                                <span className="text-sm">{useCase}</span>
-                              </div>
-                            ))}
+                          <div className="p-8 bg-white/60 rounded-[2rem] border border-white/60 shadow-sm text-center">
+                            <div className="text-3xl font-heading font-black text-primary">{solution.avgCostSaving}</div>
+                            <div className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mt-2">Delta</div>
+                          </div>
+                          <div className="p-8 bg-white/60 rounded-[2rem] border border-white/60 shadow-sm text-center">
+                            <div className="text-3xl font-heading font-black text-primary">{solution.roi}</div>
+                            <div className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mt-2">ROI</div>
                           </div>
                         </div>
                       </div>
+                      <div className="lg:col-span-2 p-20 lg:p-32 space-y-20 bg-white/20">
+                        <div className="grid md:grid-cols-2 gap-20">
+                          <div className="space-y-12">
+                            <div className="space-y-4">
+                               <h4 className="text-3xl font-heading font-bold text-slate-900 flex items-center gap-6">
+                                <div className="w-3 h-10 bg-primary rounded-full shadow-lg shadow-primary/20" />
+                                Key Protocols
+                              </h4>
+                              <div className="h-[2px] w-full bg-gradient-to-r from-primary/40 to-transparent" />
+                            </div>
+                            <div className="space-y-8">
+                              {solution.features.map((f, i) => (
+                                <div key={i} className="flex items-center gap-6 text-2xl text-slate-500 font-medium group/feat">
+                                  <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center group-hover/feat:bg-primary transition-all duration-500">
+                                     <CheckCircle className="w-5 h-5 text-primary group-hover/feat:text-white" />
+                                  </div>
+                                  <span className="group-hover/feat:text-slate-900 transition-colors">{f}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                          <div className="space-y-12">
+                            <div className="space-y-4">
+                               <h4 className="text-3xl font-heading font-bold text-slate-900 flex items-center gap-6">
+                                <div className="w-3 h-10 bg-[#FF719A] rounded-full shadow-lg shadow-accent/20" />
+                                Logic Nodes
+                              </h4>
+                               <div className="h-[2px] w-full bg-gradient-to-r from-[#FF719A]/40 to-transparent" />
+                            </div>
+                            <div className="space-y-8">
+                              {solution.useCases.map((u, i) => (
+                                <div key={i} className="flex items-center gap-6 text-2xl text-slate-500 font-medium group/feat">
+                                  <div className="w-10 h-10 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center group-hover/feat:bg-accent transition-all duration-500">
+                                     <Zap className="w-5 h-5 text-accent group-hover/feat:text-white" />
+                                  </div>
+                                  <span className="group-hover/feat:text-slate-900 transition-colors">{u}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="pt-16 border-t border-white/60 flex items-center gap-12 opacity-30">
+                           <Activity className="w-8 h-8" />
+                           <Cpu className="w-8 h-8" />
+                           <Database className="w-8 h-8" />
+                           <ShieldCheck className="w-8 h-8" />
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </Card>
-              </TabsContent>
-            ))}
+                  </motion.div>
+                </TabsContent>
+              );
+            })}
           </Tabs>
         </div>
       </section>
 
-      {/* Industry Solutions */}
-      <section className="py-24 bg-gradient-to-b from-muted/30 to-background">
+      {/* Industry Verticals */}
+      <section className="py-48 bg-background relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-[800px] h-[800px] bg-primary/5 rounded-full blur-[180px] pointer-events-none" />
         <div className="container-wide section-padding">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold mb-6">
-              Industry-Specific Solutions
+          <div className="text-center mb-32 space-y-12">
+             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+                <Badge className="bg-primary/10 border border-primary/20 text-primary px-10 py-4 rounded-full text-sm font-black uppercase tracking-[0.4em]">
+                  <Globe className="w-5 h-5 mr-4" />
+                  Absolute Intelligence Verticals
+                </Badge>
+              </motion.div>
+            <h2 className="text-6xl lg:text-[11rem] font-heading font-bold text-slate-900 mb-10 leading-[1] tracking-tighter">
+              Repository <span className="text-primary italic">Intelligence.</span>
             </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Tailored AI automation solutions designed for your industry's unique challenges and opportunities
-            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16 max-w-7xl mx-auto">
             {industries.map((industry, index) => (
-              <Card key={index} className="group hover:shadow-xl transition-all duration-300">
-                <CardHeader>
-                  <CardTitle className="text-xl group-hover:text-primary transition-colors">
-                    {industry.name}
-                  </CardTitle>
-                  <p className="text-muted-foreground text-sm">{industry.description}</p>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3 mb-4">
-                    {industry.solutions.map((solution, solutionIndex) => (
-                      <div key={solutionIndex} className="flex items-center gap-2 text-sm">
-                        <Bot className="w-4 h-4 text-primary flex-shrink-0" />
-                        <span>{solution}</span>
-                      </div>
-                    ))}
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1, duration: 1 }}
+                className="group bg-white/40 backdrop-blur-xl border border-white/60 rounded-[4rem] p-16 hover:shadow-glass transition-all duration-1000 flex flex-col justify-between hover:translate-y-[-15px]"
+              >
+                <div className="space-y-10">
+                  <h3 className="text-4xl font-heading font-bold text-slate-900 group-hover:text-primary transition-all duration-700 tracking-tight leading-tight">{industry.name}</h3>
+                  <p className="text-2xl text-slate-500 leading-relaxed font-medium h-32 overflow-hidden">{industry.description}</p>
+                  
+                  <div className="space-y-8 pt-6 border-t border-white/60">
+                    <div className="space-y-2">
+                       <h4 className="text-[10px] font-black text-slate-900 uppercase tracking-[0.4em]">Custom Logic Nodes:</h4>
+                       <div className="h-[2px] w-full bg-gradient-to-r from-primary/40 to-transparent" />
+                    </div>
+                    <div className="space-y-4">
+                      {industry.solutions.map((s, i) => (
+                        <div key={i} className="flex items-center gap-6 text-xl text-slate-700 font-bold group/node">
+                          <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center group-hover/node:bg-primary transition-all duration-500">
+                             <Bot className="w-4 h-4 text-primary group-hover/node:text-white" />
+                          </div>
+                          {s}
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                  <div className="p-3 bg-primary/5 rounded-lg">
-                    <div className="text-sm font-medium text-primary">{industry.results}</div>
+
+                  <div className="p-8 bg-slate-900 rounded-[2rem] border border-white/20 text-center shadow-2xl mt-6">
+                    <div className="text-primary font-black text-xl italic tracking-tight">{industry.results}</div>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+                <div className="mt-12 pt-8 border-t border-white/60 opacity-20 flex justify-end">
+                   <Activity className="w-8 h-8" />
+                </div>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Implementation Process */}
-      <section className="py-24 bg-white">
+      {/* Deployment Cycle */}
+      <section className="py-48 bg-white/50 backdrop-blur-md border-y border-white/40">
         <div className="container-wide section-padding">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold mb-6">
-              Our Implementation Process
+          <div className="text-center mb-32 space-y-12">
+             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+                <Badge className="bg-primary/10 border border-primary/20 text-primary px-10 py-4 rounded-full text-sm font-black uppercase tracking-[0.4em]">
+                  <Cpu className="w-5 h-5 mr-4" />
+                  Absolute Deployment Cycle
+                </Badge>
+              </motion.div>
+            <h2 className="text-6xl lg:text-[11rem] font-heading font-bold text-slate-900 mb-10 leading-[1.1] tracking-tighter">
+              The Engineering <span className="text-primary italic">Pipeline.</span>
             </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              A proven 5-phase approach to implementing AI automation that delivers results
-            </p>
           </div>
 
-          <div className="space-y-8">
+          <div className="space-y-16 max-w-7xl mx-auto">
             {implementationProcess.map((phase, index) => (
-              <Card key={index} className="overflow-hidden">
-                <div className="grid grid-cols-1 lg:grid-cols-4 gap-0">
-                  <div className="lg:col-span-1 bg-gradient-to-br from-primary/5 to-primary/10 p-6 flex flex-col justify-center">
-                    <div className="flex items-center gap-3 mb-3">
-                      <div className="w-8 h-8 bg-primary text-white rounded-lg flex items-center justify-center text-sm font-bold">
+              <motion.div 
+                key={index} 
+                initial={{ opacity: 0, x: -30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1 }}
+                className="bg-white/40 backdrop-blur-xl border border-white/60 rounded-[4rem] p-16 lg:p-24 hover:shadow-glass transition-all duration-1000 relative group overflow-hidden"
+              >
+                <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-[80px] opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+                <div className="grid lg:grid-cols-4 gap-20 relative z-10">
+                  <div className="space-y-8 flex flex-col justify-center">
+                    <div className="flex items-center gap-6">
+                      <div className="w-20 h-20 bg-slate-900 text-white rounded-[1.5rem] flex items-center justify-center font-black text-4xl shadow-2xl group-hover:bg-primary transition-all duration-700 group-hover:rotate-12">
                         {index + 1}
                       </div>
-                      <Badge variant="outline">{phase.duration}</Badge>
+                      <Badge className="bg-accent/10 text-accent border-accent/20 px-8 py-3 font-black uppercase tracking-[0.2em] rounded-full text-[10px]">{phase.duration}</Badge>
                     </div>
-                    <h3 className="text-xl font-bold mb-2">{phase.phase}</h3>
-                    <p className="text-muted-foreground text-sm">{phase.description}</p>
+                    <h3 className="text-5xl font-heading font-bold text-slate-900 tracking-tight leading-tight">{phase.phase}</h3>
                   </div>
-                  <div className="lg:col-span-3 p-6">
-                    <h4 className="font-semibold mb-4">Key Activities:</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      {phase.activities.map((activity, activityIndex) => (
-                        <div key={activityIndex} className="flex items-center gap-3">
-                          <CheckCircle className="w-5 h-5 text-primary flex-shrink-0" />
-                          <span className="text-sm">{activity}</span>
+                  <div className="lg:col-span-3 space-y-12">
+                    <p className="text-3xl text-slate-500 leading-relaxed font-medium max-w-4xl">{phase.description}</p>
+                    <div className="grid md:grid-cols-2 gap-8 pt-8 border-t border-white/60">
+                      {phase.activities.map((a, i) => (
+                        <div key={i} className="flex items-center gap-6 text-2xl text-slate-700 font-bold group/act">
+                          <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center group-hover/act:bg-primary transition-all duration-500">
+                             <CheckCircle className="w-5 h-5 text-primary group-hover/act:text-white" />
+                          </div>
+                          <span className="group-hover/act:text-slate-900 transition-colors">{a}</span>
                         </div>
                       ))}
                     </div>
                   </div>
                 </div>
-              </Card>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Case Studies */}
-      <section className="py-24 bg-gradient-to-b from-muted/30 to-background">
+      {/* Absolute Investment */}
+      <section className="py-48 bg-background relative overflow-hidden">
         <div className="container-wide section-padding">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold mb-6">
-              Success Stories
+          <div className="text-center mb-32 space-y-12">
+             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+                <Badge className="bg-primary/10 border border-primary/20 text-primary px-10 py-4 rounded-full text-sm font-black uppercase tracking-[0.4em]">
+                  <TrendingUp className="w-5 h-5 mr-4" />
+                  Absolute Scaling Logic
+                </Badge>
+              </motion.div>
+            <h2 className="text-6xl lg:text-[11rem] font-heading font-bold text-slate-900 mb-10 leading-[1.1] tracking-tighter">
+              Absolute <span className="text-primary italic">Investment.</span>
             </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Real businesses achieving remarkable results with our AI automation solutions
-            </p>
           </div>
 
-          <div className="space-y-12">
-            {caseStudies.map((study, index) => (
-              <Card key={index} className="overflow-hidden">
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-0">
-                  <div className="lg:col-span-1">
-                    <img 
-                      src={study.image} 
-                      alt={study.title}
-                      className="w-full h-64 lg:h-full object-cover"
-                    />
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-16 max-w-7xl mx-auto">
+            {pricing.map((plan, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1, duration: 1 }}
+                className={`group relative bg-white/40 backdrop-blur-xl border border-white/60 rounded-[4rem] p-16 lg:p-20 hover:shadow-glass transition-all duration-1000 flex flex-col items-center text-center ${plan.popular ? 'border-primary shadow-glass scale-105 z-10' : 'hover:translate-y-[-15px]'}`}
+              >
+                {plan.popular && (
+                  <Badge className="absolute -top-10 left-1/2 -translate-x-1/2 bg-primary text-white px-12 py-5 rounded-full text-sm font-black uppercase tracking-[0.4em] shadow-2xl">
+                    Most Popular Protocol
+                  </Badge>
+                )}
+                
+                <div className="space-y-12 flex-1 w-full">
+                  <div className="space-y-4">
+                     <h3 className="text-4xl font-heading font-bold text-slate-900 tracking-tight leading-tight">{plan.title}</h3>
+                     <div className="h-[2px] w-12 bg-primary mx-auto opacity-40" />
                   </div>
-                  <div className="lg:col-span-2 p-8">
-                    <div className="flex items-center gap-3 mb-4">
-                      <Badge variant="outline">{study.industry}</Badge>
-                      <Badge variant="secondary">{study.timeline}</Badge>
-                    </div>
-                    <h3 className="text-2xl font-bold mb-2">{study.title}</h3>
-                    <p className="text-muted-foreground text-sm mb-6">{study.company}</p>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div>
-                        <h4 className="font-semibold mb-2 text-red-600">Challenge:</h4>
-                        <p className="text-muted-foreground text-sm mb-4">{study.challenge}</p>
-                        <h4 className="font-semibold mb-2 text-blue-600">Solution:</h4>
-                        <p className="text-muted-foreground text-sm">{study.solution}</p>
-                      </div>
-                      <div>
-                        <h4 className="font-semibold mb-3 text-green-600">Results:</h4>
-                        <div className="space-y-2">
-                          {study.results.map((result, resultIndex) => (
-                            <div key={resultIndex} className="flex items-center gap-2">
-                              <TrendingUp className="w-4 h-4 text-green-500" />
-                              <span className="text-sm font-medium">{result}</span>
-                            </div>
-                          ))}
+                  <div className="space-y-4">
+                    <div className="text-6xl lg:text-7xl font-heading font-black text-primary tracking-tighter">{plan.price}</div>
+                    <div className="text-[10px] font-black text-slate-400 uppercase tracking-[0.5em]">{plan.period} Protocol</div>
+                  </div>
+                  <p className="text-2xl text-slate-500 font-medium leading-relaxed">{plan.description}</p>
+                  
+                  {plan.setupFee && (
+                    <Badge className="bg-slate-900 text-white border-none px-10 py-3 rounded-full font-black uppercase tracking-[0.2em] text-[10px] shadow-xl">Setup Node: {plan.setupFee}</Badge>
+                  )}
+
+                  <div className="space-y-8 text-left pt-12 border-t border-white/60 w-full">
+                    <h4 className="text-[10px] font-black text-slate-900 uppercase tracking-[0.4em]">Protocol Nodes:</h4>
+                    <div className="space-y-6">
+                      {plan.features.map((f, i) => (
+                        <div key={i} className="flex items-center gap-6 text-2xl text-slate-700 font-bold group/feat">
+                          <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center group-hover/feat:bg-primary transition-all duration-500">
+                             <CheckCircle className="w-5 h-5 text-primary group-hover/feat:text-white" />
+                          </div>
+                          <span className="group-hover/feat:text-slate-900 transition-colors">{f}</span>
                         </div>
-                      </div>
+                      ))}
                     </div>
                   </div>
                 </div>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Pricing Section */}
-      <section className="py-24 bg-white">
-        <div className="container-wide section-padding">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold mb-6">
-              Investment & Pricing
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Transparent pricing for AI automation that pays for itself through efficiency gains
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {pricing.map((plan, index) => (
-              <Card 
-                key={index} 
-                className={`relative ${plan.popular ? 'ring-2 ring-primary shadow-lg scale-105' : ''}`}
-              >
-                {plan.popular && (
-                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                    <Badge className="bg-primary text-white">Most Popular</Badge>
-                  </div>
-                )}
-                <CardHeader className="text-center">
-                  <CardTitle className="text-2xl">{plan.title}</CardTitle>
-                  <div className="text-4xl font-bold text-primary mb-2">
-                    {plan.price}<span className="text-lg text-muted-foreground">{plan.period}</span>
-                  </div>
-                  <p className="text-muted-foreground">{plan.description}</p>
-                  {plan.setupFee && (
-                    <div className="text-sm text-muted-foreground">
-                      Setup Fee: {plan.setupFee}
-                    </div>
-                  )}
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3 mb-6">
-                    {plan.features.map((feature, featureIndex) => (
-                      <div key={featureIndex} className="flex items-center gap-3">
-                        <CheckCircle className="w-5 h-5 text-primary flex-shrink-0" />
-                        <span className="text-sm">{feature}</span>
-                      </div>
-                    ))}
-                  </div>
-                  <Button 
-                    className={`w-full ${plan.popular ? 'bg-primary hover:bg-primary/90' : ''}`}
-                    variant={plan.popular ? 'default' : 'outline'}
-                    asChild
-                  >
-                    <a href="https://lunexomedia.com/contact">
-                      {plan.price === 'Custom' ? 'Contact Sales' : 'Get Started'}
-                    </a>
-                  </Button>
-                </CardContent>
-              </Card>
+                
+                <Button className={`mt-16 py-12 px-16 rounded-[2rem] font-bold text-2xl shadow-2xl transition-all duration-700 w-full hover:scale-110 ${plan.popular ? 'bg-primary text-white' : 'bg-slate-900 text-white'}`} asChild>
+                  <Link to="/contact" className="flex items-center justify-center gap-4">
+                    Initialize Protocol
+                    <ArrowRight className="w-8 h-8" />
+                  </Link>
+                </Button>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 bg-gradient-to-br from-primary/5 to-primary/10">
-        <div className="container-wide section-padding text-center">
-          <h2 className="text-4xl lg:text-5xl font-bold mb-6">
-            Ready to Automate Your Business?
-          </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-12">
-            Book a free automation audit to discover how AI can transform your business operations and reduce manual work
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg" asChild>
-              <a href="https://lunexomedia.com/contact">Book Free Audit</a>
-            </Button>
-            <Button size="lg" variant="outline" className="border-primary/20 hover:bg-primary hover:text-white" asChild>
-              <a href="https://lunexomedia.com/portfolio">View Success Stories</a>
-            </Button>
+      <section className="py-48 bg-slate-900 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/40 to-accent/20 opacity-40" />
+        <div className="container-wide section-padding relative z-10 text-center">
+          <div className="max-w-7xl mx-auto space-y-24">
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+              <Badge className="bg-white/10 text-white border-white/20 px-10 py-4 rounded-full text-sm font-black uppercase tracking-[0.4em] backdrop-blur-xl">
+                The Intelligence Audit
+              </Badge>
+            </motion.div>
+            <h2 className="text-6xl lg:text-[11rem] font-heading font-bold text-white leading-tight tracking-tighter">
+              Ready to <br /> <span className="text-primary italic">Absolute Automate?</span>
+            </h2>
+            <p className="text-3xl text-slate-300 font-body leading-relaxed max-w-5xl mx-auto font-medium">
+              Book an absolute intelligence audit to discover how AI can transform your business operations and eliminate manual toil.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-10 justify-center pt-16">
+              <Button size="lg" className="bg-primary text-white hover:bg-primary/90 text-3xl px-24 py-16 rounded-full font-bold shadow-2xl transition-all duration-700 hover:scale-110 group" asChild>
+                <Link to="/contact" className="flex items-center gap-6">
+                  Initialize Audit
+                  <ArrowRight className="w-10 h-10 ml-8 group-hover:translate-x-5 transition-transform" />
+                </Link>
+              </Button>
+              <Button size="lg" variant="outline" className="border-2 border-white/20 bg-white/10 backdrop-blur-xl text-white hover:bg-white/20 text-3xl px-24 py-16 rounded-full font-bold transition-all duration-700 hover:scale-105" asChild>
+                <Link to="/portfolio">
+                  View Success Repository
+                </Link>
+              </Button>
+            </div>
+            <div className="pt-24 flex items-center justify-center gap-16 opacity-30 text-white">
+               <ShieldCheck className="w-10 h-10" />
+               <Cpu className="w-10 h-10" />
+               <Database className="w-10 h-10" />
+               <Activity className="w-10 h-10" />
+            </div>
           </div>
         </div>
       </section>
